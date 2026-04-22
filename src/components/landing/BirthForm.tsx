@@ -1,0 +1,519 @@
+"use client";
+
+import { useEffect, useRef, useState, type CSSProperties, type FocusEvent, type FormEvent } from "react";
+import { useRouter } from "next/navigation";
+import { motion, Variants } from "framer-motion";
+import { useUser } from "@/context/UserContext";
+import { lookupBirthPlace } from "@/lib/client/kaalApp";
+import type { LocationLookupCandidate } from "@/lib/types/api";
+
+const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
+
+interface BirthFormProps {
+  fieldVariants?: Variants;
+  shouldReduce?: boolean;
+}
+
+/* ─── Inline DOB watermark — extremely fine strokes ─────────── */
+function DobWatermark() {
+  const r = 90;
+  const cx = r, cy = r;
+  const radii = [0.92, 0.74, 0.56, 0.38, 0.18];
+  const spokeCount = 12;
+  return (
+    <svg
+      width={r * 2} height={r * 2}
+      viewBox={`0 0 ${r * 2} ${r * 2}`}
+      aria-hidden="true"
+      style={{ display: "block" }}
+    >
+      {radii.map((ratio, i) => (
+        <circle key={i} cx={cx} cy={cy} r={r * ratio}
+          fill="none" stroke="#C4A96A" strokeWidth="0.3" />
+      ))}
+      {Array.from({ length: spokeCount }, (_, i) => {
+        const a = (i * Math.PI * 2) / spokeCount;
+        return (
+          <line key={i}
+            x1={cx + r * 0.18 * Math.cos(a)} y1={cy + r * 0.18 * Math.sin(a)}
+            x2={cx + r * 0.92 * Math.cos(a)} y2={cy + r * 0.92 * Math.sin(a)}
+            stroke="#C4A96A" strokeWidth="0.3"
+          />
+        );
+      })}
+      {Array.from({ length: 24 }, (_, i) => {
+        const a = (i * Math.PI * 2) / 24 + Math.PI / 24;
+        return (
+          <circle key={i}
+            cx={cx + r * 0.64 * Math.cos(a)}
+            cy={cy + r * 0.64 * Math.sin(a)}
+            r={0.8} fill="#C4A96A"
+          />
+        );
+      })}
+    </svg>
+  );
+}
+
+/* ─── Editorial SVG arrow ────────────────────────────────────── */
+function EditorialArrow({ hover, reduced }: { hover: boolean; reduced: boolean }) {
+  return (
+    <svg
+      width="34" height="10"
+      viewBox="0 0 34 10"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+      style={{
+        flexShrink: 0,
+        transform: hover && !reduced ? "translateX(4px)" : "translateX(0)",
+        transition: "transform 0.22s ease",
+      }}
+    >
+      <path
+        d="M0 5 H28 M24 1.5 L30.5 5 L24 8.5"
+        stroke="currentColor"
+        strokeWidth="0.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+/* ─── Styles ─────────────────────────────────────────────────── */
+const labelStyle: CSSProperties = {
+  fontFamily: "var(--font-quattrocento-sans), var(--font-inter-var), sans-serif",
+  fontSize: "11px",
+  textTransform: "lowercase",
+  letterSpacing: "0.06em",
+  color: "#2C2418",
+  display: "block",
+  marginBottom: "6px",
+  fontWeight: 400,
+  opacity: 0.72,
+};
+
+const inputStyle: CSSProperties = {
+  width: "100%",
+  background: "transparent",
+  border: "none",
+  borderBottom: "1px solid rgba(122, 116, 105, 0.1)",
+  outline: "none",
+  fontFamily: "var(--font-quattrocento-sans), var(--font-inter-var), sans-serif",
+  fontSize: "1.125rem",
+  color: "#2C2418",
+  padding: "10px 0",
+  minHeight: "44px",
+  borderRadius: 0,
+  display: "block",
+  transition: "border-color 0.25s ease",
+};
+
+const defaultVariants: Variants = {
+  hidden: { opacity: 0, x: 30 },
+  visible: (i: number) => ({
+    opacity: 1,
+    x: 0,
+    transition: { delay: i * 0.15, duration: 0.5, ease: EASE },
+  }),
+};
+
+const reducedVariants: Variants = {
+  hidden: { opacity: 1, x: 0 },
+  visible: () => ({ opacity: 1, x: 0, transition: { duration: 0 } }),
+};
+
+export default function BirthForm({ fieldVariants = defaultVariants, shouldReduce = false }: BirthFormProps) {
+  const router = useRouter();
+  const { setUserData } = useUser();
+
+  const [name, setName] = useState("");
+  const [dob, setDob] = useState("");
+  const [timeOfBirth, setTimeOfBirth] = useState("");
+  const [unknownTime, setUnknownTime] = useState(false);
+  const [placeOfBirth, setPlaceOfBirth] = useState("");
+  const [timezone, setTimezone] = useState("");
+  const [latitude, setLatitude] = useState("");
+  const [longitude, setLongitude] = useState("");
+  const [lookupResults, setLookupResults] = useState<LocationLookupCandidate[]>([]);
+  const [lookupError, setLookupError] = useState("");
+  const [isLookupLoading, setIsLookupLoading] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showAdvanced, setShowAdvanced] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [arrowHover, setArrowHover] = useState(false);
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    const browserTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    if (browserTimeZone) setTimezone((c) => c || browserTimeZone);
+  }, []);
+
+  function validate() {
+    const e: Record<string, string> = {};
+    if (!name.trim()) e.name = "name is required";
+    if (!dob) e.dob = "date of birth is required";
+    if (!unknownTime && !timeOfBirth) e.time = "enter birth time or check unknown";
+    if (!placeOfBirth.trim()) e.place = "place of birth is required";
+    if (!timezone.trim()) e.timezone = "timezone is required";
+    const parsedLat = Number(latitude);
+    if (!latitude.trim()) e.latitude = "latitude is required";
+    else if (!Number.isFinite(parsedLat) || parsedLat < -90 || parsedLat > 90)
+      e.latitude = "latitude must be between -90 and 90";
+    const parsedLng = Number(longitude);
+    if (!longitude.trim()) e.longitude = "longitude is required";
+    else if (!Number.isFinite(parsedLng) || parsedLng < -180 || parsedLng > 180)
+      e.longitude = "longitude must be between -180 and 180";
+    return e;
+  }
+
+  function handleSubmit(e: FormEvent) {
+    e.preventDefault();
+    const errs = validate();
+    if (Object.keys(errs).length > 0) {
+      setErrors(errs);
+      const fieldMap: Record<string, string> = {
+        name: "name", dob: "dob", time: "timeOfBirth",
+        place: "placeOfBirth", timezone: "timezone",
+        latitude: "latitude", longitude: "longitude",
+      };
+      document.getElementById(fieldMap[Object.keys(errs)[0]] ?? Object.keys(errs)[0])?.focus();
+      return;
+    }
+    setIsSubmitting(true);
+    setUserData({ name, dob, timeOfBirth, unknownTime, placeOfBirth, timezone, latitude, longitude });
+    router.push("/loading-screen");
+  }
+
+  function onFocus(e: FocusEvent<HTMLInputElement>) {
+    e.target.style.borderBottom = "1px solid #A34851";
+  }
+
+  function onBlur(e: FocusEvent<HTMLInputElement>, hasError: boolean) {
+    e.target.style.borderBottom = hasError
+      ? "1px solid rgba(181, 86, 62, 0.4)"
+      : "1px solid rgba(122, 116, 105, 0.1)";
+    e.target.style.boxShadow = "none";
+  }
+
+  async function runLookup(query: string) {
+    if (query.trim().length < 2) { setLookupResults([]); return; }
+    setIsLookupLoading(true);
+    setLookupError("");
+    try {
+      const lookup = await lookupBirthPlace(query);
+      if (lookup.results.length === 0) {
+        setLookupResults([]);
+        setLookupError("no matching locations. you can enter coordinates manually.");
+        return;
+      }
+      setLookupResults(lookup.results);
+    } catch (err) {
+      setLookupResults([]);
+      setLookupError(err instanceof Error ? err.message : "birthplace lookup failed.");
+    } finally {
+      setIsLookupLoading(false);
+    }
+  }
+
+  function handlePlaceChange(value: string) {
+    setPlaceOfBirth(value);
+    setLookupResults([]);
+    setLookupError("");
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => { void runLookup(value); }, 600);
+  }
+
+  function applyLookupResult(result: LocationLookupCandidate) {
+    setPlaceOfBirth(result.displayName);
+    setTimezone(result.timezone);
+    setLatitude(String(result.latitude));
+    setLongitude(String(result.longitude));
+    setLookupResults([]);
+    setLookupError("");
+    setErrors((c) => { const n = { ...c }; delete n.place; delete n.timezone; delete n.latitude; delete n.longitude; return n; });
+  }
+
+  const vars = shouldReduce ? reducedVariants : fieldVariants;
+  const errStyle = { color: "#8B3620", fontSize: "12px", marginTop: "4px", fontFamily: "var(--font-inter-var)" };
+
+  return (
+    <form onSubmit={handleSubmit} className="landing-form w-full flex flex-col gap-6" noValidate>
+
+      {/* Full Name */}
+      <motion.div custom={0} variants={vars} initial="hidden" animate="visible">
+        <label htmlFor="name" style={labelStyle}>full name</label>
+        <input
+          id="name" type="text" placeholder="full name" value={name}
+          autoComplete="name"
+          onChange={(e) => setName(e.target.value)}
+          style={{ ...inputStyle, ...(errors.name ? { borderBottomColor: "rgba(181,86,62,0.4)" } : {}) }}
+          onFocus={onFocus} onBlur={(e) => onBlur(e, !!errors.name)}
+          aria-invalid={!!errors.name} aria-describedby={errors.name ? "name-error" : undefined}
+        />
+        {errors.name && <p id="name-error" role="alert" style={errStyle}>{errors.name}</p>}
+      </motion.div>
+
+      {/* DOB + Time */}
+      <motion.div custom={1} variants={vars} initial="hidden" animate="visible" className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+        {/* DOB — watermark centered behind field */}
+        <div style={{ position: "relative" }}>
+          {/* Wheel of Time watermark */}
+          <div
+            aria-hidden="true"
+            style={{
+              position: "absolute",
+              top: "50%", left: "50%",
+              transform: "translate(-50%, -44%)",
+              pointerEvents: "none",
+              opacity: 0.055,
+              zIndex: 0,
+            }}
+          >
+            <DobWatermark />
+          </div>
+
+          <div style={{ position: "relative", zIndex: 1 }}>
+            <label htmlFor="dob" style={labelStyle}>date of birth</label>
+            <input
+              id="dob" type="date" value={dob} autoComplete="bday"
+              onChange={(e) => setDob(e.target.value)}
+              style={{ ...inputStyle, ...(errors.dob ? { borderBottomColor: "rgba(181,86,62,0.4)" } : {}) }}
+              onFocus={onFocus} onBlur={(e) => onBlur(e, !!errors.dob)}
+              aria-invalid={!!errors.dob} aria-describedby={errors.dob ? "dob-error" : undefined}
+            />
+            {errors.dob && <p id="dob-error" role="alert" style={errStyle}>{errors.dob}</p>}
+          </div>
+        </div>
+
+        {/* Time of birth */}
+        <div>
+          <label htmlFor="timeOfBirth" style={labelStyle}>time of birth</label>
+          <input
+            id="timeOfBirth" type="time" value={timeOfBirth}
+            disabled={unknownTime} autoComplete="off"
+            onChange={(e) => setTimeOfBirth(e.target.value)}
+            style={{ ...inputStyle, opacity: unknownTime ? 0.35 : 1, cursor: unknownTime ? "not-allowed" : "auto", ...(errors.time ? { borderBottomColor: "rgba(181,86,62,0.4)" } : {}) }}
+            onFocus={(e) => { if (!unknownTime) onFocus(e); }}
+            onBlur={(e) => onBlur(e, !!errors.time)}
+            aria-invalid={!!errors.time} aria-describedby={errors.time ? "time-error" : undefined}
+          />
+
+          {/* Custom circular checkbox toggle */}
+          <label
+            htmlFor="unknownTime"
+            style={{
+              display: "flex", alignItems: "center", gap: "8px",
+              marginTop: "12px", cursor: "pointer",
+              fontFamily: "var(--font-quattrocento-sans), var(--font-inter-var), sans-serif",
+              fontSize: "11px", letterSpacing: "0.06em",
+              color: "#2C2418", opacity: 0.6,
+            }}
+          >
+            {/* Hidden real input — keyboard + screen reader accessible */}
+            <span style={{ position: "relative", width: "16px", height: "16px", flexShrink: 0, display: "inline-flex" }}>
+              <input
+                id="unknownTime" type="checkbox" checked={unknownTime}
+                onChange={(e) => { setUnknownTime(e.target.checked); if (e.target.checked) setTimeOfBirth(""); }}
+                style={{
+                  position: "absolute", inset: 0, margin: 0,
+                  opacity: 0, width: "100%", height: "100%",
+                  cursor: "pointer",
+                }}
+              />
+              {/* Custom circle visual */}
+              <span
+                aria-hidden="true"
+                style={{
+                  position: "absolute", inset: 0,
+                  borderRadius: "50%",
+                  border: `1px solid ${unknownTime ? "#B5563E" : "rgba(122,116,105,0.45)"}`,
+                  backgroundColor: unknownTime ? "#B5563E" : "transparent",
+                  transition: "background-color 0.18s ease, border-color 0.18s ease",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  pointerEvents: "none",
+                }}
+              >
+                {unknownTime && (
+                  <span style={{
+                    width: "5px", height: "5px",
+                    borderRadius: "50%",
+                    backgroundColor: "#F5F0E8",
+                    display: "block",
+                  }} />
+                )}
+              </span>
+            </span>
+            i don&apos;t know my birth time
+          </label>
+
+          {errors.time && <p id="time-error" role="alert" style={errStyle}>{errors.time}</p>}
+        </div>
+      </motion.div>
+
+      {/* Place of Birth — inline autocomplete */}
+      <motion.div custom={2} variants={vars} initial="hidden" animate="visible">
+        <label htmlFor="placeOfBirth" style={labelStyle}>
+          place of birth
+          {isLookupLoading && (
+            <span style={{ marginLeft: "8px", opacity: 0.5, fontStyle: "italic" }}>searching…</span>
+          )}
+        </label>
+        <input
+          id="placeOfBirth" type="text" placeholder="city, country"
+          value={placeOfBirth} autoComplete="address-level2"
+          onChange={(e) => handlePlaceChange(e.target.value)}
+          style={{ ...inputStyle, ...(errors.place ? { borderBottomColor: "rgba(181,86,62,0.4)" } : {}) }}
+          onFocus={onFocus} onBlur={(e) => onBlur(e, !!errors.place)}
+          aria-invalid={!!errors.place} aria-describedby={errors.place ? "place-error" : undefined}
+          aria-autocomplete="list" aria-controls={lookupResults.length ? "place-results" : undefined}
+        />
+        {errors.place && <p id="place-error" role="alert" style={errStyle}>{errors.place}</p>}
+        {lookupError && <p role="alert" style={{ ...errStyle, marginTop: "8px" }}>{lookupError}</p>}
+
+        {lookupResults.length > 0 && (
+          <div id="place-results" role="listbox" style={{ display: "grid", gap: "1px", marginTop: "8px", borderTop: "1px solid rgba(122,116,105,0.08)" }}>
+            {lookupResults.map((result) => (
+              <button
+                key={result.id} type="button" role="option"
+                onClick={() => applyLookupResult(result)}
+                style={{
+                  background: "none", border: "none", borderBottom: "1px solid rgba(122,116,105,0.06)",
+                  padding: "10px 0", textAlign: "left", cursor: "pointer", minHeight: "44px", width: "100%",
+                }}
+              >
+                <span style={{ display: "block", color: "#2C2418", fontFamily: "var(--font-quattrocento-sans), var(--font-inter-var), sans-serif", fontSize: "14px" }}>
+                  {result.displayName}
+                </span>
+                <span style={{ display: "block", marginTop: "2px", color: "#9C9488", fontFamily: "var(--font-inter-var)", fontSize: "11px", letterSpacing: "0.04em" }}>
+                  {result.timezone} · {result.latitude.toFixed(4)}, {result.longitude.toFixed(4)}
+                </span>
+              </button>
+            ))}
+          </div>
+        )}
+      </motion.div>
+
+      {/* Advanced settings toggle */}
+      <motion.div custom={3} variants={vars} initial="hidden" animate="visible">
+        <button
+          type="button"
+          onClick={() => setShowAdvanced((v) => !v)}
+          style={{
+            background: "none", border: "none", cursor: "pointer",
+            fontFamily: "var(--font-inter-var)", fontSize: "11px",
+            letterSpacing: "0.06em", color: "#7A7469",
+            padding: "4px 0", display: "flex", alignItems: "center", gap: "6px",
+          }}
+        >
+          <span style={{ fontSize: "9px", opacity: 0.7 }}>{showAdvanced ? "▲" : "▼"}</span>
+          {showAdvanced ? "hide advanced" : "advanced settings"}
+        </button>
+
+        {showAdvanced && (
+          <div style={{ marginTop: "20px", display: "flex", flexDirection: "column", gap: "24px" }}>
+            <div>
+              <label htmlFor="timezone" style={labelStyle}>birth timezone</label>
+              <input
+                id="timezone" type="text" placeholder="America/New_York"
+                value={timezone} autoComplete="off"
+                onChange={(e) => setTimezone(e.target.value)}
+                style={{ ...inputStyle, ...(errors.timezone ? { borderBottomColor: "rgba(181,86,62,0.4)" } : {}) }}
+                onFocus={onFocus} onBlur={(e) => onBlur(e, !!errors.timezone)}
+                aria-invalid={!!errors.timezone} aria-describedby={errors.timezone ? "timezone-error" : undefined}
+              />
+              {errors.timezone && <p id="timezone-error" role="alert" style={errStyle}>{errors.timezone}</p>}
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label htmlFor="latitude" style={labelStyle}>latitude</label>
+                <input
+                  id="latitude" type="number" placeholder="40.7128"
+                  value={latitude} autoComplete="off" step="any"
+                  onChange={(e) => setLatitude(e.target.value)}
+                  style={{ ...inputStyle, ...(errors.latitude ? { borderBottomColor: "rgba(181,86,62,0.4)" } : {}) }}
+                  onFocus={onFocus} onBlur={(e) => onBlur(e, !!errors.latitude)}
+                  aria-invalid={!!errors.latitude} aria-describedby={errors.latitude ? "latitude-error" : undefined}
+                />
+                {errors.latitude && <p id="latitude-error" role="alert" style={errStyle}>{errors.latitude}</p>}
+              </div>
+              <div>
+                <label htmlFor="longitude" style={labelStyle}>longitude</label>
+                <input
+                  id="longitude" type="number" placeholder="-74.0060"
+                  value={longitude} autoComplete="off" step="any"
+                  onChange={(e) => setLongitude(e.target.value)}
+                  style={{ ...inputStyle, ...(errors.longitude ? { borderBottomColor: "rgba(181,86,62,0.4)" } : {}) }}
+                  onFocus={onFocus} onBlur={(e) => onBlur(e, !!errors.longitude)}
+                  aria-invalid={!!errors.longitude} aria-describedby={errors.longitude ? "longitude-error" : undefined}
+                />
+                {errors.longitude && <p id="longitude-error" role="alert" style={errStyle}>{errors.longitude}</p>}
+              </div>
+            </div>
+
+            <p style={{ color: "#9C9488", fontSize: "11px", fontFamily: "var(--font-inter-var)", lineHeight: 1.6, letterSpacing: "0.03em" }}>
+              place lookup fills these automatically. adjust if the match is wrong.
+            </p>
+          </div>
+        )}
+      </motion.div>
+
+      {/* Submit */}
+      <motion.div custom={4} variants={vars} initial="hidden" animate="visible">
+        <motion.button
+          type="submit"
+          disabled={isSubmitting}
+          className="w-full py-4 cursor-pointer"
+          style={{
+            marginTop: "40px",
+            backgroundColor: isSubmitting ? "rgba(181,86,62,0.6)" : "#B5563E",
+            color: "#F5F0E8",
+            fontFamily: "var(--font-playfair-display)",
+            fontWeight: 700,
+            fontSize: "1.1rem",
+            letterSpacing: "0.02em",
+            border: "none",
+            borderRadius: "2px",
+            minHeight: "44px",
+            cursor: isSubmitting ? "wait" : "pointer",
+            transition: "background-color 0.2s ease",
+          }}
+          whileHover={shouldReduce || isSubmitting ? {} : { y: -2, boxShadow: "0 6px 20px rgba(181,86,62,0.35)" }}
+          whileTap={shouldReduce || isSubmitting ? {} : { scale: 0.98, y: 0 }}
+          transition={{ duration: 0.2, ease: "easeOut" }}
+          onMouseEnter={() => { if (!isSubmitting) setArrowHover(true); }}
+          onMouseLeave={() => setArrowHover(false)}
+        >
+          {isSubmitting ? (
+            "Preparing…"
+          ) : (
+            <span style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "10px" }}>
+              Generate Profile
+              <EditorialArrow hover={arrowHover} reduced={!!shouldReduce} />
+            </span>
+          )}
+        </motion.button>
+      </motion.div>
+
+      {/* Footer signature — dimmed to 40% to preserve CTA focus */}
+      <motion.p
+        custom={5} variants={vars} initial="hidden" animate="visible"
+        className="text-center"
+        style={{
+          color: "#5C574F",
+          fontFamily: "var(--font-inter-var)",
+          fontSize: "11px",
+          letterSpacing: "0.12em",
+          textTransform: "lowercase",
+          opacity: 0.4,
+        }}
+      >
+        built on vedic timing systems
+      </motion.p>
+
+    </form>
+  );
+}

@@ -1,0 +1,211 @@
+:root {
+  /* Legacy tokens — kept for backward compat */
+  --color-cream: #f5f0e8;
+  --color-charcoal: #2c2418;
+  --color-warm-grey: #7a7469;
+  --color-terracotta: #b5563e;
+  --color-brass-gold: #8a7240;
+  --color-act-green: #5e7a5e;
+  --color-avoid-red: #a04040;
+
+  /* Vedic palette — semantic tokens */
+  --bg-cream: #F5F0E8;
+  --text-primary: #2C2418;
+  --text-muted: #9C9488;
+  /* #B5563E = 3.9:1 on cream — only use for non-text (borders, fills).
+     For small text labels use --accent-terracotta-text which is darkened to pass 4.5:1. */
+  --accent-terracotta: #B5563E;
+  --accent-terracotta-text: #8B3620; /* 5.6:1 on cream — safe for small labels */
+  --accent-gold: #786030;            /* 4.7:1 on cream — passes AA */
+  --accent-green: #5E7A5E;
+  --accent-red: #A04040;             /* 5.2:1 on cream — passes AA */
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  height: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100%;
+  margin: 0;
+  background-color: var(--bg-cream);
+  color: var(--text-primary);
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ─── Layout ──────────────────────────────────────────────── */
+
+.h-full       { height: 100%; }
+.min-h-full   { min-height: 100%; }
+.w-full       { width: 100%; }
+.relative     { position: relative; }
+.absolute     { position: absolute; }
+.fixed        { position: fixed; }
+.top-0        { top: 0; }
+.top-1\/2     { top: 50%; }
+.left-0       { left: 0; }
+.left-1\/2    { left: 50%; }
+.right-0      { right: 0; }
+.z-10         { z-index: 10; }
+.z-20         { z-index: 20; }
+.overflow-hidden  { overflow: hidden; }
+.pointer-events-none  { pointer-events: none; }
+.pointer-events-auto  { pointer-events: auto; }
+.sticky           { position: sticky; }
+
+/* ─── Margin ──────────────────────────────────────────────── */
+
+.mx-auto  { margin-left: auto; margin-right: auto; }
+.my-5     { margin-top: 1.25rem; margin-bottom: 1.25rem; }
+.my-16    { margin-top: 4rem;    margin-bottom: 4rem; }
+.my-20    { margin-top: 5rem;    margin-bottom: 5rem; }
+.mt-1     { margin-top: 0.25rem; }
+.mt-2     { margin-top: 0.5rem; }
+.mt-3     { margin-top: 0.75rem; }
+.mt-4     { margin-top: 1rem; }
+.mt-6     { margin-top: 1.5rem; }
+.mt-8     { margin-top: 2rem; }
+.mt-10    { margin-top: 2.5rem; }
+.mb-12    { margin-bottom: 3rem; }
+
+/* ─── Padding ─────────────────────────────────────────────── */
+
+.p-6    { padding: 1.5rem; }
+.px-6   { padding-left: 1.5rem; padding-right: 1.5rem; }
+.py-4   { padding-top: 1rem;  padding-bottom: 1rem; }
+.py-16  { padding-top: 4rem;  padding-bottom: 4rem; }
+.py-20  { padding-top: 5rem;  padding-bottom: 5rem; }
+.pt-24  { padding-top: 6rem; }
+.pb-32  { padding-bottom: 8rem; }
+
+/* ─── Flexbox / Grid ──────────────────────────────────────── */
+
+.flex           { display: flex; }
+.grid           { display: grid; }
+.grid-cols-1    { grid-template-columns: minmax(0, 1fr); }
+.flex-col       { flex-direction: column; }
+.flex-wrap      { flex-wrap: wrap; }
+.items-center   { align-items: center; }
+.justify-center { justify-content: center; }
+.justify-between { justify-content: space-between; }
+.gap-6          { gap: 1.5rem; }
+.gap-x-6        { column-gap: 1.5rem; }
+.gap-y-2        { row-gap: 0.5rem; }
+.gap-x-\[0\.25em\] { column-gap: 0.25em; }
+.space-y-3 > * + * { margin-top: 0.75rem; }
+
+/* ─── Typography ──────────────────────────────────────────── */
+
+.text-left   { text-align: left; }
+.text-center { text-align: center; }
+.text-sm     { font-size: 0.875rem; }
+.text-base   { font-size: 1rem; }
+.text-lg     { font-size: 1.125rem; }
+.font-bold   { font-weight: 700; }
+.uppercase   { text-transform: uppercase; }
+.capitalize  { text-transform: capitalize; }
+.tracking-wide    { letter-spacing: 0.025em; }
+.tracking-widest  { letter-spacing: 0.2em; }
+.tracking-\[0\.2em\] { letter-spacing: 0.2em; }
+.leading-tight    { line-height: 1.05; }
+.antialiased {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ─── Interaction ─────────────────────────────────────────── */
+
+.cursor-pointer   { cursor: pointer; }
+.transition-colors { transition: color 0.2s ease; }
+
+/* ─── Focus rings — keyboard-nav safety net ──────────────── */
+/* !important beats inline outline:none without touching JSX  */
+
+:focus-visible {
+  outline: 2px solid rgba(181, 86, 62, 0.65) !important;
+  outline-offset: 3px !important;
+  border-radius: 2px !important;
+}
+
+/* Inset ring on inputs so it doesn't fight the bottom border */
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid rgba(181, 86, 62, 0.5) !important;
+  outline-offset: -2px !important;
+}
+
+/* ─── Touch — kill 300ms tap delay on mobile ─────────────── */
+
+button,
+[role="button"],
+[role="tab"],
+input,
+select,
+textarea,
+a {
+  touch-action: manipulation;
+}
+
+/* ─── Sizing ──────────────────────────────────────────────── */
+
+.max-w-\[600px\] { max-width: 600px; }
+.-translate-x-1\/2 { transform: translateX(-50%); }
+.-translate-y-1\/2 { transform: translateY(-50%); }
+
+/* ─── Responsive: sm ──────────────────────────────────────── */
+
+@media (min-width: 640px) {
+  .sm\:text-base { font-size: 1rem; }
+  .sm\:text-lg   { font-size: 1.125rem; }
+}
+
+/* ─── Responsive: md ──────────────────────────────────────── */
+
+@media (min-width: 768px) {
+  .md\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .md\:my-20       { margin-top: 5rem; margin-bottom: 5rem; }
+  .md\:py-20       { padding-top: 5rem; padding-bottom: 5rem; }
+}
+
+/* ─── Reduced motion ──────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ─── Landing form — Poetic Lowercase placeholders ────────── */
+
+.landing-form input::placeholder,
+.landing-form textarea::placeholder {
+  font-family: var(--font-inter-var), sans-serif;
+  font-weight: 300;
+  text-transform: lowercase;
+  color: rgba(92, 87, 79, 0.4);
+  letter-spacing: 0.04em;
+}
