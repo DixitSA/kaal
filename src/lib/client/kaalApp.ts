@@ -21,7 +21,10 @@ import {
   type RiskBias,
   type SupportBias
 } from "@/lib/types/engine";
-import { deriveIdentityState, renderIdentityProfile } from "@/lib/engine/identityEngine";
+import { deriveIdentityState, renderIdentityProfile, generateIdentityProfile } from "@/lib/engine/identityEngine";
+import { generatePhaseProfile } from "@/lib/engine/phaseEngine";
+import { generateDailyState } from "@/lib/engine/dailyEngine";
+import { evaluateDecision } from "@/lib/engine/decisionEngine";
 
 // ---------------------------------------------------------------------------
 // Python backend response shapes
@@ -266,7 +269,7 @@ export async function runProfilePipeline(
   });
   const chart = chartResponse.data.chart;
 
-  // 2. Call Python backend — Swiss Ephemeris + Gemini interpretation
+  // 2. Try Python backend (AI narrative). Falls back to local TS engines if unavailable.
   reportStage?.("reading the stars...");
   const pythonPayload = {
     name: intake.name,
@@ -279,12 +282,39 @@ export async function runProfilePipeline(
     timezone: intake.timezone
   };
 
-  const py = await requestJson<PythonProfileResponse>(
-    "/api/python/profile",
-    { method: "POST", body: JSON.stringify(pythonPayload) }
-  );
+  let py: PythonProfileResponse | null = null;
+  try {
+    py = await requestJson<PythonProfileResponse>(
+      "/api/python/profile",
+      { method: "POST", body: JSON.stringify(pythonPayload) }
+    );
+  } catch {
+    // Python backend unavailable — local deterministic engines will be used below
+  }
 
   reportStage?.("building your profile...");
+
+  // ── Local-engine fallback (no Python backend) ─────────────────────────────
+  if (!py) {
+    const identity = generateIdentityProfile(chart);
+    const phase    = generatePhaseProfile(chart);
+    const daily    = generateDailyState(chart);
+    const decisions = {} as Record<DecisionCategory, DecisionEvaluation>;
+    for (const category of DECISION_CATEGORIES) {
+      decisions[category] = evaluateDecision(chart, category);
+    }
+    return {
+      userId,
+      chart,
+      identity,
+      phase,
+      daily,
+      todayGeneratedAt: new Date().toISOString(),
+      todayMode: "local-ts",
+      decisions,
+    };
+  }
+  // ── Python path continues below ───────────────────────────────────────────
 
   // 3. Map Python response → KaalSnapshot
 
