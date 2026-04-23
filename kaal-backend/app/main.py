@@ -14,7 +14,7 @@ from app.interpretation.translator import generate_profile
 
 logger = logging.getLogger("kaal")
 
-app = FastAPI(title="Kaal API", version="0.3.0")
+app = FastAPI(title="Kaal API", version="0.4.0")
 
 # --- CORS: restrict to known frontend origins ---
 _ALLOWED_ORIGINS = os.getenv(
@@ -83,17 +83,17 @@ MD_BASE_INTENSITY = {
     "Venus":   3.0,
 }
 
-# AD lord modifiers (lighter touch — AD modifies, doesn't dominate)
+# AD lord modifiers per audit spec (binary: malefic +1, benefic -0.5)
 AD_INTENSITY_MODIFIER = {
     "Rahu":    1.0,
-    "Saturn":  0.8,
-    "Mars":    0.8,
-    "Ketu":    0.5,
-    "Sun":     0.3,
+    "Saturn":  1.0,
+    "Mars":    1.0,
+    "Ketu":    1.0,
+    "Sun":     0.0,
     "Moon":    0.0,
     "Jupiter": -0.5,
     "Mercury": 0.0,
-    "Venus":   -0.3,
+    "Venus":   -0.5,
 }
 
 
@@ -102,7 +102,7 @@ def _compute_intensity(md_lord: str, ad_lord: str, transit_modifiers: list[dict]
     Compute intensity score using classical model.
 
     Base = MD lord intensity (0-10)
-    + AD modifier
+    + AD modifier (+1 for malefic, -0.5 for benefic)
     + sum of transit modifiers (each has a delta)
     Clamped to [0, 10]
     """
@@ -113,23 +113,23 @@ def _compute_intensity(md_lord: str, ad_lord: str, transit_modifiers: list[dict]
     raw_score = base + ad_mod + transit_delta
     score = max(0, min(10, raw_score))
 
-    # Thresholds per audit spec
-    if score <= 4:
+    # Thresholds per audit spec Section 8
+    if score <= 4.0:
         level = "low"
-    elif score <= 6:
+    elif score <= 6.5:
         level = "medium"
-    elif score <= 8:
+    elif score <= 8.5:
         level = "high"
     else:
         level = "critical"
 
     return {
-        "score": round(score * 10, 1),  # scale to 0-100 for frontend
+        "score": round(score, 1),
         "level": level,
         "breakdown": {
-            "base_md": round(base * 10, 1),
-            "ad_modifier": round(ad_mod * 10, 1),
-            "transits": [{"name": m["name"], "delta": round(m["delta"] * 10, 1)} for m in transit_modifiers],
+            "base_md": round(base, 1),
+            "ad_modifier": round(ad_mod, 1),
+            "transits": [{"name": m["name"], "delta": round(m["delta"], 1)} for m in transit_modifiers],
         }
     }
 
@@ -141,19 +141,32 @@ def _compute_intensity(md_lord: str, ad_lord: str, transit_modifiers: list[dict]
 RAHU_CAVEAT = (
     "Rahu amplifies the visible signal but distorts scale. "
     "What looks like the full picture is likely only part of it. "
-    "Commitments made now carry forward into the next cycle."
+    "Commitments made in this period carry forward into the next cycle."
 )
 
 KETU_CAVEAT = (
-    "Ketu creates clarity through detachment, not through accumulation. "
-    "Acting from desire rather than discernment will dissatisfy regardless of outcome."
+    "Ketu creates clarity through detachment, not accumulation. "
+    "Acting from desire rather than discernment tends to dissatisfy "
+    "regardless of outcome."
+)
+
+BOTH_NODES_CAVEAT = (
+    "Both the larger and smaller cycle are node-driven. The ground "
+    "itself is shifting. Any action here is best treated as "
+    "provisional, not foundational."
 )
 
 
 def _inject_shadow_caveats(decisions: dict, md_lord: str, ad_lord: str) -> dict:
     """Inject mandatory shadow_caveat when MD or AD lord is Rahu or Ketu."""
+    # Determine which caveat applies
+    md_is_node = md_lord in ("Rahu", "Ketu")
+    ad_is_node = ad_lord in ("Rahu", "Ketu")
+
     caveat = None
-    if md_lord == "Rahu" or ad_lord == "Rahu":
+    if md_is_node and ad_is_node:
+        caveat = BOTH_NODES_CAVEAT
+    elif md_lord == "Rahu" or ad_lord == "Rahu":
         caveat = RAHU_CAVEAT
     elif md_lord == "Ketu" or ad_lord == "Ketu":
         caveat = KETU_CAVEAT
@@ -161,7 +174,7 @@ def _inject_shadow_caveats(decisions: dict, md_lord: str, ad_lord: str) -> dict:
     if caveat:
         for category in decisions:
             if isinstance(decisions[category], dict):
-                # Only inject if action is ACT (per audit spec: "add to all ACT outputs")
+                # Inject on every ACT recommendation per audit spec
                 if decisions[category].get("action") == "ACT":
                     if not decisions[category].get("shadow_caveat"):
                         decisions[category]["shadow_caveat"] = caveat
@@ -193,17 +206,18 @@ async def create_profile(data: BirthDataRequest):
 
         transits = calculate_current_transits(chart)
 
-        # --- Deterministic phase name from MD+AD (Section 9) ---
+        # --- Deterministic phase name from MD+AD (Section 10) ---
         md_lord = dasha["mahadasha"]["planet"]
         ad_lord = dasha["antardasha"]["planet"]
         phase_name, phase_summary = get_phase_name(md_lord, ad_lord)
 
-        # --- Classical intensity scoring (Section 6) ---
+        # --- Classical intensity scoring (Section 8) ---
         transit_modifiers = transits.get("intensity_modifiers", [])
         intensity = _compute_intensity(md_lord, ad_lord, transit_modifiers)
 
-        # --- LLM interpretation (enriched with chart analysis) ---
-        profile = await generate_profile(chart, dasha, transits, phase_name, phase_summary)
+        # --- LLM interpretation (enriched with chart analysis + tara bala) ---
+        tara_bala = transits.get("tara_bala", {"name": "Sampat", "is_auspicious": True})
+        profile = await generate_profile(chart, dasha, transits, phase_name, phase_summary, tara_bala)
 
         # --- Inject mandatory Rahu/Ketu caveats ---
         decisions_raw = _inject_shadow_caveats(profile["decisions"], md_lord, ad_lord)
@@ -226,7 +240,7 @@ async def create_profile(data: BirthDataRequest):
                 "lord": md_lord,
                 "start_date": dasha["mahadasha"]["start"][:10],
                 "end_date": dasha["mahadasha"]["end"][:10],
-                "years_elapsed": dasha.get("percent_through_maha", 0) / 100 * maha_years,
+                "years_elapsed": round(dasha.get("percent_through_maha", 0) / 100 * maha_years, 2),
             },
             "antardasha": {
                 "lord": ad_lord,

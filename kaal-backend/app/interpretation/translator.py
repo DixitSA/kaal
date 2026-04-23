@@ -8,6 +8,7 @@ from app.interpretation.prompts import (
 from app.models.schemas import (
     PhaseData, TodayData, PatternData, DecisionData,
 )
+from app.calculations.nakshatras import get_nakshatra_profile
 
 FALLBACK = {
     "phase": {
@@ -36,26 +37,14 @@ FALLBACK = {
         "move": {"action": "AVOID", "reason": "ground isn't stable enough", "risk": "relocation compounds instability", "shadow_caveat": None},
         "communication": {"action": "ACT", "reason": "your words land well today", "risk": "silence is being misread", "shadow_caveat": None},
     },
-    "pattern": {
-        "nakshatra": "Ashwini",
-        "pada": 1,
-        "headline": "you move carefully, but not weakly",
-        "traits": [
-            "you internalize pressure before reacting",
-            "you wait for clarity, then move cleanly",
-            "you stay steady while others become inconsistent",
-        ],
-        "shadow": "you hold too much for too long, then shut down",
-        "archetype": "steward",
-    },
 }
 
 # Pydantic validators for LLM output — keyed by section name
 _VALIDATORS = {
     "phase": PhaseData,
     "today": TodayData,
-    "pattern": PatternData,
     # decisions are validated per-key below
+    # pattern is now deterministic, not LLM-generated
 }
 
 
@@ -75,13 +64,12 @@ def _validate_section(section_name: str, data: dict) -> bool:
             validator(**data)
             return True
         if section_name == "decisions":
-            # Validate each decision key individually
             for key in ("career", "relationships", "money", "travel", "move", "communication"):
                 if key not in data:
                     return False
                 DecisionData(**data[key])
             return True
-        return True  # No validator = pass through
+        return True
     except Exception:
         return False
 
@@ -94,7 +82,6 @@ async def _safe_interpret(system_prompt: str, data: str, fallback: dict, section
             raw = await interpret(system_prompt, data)
             parsed = json.loads(_strip_markdown(raw))
 
-            # Validate structure against schema
             if section_name and not _validate_section(section_name, parsed):
                 print(f"[interpreter] Schema validation failed for '{section_name}' (attempt {attempt}) — retrying")
                 if attempt == 1:
@@ -106,10 +93,9 @@ async def _safe_interpret(system_prompt: str, data: str, fallback: dict, section
             if attempt == 1:
                 print(f"[interpreter] JSON parse failed twice — using fallback")
                 return fallback
-            # retry once more on bad JSON
         except Exception as e:
             print(f"[interpreter] LLM error (attempt {attempt}): {e}")
-            return fallback  # don't retry network/auth errors
+            return fallback
     return fallback
 
 
@@ -125,7 +111,7 @@ def _build_chart_summary(chart_data: dict) -> dict:
             "nakshatra": data.get("nakshatra", ""),
             "pada": data.get("nakshatra_pada", 0),
             "dignity": data.get("dignity", "neutral"),
-            "dignity_score": data.get("dignity_score", 50),
+            "dignity_score": data.get("dignity_score", 0),
             "is_retrograde": data.get("is_retrograde", False),
             "is_combust": data.get("is_combust", False),
         }
@@ -141,8 +127,9 @@ async def generate_profile(
     transit_data: dict,
     phase_name: str,
     phase_summary: str,
+    tara_bala: dict,
 ) -> dict:
-    """Orchestrate LLM calls to produce full Kaal profile — all 4 run in parallel."""
+    """Orchestrate LLM calls for phase/today/decisions + deterministic pattern."""
     import asyncio
 
     chart_summary = _build_chart_summary(chart_data)
@@ -152,7 +139,10 @@ async def generate_profile(
     # Build phase fallback with deterministic name/summary
     phase_fallback = {**FALLBACK["phase"], "name": phase_name, "summary": phase_summary}
 
-    phase, today, decisions, pattern = await asyncio.gather(
+    # Build today fallback with deterministic tara bala
+    today_fallback = {**FALLBACK["today"], "tara": {"name": tara_bala["name"], "is_auspicious": tara_bala["is_auspicious"]}}
+
+    phase, today, decisions = await asyncio.gather(
         _safe_interpret(
             SYSTEM_PROMPT,
             PHASE_PROMPT.format(
@@ -165,8 +155,12 @@ async def generate_profile(
         ),
         _safe_interpret(
             SYSTEM_PROMPT,
-            TODAY_PROMPT.format(calculation_data=json.dumps(transit_data, indent=2)),
-            FALLBACK["today"],
+            TODAY_PROMPT.format(
+                calculation_data=json.dumps(transit_data, indent=2),
+                tara_name=tara_bala["name"],
+                tara_auspicious="true" if tara_bala["is_auspicious"] else "false",
+            ),
+            today_fallback,
             section_name="today",
         ),
         _safe_interpret(
@@ -183,16 +177,26 @@ async def generate_profile(
             FALLBACK["decisions"],
             section_name="decisions",
         ),
-        _safe_interpret(
-            SYSTEM_PROMPT,
-            PATTERN_PROMPT.format(calculation_data=json.dumps(chart_summary, indent=2)),
-            FALLBACK["pattern"],
-            section_name="pattern",
-        ),
     )
 
     # Ensure phase name/summary are deterministic regardless of LLM output
     phase["name"] = phase_name
     phase["summary"] = phase_summary
+
+    # Ensure tara bala is deterministic regardless of LLM output
+    today["tara"] = {"name": tara_bala["name"], "is_auspicious": tara_bala["is_auspicious"]}
+
+    # --- Pattern is fully deterministic (Section 9) ---
+    moon_nak = chart_data.get("moon_nakshatra", "Ashwini")
+    moon_pada = chart_data["planets"]["Moon"]["nakshatra_pada"]
+    nak_profile = get_nakshatra_profile(moon_nak, moon_pada)
+    pattern = {
+        "nakshatra": moon_nak,
+        "pada": moon_pada,
+        "headline": nak_profile["headline"],
+        "traits": nak_profile["traits"],
+        "shadow": nak_profile["shadow"],
+        "archetype": nak_profile["archetype"],
+    }
 
     return {"phase": phase, "today": today, "decisions": decisions, "pattern": pattern}

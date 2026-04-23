@@ -50,7 +50,8 @@ Important context:
 - The intensity_modifiers list shows which heavy transits are active
 - notable_transits explains each significant transit
 
-Determine the Tara (auspiciousness) based on the transit Moon's position relative to the natal Moon nakshatra.
+The Tara Bala has ALREADY been computed: {tara_name} ({tara_auspicious}).
+Use this to inform the signal and guidance — do NOT override the tara values.
 
 Calculation data:
 {calculation_data}
@@ -59,10 +60,10 @@ Respond with exactly this JSON structure:
 {{
     "signal": "one sentence summary of today's overall energy, lowercase",
     "tara": {{
-        "name": "e.g. Sampat, Vipat, Kshema, Pratyak, Sadhana, Naidhana, Mitra, Parama Mitra, one of the 9 Tara names",
-        "is_auspicious": true
+        "name": "{tara_name}",
+        "is_auspicious": {tara_auspicious}
     }},
-    "focus_area": "e.g. maintenance, execution, reflection, preparation",
+    "focus_area": "e.g. maintenance, execution, reflection, preparation — should reflect strongest transit influence (Saturn=maintenance, Mars=initiative, Venus=connection, Jupiter=expansion)",
     "guidance": "one sentence, how to handle the pressure or advantage",
     "caution": "one sentence, what to actively avoid or watch out for today"
 }}"""

@@ -91,7 +91,7 @@ class GrahaData(BaseModel):
     nakshatra_pada: int
     house: int
     dignity: str
-    dignity_score: float
+    dignity_score: int
     is_retrograde: bool
     is_combust: bool
 

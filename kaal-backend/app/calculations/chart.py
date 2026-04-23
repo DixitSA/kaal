@@ -5,6 +5,7 @@ Ayanamsa: Lahiri (Chitrapaksha) — swe.SIDM_LAHIRI
 Zodiac:   Sidereal — swe.FLG_SIDEREAL
 Houses:   Whole Sign — house system 'W'
 Nodes:    True Node — swe.TRUE_NODE (not mean node)
+Flags:    swe.FLG_SWIEPH | swe.FLG_SIDEREAL | swe.FLG_SPEED
 """
 import swisseph as swe
 from datetime import datetime
@@ -12,7 +13,10 @@ import pytz
 from app.calculations.dignity import compute_all_dignities
 from app.calculations.aspects import compute_aspects_on_signs
 
-swe.set_sid_mode(swe.SIDM_LAHIRI)
+swe.set_sid_mode(swe.SIDM_LAHIRI, 0, 0)
+
+# Full flag set: Swiss Eph + Sidereal + Speed (for retrograde detection)
+_CALC_FLAGS = swe.FLG_SWIEPH | swe.FLG_SIDEREAL | swe.FLG_SPEED
 
 PLANETS = {
     "Sun": swe.SUN,
@@ -54,7 +58,7 @@ COMBUSTION_DISTANCES = {
 
 def _nakshatra_info(longitude: float) -> tuple[str, int]:
     """Compute nakshatra name and pada from sidereal longitude."""
-    nak_span = 360.0 / 27.0  # 13.3333...°
+    nak_span = 360.0 / 27.0  # 13.3333...deg
     idx = int(longitude / nak_span) % 27
     rem = (longitude % nak_span) / nak_span
     pada = int(rem * 4) + 1
@@ -90,7 +94,7 @@ def calculate_birth_chart(
     planets = {}
     sun_lon = 0.0
     for name, planet_id in PLANETS.items():
-        result, _ = swe.calc_ut(jd, planet_id, swe.FLG_SIDEREAL)
+        result, _ = swe.calc_ut(jd, planet_id, _CALC_FLAGS)
         lon = result[0]
         if name == "Sun":
             sun_lon = lon
@@ -98,10 +102,11 @@ def calculate_birth_chart(
         house = (sign_idx - asc_sign_idx) % 12 + 1
 
         # Retrograde: Rahu is always retrograde per BPHS
+        # Sun and Moon are never retrograde
         if name == "Rahu":
-            retrograde = True  # Rahu is always retrograde
+            retrograde = True
         elif name in ("Sun", "Moon"):
-            retrograde = False  # Sun and Moon are never retrograde
+            retrograde = False
         else:
             retrograde = result[3] < 0
 
@@ -117,10 +122,10 @@ def calculate_birth_chart(
             "is_retrograde": retrograde,
             "is_combust": False,
             "dignity": "neutral",
-            "dignity_score": 50.0,
+            "dignity_score": 0,
         }
 
-    # --- Combustion check per BPHS/Saravali (per-planet distances) ---
+    # --- Combustion check per BPHS/Saravali (per-planet distances, inclusive) ---
     for name, data in planets.items():
         if name in COMBUSTION_DISTANCES:
             diff = abs(data["longitude"] - sun_lon)
@@ -134,9 +139,9 @@ def calculate_birth_chart(
             elif name == "Venus" and data["is_retrograde"]:
                 threshold = 8.0
 
-            data["is_combust"] = diff < threshold
+            data["is_combust"] = diff <= threshold  # inclusive per spec
 
-    # --- Ketu = Rahu + 180° (always retrograde per BPHS) ---
+    # --- Ketu = Rahu + 180 deg (always retrograde per BPHS) ---
     rahu_lon = planets["Rahu"]["longitude"]
     ketu_lon = (rahu_lon + 180) % 360
     ketu_sign_idx = int(ketu_lon / 30)
@@ -149,20 +154,20 @@ def calculate_birth_chart(
         "nakshatra": ketu_nak_name,
         "nakshatra_pada": ketu_nak_pada,
         "house": (ketu_sign_idx - asc_sign_idx) % 12 + 1,
-        "is_retrograde": True,  # Ketu is always retrograde per BPHS
-        "is_combust": False,    # Nodes cannot be combust
+        "is_retrograde": True,   # Ketu is always retrograde per BPHS
+        "is_combust": False,     # Nodes cannot be combust
         "dignity": "neutral",
-        "dignity_score": 50.0,
+        "dignity_score": 0,
     }
 
-    # --- Compute dignities for all grahas (Section 4) ---
+    # --- Compute dignities for all grahas (now with combust factored in) ---
     asc_sign_name = SIGNS[asc_sign_idx]
     dignities = compute_all_dignities(planets, asc_sign_name)
     for name, dig in dignities.items():
         planets[name]["dignity"] = dig["dignity"]
         planets[name]["dignity_score"] = dig["dignity_score"]
 
-    # --- Compute aspects for all signs (Section 5) ---
+    # --- Compute aspects for all signs ---
     sign_aspects = compute_aspects_on_signs(planets)
 
     return {
