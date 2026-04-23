@@ -278,7 +278,9 @@ a {
 .input-underline-wrapper input,
 .input-underline-wrapper select,
 .input-underline-wrapper textarea {
-  border-bottom: 2px solid transparent !important;
+  /* Static underline visible at rest — inline styles control the exact color.
+     The animated .input-underline bar overlays this on focus. */
+  border-bottom: 1px solid rgba(0, 0, 0, 0.15);
 }
 
 .input-underline {

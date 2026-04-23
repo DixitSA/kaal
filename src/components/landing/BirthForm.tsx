@@ -518,7 +518,7 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
             fontSize: "1.1rem",
             letterSpacing: "0.02em",
             border: "none",
-            borderRadius: "2px",
+            borderRadius: "8px",
             minHeight: "56px",
             cursor: isSubmitting ? "wait" : "pointer",
             transition: "background-color 0.2s ease",
