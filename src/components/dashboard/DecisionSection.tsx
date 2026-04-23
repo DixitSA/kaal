@@ -197,6 +197,31 @@ export default function DecisionSection() {
                   {line}
                 </p>
               ))}
+
+            {result.shadowCaveat && (
+              <div
+                style={{
+                  marginTop: "24px",
+                  borderLeft: "2px solid rgba(122, 116, 105, 0.3)",
+                  paddingLeft: "16px",
+                  textAlign: "left",
+                }}
+              >
+                <p
+                  style={{
+                    fontFamily: "var(--font-quattrocento-sans), var(--font-inter-var), sans-serif",
+                    fontStyle: "italic",
+                    fontSize: "0.875rem",
+                    color: "#9C9488",
+                    textTransform: "lowercase",
+                    letterSpacing: "0.02em",
+                    lineHeight: 1.6,
+                  }}
+                >
+                  {result.shadowCaveat}
+                </p>
+              </div>
+            )}
           </motion.div>
         </AnimatePresence>
       </div>

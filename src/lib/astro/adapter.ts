@@ -8,6 +8,10 @@ import {
   resolveBirthUtcDate
 } from "@/lib/astro/calculateJulianDay";
 import { normalizeLongitude } from "@/lib/astro/calculateNakshatra";
+import {
+  computeAstronomiaPositions,
+  isAstronomiaAvailable,
+} from "@/lib/astro/calculateAstronomia";
 import type {
   AyanamshaKey,
   BirthInput,
@@ -19,12 +23,14 @@ import { hasExactBirthTime } from "@/lib/types/astrology";
 
 const require = createRequire(import.meta.url);
 
-type ProviderEngine = "swisseph" | "approximation-fallback";
+type ProviderEngine = "swisseph" | "astronomia" | "approximation-fallback";
 
 interface SiderealState {
   provider: ProviderEngine;
   julianDayUT: number;
   planetLongitudes: Record<PlanetKey, number>;
+  /** Approximate daily longitudinal speed (°/day); negative = retrograde */
+  planetSpeeds: Record<PlanetKey, number>;
   lagnaLongitude?: number;
 }
 
@@ -97,6 +103,15 @@ function tryLoadSwissephRuntime(): MinimalSwissephModule | null {
 }
 
 function getRuntimeStatus(): AdapterRuntimeStatus {
+  if (isAstronomiaAvailable()) {
+    return {
+      provider: "astronomia",
+      swissephAvailable: false,
+      note:
+        "Using astronomia (VSOP87B/ELP) for high-accuracy ephemeris (±0.01° planets, ±0.1° Moon).",
+    };
+  }
+
   const runtime = tryLoadSwissephRuntime();
   const swissephAvailable =
     runtime !== null &&
@@ -108,7 +123,7 @@ function getRuntimeStatus(): AdapterRuntimeStatus {
       provider: "approximation-fallback",
       swissephAvailable: true,
       note:
-        "Native swisseph runtime is installed, but the current v1 adapter still computes through the deterministic approximation provider."
+        "Native swisseph runtime detected but not yet wired; falling back to approximation provider.",
     };
   }
 
@@ -116,7 +131,7 @@ function getRuntimeStatus(): AdapterRuntimeStatus {
     provider: "approximation-fallback",
     swissephAvailable: false,
     note:
-      "swisseph is not available in this environment, so the adapter is using the deterministic approximation provider."
+      "No high-accuracy engine available; using deterministic approximation provider (±2-11° error).",
   };
 }
 
@@ -213,50 +228,88 @@ function approximateAscendantLongitude(
   return normalizeLongitude(toDegrees(ascendantRadians));
 }
 
-function computeApproximateSiderealState(
+function computeTropicalLongitudes(julianDayUT: number): Record<PlanetKey, number> {
+  const rahuTropical = approximateNodeLongitude(julianDayUT);
+  return {
+    sun:     approximateSunLongitude(julianDayUT),
+    moon:    approximateMoonLongitude(julianDayUT),
+    mercury: approximateInnerPlanetLongitude(julianDayUT, 252.25084, 4.09233445, 7.5, 15),
+    venus:   approximateInnerPlanetLongitude(julianDayUT, 181.97973, 1.60213034, 5.5, 75),
+    mars:    approximateOuterPlanetLongitude(julianDayUT, 355.433, 0.52402068, 10),
+    jupiter: approximateOuterPlanetLongitude(julianDayUT, 34.351, 0.083091, 4.5),
+    saturn:  approximateOuterPlanetLongitude(julianDayUT, 50.077, 0.0334597, 3.5),
+    rahu:    rahuTropical,
+    ketu:    normalizeLongitude(rahuTropical + 180),
+  };
+}
+
+/**
+ * Compute approximate daily longitudinal speed (degrees per day) for each planet.
+ * Positive = direct motion, Negative = retrograde.
+ * Nodes (Rahu/Ketu) are always retrograde by definition (mean node).
+ */
+function computePlanetSpeeds(julianDayUT: number): Record<PlanetKey, number> {
+  const delta = 0.5; // half-day step for central difference
+  const before = computeTropicalLongitudes(julianDayUT - delta);
+  const after  = computeTropicalLongitudes(julianDayUT + delta);
+
+  const speeds: Partial<Record<PlanetKey, number>> = {};
+  const planets: PlanetKey[] = ["sun","moon","mercury","venus","mars","jupiter","saturn","rahu","ketu"];
+  for (const p of planets) {
+    if (p === "rahu" || p === "ketu") {
+      speeds[p] = -0.053; // mean node always retrograde
+    } else {
+      let diff = after[p] - before[p];
+      // unwrap crossing 0°/360°
+      if (diff > 180)  diff -= 360;
+      if (diff < -180) diff += 360;
+      speeds[p] = diff; // per full day (2×delta = 1 day)
+    }
+  }
+  return speeds as Record<PlanetKey, number>;
+}
+
+function computeSiderealState(
   birth: ResolvedBirthInput,
   ayanamsha: AyanamshaKey
 ): SiderealState {
   normalizeAyanamsha(ayanamsha);
 
   const julianDayUT = calculateJulianDay(birth.date, birth.time, birth.timezone);
-  const sunTropical = approximateSunLongitude(julianDayUT);
-  const moonTropical = approximateMoonLongitude(julianDayUT);
-  const rahuTropical = approximateNodeLongitude(julianDayUT);
   const lagnaTropical = approximateAscendantLongitude(julianDayUT, birth.latitude, birth.longitude);
+
+  // ── High-accuracy path: astronomia (VSOP87B + ELP) ──────────────────────────
+  const astro = computeAstronomiaPositions(julianDayUT);
+  if (astro.available) {
+    return {
+      provider: "astronomia",
+      julianDayUT,
+      planetLongitudes: astro.longitudes,
+      planetSpeeds: astro.speeds,
+      lagnaLongitude: birth.timeKnown
+        ? tropicalToSidereal(lagnaTropical, julianDayUT)
+        : undefined,
+    };
+  }
+
+  // ── Fallback: polynomial approximation (±2-11° error) ───────────────────────
+  const tropical = computeTropicalLongitudes(julianDayUT);
+  const speeds   = computePlanetSpeeds(julianDayUT);
+
+  const sidereal: Record<PlanetKey, number> = {} as Record<PlanetKey, number>;
+  const planets: PlanetKey[] = ["sun","moon","mercury","venus","mars","jupiter","saturn","rahu","ketu"];
+  for (const p of planets) {
+    sidereal[p] = tropicalToSidereal(tropical[p], julianDayUT);
+  }
 
   return {
     provider: "approximation-fallback",
     julianDayUT,
-    planetLongitudes: {
-      sun: tropicalToSidereal(sunTropical, julianDayUT),
-      moon: tropicalToSidereal(moonTropical, julianDayUT),
-      mercury: tropicalToSidereal(
-        approximateInnerPlanetLongitude(julianDayUT, 252.25084, 4.09233445, 7.5, 15),
-        julianDayUT
-      ),
-      venus: tropicalToSidereal(
-        approximateInnerPlanetLongitude(julianDayUT, 181.97973, 1.60213034, 5.5, 75),
-        julianDayUT
-      ),
-      mars: tropicalToSidereal(
-        approximateOuterPlanetLongitude(julianDayUT, 355.433, 0.52402068, 10),
-        julianDayUT
-      ),
-      jupiter: tropicalToSidereal(
-        approximateOuterPlanetLongitude(julianDayUT, 34.351, 0.083091, 4.5),
-        julianDayUT
-      ),
-      saturn: tropicalToSidereal(
-        approximateOuterPlanetLongitude(julianDayUT, 50.077, 0.0334597, 3.5),
-        julianDayUT
-      ),
-      rahu: tropicalToSidereal(rahuTropical, julianDayUT),
-      ketu: tropicalToSidereal(rahuTropical + 180, julianDayUT)
-    },
+    planetLongitudes: sidereal,
+    planetSpeeds: speeds,
     lagnaLongitude: birth.timeKnown
       ? tropicalToSidereal(lagnaTropical, julianDayUT)
-      : undefined
+      : undefined,
   };
 }
 
@@ -282,12 +335,12 @@ export interface AstrologyAdapter {
 
 export const astrologyAdapter: AstrologyAdapter = {
   name: "sidereal-astrology-adapter",
-  computeProvider: "approximation-fallback",
+  computeProvider: isAstronomiaAvailable() ? "astronomia" : "approximation-fallback",
   nativeEngineTarget: "swisseph",
   getRuntimeStatus,
   computeSiderealState(birth, ayanamsha = DEFAULT_AYANAMSHA) {
     const resolvedBirth = resolveBirthInput(birth);
-    return computeApproximateSiderealState(resolvedBirth, ayanamsha);
+    return computeSiderealState(resolvedBirth, ayanamsha);
   },
   computeChart(birth, ayanamsha = DEFAULT_AYANAMSHA, asOf = new Date()) {
     const timezone = birth.timezone ?? "UTC";
@@ -296,13 +349,24 @@ export const astrologyAdapter: AstrologyAdapter = {
     const normalizedAsOf = normalizeAsOf(asOf, timezone);
     const siderealState = this.computeSiderealState(birth, ayanamsha);
 
+    // Compute today's transit planet positions (for intensity scoring).
+    // Julian Day for the normalized query date:
+    const transitJD = normalizedAsOf.getTime() / 86400000 + 2440587.5;
+    const transitAstro = computeAstronomiaPositions(transitJD);
+    const transitLongitudes = transitAstro.available ? transitAstro.longitudes : undefined;
+    // Use transit Moon from astronomia when available; fall back to approximation.
+    const currentMoonLon = transitLongitudes?.moon
+      ?? computeCurrentMoonLongitude(normalizedAsOf, ayanamsha);
+
     return buildChartPrimitives({
       birth,
       ayanamsha,
       julianDayUT: siderealState.julianDayUT,
       planetLongitudes: siderealState.planetLongitudes,
+      planetSpeeds: siderealState.planetSpeeds,
       lagnaLongitude: siderealState.lagnaLongitude,
-      currentMoonLongitude: computeCurrentMoonLongitude(normalizedAsOf, ayanamsha),
+      currentMoonLongitude: currentMoonLon,
+      transitPlanetLongitudes: transitLongitudes,
       asOf: normalizedAsOf
     });
   }

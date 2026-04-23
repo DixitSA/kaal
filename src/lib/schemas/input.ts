@@ -171,7 +171,8 @@ export const chartPrimitivesInputSchema = z.object({
     }),
     supportLevel: z.enum(TRANSIT_MODIFIER_LEVELS),
     pressureLevel: z.enum(TRANSIT_MODIFIER_LEVELS),
-    clarityLevel: z.enum(TRANSIT_MODIFIER_LEVELS)
+    clarityLevel: z.enum(TRANSIT_MODIFIER_LEVELS),
+    transitPlanetLongitudes: z.record(z.string(), z.number()).optional()
   }),
   computedAt: z.string().datetime(),
   computedDate: z.string().regex(isoDatePattern, "computedDate must use YYYY-MM-DD")

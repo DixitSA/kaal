@@ -18,8 +18,15 @@ const baseChart = astrologyAdapter.computeChart(
   new Date("2026-04-07T00:00:00.000Z")
 );
 
+// Both charts use signal-based scoring (lagnaSign: undefined) so transit
+// overrides are what govern the score, not house-lord dignity.
 const supportiveChart: ChartPrimitives = {
   ...baseChart,
+  birthTimeMode: "time-unknown" as const,
+  confidence: "medium" as const,
+  lagnaSign: undefined,
+  lagnaDegree: undefined,
+  houses: undefined,
   transit: {
     ...baseChart.transit,
     supportLevel: "high",

@@ -33,7 +33,7 @@ export default function LoadingScreen() {
   const readyToNavigateRef = useRef(false);
 
   const phase = getPhase(statusMessage);
-  const progress = errorMessage ? PHASE_PROGRESS[phase] : PHASE_PROGRESS[phase];
+  const progress = PHASE_PROGRESS[phase];
 
   useEffect(() => {
     if (!isLoading && !userData) router.replace("/");
@@ -168,7 +168,7 @@ export default function LoadingScreen() {
           >
             {/* Animated fill */}
             <motion.div
-              animate={{ scaleX: errorMessage ? progress : progress }}
+              animate={{ scaleX: progress }}
               transition={{
                 duration: shouldReduce ? 0 : 1.8,
                 ease: [0.16, 1, 0.3, 1],

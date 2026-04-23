@@ -3,8 +3,25 @@
 import { motion, useReducedMotion } from "framer-motion";
 import { useUser } from "@/context/UserContext";
 import InsightCard from "@/components/ui/InsightCard";
+import type { TaraBalaLevel } from "@/lib/types/astrology";
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
+
+const TARA_DISPLAY: Record<TaraBalaLevel, string> = {
+  janma:       "janma tara — introspective",
+  sampat:      "sampat tara — abundant",
+  vipat:       "vipat tara — obstacle",
+  kshema:      "kshema tara — stable",
+  pratyari:    "pratyari tara — challenging",
+  sadhaka:     "sadhaka tara — achieving",
+  naidhana:    "naidhana tara — difficult",
+  mitra:       "mitra tara — friendly",
+  paramamitra: "paramamitra tara — excellent",
+};
+
+const TARA_FAVORABLE: ReadonlySet<TaraBalaLevel> = new Set([
+  "sampat", "kshema", "sadhaka", "mitra", "paramamitra"
+]);
 
 export default function TodaySection() {
   const { computedData } = useUser();
@@ -13,6 +30,7 @@ export default function TodaySection() {
   if (!computedData) return null;
 
   const { daily } = computedData;
+  const taraBala = computedData.chart.transit.taraBala;
 
   const childAnim = (delay: number) => ({
     hidden: { opacity: 0, y: shouldReduce ? 0 : 20 },
@@ -33,7 +51,7 @@ export default function TodaySection() {
         Today
       </motion.p>
 
-      {/* Signal tone — text-2xl / text-3xl, max 25ch, no italic */}
+      {/* Signal tone */}
       <motion.h2
         variants={childAnim(0.1)}
         className="mt-3"
@@ -57,7 +75,7 @@ export default function TodaySection() {
         focus area: {daily.focusArea}
       </motion.p>
 
-      {/* Guidance — InsightCard positive (green) */}
+      {/* Guidance */}
       <motion.div variants={childAnim(0.2)} className="mt-8">
         <InsightCard
           type="positive"
@@ -67,7 +85,7 @@ export default function TodaySection() {
         />
       </motion.div>
 
-      {/* Caution — InsightCard negative (terracotta) */}
+      {/* Caution */}
       <motion.div variants={childAnim(0.3)} className="mt-6">
         <InsightCard
           type="negative"
@@ -75,6 +93,26 @@ export default function TodaySection() {
           content={daily.caution}
           animDelay={0.45}
         />
+      </motion.div>
+
+      {/* Tara Bala */}
+      <motion.div variants={childAnim(0.4)} style={{ marginTop: "20px" }}>
+        <span
+          style={{
+            fontFamily: "var(--font-inter-var)",
+            fontSize: "11px",
+            textTransform: "lowercase",
+            letterSpacing: "0.06em",
+            color: TARA_FAVORABLE.has(taraBala.level) ? "#5E7A5E" : "#9C9488",
+            backgroundColor: TARA_FAVORABLE.has(taraBala.level)
+              ? "rgba(94, 122, 94, 0.08)"
+              : "rgba(122, 116, 105, 0.08)",
+            borderRadius: "2px",
+            padding: "3px 8px",
+          }}
+        >
+          {TARA_DISPLAY[taraBala.level]}
+        </span>
       </motion.div>
     </motion.section>
   );
