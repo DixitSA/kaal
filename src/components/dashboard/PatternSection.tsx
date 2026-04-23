@@ -182,7 +182,9 @@ export default function PatternSection() {
         */}
         <div
           onMouseEnter={() => { if (!shouldReduce) setHovered(true); }}
-          onMouseLeave={() => setHovered(false)}
+          onMouseLeave={() => { if (!shouldReduce) setHovered(false); }}
+          onTouchStart={() => { if (!shouldReduce) setHovered(true); }}
+          onTouchEnd={() => { if (!shouldReduce) setHovered(false); }}
           style={{
             perspective: "1400px",
             borderRadius: "4px",
@@ -203,7 +205,8 @@ export default function PatternSection() {
             style={{
               position: "relative",
               width: "100%",
-              aspectRatio: "1.6",
+              aspectRatio: undefined,
+              maxHeight: "clamp(200px, 45vw, 360px)",
               WebkitTransformStyle: "preserve-3d",
               transformStyle: "preserve-3d",
               transform: flipped ? "rotateY(180deg)" : "rotateY(0deg)",
@@ -211,6 +214,7 @@ export default function PatternSection() {
               cursor: "pointer",
               userSelect: "none",
               borderRadius: "3px",
+              touchAction: "manipulation",
             }}
           >
 
@@ -265,7 +269,7 @@ export default function PatternSection() {
                 {CORNERS.map((c, i) => <CornerGlyph key={i} style={c} />)}
 
                 {/* Main area */}
-                <div style={{ flex: 1, display: "grid", gridTemplateColumns: "36px 1fr 36px", minHeight: 0, position: "relative", zIndex: 1 }}>
+                <div style={{ flex: 1, display: "grid", gridTemplateColumns: "minmax(24px, 36px) 1fr minmax(24px, 36px)", minHeight: 0, position: "relative", zIndex: 1 }}>
 
                   <div style={{ display: "flex", alignItems: "center", justifyContent: "center", position: "relative" }}>
                     <div style={{ position: "absolute", inset: 0, opacity: 0.05, pointerEvents: "none" }}>
@@ -276,7 +280,7 @@ export default function PatternSection() {
                     </span>
                   </div>
 
-                  <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", padding: "28px 8px 16px" }}>
+                  <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", padding: "clamp(12px, 3vw, 28px) clamp(4px, 2vw, 8px) clamp(8px, 2vw, 16px)" }}>
                     <p style={{ fontFamily: "var(--font-inter-var)", fontSize: "9px", textTransform: "uppercase", letterSpacing: "0.26em", color: "#8A7240", margin: 0, opacity: 0.8 }}>
                       your patterns
                     </p>

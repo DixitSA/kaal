@@ -29,7 +29,7 @@ export default function SettingsDropdown() {
     <div ref={ref} className="relative">
       <motion.button
         onClick={() => setOpen((v) => !v)}
-        className="p-6 cursor-pointer"
+        className="p-4 sm:p-6 cursor-pointer touch-target"
         aria-label="Settings"
         whileHover={shouldReduce ? {} : { rotate: 45 }}
         transition={{ duration: 0.3, ease: "easeOut" }}

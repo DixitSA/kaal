@@ -157,7 +157,7 @@ export default function LandingPage() {
           transition={{ delay: allWords.length * 0.1 + 0.1, duration: shouldReduce ? 0 : 1, ease: EASE }}
           style={{ transformOrigin: "center" }}
         >
-          <DecorativeDivider width={300} opacity={0.25} />
+          <DecorativeDivider width={300} opacity={0.25} style={{ maxWidth: "calc(100vw - 48px)" }} />
         </motion.div>
 
         {/* Form with stagger slide-in */}

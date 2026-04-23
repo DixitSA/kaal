@@ -39,8 +39,8 @@ export default function Dashboard() {
   return (
     <div style={{ minHeight: "100dvh" }} className="relative">
       {/* Top bar */}
-      <div className="fixed top-0 left-0 right-0 z-20 flex items-center justify-between pointer-events-none">
-        <div className="p-6 pointer-events-auto" style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
+      <div className="fixed top-0 left-0 right-0 z-20 flex items-center justify-between pointer-events-none dashboard-header">
+        <div className="p-4 sm:p-6 pointer-events-auto" style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
           <span
             style={{
               fontFamily: "var(--font-playfair-display)",
@@ -70,7 +70,7 @@ export default function Dashboard() {
       </div>
 
       <main
-        className="mx-auto px-6 pt-24 pb-32"
+        className="mx-auto px-4 sm:px-6 pt-24 pb-32"
         style={{ maxWidth: "720px" }}
       >
         {/* Visually hidden h1 for screen-reader heading hierarchy */}

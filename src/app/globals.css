@@ -191,13 +191,33 @@ a {
 /* ─── Landing page mobile fixes ─────────────────────────── */
 @media (max-width: 639px) {
   .landing-yantra {
-    transform: translate(-50%, -50%) scale(0.6);
+    transform: translate(-50%, -50%) scale(0.5);
     transform-origin: center center;
   }
   .landing-form-container {
     max-width: 100vw;
-    padding-left: 0.5rem;
-    padding-right: 0.5rem;
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
+  }
+}
+
+/* ─── Pattern card mobile fixes ───────────────────── */
+@media (max-width: 639px) {
+  .pattern-card-flip {
+    max-height: 220px !important;
+  }
+}
+
+/* ─── Dashboard mobile fixes ─────────────────────────── */
+@media (max-width: 639px) {
+  .dashboard-name {
+    font-size: 10px !important;
+  }
+  .section-date-stamp {
+    font-size: 10px !important;
+  }
+  .dashboard-header {
+    padding: 1rem !important;
   }
 }
 
