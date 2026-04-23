@@ -1,10 +1,12 @@
+import { memo } from "react";
+
 interface YantraMandalaProps {
   size?: number;
   opacity?: number;
   className?: string;
 }
 
-export default function YantraMandala({
+function YantraMandalaInner({
   size = 500,
   opacity = 0.12,
   className = "",
@@ -95,3 +97,6 @@ export default function YantraMandala({
     </svg>
   );
 }
+
+const YantraMandala = memo(YantraMandalaInner);
+export default YantraMandala;

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useLayoutEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { useUser } from "@/context/UserContext";
 import { DecisionCategory } from "@/types/api";
@@ -27,7 +27,7 @@ export default function DecisionSection() {
   const [underline, setUnderline] = useState({ left: 0, width: 0 });
   const containerRef = useRef<HTMLDivElement>(null);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const btn = btnRefs.current[active];
     const container = containerRef.current;
     if (!btn || !container) return;

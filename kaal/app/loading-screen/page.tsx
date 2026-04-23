@@ -19,30 +19,28 @@ export default function LoadingScreen() {
   const shouldReduce = useReducedMotion();
   const [msgIndex, setMsgIndex] = useState(0);
   const [exiting, setExiting] = useState(false);
-  const [yantraOpacity, setYantraOpacity] = useState(0.15);
   const [errorMsg, setErrorMsg] = useState("");
-  
+  const [errorStatus, setErrorStatus] = useState(0);
+
   const apiCallStarted = useRef(false);
 
   useEffect(() => {
     if (!isLoading && !userData) router.replace("/");
   }, [isLoading, userData, router]);
 
-  // Cycle messages every 1s, pulse yantra on change
+  // Cycle messages every 1s (no opacity state — Framer handles the pulse)
   useEffect(() => {
     const interval = setInterval(() => {
-      setYantraOpacity(0.22);
-      setTimeout(() => setYantraOpacity(0.15), 400);
       setMsgIndex((i) => (i + 1) % messages.length);
     }, 1000);
     return () => clearInterval(interval);
   }, []);
 
-  // Exit animation then navigate
+  // Fetch API data
   useEffect(() => {
     if (isLoading || !userData || apiCallStarted.current) return;
     apiCallStarted.current = true;
-    
+
     const fetchProfile = async () => {
       try {
         const res = await fetch(process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/profile", {
@@ -59,36 +57,50 @@ export default function LoadingScreen() {
             timezone: userData.timezone || "UTC",
           })
         });
-        
+
         if (!res.ok) {
-          throw new Error("Failed to fetch profile");
+          setErrorStatus(res.status);
+          if (res.status === 429) {
+            throw new Error("Server is busy. Please wait a moment and try again.");
+          } else if (res.status === 422) {
+            const body = await res.json().catch(() => null);
+            throw new Error(body?.detail || "Invalid input. Please check your details.");
+          }
+          throw new Error("Something went wrong. Please try again.");
         }
-        
+
         const data: ProfileResponse = await res.json();
         setApiData(data);
         return true;
       } catch (err) {
         console.error(err);
-        setErrorMsg("Failed to generate profile. Please try again.");
+        setErrorMsg(err instanceof Error ? err.message : "Failed to generate profile.");
         return false;
       }
     };
-    
+
     const runFlow = async () => {
       const minDelay = new Promise(resolve => setTimeout(resolve, 3000));
       const [success] = await Promise.all([fetchProfile(), minDelay]);
-      
+
       if (success) {
         setExiting(true);
         setTimeout(() => router.push("/dashboard"), shouldReduce ? 0 : 350);
-      } else {
-        setTimeout(() => router.push("/"), 2000);
       }
+      // On failure: do NOT auto-redirect. Show error + retry button.
     };
-    
+
     runFlow();
-    
+
   }, [isLoading, userData, router, shouldReduce, setApiData]);
+
+  function handleRetry() {
+    setErrorMsg("");
+    setErrorStatus(0);
+    apiCallStarted.current = false;
+    // Force re-run by toggling a dependency — simplest: reload page
+    window.location.reload();
+  }
 
   if (isLoading) return <div style={{ minHeight: "100dvh", backgroundColor: "#F5F0E8" }} />;
 
@@ -99,15 +111,15 @@ export default function LoadingScreen() {
       animate={exiting && !shouldReduce ? { opacity: 0, scale: 1.02 } : { opacity: 1, scale: 1 }}
       transition={{ duration: 0.35, ease: "easeIn" }}
     >
-      {/* Yantra with spin + opacity pulse */}
+      {/* Yantra with spin + CSS-driven opacity pulse (no React state) */}
       <motion.div
         className="absolute pointer-events-none"
         animate={shouldReduce ? {} : { rotate: 360 }}
         transition={{ duration: 20, ease: "linear", repeat: Infinity }}
       >
         <motion.div
-          animate={{ opacity: shouldReduce ? 0.15 : yantraOpacity }}
-          transition={{ duration: 0.4, ease: "easeOut" }}
+          animate={shouldReduce ? { opacity: 0.15 } : { opacity: [0.15, 0.22, 0.15] }}
+          transition={shouldReduce ? {} : { duration: 2, ease: "easeInOut", repeat: Infinity }}
         >
           <YantraMandala size={400} opacity={1} />
         </motion.div>
@@ -128,14 +140,33 @@ export default function LoadingScreen() {
           Kaal
         </motion.p>
 
-        {/* Vertical carousel messages */}
-        <div style={{ minHeight: "1.8em", overflow: "hidden", position: "relative", textAlign: "center", width: "260px" }}>
+        {/* Vertical carousel messages or error */}
+        <div style={{ minHeight: "3em", overflow: "hidden", position: "relative", textAlign: "center", width: "280px" }}>
           {errorMsg ? (
-            <p style={{
-                fontFamily: "var(--font-playfair-display)",
-                fontSize: "clamp(0.9rem, 2vw, 1.125rem)",
-                color: "#B5563E",
-              }}>{errorMsg}</p>
+            <div className="flex flex-col items-center gap-3">
+              <p style={{
+                  fontFamily: "var(--font-playfair-display)",
+                  fontSize: "clamp(0.85rem, 2vw, 1rem)",
+                  color: "#B5563E",
+                  lineHeight: 1.4,
+                }}>{errorMsg}</p>
+              <button
+                onClick={handleRetry}
+                className="uppercase tracking-widest cursor-pointer"
+                style={{
+                  fontFamily: "var(--font-inter-var)",
+                  fontSize: "11px",
+                  color: "#F5F0E8",
+                  backgroundColor: "#B5563E",
+                  border: "none",
+                  borderRadius: "2px",
+                  padding: "8px 20px",
+                  minHeight: "36px",
+                }}
+              >
+                Try Again
+              </button>
+            </div>
           ) : (
           <AnimatePresence mode="popLayout">
             <motion.p

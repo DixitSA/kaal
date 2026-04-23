@@ -5,7 +5,7 @@ from app.config import settings
 _client = AsyncGroq(api_key=settings.GROQ_API_KEY)
 
 _MODEL = "llama-3.3-70b-versatile"
-_TEMPERATURE = 0.7
+_TEMPERATURE = 0.3
 _MAX_TOKENS = 2000
 _TIMEOUT_SECONDS = 15.0
 

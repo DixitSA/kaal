@@ -14,6 +14,8 @@ export interface UserFormData {
   timezone?: string;
 }
 
+const STALE_THRESHOLD_MS = 6 * 60 * 60 * 1000; // 6 hours
+
 export interface UserContextType {
   userData: UserFormData | null;
   setUserData: (data: UserFormData) => void;
@@ -21,6 +23,7 @@ export interface UserContextType {
   setApiData: (data: ProfileResponse | null) => void;
   clearUserData: () => void;
   isLoading: boolean;
+  isStale: boolean;
 }
 
 const UserContext = createContext<UserContextType | null>(null);
@@ -30,6 +33,7 @@ const STORAGE_KEY = "kaal-user";
 export function UserProvider({ children }: { children: ReactNode }) {
   const [userData, setUserDataState] = useState<UserFormData | null>(null);
   const [apiData, setApiDataState] = useState<ProfileResponse | null>(null);
+  const [lastFetchedAt, setLastFetchedAt] = useState<number>(0);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -51,16 +55,20 @@ export function UserProvider({ children }: { children: ReactNode }) {
 
   function setApiData(data: ProfileResponse | null) {
     setApiDataState(data);
+    setLastFetchedAt(data ? Date.now() : 0);
   }
 
   function clearUserData() {
     setUserDataState(null);
     setApiDataState(null);
+    setLastFetchedAt(0);
     localStorage.removeItem(STORAGE_KEY);
   }
 
+  const isStale = apiData !== null && lastFetchedAt > 0 && (Date.now() - lastFetchedAt) > STALE_THRESHOLD_MS;
+
   return (
-    <UserContext.Provider value={{ userData, setUserData, apiData, setApiData, clearUserData, isLoading }}>
+    <UserContext.Provider value={{ userData, setUserData, apiData, setApiData, clearUserData, isLoading, isStale }}>
       {children}
     </UserContext.Provider>
   );

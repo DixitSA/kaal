@@ -5,6 +5,9 @@ from app.interpretation.prompts import (
     SYSTEM_PROMPT, PHASE_PROMPT, TODAY_PROMPT,
     DECISION_PROMPT, PATTERN_PROMPT,
 )
+from app.models.schemas import (
+    PhaseData, TodayData, PatternData, DecisionData,
+)
 
 FALLBACK = {
     "phase": {
@@ -47,6 +50,14 @@ FALLBACK = {
     },
 }
 
+# Pydantic validators for LLM output — keyed by section name
+_VALIDATORS = {
+    "phase": PhaseData,
+    "today": TodayData,
+    "pattern": PatternData,
+    # decisions are validated per-key below
+}
+
 
 def _strip_markdown(text: str) -> str:
     """Strip markdown code fences the LLM sometimes adds."""
@@ -56,12 +67,41 @@ def _strip_markdown(text: str) -> str:
     return text.strip()
 
 
-async def _safe_interpret(system_prompt: str, data: str, fallback: dict) -> dict:
-    """Call LLM, retry once on JSON parse failure only. Non-JSON errors fall back immediately."""
+def _validate_section(section_name: str, data: dict) -> bool:
+    """Validate parsed LLM JSON against the Pydantic schema. Returns True if valid."""
+    try:
+        validator = _VALIDATORS.get(section_name)
+        if validator:
+            validator(**data)
+            return True
+        if section_name == "decisions":
+            # Validate each decision key individually
+            for key in ("career", "relationships", "money", "travel", "move", "communication"):
+                if key not in data:
+                    return False
+                DecisionData(**data[key])
+            return True
+        return True  # No validator = pass through
+    except Exception:
+        return False
+
+
+async def _safe_interpret(system_prompt: str, data: str, fallback: dict, section_name: str = "") -> dict:
+    """Call LLM, retry once on JSON parse failure only. Non-JSON errors fall back immediately.
+    Validates the parsed output against the Pydantic schema before returning."""
     for attempt in range(2):
         try:
             raw = await interpret(system_prompt, data)
-            return json.loads(_strip_markdown(raw))
+            parsed = json.loads(_strip_markdown(raw))
+
+            # Validate structure against schema
+            if section_name and not _validate_section(section_name, parsed):
+                print(f"[interpreter] Schema validation failed for '{section_name}' (attempt {attempt}) — retrying")
+                if attempt == 1:
+                    return fallback
+                continue
+
+            return parsed
         except json.JSONDecodeError:
             if attempt == 1:
                 print(f"[interpreter] JSON parse failed twice — using fallback")
@@ -81,11 +121,13 @@ async def generate_profile(chart_data: dict, dasha_data: dict, transit_data: dic
             SYSTEM_PROMPT,
             PHASE_PROMPT.format(calculation_data=json.dumps(dasha_data, indent=2)),
             FALLBACK["phase"],
+            section_name="phase",
         ),
         _safe_interpret(
             SYSTEM_PROMPT,
             TODAY_PROMPT.format(calculation_data=json.dumps(transit_data, indent=2)),
             FALLBACK["today"],
+            section_name="today",
         ),
         _safe_interpret(
             SYSTEM_PROMPT,
@@ -93,11 +135,13 @@ async def generate_profile(chart_data: dict, dasha_data: dict, transit_data: dic
                 {"dasha": dasha_data, "transits": transit_data, "chart": chart_data}, indent=2
             )),
             FALLBACK["decisions"],
+            section_name="decisions",
         ),
         _safe_interpret(
             SYSTEM_PROMPT,
             PATTERN_PROMPT.format(calculation_data=json.dumps(chart_data, indent=2)),
             FALLBACK["pattern"],
+            section_name="pattern",
         ),
     )
     return {"phase": phase, "today": today, "decisions": decisions, "pattern": pattern}

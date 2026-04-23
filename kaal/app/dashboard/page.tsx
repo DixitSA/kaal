@@ -12,16 +12,16 @@ import SettingsDropdown from "@/components/ui/SettingsDropdown";
 
 export default function Dashboard() {
   const router = useRouter();
-  const { userData, apiData, isLoading } = useUser();
+  const { userData, apiData, isLoading, isStale } = useUser();
 
   useEffect(() => {
     if (isLoading) return;
     if (!userData) {
       router.replace("/");
-    } else if (!apiData) {
+    } else if (!apiData || isStale) {
       router.replace("/loading-screen");
     }
-  }, [isLoading, userData, apiData, router]);
+  }, [isLoading, userData, apiData, isStale, router]);
 
   if (isLoading || !userData || !apiData) {
     return <div style={{ minHeight: "100dvh", backgroundColor: "#F5F0E8" }} />;

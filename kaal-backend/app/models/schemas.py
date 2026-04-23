@@ -1,5 +1,10 @@
 from pydantic import BaseModel, field_validator
-from typing import Literal, Optional, Dict, List
+from typing import Literal, Optional, List
+import re
+
+import pytz
+
+_VALID_TIMEZONES = set(pytz.all_timezones)
 
 
 class BirthDataRequest(BaseModel):
@@ -12,11 +17,56 @@ class BirthDataRequest(BaseModel):
     longitude: float          # resolved by frontend (Open-Meteo)
     timezone: str             # IANA tz name e.g. "Asia/Kolkata"
 
+    @field_validator("name", mode="before")
+    @classmethod
+    def validate_name(cls, v: object) -> str:
+        if not isinstance(v, str) or not v.strip():
+            raise ValueError("Name is required")
+        if len(v) > 200:
+            raise ValueError("Name must be 200 characters or fewer")
+        return v.strip()
+
+    @field_validator("dob", mode="before")
+    @classmethod
+    def validate_dob(cls, v: object) -> str:
+        if not isinstance(v, str) or not re.match(r"^\d{4}-\d{2}-\d{2}$", v):
+            raise ValueError("Date of birth must be in YYYY-MM-DD format")
+        return v
+
     @field_validator("time_of_birth", mode="before")
     @classmethod
-    def default_empty_time(cls, v: object) -> object:
+    def default_empty_time(cls, v: object) -> str:
         if isinstance(v, str) and v.strip() == "":
             return "12:00"
+        if isinstance(v, str) and not re.match(r"^\d{2}:\d{2}$", v):
+            raise ValueError("Time of birth must be in HH:MM format")
+        if isinstance(v, str):
+            parts = v.split(":")
+            if int(parts[0]) > 23 or int(parts[1]) > 59:
+                raise ValueError("Invalid time value")
+        return v if isinstance(v, str) else "12:00"
+
+    @field_validator("latitude", mode="before")
+    @classmethod
+    def validate_latitude(cls, v: object) -> float:
+        v = float(v)  # type: ignore[arg-type]
+        if not -90 <= v <= 90:
+            raise ValueError("Latitude must be between -90 and 90")
+        return v
+
+    @field_validator("longitude", mode="before")
+    @classmethod
+    def validate_longitude(cls, v: object) -> float:
+        v = float(v)  # type: ignore[arg-type]
+        if not -180 <= v <= 180:
+            raise ValueError("Longitude must be between -180 and 180")
+        return v
+
+    @field_validator("timezone", mode="before")
+    @classmethod
+    def validate_timezone(cls, v: object) -> str:
+        if not isinstance(v, str) or v not in _VALID_TIMEZONES:
+            raise ValueError(f"Invalid IANA timezone: {v}")
         return v
 
 
@@ -48,7 +98,7 @@ class GrahaData(BaseModel):
 
 class ChartData(BaseModel):
     ascendant: AscendantData
-    grahas: Dict[str, GrahaData]
+    grahas: dict[str, GrahaData]
 
 
 class DashaPeriod(BaseModel):
@@ -88,7 +138,7 @@ class IntensityBreakdown(BaseModel):
 
 class IntensityData(BaseModel):
     score: float
-    level: str
+    level: Literal["low", "medium", "high", "critical"]
     breakdown: IntensityBreakdown
 
 
@@ -112,6 +162,15 @@ class DecisionData(BaseModel):
     shadow_caveat: Optional[str] = None
 
 
+class DecisionsData(BaseModel):
+    career: DecisionData
+    relationships: DecisionData
+    money: DecisionData
+    travel: DecisionData
+    move: DecisionData
+    communication: DecisionData
+
+
 class PatternData(BaseModel):
     nakshatra: str
     pada: int
@@ -128,5 +187,5 @@ class ProfileResponse(BaseModel):
     phase: PhaseData
     intensity: IntensityData
     today: TodayData
-    decisions: Dict[str, DecisionData]  # keys: career, relationships, money, travel, move, communication
+    decisions: DecisionsData
     pattern: PatternData

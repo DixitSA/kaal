@@ -1,8 +1,9 @@
 "use client";
 
-export default function BackgroundPattern() {
-  // Inline SVG as a data URI for CSS background tiling
-  const svgContent = `
+import { memo } from "react";
+
+// Static SVG content — computed once at module scope, not per render.
+const svgContent = `
     <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 80 80">
       <!-- Paisley teardrop -->
       <path d="M20 10 C10 10 6 18 10 26 C14 34 22 36 26 30 C30 24 24 16 20 10 Z"
@@ -22,8 +23,9 @@ export default function BackgroundPattern() {
     </svg>
   `.trim().replace(/\s+/g, " ");
 
-  const dataUri = `url("data:image/svg+xml,${svgContent}")`;
+const dataUri = `url("data:image/svg+xml,${svgContent}")`;
 
+function BackgroundPatternInner() {
   return (
     <div
       aria-hidden="true"
@@ -40,3 +42,6 @@ export default function BackgroundPattern() {
     />
   );
 }
+
+const BackgroundPattern = memo(BackgroundPatternInner);
+export default BackgroundPattern;
