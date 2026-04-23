@@ -3,31 +3,22 @@
 import { motion, useReducedMotion } from "framer-motion";
 import { useUser } from "@/context/UserContext";
 import InsightCard from "@/components/ui/InsightCard";
-import type { PhaseIntensity, PhaseStateKey } from "@/lib/types/engine";
+import type { IntensityLevel } from "@/lib/types/engine";
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
-function formatStateKey(key: PhaseStateKey): string {
-  return key
-    .split("-")
-    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-    .join(" ");
-}
-
-function formatBias(bias: string): string {
-  return bias.charAt(0).toUpperCase() + bias.slice(1);
-}
-
-const INTENSITY_DOTS: Record<PhaseIntensity, number> = {
-  low: 1,
-  steady: 2,
-  high: 3,
+const INTENSITY_DOTS: Record<IntensityLevel, number> = {
+  low:      1,
+  medium:   2,
+  high:     3,
+  critical: 4,
 };
 
-const INTENSITY_LABELS: Record<PhaseIntensity, string> = {
-  low: "Low Intensity",
-  steady: "Steady Intensity",
-  high: "High Intensity",
+const INTENSITY_LABELS: Record<IntensityLevel, string> = {
+  low:      "low intensity",
+  medium:   "steady intensity",
+  high:     "high intensity",
+  critical: "critical intensity",
 };
 
 export default function PhaseSection() {
@@ -37,8 +28,10 @@ export default function PhaseSection() {
   if (!computedData) return null;
 
   const { phase } = computedData;
+  const intensityLevel: IntensityLevel = computedData.intensity?.level ?? "medium";
+  const filledDots = INTENSITY_DOTS[intensityLevel];
+  const isCritical = intensityLevel === "critical";
   const words = phase.label.split(" ");
-  const filledDots = INTENSITY_DOTS[phase.intensity];
 
   const container = {
     hidden: {},
@@ -70,36 +63,50 @@ export default function PhaseSection() {
           Current Phase
         </p>
         <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-          {[1, 2, 3].map((dot) => (
-            <motion.div
-              key={dot}
-              initial={{ opacity: 0, scale: shouldReduce ? 1 : 0.5 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.3, delay: shouldReduce ? 0 : 0.08 * dot, ease: EASE }}
-              style={{
-                width: "6px",
-                height: "6px",
-                borderRadius: "50%",
-                backgroundColor: dot <= filledDots ? "#B5563E" : "rgba(122, 116, 105, 0.22)",
-              }}
-            />
-          ))}
+          {[1, 2, 3, 4].map((dot) => {
+            const filled = dot <= filledDots;
+            const pulse  = filled && isCritical && dot === 4 && !shouldReduce;
+            return (
+              <motion.div
+                key={dot}
+                initial={{ opacity: 0, scale: shouldReduce ? 1 : 0.5 }}
+                animate={
+                  pulse
+                    ? { opacity: [1, 0.3, 1], scale: 1 }
+                    : { opacity: 1, scale: 1 }
+                }
+                transition={
+                  pulse
+                    ? { duration: 1.4, repeat: Infinity, ease: "easeInOut", delay: shouldReduce ? 0 : 0.08 * dot }
+                    : { duration: 0.3, delay: shouldReduce ? 0 : 0.08 * dot, ease: EASE }
+                }
+                style={{
+                  width: "6px",
+                  height: "6px",
+                  borderRadius: "50%",
+                  backgroundColor: filled
+                    ? isCritical ? "#A04040" : "#B5563E"
+                    : "rgba(122, 116, 105, 0.22)",
+                }}
+              />
+            );
+          })}
           <span
             style={{
               fontFamily: "var(--font-inter-var)",
               fontSize: "11px",
               textTransform: "lowercase",
               letterSpacing: "0.08em",
-              color: "#7A7469",
+              color: isCritical ? "#A04040" : "#7A7469",
               marginLeft: "4px",
             }}
           >
-            {INTENSITY_LABELS[phase.intensity]}
+            {INTENSITY_LABELS[intensityLevel]}
           </span>
         </div>
       </motion.div>
 
-      {/* Phase name — text-5xl / text-6xl, max 25ch */}
+      {/* Phase name */}
       <motion.h2
         variants={container}
         className="mt-3 font-bold"
@@ -136,11 +143,11 @@ export default function PhaseSection() {
             padding: "3px 8px",
           }}
         >
-          {formatStateKey(phase.stateKey)}
+          {phase.stateKey.replace(/-/g, " ")}
         </span>
       </motion.div>
 
-      {/* Summary — italic Inter: short emotional hook */}
+      {/* Summary */}
       <motion.p
         variants={childAnim(0.2)}
         className="mt-4"
@@ -158,7 +165,7 @@ export default function PhaseSection() {
         {phase.summary}
       </motion.p>
 
-      {/* Opportunity — InsightCard positive (green) */}
+      {/* Opportunity */}
       <motion.div variants={childAnim(0.3)} className="mt-8">
         <InsightCard
           type="positive"
@@ -168,7 +175,7 @@ export default function PhaseSection() {
         />
       </motion.div>
 
-      {/* Risk — InsightCard negative (terracotta) */}
+      {/* Risk */}
       <motion.div variants={childAnim(0.4)} className="mt-6">
         <InsightCard
           type="negative"
@@ -178,40 +185,31 @@ export default function PhaseSection() {
         />
       </motion.div>
 
-      {/* Bias context pills */}
-      <motion.div
-        variants={childAnim(0.5)}
-        style={{ display: "flex", gap: "8px", marginTop: "20px", flexWrap: "wrap" }}
-      >
-        <span
-          style={{
-            fontFamily: "var(--font-inter-var)",
-            fontSize: "11px",
-            textTransform: "lowercase",
-            letterSpacing: "0.06em",
-            color: "#5C574F",
-            backgroundColor: "rgba(122, 116, 105, 0.1)",
-            borderRadius: "2px",
-            padding: "3px 8px",
-          }}
+      {/* Phase tags */}
+      {phase.tags && phase.tags.length > 0 && (
+        <motion.div
+          variants={childAnim(0.5)}
+          style={{ display: "flex", gap: "8px", marginTop: "20px", flexWrap: "wrap" }}
         >
-          {phase.supportBias} mode
-        </span>
-        <span
-          style={{
-            fontFamily: "var(--font-inter-var)",
-            fontSize: "11px",
-            textTransform: "lowercase",
-            letterSpacing: "0.06em",
-            color: "#5C574F",
-            backgroundColor: "rgba(122, 116, 105, 0.1)",
-            borderRadius: "2px",
-            padding: "3px 8px",
-          }}
-        >
-          avoid: {phase.riskBias}
-        </span>
-      </motion.div>
+          {phase.tags.map((tag) => (
+            <span
+              key={tag}
+              style={{
+                fontFamily: "var(--font-inter-var)",
+                fontSize: "11px",
+                textTransform: "lowercase",
+                letterSpacing: "0.06em",
+                color: "#5C574F",
+                backgroundColor: "rgba(122, 116, 105, 0.1)",
+                borderRadius: "2px",
+                padding: "3px 8px",
+              }}
+            >
+              {tag}
+            </span>
+          ))}
+        </motion.div>
+      )}
 
     </motion.section>
   );

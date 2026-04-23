@@ -5,6 +5,7 @@ import type { TransitModifierLevel, TransitState } from "@/lib/types/astrology";
 export interface TransitCalculationInput {
   natalMoonLongitude: number;
   currentMoonLongitude: number;
+  transitPlanetLongitudes?: Record<string, number>;
 }
 
 function toModifierLevel(score: number): TransitModifierLevel {
@@ -43,6 +44,7 @@ export function calculateTransits(input: TransitCalculationInput): TransitState 
     taraBala,
     supportLevel: toModifierLevel(supportScore),
     pressureLevel: toModifierLevel(pressureScore),
-    clarityLevel: toModifierLevel(clarityScore)
+    clarityLevel: toModifierLevel(clarityScore),
+    transitPlanetLongitudes: input.transitPlanetLongitudes,
   };
 }

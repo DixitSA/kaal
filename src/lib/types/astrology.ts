@@ -58,6 +58,20 @@ export interface PlanetPosition {
   degree: number;
   absoluteLongitude: number;
   house?: number;
+  /** Nakshatra name (1-27) */
+  nakshatra?: string;
+  /** Nakshatra pada (1-4) */
+  nakshatraPada?: number;
+  /** True when daily longitudinal speed < 0 (nodes always true) */
+  isRetrograde?: boolean;
+  /** True when within Sun combustion orb */
+  isCombust?: boolean;
+  /** Composite dignity score per Section 5 */
+  dignityScore?: number;
+  /** Dignity placement label */
+  dignityPlacement?: string;
+  /** Neecha Bhanga Raja Yoga active */
+  neechaBhanga?: boolean;
 }
 
 export interface HousePosition {
@@ -91,6 +105,8 @@ export interface TransitState {
   supportLevel: TransitModifierLevel;
   pressureLevel: TransitModifierLevel;
   clarityLevel: TransitModifierLevel;
+  /** Today's sidereal planet longitudes (Lahiri). Present when astronomia is available. */
+  transitPlanetLongitudes?: Record<PlanetKey, number>;
 }
 
 export interface ChartPrimitives {

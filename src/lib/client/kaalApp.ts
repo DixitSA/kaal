@@ -6,6 +6,11 @@ import type {
 } from "@/lib/types/api";
 import type { ChartPrimitives } from "@/lib/types/astrology";
 import {
+  computeIntensity,
+  type IntensityResult,
+  type TransitNatalContext,
+} from "@/lib/astro/calculateIntensity";
+import {
   DECISION_CATEGORIES,
   IDENTITY_ARCHETYPE_KEYS,
   type DecisionCategory,
@@ -88,6 +93,8 @@ export interface KaalSnapshot {
   todayGeneratedAt: string;
   todayMode: string;
   decisions: Record<DecisionCategory, DecisionEvaluation>;
+  /** Full intensity result (score, level, breakdown). Optional for backward compat. */
+  intensity?: IntensityResult;
 }
 
 export interface LocationLookupResult {
@@ -205,6 +212,48 @@ function deriveRiskBias(riskText: string): RiskBias {
   return "force";
 }
 
+const SIGN_ORDER = [
+  "Aries","Taurus","Gemini","Cancer","Leo","Virgo",
+  "Libra","Scorpio","Sagittarius","Capricorn","Aquarius","Pisces"
+] as const;
+
+function buildTransitNatalContext(chart: ChartPrimitives): TransitNatalContext {
+  const pp = chart.planetPositions;
+  const tl = chart.transit.transitPlanetLongitudes;
+
+  const transitMoonLon =
+    tl?.moon ??
+    (SIGN_ORDER.indexOf(chart.transit.currentMoonSign as (typeof SIGN_ORDER)[number]) * 30 +
+      chart.transit.currentMoonDegree);
+
+  const natalLagnaLon =
+    chart.lagnaSign !== undefined && chart.lagnaDegree !== undefined
+      ? SIGN_ORDER.indexOf(chart.lagnaSign as (typeof SIGN_ORDER)[number]) * 30 + chart.lagnaDegree
+      : undefined;
+
+  return {
+    natalMoonLon:      pp.moon.absoluteLongitude,
+    natalSunLon:       pp.sun.absoluteLongitude,
+    natalLagnaLon,
+    natalMarsLon:      pp.mars.absoluteLongitude,
+    natalJupiterLon:   pp.jupiter.absoluteLongitude,
+    transitSaturnLon:  tl?.saturn  ?? pp.saturn.absoluteLongitude,
+    transitRahuLon:    tl?.rahu    ?? pp.rahu.absoluteLongitude,
+    transitKetuLon:    tl?.ketu    ?? pp.ketu.absoluteLongitude,
+    transitMarsLon:    tl?.mars    ?? pp.mars.absoluteLongitude,
+    transitJupiterLon: tl?.jupiter ?? pp.jupiter.absoluteLongitude,
+    transitMoonLon,
+  };
+}
+
+function computeChartIntensity(chart: ChartPrimitives): IntensityResult {
+  return computeIntensity(
+    chart.dasha.mahadashaLord,
+    chart.dasha.antardashaLord,
+    buildTransitNatalContext(chart)
+  );
+}
+
 function deriveEnergyLevel(text: string): EnergyLevel {
   const t = text.toLowerCase();
   if (t.includes("high") || t.includes("strong") || t.includes("active") || t.includes("momentum") || t.includes("favorable")) return "high";
@@ -312,6 +361,7 @@ export async function runProfilePipeline(
       todayGeneratedAt: new Date().toISOString(),
       todayMode: "local-ts",
       decisions,
+      intensity: computeChartIntensity(chart),
     };
   }
   // ── Python path continues below ───────────────────────────────────────────
@@ -319,6 +369,8 @@ export async function runProfilePipeline(
   // 3. Map Python response → KaalSnapshot
 
   const phaseStateKey = deriveStateKey(py.phase.name);
+  const phaseSupportBias = deriveSupportBias(phaseStateKey);
+  const phaseRiskBias = deriveRiskBias(py.phase.risk);
   const phase: PhaseProfile = {
     label: py.phase.name,
     summary: py.phase.summary,
@@ -327,8 +379,13 @@ export async function runProfilePipeline(
     confidence: 0.85,
     stateKey: phaseStateKey,
     intensity: deriveIntensity(py.phase),
-    supportBias: deriveSupportBias(phaseStateKey),
-    riskBias: deriveRiskBias(py.phase.risk)
+    supportBias: phaseSupportBias,
+    riskBias: phaseRiskBias,
+    tags: [
+      phaseStateKey.replace(/-/g, " "),
+      `${phaseSupportBias} mode`,
+      `avoid: ${phaseRiskBias}`,
+    ],
   };
 
   const traits = py.pattern.traits;
@@ -411,7 +468,8 @@ export async function runProfilePipeline(
     daily,
     todayGeneratedAt: new Date().toISOString(),
     todayMode: "python-groq",
-    decisions
+    decisions,
+    intensity: computeChartIntensity(chart),
   };
 }
 

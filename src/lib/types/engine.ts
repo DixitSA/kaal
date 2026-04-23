@@ -110,6 +110,8 @@ export interface PhaseProfile {
   intensity: PhaseIntensity;
   supportBias: SupportBias;
   riskBias: RiskBias;
+  /** 2-3 short descriptor tags derived from stateKey + biases. */
+  tags: string[];
 }
 
 export interface DailyState {
@@ -133,4 +135,24 @@ export interface DecisionEvaluation {
   confidence: number;
   primaryDriver: DecisionDriverKey;
   secondaryDriver: DecisionDriverKey;
+  shadowCaveat?: string;
+}
+
+export interface IntensityTransitItem {
+  name: string;
+  delta: number;
+}
+
+export interface IntensityBreakdown {
+  base_md: number;
+  ad_modifier: number;
+  transits: IntensityTransitItem[];
+}
+
+export type IntensityLevel = "low" | "medium" | "high" | "critical";
+
+export interface IntensityResult {
+  score: number;
+  level: IntensityLevel;
+  breakdown: IntensityBreakdown;
 }
