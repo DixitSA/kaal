@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { motion, useReducedMotion, useScroll, useTransform, Variants } from "framer-motion";
+import { motion, useReducedMotion, Variants } from "framer-motion";
 import { useUser } from "@/context/UserContext";
 import YantraMandala from "@/components/svg/YantraMandala";
 import DecorativeDivider from "@/components/svg/DecorativeDivider";
@@ -18,11 +18,6 @@ export default function LandingPage() {
   const router = useRouter();
   const { userData, isLoading } = useUser();
   const shouldReduce = useReducedMotion();
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  const { scrollY } = useScroll();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const _bgY = useTransform(scrollY, [0, 500], [0, shouldReduce ? 0 : -25]);
 
   useEffect(() => {
     if (!isLoading && userData) router.replace("/dashboard");
@@ -50,7 +45,6 @@ export default function LandingPage() {
 
   return (
     <main
-      ref={containerRef}
       className="flex items-center justify-center px-6 py-16 relative"
       style={{ minHeight: "100dvh" }}
     >

@@ -312,11 +312,17 @@ export async function runProfilePipeline(
 
   // 1. Compute chart locally via Next.js adapter (pure TS, fast, no network)
   reportStage?.("computing your chart...");
-  const chartResponse = await requestJson<ChartComputeResponse>("/api/chart/compute", {
-    method: "POST",
-    body: JSON.stringify({ birth })
-  });
-  const chart = chartResponse.data.chart;
+  let chart: ChartPrimitives;
+  try {
+    const chartResponse = await requestJson<ChartComputeResponse>("/api/chart/compute", {
+      method: "POST",
+      body: JSON.stringify({ birth })
+    });
+    chart = chartResponse.data.chart;
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "chart computation failed";
+    throw new Error(`Failed to compute chart: ${message}`);
+  }
 
   // 2. Try Python backend (AI narrative). Falls back to local TS engines if unavailable.
   reportStage?.("reading the stars...");
@@ -477,18 +483,23 @@ export async function lookupBirthPlace(
   query: string,
   countryCode?: string
 ): Promise<LocationLookupResult> {
-  const response = await requestJson<LocationLookupResponse>("/api/location/lookup", {
-    method: "POST",
-    body: JSON.stringify({
-      query,
-      count: 5,
-      language: "en",
-      countryCode
-    })
-  });
+  try {
+    const response = await requestJson<LocationLookupResponse>("/api/location/lookup", {
+      method: "POST",
+      body: JSON.stringify({
+        query,
+        count: 5,
+        language: "en",
+        countryCode
+      })
+    });
 
-  return {
-    provider: response.data.provider,
-    results: response.data.results
-  };
+    return {
+      provider: response.data.provider,
+      results: response.data.results
+    };
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "location lookup failed";
+    throw new Error(`Failed to lookup location: ${message}`);
+  }
 }
