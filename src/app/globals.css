@@ -178,12 +178,36 @@ a {
   .sm\:text-lg   { font-size: 1.125rem; }
 }
 
+/* ─── Responsive: mobile-first utilities ───────────────────── */
+
+@media (max-width: 639px) {
+  .mobile\:py-8   { padding-top: 2rem; padding-bottom: 2rem; }
+  .mobile\:my-8   { margin-top: 2rem; margin-bottom: 2rem; }
+  .mobile\:gap-4  { gap: 1rem; }
+  .mobile\:px-4   { padding-left: 1rem; padding-right: 1rem; }
+  .mobile\:text-center { text-align: center; }
+}
+
+/* ─── Touch targets: min 44px ──────────────────────────────── */
+
+.touch-target {
+  min-height: 44px;
+  min-width: 44px;
+}
+
 /* ─── Responsive: md ──────────────────────────────────────── */
 
 @media (min-width: 768px) {
   .md\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .md\:my-20       { margin-top: 5rem; margin-bottom: 5rem; }
   .md\:py-20       { padding-top: 5rem; padding-bottom: 5rem; }
+}
+
+/* ─── Responsive: lg ──────────────────────────────────────── */
+
+@media (min-width: 1024px) {
+  .lg\:max-w-2xl { max-width: 42rem; }
+  .lg\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 
 /* ─── Reduced motion ──────────────────────────────────────── */

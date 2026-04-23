@@ -83,10 +83,12 @@ export default function DecisionSection() {
         style={{
           marginTop: "16px",
           borderBottom: "1px solid rgba(122, 116, 105, 0.12)",
-          marginLeft: "-24px",
-          marginRight: "-24px",
-          paddingLeft: "24px",
-          paddingRight: "24px",
+          marginLeft: "clamp(-12px, -3vw, -24px)",
+          marginRight: "clamp(-12px, -3vw, -24px)",
+          paddingLeft: "clamp(12px, 3vw, 24px)",
+          paddingRight: "clamp(12px, 3vw, 24px)",
+          overflowX: "auto",
+          WebkitOverflowScrolling: "touch",
         }}
       >
         <div
@@ -173,7 +175,7 @@ export default function DecisionSection() {
             </motion.p>
             <p
               className="mt-4"
-              style={{ color: "#7A7469", fontFamily: "var(--font-quattrocento-sans), var(--font-inter-var), sans-serif", fontSize: "1.4rem", lineHeight: 1.5, fontStyle: "normal", letterSpacing: "0.02em", textTransform: "lowercase" }}
+              style={{ color: "#7A7469", fontFamily: "var(--font-quattrocento-sans), var(--font-inter-var), sans-serif", fontSize: "clamp(1rem, 3vw, 1.4rem)", lineHeight: 1.5, fontStyle: "normal", letterSpacing: "0.02em", textTransform: "lowercase" }}
             >
               {result.guidance}
             </p>

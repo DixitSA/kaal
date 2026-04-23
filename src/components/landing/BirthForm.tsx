@@ -239,7 +239,7 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
   const errStyle = { color: "#8B3620", fontSize: "12px", marginTop: "4px", fontFamily: "var(--font-inter-var)" };
 
   return (
-    <form onSubmit={handleSubmit} className="landing-form w-full flex flex-col gap-6" noValidate>
+    <form onSubmit={handleSubmit} className="landing-form w-full flex flex-col gap-6 mobile:gap-4" noValidate style={{ paddingLeft: "clamp(0px, 0vw, 0px)", paddingRight: "clamp(0px, 0vw, 0px)" }}>
 
       {/* Full Name */}
       <motion.div custom={0} variants={vars} initial="hidden" animate="visible">
