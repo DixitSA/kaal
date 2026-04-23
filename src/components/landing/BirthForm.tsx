@@ -21,36 +21,27 @@ function DobWatermark() {
   const radii = [0.92, 0.74, 0.56, 0.38, 0.18];
   const spokeCount = 12;
   return (
-    <svg
-      width={r * 2} height={r * 2}
-      viewBox={`0 0 ${r * 2} ${r * 2}`}
-      aria-hidden="true"
-      style={{ display: "block" }}
-    >
+    <svg width={r * 2} height={r * 2} viewBox={`0 0 ${r * 2} ${r * 2}`} aria-hidden="true" style={{ display: "block" }}>
       {radii.map((ratio, i) => (
-        <circle key={i} cx={cx} cy={cy} r={r * ratio}
-          fill="none" stroke="#C4A96A" strokeWidth="0.3" />
+        <circle key={i} cx={cx} cy={cy} r={r * ratio} fill="none" stroke="#C4A96A" strokeWidth="0.3" />
       ))}
       {Array.from({ length: spokeCount }, (_, i) => {
         const a = (i * Math.PI * 2) / spokeCount;
-        return (
-          <line key={i}
-            x1={cx + r * 0.18 * Math.cos(a)} y1={cy + r * 0.18 * Math.sin(a)}
-            x2={cx + r * 0.92 * Math.cos(a)} y2={cy + r * 0.92 * Math.sin(a)}
-            stroke="#C4A96A" strokeWidth="0.3"
-          />
-        );
+        return <line key={i} x1={cx + r * 0.18 * Math.cos(a)} y1={cy + r * 0.18 * Math.sin(a)} x2={cx + r * 0.92 * Math.cos(a)} y2={cy + r * 0.92 * Math.sin(a)} stroke="#C4A96A" strokeWidth="0.3" />;
       })}
       {Array.from({ length: 24 }, (_, i) => {
         const a = (i * Math.PI * 2) / 24 + Math.PI / 24;
-        return (
-          <circle key={i}
-            cx={cx + r * 0.64 * Math.cos(a)}
-            cy={cy + r * 0.64 * Math.sin(a)}
-            r={0.8} fill="#C4A96A"
-          />
-        );
+        return <circle key={i} cx={cx + r * 0.64 * Math.cos(a)} cy={cy + r * 0.64 * Math.sin(a)} r={0.8} fill="#C4A96A" />;
       })}
+    </svg>
+  );
+}
+
+/* ─── Location pin icon ──────────────────────────────────────── */
+function LocationPinIcon() {
+  return (
+    <svg width="11" height="14" viewBox="0 0 11 14" fill="currentColor" aria-hidden="true">
+      <path d="M5.5 0C2.46 0 0 2.46 0 5.5 0 9.35 5.5 14 5.5 14S11 9.35 11 5.5C11 2.46 8.54 0 5.5 0zm0 7.5c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z" />
     </svg>
   );
 }
@@ -105,14 +96,14 @@ function CeremonialInput({ id, type, placeholder, value, onChange, autoComplete,
 /* ─── Styles ─────────────────────────────────────────────────── */
 const labelStyle: CSSProperties = {
   fontFamily: "var(--font-inter-var), sans-serif",
-  fontSize: "13px",
-  textTransform: "lowercase",
-  letterSpacing: "0.06em",
+  fontSize: "12px",
+  textTransform: "uppercase",
+  letterSpacing: "0.09em",
   color: "#2C2418",
   display: "block",
-  marginBottom: "6px",
-  fontWeight: 400,
-  opacity: 0.72,
+  marginBottom: "10px",
+  fontWeight: 500,
+  opacity: 0.6,
   textAlign: "left",
 };
 
@@ -120,13 +111,13 @@ const inputStyle: CSSProperties = {
   width: "100%",
   background: "transparent",
   border: "none",
-  borderBottom: "1px solid rgba(0, 0, 0, 0.2)",
+  borderBottom: "1px solid rgba(0, 0, 0, 0.15)",
   outline: "none",
   fontFamily: "var(--font-inter-var), sans-serif",
   fontSize: "15px",
   color: "#2C2418",
   padding: 0,
-  paddingBottom: "8px",
+  paddingBottom: "10px",
   minHeight: "44px",
   borderRadius: 0,
   display: "block",
@@ -134,17 +125,17 @@ const inputStyle: CSSProperties = {
 };
 
 const defaultVariants: Variants = {
-  hidden: { opacity: 0, x: 30 },
+  hidden: { opacity: 0, y: 16 },
   visible: (i: number) => ({
     opacity: 1,
-    x: 0,
-    transition: { delay: i * 0.15, duration: 0.5, ease: EASE },
+    y: 0,
+    transition: { delay: i * 0.12, duration: 0.45, ease: EASE },
   }),
 };
 
 const reducedVariants: Variants = {
-  hidden: { opacity: 1, x: 0 },
-  visible: () => ({ opacity: 1, x: 0, transition: { duration: 0 } }),
+  hidden: { opacity: 1, y: 0 },
+  visible: () => ({ opacity: 1, y: 0, transition: { duration: 0 } }),
 };
 
 export default function BirthForm({ fieldVariants = defaultVariants, shouldReduce = false }: BirthFormProps) {
@@ -216,7 +207,7 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
   function onBlur(e: FocusEvent<HTMLInputElement>, hasError: boolean) {
     e.target.style.borderBottom = hasError
       ? "1px solid rgba(181, 86, 62, 0.4)"
-      : "1px solid rgba(0, 0, 0, 0.2)";
+      : "1px solid rgba(0, 0, 0, 0.15)";
     e.target.style.boxShadow = "none";
   }
 
@@ -254,10 +245,7 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
     } else if (lookupResults.length > 0) {
       const top = lookupResults[0];
       const queryLower = placeOfBirth.toLowerCase().trim();
-      const matchScore = top.displayName.toLowerCase().startsWith(queryLower) ? 1 : 0;
-      if (matchScore === 1) {
-        applyLookupResult(top);
-      }
+      if (top.displayName.toLowerCase().startsWith(queryLower)) applyLookupResult(top);
     }
   }
 
@@ -279,91 +267,150 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
   }
 
   const vars = shouldReduce ? reducedVariants : fieldVariants;
-  const errStyle: CSSProperties = { color: "#8B3620", fontSize: "12px", marginTop: "4px", fontFamily: "var(--font-inter-var)" };
+  const errStyle: CSSProperties = { color: "#8B3620", fontSize: "11px", marginTop: "5px", fontFamily: "var(--font-inter-var)", letterSpacing: "0.02em" };
 
   return (
     <form
       onSubmit={handleSubmit}
-      style={{ width: "100%", maxWidth: "480px", margin: "0 auto", display: "flex", flexDirection: "column", gap: "24px" }}
+      style={{ width: "100%", maxWidth: "480px", margin: "0 auto", display: "flex", flexDirection: "column", gap: "32px" }}
       noValidate
     >
 
-      {/* Full Name */}
+      {/* ── Full Name — full width ── */}
       <motion.div custom={0} variants={vars} initial="hidden" animate="visible">
         <label htmlFor="name" style={labelStyle}>full name</label>
         <CeremonialInput
-          id="name"
-          type="text"
-          placeholder="john doe"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          autoComplete="name"
-          style={inputStyle}
-          onFocus={onFocus}
-          onBlur={(e) => onBlur(e, !!errors.name)}
-          ariaInvalid={!!errors.name}
-          ariaDescribedBy={errors.name ? "name-error" : undefined}
+          id="name" type="text" placeholder="arjun sharma"
+          value={name} onChange={(e) => setName(e.target.value)}
+          autoComplete="name" style={inputStyle}
+          onFocus={onFocus} onBlur={(e) => onBlur(e, !!errors.name)}
+          ariaInvalid={!!errors.name} ariaDescribedBy={errors.name ? "name-error" : undefined}
         />
         {errors.name && <p id="name-error" role="alert" style={errStyle}>{errors.name}</p>}
       </motion.div>
 
-      {/* Date of Birth */}
-      <motion.div custom={1} variants={vars} initial="hidden" animate="visible" style={{ position: "relative" }}>
-        <div
-          aria-hidden="true"
-          style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", pointerEvents: "none", opacity: 0.02, zIndex: 0, width: "280px", height: "280px" }}
-        >
-          <DobWatermark />
+      {/* ── Date of Birth + Time of Birth — 2 columns ── */}
+      <motion.div
+        custom={1} variants={vars} initial="hidden" animate="visible"
+        style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "28px" }}
+      >
+        {/* Date of Birth */}
+        <div style={{ position: "relative" }}>
+          <div aria-hidden="true" style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", pointerEvents: "none", opacity: 0.025, zIndex: 0, width: "180px", height: "180px" }}>
+            <DobWatermark />
+          </div>
+          <div style={{ position: "relative", zIndex: 1 }}>
+            <label htmlFor="dob" style={labelStyle}>date of birth</label>
+            <CeremonialInput
+              id="dob" type="text" placeholder="MM/DD/YYYY"
+              value={dob} autoComplete="bday"
+              onChange={(e) => {
+                let val = e.target.value.replace(/[^0-9/]/g, "");
+                if (val.length === 2 && dob.length <= 2) val += "/";
+                if (val.length === 5 && dob.length <= 5) val += "/";
+                if (val.length <= 10) setDob(val);
+              }}
+              style={inputStyle}
+              onFocus={onFocus} onBlur={(e) => onBlur(e, !!errors.dob)}
+              ariaInvalid={!!errors.dob} ariaDescribedBy={errors.dob ? "dob-error" : undefined}
+            />
+            {errors.dob && <p id="dob-error" role="alert" style={errStyle}>{errors.dob}</p>}
+          </div>
         </div>
-        <div style={{ position: "relative", zIndex: 1 }}>
-          <label htmlFor="dob" style={labelStyle}>date of birth</label>
-          <CeremonialInput
-            id="dob"
-            type="text"
-            placeholder="MM/DD/YYYY"
-            value={dob}
-            autoComplete="bday"
-            onChange={(e) => {
-              let val = e.target.value.replace(/[^0-9/]/g, "");
-              if (val.length === 2 && dob.length <= 2) val += "/";
-              if (val.length === 5 && dob.length <= 5) val += "/";
-              if (val.length <= 10) setDob(val);
-            }}
-            style={inputStyle}
-            onFocus={onFocus}
-            onBlur={(e) => onBlur(e, !!errors.dob)}
-            ariaInvalid={!!errors.dob}
-            ariaDescribedBy={errors.dob ? "dob-error" : undefined}
-          />
-          {errors.dob && <p id="dob-error" role="alert" style={errStyle}>{errors.dob}</p>}
+
+        {/* Time of Birth — input + "I don't know" inline */}
+        <div>
+          <label htmlFor="timeOfBirth" style={labelStyle}>time of birth</label>
+          <div style={{ display: "flex", alignItems: "flex-end", gap: "12px" }}>
+            <div style={{ flex: 1 }}>
+              <CeremonialInput
+                id="timeOfBirth" type="text" placeholder="HH:MM"
+                value={timeOfBirth} disabled={unknownTime} autoComplete="off"
+                onChange={(e) => {
+                  let val = e.target.value.replace(/[^0-9:]/g, "");
+                  if (val.length === 2 && !val.includes(":")) val += ":";
+                  if (val.length <= 5) setTimeOfBirth(val);
+                }}
+                style={{ ...inputStyle, opacity: unknownTime ? 0.35 : 1, cursor: unknownTime ? "not-allowed" : "auto" }}
+                onFocus={(e) => { if (!unknownTime) onFocus(e); }}
+                onBlur={(e) => onBlur(e, !!errors.time)}
+                ariaInvalid={!!errors.time} ariaDescribedBy={errors.time ? "time-error" : undefined}
+              />
+            </div>
+
+            {/* Inline "I don't know" toggle */}
+            <label
+              htmlFor="unknownTime"
+              style={{
+                display: "flex", alignItems: "center", gap: "6px",
+                paddingBottom: "10px", cursor: "pointer", flexShrink: 0,
+                fontFamily: "var(--font-inter-var), sans-serif",
+                fontSize: "11px", letterSpacing: "0.04em",
+                color: "#2C2418", opacity: 0.55,
+              }}
+            >
+              <span style={{ position: "relative", width: "14px", height: "14px", flexShrink: 0, display: "inline-flex" }}>
+                <input
+                  id="unknownTime" type="checkbox" checked={unknownTime}
+                  onChange={(e) => { setUnknownTime(e.target.checked); if (e.target.checked) setTimeOfBirth(""); }}
+                  style={{ position: "absolute", inset: 0, margin: 0, opacity: 0, width: "100%", height: "100%", cursor: "pointer" }}
+                />
+                <span
+                  aria-hidden="true"
+                  style={{
+                    position: "absolute", inset: 0, borderRadius: "50%",
+                    border: `1px solid ${unknownTime ? "#B5563E" : "rgba(122,116,105,0.5)"}`,
+                    backgroundColor: unknownTime ? "#B5563E" : "transparent",
+                    transition: "background-color 0.18s ease, border-color 0.18s ease",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    pointerEvents: "none",
+                  }}
+                >
+                  {unknownTime && <span style={{ width: "4px", height: "4px", borderRadius: "50%", backgroundColor: "#F5F0E8", display: "block" }} />}
+                </span>
+              </span>
+              i don&apos;t know
+            </label>
+          </div>
+          {errors.time && <p id="time-error" role="alert" style={errStyle}>{errors.time}</p>}
         </div>
       </motion.div>
 
-      {/* Place of Birth */}
+      {/* ── Place of Birth — full width with pin icon ── */}
       <motion.div custom={2} variants={vars} initial="hidden" animate="visible">
         <label htmlFor="placeOfBirth" style={labelStyle}>
           place of birth
-          {isLookupLoading && <span style={{ marginLeft: "8px", opacity: 0.5, fontStyle: "italic" }}>searching…</span>}
+          {isLookupLoading && <span style={{ marginLeft: "8px", opacity: 0.45, fontStyle: "italic", textTransform: "none", letterSpacing: 0 }}>searching…</span>}
         </label>
-        <CeremonialInput
-          id="placeOfBirth"
-          type="text"
-          placeholder="city, country"
-          value={placeOfBirth}
-          autoComplete="address-level2"
-          onChange={(e) => handlePlaceChange(e.target.value)}
-          style={inputStyle}
-          onFocus={onFocus}
-          onBlur={(e) => { handlePlaceBlur(); onBlur(e, !!errors.place); }}
-          ariaInvalid={!!errors.place}
-          ariaDescribedBy={errors.place ? "place-error" : undefined}
-        />
+        <div style={{ position: "relative" }}>
+          <span
+            aria-hidden="true"
+            style={{ position: "absolute", left: 0, bottom: "11px", color: "#9C9488", pointerEvents: "none", display: "flex", alignItems: "center" }}
+          >
+            <LocationPinIcon />
+          </span>
+          <CeremonialInput
+            id="placeOfBirth" type="text" placeholder="city, country"
+            value={placeOfBirth} autoComplete="address-level2"
+            onChange={(e) => handlePlaceChange(e.target.value)}
+            style={{ ...inputStyle, paddingLeft: "20px" }}
+            onFocus={onFocus} onBlur={(e) => { handlePlaceBlur(); onBlur(e, !!errors.place); }}
+            ariaInvalid={!!errors.place} ariaDescribedBy={errors.place ? "place-error" : undefined}
+          />
+        </div>
         {errors.place && <p id="place-error" role="alert" style={errStyle}>{errors.place}</p>}
         {lookupError && <p role="alert" style={{ ...errStyle, marginTop: "8px" }}>{lookupError}</p>}
         {lookupResults.length > 0 && (
-          <div id="place-results" role="listbox" style={{ display: "grid", gap: "1px", marginTop: "8px", borderTop: "1px solid rgba(122,116,105,0.08)" }}>
+          <div
+            id="place-results" role="listbox"
+            style={{ marginTop: "6px", borderRadius: "6px", overflow: "hidden", border: "1px solid rgba(122,116,105,0.12)", background: "#FDFCF8" }}
+          >
             {lookupResults.map((result) => (
-              <button key={result.id} type="button" role="option" onClick={() => applyLookupResult(result)} style={{ background: "none", border: "none", borderBottom: "1px solid rgba(122,116,105,0.06)", padding: "10px 0", textAlign: "left", cursor: "pointer", minHeight: "44px", width: "100%" }}>
+              <button
+                key={result.id} type="button" role="option"
+                onClick={() => applyLookupResult(result)}
+                style={{ background: "none", border: "none", borderBottom: "1px solid rgba(122,116,105,0.06)", padding: "10px 12px", textAlign: "left", cursor: "pointer", minHeight: "44px", width: "100%", display: "block" }}
+              >
                 <span style={{ display: "block", color: "#2C2418", fontFamily: "var(--font-quattrocento-sans), var(--font-inter-var), sans-serif", fontSize: "14px" }}>{result.displayName}</span>
                 <span style={{ display: "block", marginTop: "2px", color: "#9C9488", fontFamily: "var(--font-inter-var)", fontSize: "11px", letterSpacing: "0.04em" }}>{result.timezone} · {result.latitude.toFixed(4)}, {result.longitude.toFixed(4)}</span>
               </button>
@@ -372,90 +419,41 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
         )}
       </motion.div>
 
-      {/* Time of Birth */}
+      {/* ── Advanced Birth Details ── */}
       <motion.div custom={3} variants={vars} initial="hidden" animate="visible">
-        <label htmlFor="timeOfBirth" style={labelStyle}>time of birth</label>
-        <CeremonialInput
-          id="timeOfBirth"
-          type="text"
-          placeholder="HH:MM"
-          value={timeOfBirth}
-          disabled={unknownTime}
-          autoComplete="off"
-          onChange={(e) => {
-            let val = e.target.value.replace(/[^0-9:]/g, "");
-            if (val.length === 2 && !val.includes(":")) val += ":";
-            if (val.length <= 5) setTimeOfBirth(val);
-          }}
-          style={{ ...inputStyle, opacity: unknownTime ? 0.35 : 1, cursor: unknownTime ? "not-allowed" : "auto" }}
-          onFocus={(e) => { if (!unknownTime) onFocus(e); }}
-          onBlur={(e) => onBlur(e, !!errors.time)}
-          ariaInvalid={!!errors.time}
-          ariaDescribedBy={errors.time ? "time-error" : undefined}
-        />
-        <label
-          htmlFor="unknownTime"
-          style={{
-            display: "flex", alignItems: "center", gap: "8px",
-            marginTop: "12px", cursor: "pointer",
-            fontFamily: "var(--font-quattrocento-sans), var(--font-inter-var), sans-serif",
-            fontSize: "13px", letterSpacing: "0.06em",
-            color: "#2C2418", opacity: 0.6,
-          }}
-        >
-          <span style={{ position: "relative", width: "16px", height: "16px", flexShrink: 0, display: "inline-flex" }}>
-            <input
-              id="unknownTime"
-              type="checkbox"
-              checked={unknownTime}
-              onChange={(e) => { setUnknownTime(e.target.checked); if (e.target.checked) setTimeOfBirth(""); }}
-              style={{ position: "absolute", inset: 0, margin: 0, opacity: 0, width: "100%", height: "100%", cursor: "pointer" }}
-            />
-            <span
-              aria-hidden="true"
-              style={{
-                position: "absolute", inset: 0, borderRadius: "50%",
-                border: `1px solid ${unknownTime ? "#B5563E" : "rgba(122,116,105,0.45)"}`,
-                backgroundColor: unknownTime ? "#B5563E" : "transparent",
-                transition: "background-color 0.18s ease, border-color 0.18s ease",
-                display: "flex", alignItems: "center", justifyContent: "center",
-                pointerEvents: "none",
-              }}
-            >
-              {unknownTime && <span style={{ width: "5px", height: "5px", borderRadius: "50%", backgroundColor: "#F5F0E8", display: "block" }} />}
-            </span>
-          </span>
-          i don&apos;t know my birth time
-        </label>
-        {errors.time && <p id="time-error" role="alert" style={errStyle}>{errors.time}</p>}
-      </motion.div>
-
-      {/* Advanced Settings */}
-      <motion.div custom={4} variants={vars} initial="hidden" animate="visible">
         <button
           type="button"
           onClick={() => setShowAdvanced((v) => !v)}
-          style={{ background: "none", border: "none", cursor: "pointer", fontFamily: "var(--font-inter-var)", fontSize: "13px", letterSpacing: "0.06em", color: "#7A7469", padding: "4px 0", display: "flex", alignItems: "center", gap: "6px" }}
+          style={{
+            background: "none", border: "none", cursor: "pointer",
+            fontFamily: "var(--font-inter-var)", fontSize: "12px",
+            letterSpacing: "0.07em", textTransform: "uppercase",
+            color: "#7A7469", padding: "4px 0",
+            display: "flex", alignItems: "center", gap: "8px",
+          }}
         >
-          <span style={{ fontSize: "9px", opacity: 0.7 }}>{showAdvanced ? "▲" : "▼"}</span>
-          {showAdvanced ? "hide advanced" : "advanced settings"}
+          <span
+            style={{
+              display: "inline-block", fontSize: "10px",
+              transition: "transform 0.2s ease",
+              transform: showAdvanced ? "rotate(90deg)" : "rotate(0deg)",
+            }}
+          >
+            ›
+          </span>
+          advanced birth details
         </button>
+
         {showAdvanced && (
-          <div style={{ marginTop: "20px", display: "flex", flexDirection: "column", gap: "24px" }}>
+          <div style={{ marginTop: "24px", display: "flex", flexDirection: "column", gap: "24px" }}>
             <div>
               <label htmlFor="timezone" style={labelStyle}>birth timezone</label>
               <CeremonialInput
-                id="timezone"
-                type="text"
-                placeholder="America/New_York"
-                value={timezone}
-                autoComplete="off"
+                id="timezone" type="text" placeholder="America/New_York"
+                value={timezone} autoComplete="off"
                 onChange={(e) => setTimezone(e.target.value)}
-                style={inputStyle}
-                onFocus={onFocus}
-                onBlur={(e) => onBlur(e, !!errors.timezone)}
-                ariaInvalid={!!errors.timezone}
-                ariaDescribedBy={errors.timezone ? "timezone-error" : undefined}
+                style={inputStyle} onFocus={onFocus} onBlur={(e) => onBlur(e, !!errors.timezone)}
+                ariaInvalid={!!errors.timezone} ariaDescribedBy={errors.timezone ? "timezone-error" : undefined}
               />
               {errors.timezone && <p id="timezone-error" role="alert" style={errStyle}>{errors.timezone}</p>}
             </div>
@@ -463,36 +461,22 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
               <div>
                 <label htmlFor="latitude" style={labelStyle}>latitude</label>
                 <CeremonialInput
-                  id="latitude"
-                  type="number"
-                  placeholder="40.7128"
-                  value={latitude}
-                  autoComplete="off"
-                  inputMode="decimal"
+                  id="latitude" type="number" placeholder="40.7128"
+                  value={latitude} autoComplete="off" inputMode="decimal"
                   onChange={(e) => setLatitude(e.target.value)}
-                  style={inputStyle}
-                  onFocus={onFocus}
-                  onBlur={(e) => onBlur(e, !!errors.latitude)}
-                  ariaInvalid={!!errors.latitude}
-                  ariaDescribedBy={errors.latitude ? "latitude-error" : undefined}
+                  style={inputStyle} onFocus={onFocus} onBlur={(e) => onBlur(e, !!errors.latitude)}
+                  ariaInvalid={!!errors.latitude} ariaDescribedBy={errors.latitude ? "latitude-error" : undefined}
                 />
                 {errors.latitude && <p id="latitude-error" role="alert" style={errStyle}>{errors.latitude}</p>}
               </div>
               <div>
                 <label htmlFor="longitude" style={labelStyle}>longitude</label>
                 <CeremonialInput
-                  id="longitude"
-                  type="number"
-                  placeholder="-74.0060"
-                  value={longitude}
-                  autoComplete="off"
-                  inputMode="decimal"
+                  id="longitude" type="number" placeholder="-74.0060"
+                  value={longitude} autoComplete="off" inputMode="decimal"
                   onChange={(e) => setLongitude(e.target.value)}
-                  style={inputStyle}
-                  onFocus={onFocus}
-                  onBlur={(e) => onBlur(e, !!errors.longitude)}
-                  ariaInvalid={!!errors.longitude}
-                  ariaDescribedBy={errors.longitude ? "longitude-error" : undefined}
+                  style={inputStyle} onFocus={onFocus} onBlur={(e) => onBlur(e, !!errors.longitude)}
+                  ariaInvalid={!!errors.longitude} ariaDescribedBy={errors.longitude ? "longitude-error" : undefined}
                 />
                 {errors.longitude && <p id="longitude-error" role="alert" style={errStyle}>{errors.longitude}</p>}
               </div>
@@ -504,8 +488,8 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
         )}
       </motion.div>
 
-      {/* Submit */}
-      <motion.div custom={5} variants={vars} initial="hidden" animate="visible">
+      {/* ── Submit ── */}
+      <motion.div custom={4} variants={vars} initial="hidden" animate="visible">
         <motion.button
           type="submit"
           disabled={isSubmitting}
@@ -515,7 +499,7 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
             color: "#F5F0E8",
             fontFamily: "var(--font-playfair-display)",
             fontWeight: 700,
-            fontSize: "1.1rem",
+            fontSize: "1.05rem",
             letterSpacing: "0.02em",
             border: "none",
             borderRadius: "8px",
@@ -523,7 +507,7 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
             cursor: isSubmitting ? "wait" : "pointer",
             transition: "background-color 0.2s ease",
           }}
-          whileHover={shouldReduce || isSubmitting ? {} : { y: -2, boxShadow: "0 6px 20px rgba(181,86,62,0.35)" }}
+          whileHover={shouldReduce || isSubmitting ? {} : { y: -2, boxShadow: "0 8px 24px rgba(181,86,62,0.3)" }}
           whileTap={shouldReduce || isSubmitting ? {} : { scale: 0.98, y: 0 }}
           transition={{ duration: 0.2, ease: "easeOut" }}
           onMouseEnter={() => { if (!isSubmitting) setArrowHover(true); }}
@@ -540,9 +524,9 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
         </motion.button>
       </motion.div>
 
-      {/* Footer signature */}
+      {/* ── Footer ── */}
       <motion.p
-        custom={5} variants={vars} initial="hidden" animate="visible"
+        custom={4} variants={vars} initial="hidden" animate="visible"
         style={{
           textAlign: "center",
           color: "#5C574F",
