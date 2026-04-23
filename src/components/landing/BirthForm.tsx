@@ -120,12 +120,13 @@ const inputStyle: CSSProperties = {
   width: "100%",
   background: "transparent",
   border: "none",
-  borderBottom: "1px solid rgba(122,116,105,0.35)",
+  borderBottom: "1px solid rgba(0, 0, 0, 0.2)",
   outline: "none",
   fontFamily: "var(--font-inter-var), sans-serif",
   fontSize: "15px",
   color: "#2C2418",
   padding: 0,
+  paddingBottom: "8px",
   minHeight: "44px",
   borderRadius: 0,
   display: "block",
@@ -215,7 +216,7 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
   function onBlur(e: FocusEvent<HTMLInputElement>, hasError: boolean) {
     e.target.style.borderBottom = hasError
       ? "1px solid rgba(181, 86, 62, 0.4)"
-      : "1px solid rgba(122, 116, 105, 0.1)";
+      : "1px solid rgba(0, 0, 0, 0.2)";
     e.target.style.boxShadow = "none";
   }
 
@@ -278,12 +279,16 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
   }
 
   const vars = shouldReduce ? reducedVariants : fieldVariants;
-  const errStyle = { color: "#8B3620", fontSize: "12px", marginTop: "4px", fontFamily: "var(--font-inter-var)" };
+  const errStyle: CSSProperties = { color: "#8B3620", fontSize: "12px", marginTop: "4px", fontFamily: "var(--font-inter-var)" };
 
-return (
-    <form onSubmit={handleSubmit} style={{ width: "800px", display: "grid", gridTemplateColumns: "1fr 1fr", columnGap: "60px", rowGap: "48px" }} noValidate>
+  return (
+    <form
+      onSubmit={handleSubmit}
+      style={{ width: "100%", maxWidth: "480px", margin: "0 auto", display: "flex", flexDirection: "column", gap: "24px" }}
+      noValidate
+    >
 
-      {/* Full Name — left column */}
+      {/* Full Name */}
       <motion.div custom={0} variants={vars} initial="hidden" animate="visible">
         <label htmlFor="name" style={labelStyle}>full name</label>
         <CeremonialInput
@@ -302,39 +307,40 @@ return (
         {errors.name && <p id="name-error" role="alert" style={errStyle}>{errors.name}</p>}
       </motion.div>
 
-      {/* Date of Birth — right column */}
-      <motion.div custom={2} variants={vars} initial="hidden" animate="visible">
-        <div style={{ position: "relative" }}>
-          <div aria-hidden="true" style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", pointerEvents: "none", opacity: 0.02, zIndex: 0, width: "280px", height: "280px" }}>
-            <DobWatermark />
-          </div>
-          <div style={{ position: "relative", zIndex: 1 }}>
-            <label htmlFor="dob" style={labelStyle}>date of birth</label>
-            <CeremonialInput
-              id="dob"
-              type="text"
-              placeholder="MM/DD/YYYY"
-              value={dob}
-              autoComplete="bday"
-              onChange={(e) => {
-                let val = e.target.value.replace(/[^0-9/]/g, "");
-                if (val.length === 2 && dob.length <= 2) val += "/";
-                if (val.length === 5 && dob.length <= 5) val += "/";
-                if (val.length <= 10) setDob(val);
-              }}
-              style={inputStyle}
-              onFocus={onFocus}
-              onBlur={(e) => onBlur(e, !!errors.dob)}
-              ariaInvalid={!!errors.dob}
-              ariaDescribedBy={errors.dob ? "dob-error" : undefined}
-            />
-            {errors.dob && <p id="dob-error" role="alert" style={errStyle}>{errors.dob}</p>}
-          </div>
+      {/* Date of Birth */}
+      <motion.div custom={1} variants={vars} initial="hidden" animate="visible" style={{ position: "relative" }}>
+        <div
+          aria-hidden="true"
+          style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", pointerEvents: "none", opacity: 0.02, zIndex: 0, width: "280px", height: "280px" }}
+        >
+          <DobWatermark />
+        </div>
+        <div style={{ position: "relative", zIndex: 1 }}>
+          <label htmlFor="dob" style={labelStyle}>date of birth</label>
+          <CeremonialInput
+            id="dob"
+            type="text"
+            placeholder="MM/DD/YYYY"
+            value={dob}
+            autoComplete="bday"
+            onChange={(e) => {
+              let val = e.target.value.replace(/[^0-9/]/g, "");
+              if (val.length === 2 && dob.length <= 2) val += "/";
+              if (val.length === 5 && dob.length <= 5) val += "/";
+              if (val.length <= 10) setDob(val);
+            }}
+            style={inputStyle}
+            onFocus={onFocus}
+            onBlur={(e) => onBlur(e, !!errors.dob)}
+            ariaInvalid={!!errors.dob}
+            ariaDescribedBy={errors.dob ? "dob-error" : undefined}
+          />
+          {errors.dob && <p id="dob-error" role="alert" style={errStyle}>{errors.dob}</p>}
         </div>
       </motion.div>
 
-      {/* Place of Birth — left column */}
-      <motion.div custom={1} variants={vars} initial="hidden" animate="visible">
+      {/* Place of Birth */}
+      <motion.div custom={2} variants={vars} initial="hidden" animate="visible">
         <label htmlFor="placeOfBirth" style={labelStyle}>
           place of birth
           {isLookupLoading && <span style={{ marginLeft: "8px", opacity: 0.5, fontStyle: "italic" }}>searching…</span>}
@@ -366,7 +372,7 @@ return (
         )}
       </motion.div>
 
-      {/* Time of Birth — right column */}
+      {/* Time of Birth */}
       <motion.div custom={3} variants={vars} initial="hidden" animate="visible">
         <label htmlFor="timeOfBirth" style={labelStyle}>time of birth</label>
         <CeremonialInput
@@ -382,144 +388,55 @@ return (
             if (val.length <= 5) setTimeOfBirth(val);
           }}
           style={{ ...inputStyle, opacity: unknownTime ? 0.35 : 1, cursor: unknownTime ? "not-allowed" : "auto" }}
-          onFocus={(e) => { if (!unknownTime) onFocus?.(e); }}
+          onFocus={(e) => { if (!unknownTime) onFocus(e); }}
           onBlur={(e) => onBlur(e, !!errors.time)}
           ariaInvalid={!!errors.time}
           ariaDescribedBy={errors.time ? "time-error" : undefined}
         />
-        <label htmlFor="unknownTime" style={{ display: "flex", alignItems: "center", gap: "8px", marginTop: "12px", cursor: "pointer", fontFamily: "var(--font-quattrocento-sans), var(--font-inter-var), sans-serif", fontSize: "13px", letterSpacing: "0.06em", color: "#2C2418", opacity: 0.6 }}>
+        <label
+          htmlFor="unknownTime"
+          style={{
+            display: "flex", alignItems: "center", gap: "8px",
+            marginTop: "12px", cursor: "pointer",
+            fontFamily: "var(--font-quattrocento-sans), var(--font-inter-var), sans-serif",
+            fontSize: "13px", letterSpacing: "0.06em",
+            color: "#2C2418", opacity: 0.6,
+          }}
+        >
           <span style={{ position: "relative", width: "16px", height: "16px", flexShrink: 0, display: "inline-flex" }}>
-            <input id="unknownTime" type="checkbox" checked={unknownTime} onChange={(e) => { setUnknownTime(e.target.checked); if (e.target.checked) setTimeOfBirth(""); }} style={{ position: "absolute", inset: 0, margin: 0, opacity: 0, width: "100%", height: "100%", cursor: "pointer" }} />
-            <span aria-hidden="true" style={{ position: "absolute", inset: 0, borderRadius: "50%", border: `1px solid ${unknownTime ? "#B5563E" : "rgba(122,116,105,0.45)"}`, backgroundColor: unknownTime ? "#B5563E" : "transparent", transition: "background-color 0.18s ease, border-color 0.18s ease", display: "flex", alignItems: "center", justifyContent: "center", pointerEvents: "none" }}>
+            <input
+              id="unknownTime"
+              type="checkbox"
+              checked={unknownTime}
+              onChange={(e) => { setUnknownTime(e.target.checked); if (e.target.checked) setTimeOfBirth(""); }}
+              style={{ position: "absolute", inset: 0, margin: 0, opacity: 0, width: "100%", height: "100%", cursor: "pointer" }}
+            />
+            <span
+              aria-hidden="true"
+              style={{
+                position: "absolute", inset: 0, borderRadius: "50%",
+                border: `1px solid ${unknownTime ? "#B5563E" : "rgba(122,116,105,0.45)"}`,
+                backgroundColor: unknownTime ? "#B5563E" : "transparent",
+                transition: "background-color 0.18s ease, border-color 0.18s ease",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                pointerEvents: "none",
+              }}
+            >
               {unknownTime && <span style={{ width: "5px", height: "5px", borderRadius: "50%", backgroundColor: "#F5F0E8", display: "block" }} />}
             </span>
           </span>
-          i don't know my birth time
+          i don&apos;t know my birth time
         </label>
         {errors.time && <p id="time-error" role="alert" style={errStyle}>{errors.time}</p>}
       </motion.div>
 
-      {/* DOB + Time — stacked vertically */}
-      <motion.div custom={1} variants={vars} initial="hidden" animate="visible" style={{ display: "flex", flexDirection: "column", gap: "40px" }}>
-
-        {/* DOB — watermark centered behind field */}
-        <div style={{ position: "relative", width: "450px" }}>
-          {/* Wheel of Time watermark */}
-          <div
-            aria-hidden="true"
-            style={{
-              position: "absolute",
-              top: "50%", left: "50%",
-              transform: "translate(-50%, -50%)",
-              pointerEvents: "none",
-              opacity: 0.02,
-              zIndex: 0,
-              width: "280px",
-              height: "280px",
-            }}
-          >
-            <DobWatermark />
-          </div>
-
-          <div style={{ position: "relative", zIndex: 1 }}>
-            <label htmlFor="dob" style={labelStyle}>date of birth</label>
-            <CeremonialInput
-              id="dob"
-              type="text"
-              placeholder="MM/DD/YYYY"
-              value={dob}
-              autoComplete="bday"
-              onChange={(e) => {
-                let val = e.target.value.replace(/[^0-9/]/g, "");
-                if (val.length === 2 && dob.length <= 2) val += "/";
-                if (val.length === 5 && dob.length <= 5) val += "/";
-                if (val.length <= 10) setDob(val);
-              }}
-              style={inputStyle}
-              onFocus={onFocus}
-              onBlur={(e) => onBlur(e, !!errors.dob)}
-              ariaInvalid={!!errors.dob}
-              ariaDescribedBy={errors.dob ? "dob-error" : undefined}
-            />
-            {errors.dob && <p id="dob-error" role="alert" style={errStyle}>{errors.dob}</p>}
-          </div>
-        </div>
-
-        {/* Time of birth */}
-        <div>
-          <label htmlFor="timeOfBirth" style={labelStyle}>time of birth</label>
-          <CeremonialInput
-            id="timeOfBirth"
-            type="text"
-            placeholder="HH:MM"
-            value={timeOfBirth}
-            disabled={unknownTime}
-            autoComplete="off"
-            onChange={(e) => {
-              let val = e.target.value.replace(/[^0-9:]/g, "");
-              if (val.length === 2 && !val.includes(":")) val += ":";
-              if (val.length <= 5) setTimeOfBirth(val);
-            }}
-            style={{ ...inputStyle, opacity: unknownTime ? 0.35 : 1, cursor: unknownTime ? "not-allowed" : "auto" }}
-            onFocus={(e) => { if (!unknownTime) onFocus?.(e); }}
-            onBlur={(e) => onBlur(e, !!errors.time)}
-            ariaInvalid={!!errors.time}
-            ariaDescribedBy={errors.time ? "time-error" : undefined}
-          />
-
-          {/* Custom circular checkbox toggle */}
-          <label
-            htmlFor="unknownTime"
-            style={{
-              display: "flex", alignItems: "center", justifyContent: "center", gap: "8px",
-              width: "450px", marginTop: "12px", cursor: "pointer",
-              fontFamily: "var(--font-quattrocento-sans), var(--font-inter-var), sans-serif",
-              fontSize: "14px", letterSpacing: "0.06em",
-              color: "#2C2418", opacity: 0.6, textAlign: "center",
-            }}
-          >
-            {/* Hidden real input — keyboard + screen reader accessible */}
-            <span style={{ position: "relative", width: "16px", height: "16px", flexShrink: 0, display: "inline-flex" }}>
-              <input
-                id="unknownTime" type="checkbox" checked={unknownTime}
-                onChange={(e) => { setUnknownTime(e.target.checked); if (e.target.checked) setTimeOfBirth(""); }}
-                style={{
-                  position: "absolute", inset: 0, margin: 0,
-                  opacity: 0, width: "100%", height: "100%",
-                  cursor: "pointer",
-                }}
-              />
-              {/* Custom circle visual */}
-              <span
-                aria-hidden="true"
-                style={{
-                  position: "absolute", inset: 0,
-                  borderRadius: "50%",
-                  border: `1px solid ${unknownTime ? "#B5563E" : "rgba(122,116,105,0.45)"}`,
-                  backgroundColor: unknownTime ? "#B5563E" : "transparent",
-                  transition: "background-color 0.18s ease, border-color 0.18s ease",
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  pointerEvents: "none",
-                }}
-              >
-                {unknownTime && (
-                  <span style={{
-                    width: "5px", height: "5px",
-                    borderRadius: "50%",
-                    backgroundColor: "#F5F0E8",
-                    display: "block",
-                  }} />
-                )}
-              </span>
-            </span>
-            i don&apos;t know my birth time
-          </label>
-
-          {errors.time && <p id="time-error" role="alert" style={errStyle}>{errors.time}</p>}
-      </div>
-
-      {/* Advanced settings */}
-        <button type="button" onClick={() => setShowAdvanced((v) => !v)} style={{ background: "none", border: "none", cursor: "pointer", fontFamily: "var(--font-inter-var)", fontSize: "13px", letterSpacing: "0.06em", color: "#7A7469", padding: "4px 0", display: "flex", alignItems: "center", gap: "6px" }}>
+      {/* Advanced Settings */}
+      <motion.div custom={4} variants={vars} initial="hidden" animate="visible">
+        <button
+          type="button"
+          onClick={() => setShowAdvanced((v) => !v)}
+          style={{ background: "none", border: "none", cursor: "pointer", fontFamily: "var(--font-inter-var)", fontSize: "13px", letterSpacing: "0.06em", color: "#7A7469", padding: "4px 0", display: "flex", alignItems: "center", gap: "6px" }}
+        >
           <span style={{ fontSize: "9px", opacity: 0.7 }}>{showAdvanced ? "▲" : "▼"}</span>
           {showAdvanced ? "hide advanced" : "advanced settings"}
         </button>
@@ -542,7 +459,7 @@ return (
               />
               {errors.timezone && <p id="timezone-error" role="alert" style={errStyle}>{errors.timezone}</p>}
             </div>
-            <div className="grid grid-cols-2" style={{ columnGap: "60px" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", columnGap: "24px" }}>
               <div>
                 <label htmlFor="latitude" style={labelStyle}>latitude</label>
                 <CeremonialInput
@@ -587,15 +504,12 @@ return (
         )}
       </motion.div>
 
-      {/* Submit — full width */}
-      <motion.div custom={5} variants={vars} initial="hidden" animate="visible" style={{ gridColumn: "1 / -1" }}>
+      {/* Submit */}
+      <motion.div custom={5} variants={vars} initial="hidden" animate="visible">
         <motion.button
           type="submit"
           disabled={isSubmitting}
-          className="w-full py-4 cursor-pointer"
           style={{
-            marginTop: "40px",
-            maxWidth: "800px",
             width: "100%",
             backgroundColor: isSubmitting ? "rgba(181,86,62,0.6)" : "#B5563E",
             color: "#F5F0E8",
@@ -605,7 +519,7 @@ return (
             letterSpacing: "0.02em",
             border: "none",
             borderRadius: "2px",
-            minHeight: "44px",
+            minHeight: "56px",
             cursor: isSubmitting ? "wait" : "pointer",
             transition: "background-color 0.2s ease",
           }}
@@ -626,11 +540,11 @@ return (
         </motion.button>
       </motion.div>
 
-      {/* Footer signature — dimmed to 40% to preserve CTA focus */}
+      {/* Footer signature */}
       <motion.p
         custom={5} variants={vars} initial="hidden" animate="visible"
-        className="text-center"
         style={{
+          textAlign: "center",
           color: "#5C574F",
           fontFamily: "var(--font-inter-var)",
           fontSize: "11px",

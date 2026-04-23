@@ -88,7 +88,7 @@ export default function LandingPage() {
         Kaal
       </motion.div>
 
-      <div className="w-full flex flex-col items-center" style={{ position: "relative", zIndex: 2, maxWidth: "450px" }}>
+      <div className="w-full flex flex-col items-center" style={{ position: "relative", zIndex: 2, maxWidth: "560px" }}>
         {/* Yantra with rotation + pulse */}
         <div className="relative flex flex-col items-center w-full">
           <motion.div
@@ -105,7 +105,7 @@ export default function LandingPage() {
           {/* Headline word-by-word */}
           <h1
             className="relative z-10 text-center font-bold leading-tight"
-            style={{ fontFamily: "var(--font-playfair-display)", fontSize: "3.5rem", color: "#2C2418", margin: 0, textAlign: "center" }}
+            style={{ fontFamily: "var(--font-playfair-display)", fontSize: "3.5rem", color: "#2C2418", margin: 0, marginBottom: "1rem", textAlign: "center" }}
           >
             <div className="flex flex-wrap justify-center gap-x-[0.25em]">
               {allWords.map(({ word, line }, i) => (
@@ -140,6 +140,7 @@ export default function LandingPage() {
             color: "#7A7469",
             textAlign: "center",
             marginTop: "100px",
+            marginBottom: "4rem",
             position: "relative",
             zIndex: 10,
             textTransform: "lowercase",
@@ -161,7 +162,7 @@ export default function LandingPage() {
         </motion.div>
 
         {/* Form with stagger slide-in */}
-        <div style={{ width: "800px", margin: "0 auto" }}>
+        <div style={{ width: "100%" }}>
           <BirthForm fieldVariants={fieldVariants} shouldReduce={!!shouldReduce} />
         </div>
       </div>
