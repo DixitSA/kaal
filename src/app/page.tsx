@@ -121,6 +121,7 @@ export default function LandingPage() {
                     style={{
                       display: "inline-block",
                       fontStyle: line === 1 ? "italic" : "normal",
+                      fontWeight: line === 1 ? 300 : 700,
                     }}
                   >
                     {word}
