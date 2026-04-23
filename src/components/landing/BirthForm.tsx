@@ -516,7 +516,7 @@ return (
           </label>
 
           {errors.time && <p id="time-error" role="alert" style={errStyle}>{errors.time}</p>}
-      </motion.div>
+      </div>
 
       {/* Advanced settings */}
         <button type="button" onClick={() => setShowAdvanced((v) => !v)} style={{ background: "none", border: "none", cursor: "pointer", fontFamily: "var(--font-inter-var)", fontSize: "13px", letterSpacing: "0.06em", color: "#7A7469", padding: "4px 0", display: "flex", alignItems: "center", gap: "6px" }}>
