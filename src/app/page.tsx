@@ -105,7 +105,7 @@ export default function LandingPage() {
           {/* Headline word-by-word */}
           <h1
             className="relative z-10 text-center font-bold leading-tight"
-            style={{ fontFamily: "var(--font-playfair-display)", fontSize: "clamp(1.75rem, 5.6vw, 4.2rem)", color: "#2C2418", margin: 0, maxWidth: "700px" }}
+            style={{ fontFamily: "var(--font-playfair-display)", fontSize: "4.5rem", color: "#2C2418", margin: 0, textAlign: "center" }}
           >
             <div className="flex flex-wrap justify-center gap-x-[0.25em]">
               {allWords.map(({ word, line }, i) => (
@@ -139,7 +139,7 @@ export default function LandingPage() {
             fontWeight: 300,
             color: "#7A7469",
             textAlign: "center",
-            marginTop: "80px",
+            marginTop: "120px",
             position: "relative",
             zIndex: 10,
             textTransform: "lowercase",
@@ -161,7 +161,7 @@ export default function LandingPage() {
         </motion.div>
 
         {/* Form with stagger slide-in */}
-        <div style={{ maxWidth: "450px", width: "100%", marginTop: "4rem" }}>
+        <div style={{ width: "450px", margin: "0 auto" }}>
           <BirthForm fieldVariants={fieldVariants} shouldReduce={!!shouldReduce} />
         </div>
       </div>

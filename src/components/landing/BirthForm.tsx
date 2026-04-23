@@ -105,7 +105,7 @@ function CeremonialInput({ id, type, placeholder, value, onChange, autoComplete,
 /* ─── Styles ─────────────────────────────────────────────────── */
 const labelStyle: CSSProperties = {
   fontFamily: "var(--font-inter-var), sans-serif",
-  fontSize: "13px",
+  fontSize: "14px",
   textTransform: "lowercase",
   letterSpacing: "0.06em",
   color: "#2C2418",
@@ -117,16 +117,15 @@ const labelStyle: CSSProperties = {
 };
 
 const inputStyle: CSSProperties = {
-  width: "100%",
-  maxWidth: "400px",
+  width: "450px",
   background: "transparent",
   border: "none",
-  borderBottom: "2px solid transparent",
+  borderBottom: "1px solid rgba(122,116,105,0.35)",
   outline: "none",
   fontFamily: "var(--font-inter-var), sans-serif",
-  fontSize: "16px",
+  fontSize: "14px",
   color: "#2C2418",
-  padding: "10px 0",
+  padding: 0,
   minHeight: "44px",
   borderRadius: 0,
   display: "block",
@@ -282,7 +281,7 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
   const errStyle = { color: "#8B3620", fontSize: "12px", marginTop: "4px", fontFamily: "var(--font-inter-var)" };
 
   return (
-    <form onSubmit={handleSubmit} className="landing-form w-full flex flex-col gap-12" noValidate>
+    <form onSubmit={handleSubmit} className="landing-form w-full flex flex-col gap-12" style={{ padding: 0 }} noValidate>
 
       {/* Full Name */}
       <motion.div custom={0} variants={vars} initial="hidden" animate="visible">
@@ -307,17 +306,19 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
       <motion.div custom={1} variants={vars} initial="hidden" animate="visible" style={{ display: "flex", flexDirection: "column", gap: "40px" }}>
 
         {/* DOB — watermark centered behind field */}
-        <div style={{ position: "relative" }}>
+        <div style={{ position: "relative", width: "450px" }}>
           {/* Wheel of Time watermark */}
           <div
             aria-hidden="true"
             style={{
               position: "absolute",
               top: "50%", left: "50%",
-              transform: "translate(-50%, -44%)",
+              transform: "translate(-50%, -50%)",
               pointerEvents: "none",
-              opacity: 0.05,
+              opacity: 0.02,
               zIndex: 0,
+              width: "280px",
+              height: "280px",
             }}
           >
             <DobWatermark />
@@ -373,11 +374,11 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
           <label
             htmlFor="unknownTime"
             style={{
-              display: "flex", alignItems: "center", gap: "8px",
-              marginTop: "12px", cursor: "pointer",
+              display: "flex", alignItems: "center", justifyContent: "center", gap: "8px",
+              width: "450px", marginTop: "12px", cursor: "pointer",
               fontFamily: "var(--font-quattrocento-sans), var(--font-inter-var), sans-serif",
-              fontSize: "11px", letterSpacing: "0.06em",
-              color: "#2C2418", opacity: 0.6,
+              fontSize: "14px", letterSpacing: "0.06em",
+              color: "#2C2418", opacity: 0.6, textAlign: "center",
             }}
           >
             {/* Hidden real input — keyboard + screen reader accessible */}
@@ -475,9 +476,9 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
           onClick={() => setShowAdvanced((v) => !v)}
           style={{
             background: "none", border: "none", cursor: "pointer",
-            fontFamily: "var(--font-inter-var)", fontSize: "11px",
+            fontFamily: "var(--font-inter-var)", fontSize: "14px",
             letterSpacing: "0.06em", color: "#7A7469",
-            padding: "4px 0", display: "flex", alignItems: "center", gap: "6px",
+            padding: "4px 0", display: "flex", alignItems: "center", justifyContent: "center", gap: "6px", width: "450px",
           }}
         >
           <span style={{ fontSize: "9px", opacity: 0.7 }}>{showAdvanced ? "▲" : "▼"}</span>
@@ -558,7 +559,7 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
           className="w-full py-4 cursor-pointer"
           style={{
             marginTop: "40px",
-            maxWidth: "400px",
+            maxWidth: "450px",
             width: "100%",
             backgroundColor: isSubmitting ? "rgba(181,86,62,0.6)" : "#B5563E",
             color: "#F5F0E8",
