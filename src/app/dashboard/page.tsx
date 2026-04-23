@@ -51,18 +51,6 @@ export default function Dashboard() {
           >
             Kaal
           </span>
-          <span
-            style={{
-              fontFamily: "var(--font-inter-var)",
-              fontSize: "13px",
-              textTransform: "uppercase",
-              letterSpacing: "0.16em",
-              color: "#7A7469",
-              lineHeight: 1,
-            }}
-          >
-            {userData.name}
-          </span>
         </div>
         <div className="pointer-events-auto">
           <SettingsDropdown />

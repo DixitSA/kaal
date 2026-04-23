@@ -139,7 +139,7 @@ export default function LandingPage() {
             fontWeight: 300,
             color: "#7A7469",
             textAlign: "center",
-            marginTop: "1.25rem",
+            marginTop: "80px",
             position: "relative",
             zIndex: 10,
             textTransform: "lowercase",

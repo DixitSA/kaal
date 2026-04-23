@@ -113,10 +113,12 @@ const labelStyle: CSSProperties = {
   marginBottom: "6px",
   fontWeight: 400,
   opacity: 0.72,
+  textAlign: "center",
 };
 
 const inputStyle: CSSProperties = {
   width: "100%",
+  maxWidth: "400px",
   background: "transparent",
   border: "none",
   borderBottom: "2px solid transparent",
@@ -128,6 +130,7 @@ const inputStyle: CSSProperties = {
   minHeight: "44px",
   borderRadius: 0,
   display: "block",
+  textAlign: "center",
 };
 
 const defaultVariants: Variants = {
@@ -245,6 +248,19 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
     debounceRef.current = setTimeout(() => { void runLookup(value); }, 600);
   }
 
+  function handlePlaceBlur() {
+    if (lookupResults.length === 1) {
+      applyLookupResult(lookupResults[0]);
+    } else if (lookupResults.length > 0) {
+      const top = lookupResults[0];
+      const queryLower = placeOfBirth.toLowerCase().trim();
+      const matchScore = top.displayName.toLowerCase().startsWith(queryLower) ? 1 : 0;
+      if (matchScore === 1) {
+        applyLookupResult(top);
+      }
+    }
+  }
+
   function formatLocation(result: LocationLookupCandidate): string {
     const parts = [result.name];
     if (result.admin1) parts.push(result.admin1);
@@ -266,7 +282,7 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
   const errStyle = { color: "#8B3620", fontSize: "12px", marginTop: "4px", fontFamily: "var(--font-inter-var)" };
 
   return (
-    <form onSubmit={handleSubmit} className="landing-form w-full flex flex-col gap-6" noValidate>
+    <form onSubmit={handleSubmit} className="landing-form w-full flex flex-col gap-12" noValidate>
 
       {/* Full Name */}
       <motion.div custom={0} variants={vars} initial="hidden" animate="visible">
@@ -287,8 +303,8 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
         {errors.name && <p id="name-error" role="alert" style={errStyle}>{errors.name}</p>}
       </motion.div>
 
-      {/* DOB + Time */}
-      <motion.div custom={1} variants={vars} initial="hidden" animate="visible" className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {/* DOB + Time — stacked vertically */}
+      <motion.div custom={1} variants={vars} initial="hidden" animate="visible" style={{ display: "flex", flexDirection: "column", gap: "40px" }}>
 
         {/* DOB — watermark centered behind field */}
         <div style={{ position: "relative" }}>
@@ -336,12 +352,16 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
           <label htmlFor="timeOfBirth" style={labelStyle}>time of birth</label>
           <CeremonialInput
             id="timeOfBirth"
-            type="time"
+            type="text"
             placeholder="HH:MM"
             value={timeOfBirth}
             disabled={unknownTime}
             autoComplete="off"
-            onChange={(e) => setTimeOfBirth(e.target.value)}
+            onChange={(e) => {
+              let val = e.target.value.replace(/[^0-9:]/g, "");
+              if (val.length === 2 && !val.includes(":")) val += ":";
+              if (val.length <= 5) setTimeOfBirth(val);
+            }}
             style={{ ...inputStyle, opacity: unknownTime ? 0.35 : 1, cursor: unknownTime ? "not-allowed" : "auto" }}
             onFocus={(e) => { if (!unknownTime) onFocus?.(e); }}
             onBlur={(e) => onBlur(e, !!errors.time)}
@@ -418,7 +438,7 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
           onChange={(e) => handlePlaceChange(e.target.value)}
           style={inputStyle}
           onFocus={onFocus}
-          onBlur={(e) => onBlur(e, !!errors.place)}
+          onBlur={(e) => { handlePlaceBlur(); onBlur(e, !!errors.place); }}
           ariaInvalid={!!errors.place}
           ariaDescribedBy={errors.place ? "place-error" : undefined}
         />
@@ -538,6 +558,8 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
           className="w-full py-4 cursor-pointer"
           style={{
             marginTop: "40px",
+            maxWidth: "400px",
+            width: "100%",
             backgroundColor: isSubmitting ? "rgba(181,86,62,0.6)" : "#B5563E",
             color: "#F5F0E8",
             fontFamily: "var(--font-playfair-display)",
