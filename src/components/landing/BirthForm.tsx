@@ -118,7 +118,7 @@ const inputStyle: CSSProperties = {
   fontSize: "14px",
   color: "#2C2418",
   padding: 0,
-  paddingBottom: "10px",
+  paddingBottom: "8px",
   minHeight: "40px",
   borderRadius: 0,
   display: "block",
@@ -253,12 +253,12 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
         width: "100%",
         maxWidth: "500px",
         margin: "0 auto",
-        background: "rgba(255, 255, 255, 0.5)",
+        background: "rgba(252, 250, 245, 0.6)",
         backdropFilter: "blur(10px)",
         WebkitBackdropFilter: "blur(10px)",
         borderRadius: "12px",
         padding: "2.5rem 2.75rem",
-        boxShadow: "0 2px 32px rgba(44, 36, 24, 0.07), 0 0 0 1px rgba(44, 36, 24, 0.05)",
+        boxShadow: "0 0 0 1px rgba(44, 36, 24, 0.06)",
         display: "flex",
         flexDirection: "column",
         gap: "28px",
@@ -313,7 +313,6 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
           <label htmlFor="timeOfBirth" style={labelStyle}>time of birth</label>
           <div style={{ display: "flex", alignItems: "flex-end", gap: "10px" }}>
             <div style={{ flex: 1, position: "relative" }}>
-              <span style={{ ...iconStyle, left: 0 }}><ClockIcon /></span>
               <CeremonialInput
                 id="timeOfBirth" type="text" placeholder="HH:MM" value={timeOfBirth}
                 disabled={unknownTime} autoComplete="off"
@@ -322,14 +321,15 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
                   if (val.length === 2 && !val.includes(":")) val += ":";
                   if (val.length <= 5) setTimeOfBirth(val);
                 }}
-                style={{ ...inputStyle, paddingLeft: "20px", opacity: unknownTime ? 0.35 : 1, cursor: unknownTime ? "not-allowed" : "auto" }}
+                style={{ ...inputStyle, paddingRight: "22px", opacity: unknownTime ? 0.35 : 1, cursor: unknownTime ? "not-allowed" : "auto" }}
                 onFocus={(e) => { if (!unknownTime) onFocus(e); }}
                 onBlur={(e) => onBlur(e, !!errors.time)}
                 ariaInvalid={!!errors.time} ariaDescribedBy={errors.time ? "time-error" : undefined}
               />
+              <span style={{ ...iconStyle, right: 0 }}><ClockIcon /></span>
             </div>
             {/* "I don't know" inline toggle */}
-            <label htmlFor="unknownTime" style={{ display: "flex", alignItems: "center", gap: "5px", paddingBottom: "10px", cursor: "pointer", flexShrink: 0, fontFamily: "var(--font-inter-var), sans-serif", fontSize: "10px", letterSpacing: "0.5px", color: "#2C2418", opacity: 0.5 }}>
+            <label htmlFor="unknownTime" style={{ display: "flex", alignItems: "center", gap: "5px", paddingBottom: "8px", cursor: "pointer", flexShrink: 0, whiteSpace: "nowrap", fontFamily: "var(--font-inter-var), sans-serif", fontSize: "10px", letterSpacing: "0.5px", color: "#2C2418", opacity: 0.5 }}>
               <span style={{ position: "relative", width: "13px", height: "13px", flexShrink: 0, display: "inline-flex" }}>
                 <input id="unknownTime" type="checkbox" checked={unknownTime} onChange={(e) => { setUnknownTime(e.target.checked); if (e.target.checked) setTimeOfBirth(""); }}
                   style={{ position: "absolute", inset: 0, margin: 0, opacity: 0, width: "100%", height: "100%", cursor: "pointer" }} />
@@ -433,7 +433,7 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
             letterSpacing: "0.12em",
             textTransform: "uppercase",
             border: "none",
-            borderRadius: "8px",
+            borderRadius: "2px",
             cursor: isSubmitting ? "wait" : "pointer",
             transition: "background-color 0.2s ease",
           }}
