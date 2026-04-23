@@ -188,6 +188,19 @@ a {
   .mobile\:text-center { text-align: center; }
 }
 
+/* ─── Landing page mobile fixes ─────────────────────────── */
+@media (max-width: 639px) {
+  .landing-yantra {
+    transform: translate(-50%, -50%) scale(0.6);
+    transform-origin: center center;
+  }
+  .landing-form-container {
+    max-width: 100vw;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+}
+
 /* ─── Touch targets: min 44px ──────────────────────────────── */
 
 .touch-target {

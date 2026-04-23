@@ -49,7 +49,7 @@ export default function LandingPage() {
 
   return (
     <main
-      className="flex items-center justify-center px-6 py-16 relative"
+      className="flex items-start sm:items-center justify-center px-4 sm:px-6 py-8 sm:py-16 relative"
       style={{
         minHeight: "100dvh",
         background: "radial-gradient(ellipse at center, #FDFCF6 0%, #F2EFDF 100%)",
@@ -72,7 +72,7 @@ export default function LandingPage() {
       {/* Sacred Ledger — large background mandala */}
       <div
         aria-hidden="true"
-        style={{ position: "fixed", top: "50%", left: "50%", transform: "translate(-50%, -50%)", pointerEvents: "none", zIndex: 0 }}
+        style={{ position: "fixed", top: "50%", left: "50%", transform: "translate(-50%, -50%)", pointerEvents: "none", zIndex: 0, width: "200vmax", height: "200vmax", maxWidth: "900px", maxHeight: "900px" }}
       >
         <YantraMandala size={900} opacity={0.04} />
       </div>
@@ -88,7 +88,7 @@ export default function LandingPage() {
         Kaal
       </motion.div>
 
-      <div className="w-full max-w-[600px] flex flex-col items-center" style={{ position: "relative", zIndex: 2 }}>
+      <div className="w-full max-w-full sm:max-w-[600px] flex flex-col items-center landing-form-container" style={{ position: "relative", zIndex: 2 }}>
         {/* Yantra with rotation + pulse */}
         <div className="relative flex flex-col items-center w-full">
           <motion.div
@@ -161,7 +161,7 @@ export default function LandingPage() {
         </motion.div>
 
         {/* Form with stagger slide-in */}
-        <div className="w-full">
+        <div className="w-full" style={{ maxWidth: "100%", overflowX: "hidden" }}>
           <BirthForm fieldVariants={fieldVariants} shouldReduce={!!shouldReduce} />
         </div>
       </div>
