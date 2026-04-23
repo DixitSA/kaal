@@ -14,7 +14,7 @@ export interface UserFormData {
   timezone?: string;
 }
 
-interface UserContextType {
+export interface UserContextType {
   userData: UserFormData | null;
   setUserData: (data: UserFormData) => void;
   apiData: ProfileResponse | null;
