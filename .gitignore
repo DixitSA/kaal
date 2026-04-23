@@ -1,4 +1,8 @@
 node_modules/
+__pycache__/
+*.pyc
+venv/
+.venv/
 .next/
 out/
 coverage/
@@ -7,3 +11,10 @@ dist/
 .env
 .env.local
 .env.*.local
+.agents/
+.claude/
+.graphify_python
+.graphify_analysis.json
+.graphify_detect.json
+graphify-out/
+cost_tracker.py

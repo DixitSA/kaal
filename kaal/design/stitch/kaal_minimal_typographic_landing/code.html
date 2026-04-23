@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Kaal | Vedic Timing Systems</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700;800&amp;family=Manrope:wght@300;400;500;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "secondary-fixed-dim": "#e6c188",
+                      "on-surface": "#1c1c17",
+                      "surface-container-high": "#ebe8e0",
+                      "on-error": "#ffffff",
+                      "surface": "#fcf9f1",
+                      "surface-container-low": "#f6f3eb",
+                      "tertiary-container": "#79736f",
+                      "on-primary-fixed-variant": "#7e2c0a",
+                      "on-background": "#1c1c17",
+                      "secondary": "#755a2b",
+                      "on-error-container": "#93000a",
+                      "on-tertiary-fixed": "#1e1b18",
+                      "tertiary-fixed-dim": "#cdc5c0",
+                      "inverse-primary": "#ffb59b",
+                      "inverse-on-surface": "#f3f1e9",
+                      "surface-dim": "#dcdad2",
+                      "surface-variant": "#e5e2da",
+                      "error": "#ba1a1a",
+                      "on-primary-fixed": "#380d00",
+                      "on-primary": "#ffffff",
+                      "primary-fixed-dim": "#ffb59b",
+                      "on-tertiary": "#ffffff",
+                      "tertiary": "#605b57",
+                      "surface-container": "#f1eee6",
+                      "tertiary-fixed": "#e9e1dc",
+                      "outline-variant": "#dcc1b8",
+                      "on-surface-variant": "#56423c",
+                      "inverse-surface": "#31312b",
+                      "on-secondary": "#ffffff",
+                      "on-tertiary-container": "#fffbff",
+                      "surface-tint": "#9d4320",
+                      "secondary-container": "#fdd79c",
+                      "surface-bright": "#fcf9f1",
+                      "outline": "#89726b",
+                      "on-secondary-fixed-variant": "#5b4215",
+                      "surface-container-highest": "#e5e2da",
+                      "error-container": "#ffdad6",
+                      "secondary-fixed": "#ffdeac",
+                      "on-tertiary-fixed-variant": "#4b4642",
+                      "primary": "#9a401e",
+                      "on-secondary-container": "#785c2d",
+                      "surface-container-lowest": "#ffffff",
+                      "background": "#fcf9f1",
+                      "on-secondary-fixed": "#281900",
+                      "primary-fixed": "#ffdbcf",
+                      "primary-container": "#b95833",
+                      "on-primary-container": "#fffbff"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "fontFamily": {
+                      "headline": [
+                              "Noto Serif"
+                      ],
+                      "body": [
+                              "Manrope"
+                      ],
+                      "label": [
+                              "Manrope"
+                      ]
+              }
+            },
+          },
+        }
+      </script>
+<style>
+        body {
+            font-family: 'Manrope', sans-serif;
+            background-color: #fcf9f1;
+            color: #1c1c17;
+            overflow: hidden; /* Maintain single-screen experience */
+        }
+        .serif-display {
+            font-family: 'Noto Serif', serif;
+        }
+        input::placeholder {
+            color: rgba(28, 28, 23, 0.3);
+        }
+        /* Custom appearance for time/date inputs to maintain style */
+        input::-webkit-calendar-picker-indicator {
+            filter: invert(10%) sepia(10%) saturate(500%) hue-rotate(10deg);
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface h-screen flex flex-col justify-between selection:bg-primary-fixed-dim">
+<!-- Top Navigation Anchor -->
+<header class="w-full px-8 py-8 flex justify-between items-center z-50">
+<div class="font-headline font-bold text-2xl tracking-tighter text-on-surface">
+            Kaal
+        </div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow flex flex-col items-center justify-center px-4 md:px-0">
+<div class="max-w-4xl w-full">
+<!-- Hero Headline -->
+<h1 class="serif-display text-5xl md:text-8xl font-extrabold text-center leading-[0.9] tracking-tight mb-0">
+                know what's happening. <br/>
+                know what to do.
+            </h1>
+<!-- Form-as-Hero -->
+<form class="mt-8 space-y-6 md:space-y-10">
+<!-- Full Name -->
+<div class="relative group">
+<input class="w-full bg-transparent border-0 border-b border-on-surface/20 py-4 text-2xl md:text-3xl font-body focus:ring-0 focus:border-primary transition-all duration-500 placeholder-transparent peer" id="full_name" name="full_name" placeholder="Full Name" type="text"/>
+<label class="absolute left-0 top-4 text-2xl md:text-3xl font-body text-on-surface/30 pointer-events-none transition-all duration-300 peer-focus:-top-6 peer-focus:text-xs peer-focus:uppercase peer-focus:tracking-widest peer-focus:text-primary peer-[:not(:placeholder-shown)]:-top-6 peer-[:not(:placeholder-shown)]:text-xs peer-[:not(:placeholder-shown)]:uppercase peer-[:not(:placeholder-shown)]:tracking-widest" for="full_name">
+                        Full Name
+                    </label>
+</div>
+<!-- DOB & TOB Side-by-Side -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+<div class="relative group">
+<input class="w-full bg-transparent border-0 border-b border-on-surface/20 py-4 text-xl md:text-2xl font-body focus:ring-0 focus:border-primary transition-all duration-500 peer" id="dob" name="dob" type="date"/>
+<label class="absolute -top-6 left-0 text-xs uppercase tracking-widest text-on-surface/50 font-label" for="dob">Date of Birth</label>
+</div>
+<div class="relative group">
+<input class="w-full bg-transparent border-0 border-b border-on-surface/20 py-4 text-xl md:text-2xl font-body focus:ring-0 focus:border-primary transition-all duration-500 peer" id="tob" name="tob" type="time"/>
+<label class="absolute -top-6 left-0 text-xs uppercase tracking-widest text-on-surface/50 font-label" for="tob">Time of Birth</label>
+</div>
+</div>
+<!-- Toggle & Place of Birth -->
+<div class="space-y-6">
+<div class="flex items-center space-x-3">
+<input class="rounded-sm border-on-surface/20 text-primary focus:ring-primary h-4 w-4 bg-transparent cursor-pointer" id="no_time" type="checkbox"/>
+<label class="font-label text-xs uppercase tracking-widest text-on-surface/60 cursor-pointer" for="no_time">I don't know my birth time</label>
+</div>
+<div class="relative group">
+<input class="w-full bg-transparent border-0 border-b border-on-surface/20 py-4 text-2xl md:text-3xl font-body focus:ring-0 focus:border-primary transition-all duration-500 peer placeholder-transparent" id="pob" name="pob" placeholder="transparent" type="text"/>
+<label class="absolute left-0 top-4 text-2xl md:text-3xl font-body text-on-surface/30 pointer-events-none transition-all duration-300 peer-focus:-top-6 peer-focus:text-xs peer-focus:uppercase peer-focus:tracking-widest peer-focus:text-primary peer-[:not(:placeholder-shown)]:-top-6 peer-[:not(:placeholder-shown)]:text-xs peer-[:not(:placeholder-shown)]:uppercase peer-[:not(:placeholder-shown)]:tracking-widest" for="pob">Place of Birth</label>
+</div>
+</div>
+<!-- CTA -->
+<div class="pt-6">
+<button class="w-full bg-primary text-on-primary py-6 rounded-lg text-lg font-bold tracking-[0.1em] uppercase hover:bg-primary-container transition-all duration-500 flex justify-center items-center group" type="submit">
+                        Generate Profile
+                        <span class="material-symbols-outlined ml-3 transition-transform group-hover:translate-x-2">arrow_forward</span>
+</button>
+<p class="mt-4 text-center font-label text-xs uppercase tracking-[0.2em] text-on-surface/40">
+                        built on vedic timing systems
+                    </p>
+</div>
+</form>
+</div>
+</main>
+<!-- Visual Embellishment / Background Pattern -->
+<div class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -z-10 opacity-[0.03] pointer-events-none">
+<svg class="text-secondary stroke-current fill-none" height="800" viewbox="0 0 100 100" width="800">
+<!-- Abstract Kolam-inspired geometric pattern -->
+<path d="M50 10 L90 50 L50 90 L10 50 Z" stroke-width="0.2"></path>
+<circle cx="50" cy="50" r="30" stroke-width="0.2"></circle>
+<path d="M0 50 L100 50 M50 0 L50 100" stroke-width="0.1"></path>
+<circle cx="50" cy="50" r="45" stroke-dasharray="1 2" stroke-width="0.1"></circle>
+</svg>
+</div>
+<!-- Decorative Texture Layer -->
+<div class="fixed inset-0 pointer-events-none mix-blend-multiply opacity-20 bg-[url('https://www.transparenttextures.com/patterns/paper-fibers.png')]"></div>
+<!-- Footer Meta (Optional for balance) -->
+</body></html>

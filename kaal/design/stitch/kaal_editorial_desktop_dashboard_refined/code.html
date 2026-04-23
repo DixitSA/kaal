@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Kaal | Desktop Dashboard</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400;1,700&amp;family=Manrope:wght@400;500;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Icons -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-error": "#ffffff",
+                    "on-background": "#1c1c17",
+                    "primary": "#9a401e",
+                    "inverse-on-surface": "#f3f1e9",
+                    "on-secondary-fixed-variant": "#5b4215",
+                    "primary-fixed": "#ffdbcf",
+                    "secondary-fixed": "#ffdeac",
+                    "tertiary-container": "#79736f",
+                    "primary-container": "#b95833",
+                    "secondary-container": "#fdd79c",
+                    "surface-variant": "#e5e2da",
+                    "on-secondary-container": "#785c2d",
+                    "surface": "#fcf9f1",
+                    "background": "#fcf9f1",
+                    "on-tertiary-container": "#fffbff",
+                    "outline-variant": "#dcc1b8",
+                    "surface-container-highest": "#e5e2da",
+                    "tertiary": "#605b57",
+                    "surface-container-low": "#f6f3eb",
+                    "on-error-container": "#93000a",
+                    "on-secondary-fixed": "#281900",
+                    "secondary-fixed-dim": "#e6c188",
+                    "on-tertiary": "#ffffff",
+                    "on-surface": "#1c1c17",
+                    "primary-fixed-dim": "#ffb59b",
+                    "secondary": "#755a2b",
+                    "on-surface-variant": "#56423c",
+                    "on-secondary": "#ffffff",
+                    "surface-container-lowest": "#ffffff",
+                    "on-primary-container": "#fffbff",
+                    "on-tertiary-fixed-variant": "#4b4642",
+                    "on-primary": "#ffffff",
+                    "inverse-surface": "#31312b",
+                    "error-container": "#ffdad6",
+                    "inverse-primary": "#ffb59b",
+                    "surface-bright": "#fcf9f1",
+                    "surface-container-high": "#ebe8e0",
+                    "on-primary-fixed-variant": "#7e2c0a",
+                    "error": "#ba1a1a",
+                    "tertiary-fixed": "#e9e1dc",
+                    "on-primary-fixed": "#380d00",
+                    "tertiary-fixed-dim": "#cdc5c0",
+                    "outline": "#89726b",
+                    "surface-container": "#f1eee6",
+                    "surface-tint": "#9d4320",
+                    "on-tertiary-fixed": "#1e1b18",
+                    "surface-dim": "#dcdad2"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "fontFamily": {
+                    "headline": [
+                            "Noto Serif"
+                    ],
+                    "body": [
+                            "Manrope"
+                    ],
+                    "label": [
+                            "Manrope"
+                    ]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Manrope', sans-serif; }
+        h1, h2, h3, .serif { font-family: 'Noto Serif', serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .thin-divider { border-bottom: 0.5px solid rgba(28, 28, 23, 0.15); }
+    </style>
+</head>
+<body class="bg-surface text-on-surface selection:bg-primary-fixed selection:text-on-primary-fixed">
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full z-50 bg-[#fcf9f1] dark:bg-[#1c1c17] border-b border-[#1c1c17]/10 dark:border-[#fcf9f1]/10">
+<nav class="flex justify-between items-center px-12 h-20 w-full">
+<div class="font-serif text-2xl font-bold text-[#1c1c17] dark:text-[#fcf9f1]">
+                Kaal
+            </div>
+<div class="flex gap-8 items-center">
+<div class="ml-4 p-2 rounded-full hover:bg-surface-container transition-colors cursor-pointer">
+<span class="material-symbols-outlined block" style="font-size: 20px;">settings</span>
+</div>
+</div>
+</nav>
+</header>
+<!-- Main Content -->
+<main class="max-w-[800px] mx-auto pt-40 pb-32 px-6">
+<!-- Section 1: Current Phase -->
+<section class="pb-16 thin-divider mb-16">
+<label class="block text-[10px] tracking-[0.2em] font-bold text-on-surface-variant mb-6 font-label uppercase">
+                CURRENT PHASE
+            </label>
+<h1 class="text-6xl md:text-7xl serif text-on-background leading-[1.1] mb-8 lowercase font-bold tracking-tight">
+                pressure and discipline
+            </h1>
+<p class="text-xl md:text-2xl text-on-surface/80 serif italic mb-12">
+                life is asking for consistency, not speed
+            </p>
+<div class="flex flex-col gap-6">
+<div class="flex items-start gap-4">
+<span class="text-[10px] tracking-widest font-bold text-primary uppercase pt-1.5 font-label">OPPORTUNITY</span>
+<p class="text-lg text-on-surface">Precision in repetitive tasks leads to a permanent structural upgrade.</p>
+</div>
+<div class="flex items-start gap-4">
+<span class="text-[10px] tracking-widest font-bold text-primary uppercase pt-1.5 font-label">RISK</span>
+<p class="text-lg text-on-surface">Impulsive exits to avoid minor discomfort will reset the current cycle.</p>
+</div>
+</div>
+</section>
+<!-- Section 2: Today -->
+<section class="pb-16 thin-divider mb-16">
+<label class="block text-[10px] tracking-[0.2em] font-bold text-on-surface-variant mb-6 font-label uppercase">
+                TODAY
+            </label>
+<h2 class="text-4xl serif text-on-background mb-10 leading-tight">
+                mixed day. act only on what is already clear
+            </h2>
+<div class="space-y-8 pl-6">
+<div class="border-l-[1.5px] border-primary/40 pl-8">
+<span class="block text-[10px] tracking-widest font-bold text-primary mb-2 font-label uppercase">PRESSURE</span>
+<p class="text-lg text-on-surface leading-relaxed">Internal friction regarding long-term commitments. Do not renegotiate today.</p>
+</div>
+<div class="border-l-[1.5px] border-primary/40 pl-8">
+<span class="block text-[10px] tracking-widest font-bold text-primary mb-2 font-label uppercase">EDGE</span>
+<p class="text-lg text-on-surface leading-relaxed">A sharp focus on technical details. Use this for editing or refining existing work.</p>
+</div>
+</div>
+</section>
+<!-- Section 3: Decision -->
+<section class="pb-16 thin-divider mb-16">
+<label class="block text-[10px] tracking-[0.2em] font-bold text-on-surface-variant mb-8 font-label uppercase">
+                DECISION
+            </label>
+<div class="flex flex-wrap gap-x-12 gap-y-6 mb-16">
+<span class="text-lg font-medium text-primary border-b-2 border-primary pb-1 cursor-pointer">career</span>
+<span class="text-lg font-medium text-on-surface/40 hover:text-on-surface transition-colors cursor-pointer">relationships</span>
+<span class="text-lg font-medium text-on-surface/40 hover:text-on-surface transition-colors cursor-pointer">money</span>
+<span class="text-lg font-medium text-on-surface/40 hover:text-on-surface transition-colors cursor-pointer">travel</span>
+<span class="text-lg font-medium text-on-surface/40 hover:text-on-surface transition-colors cursor-pointer">move</span>
+<span class="text-lg font-medium text-on-surface/40 hover:text-on-surface transition-colors cursor-pointer">communication</span>
+</div>
+<div class="text-center py-8"><span class="text-8xl md:text-[10rem] serif font-bold text-primary tracking-tighter opacity-90 block">WAIT</span><div class="mt-6 space-y-2"><p class="text-on-surface/60 font-body text-lg">timing is active, but clarity is not</p><p class="text-on-surface/60 font-body text-lg">risk: acting now creates cleanup later</p></div></div>
+</section>
+<!-- Section 4: Your Pattern -->
+<section class="pb-24">
+<label class="block text-[10px] tracking-[0.2em] font-bold text-on-surface-variant mb-6 font-label uppercase">
+                YOUR PATTERN
+            </label>
+<h2 class="text-5xl serif italic text-on-background leading-snug mb-12">
+                you move carefully, but not weakly
+            </h2>
+<ul class="space-y-6 mb-16">
+<li class="text-xl text-on-surface border-b border-on-surface/5 pb-4 flex justify-between items-end">
+<span>Observation as a primary defense mechanism</span>
+</li>
+<li class="text-xl text-on-surface border-b border-on-surface/5 pb-4 flex justify-between items-end">
+<span>Deliberate pacing in social expansion</span>
+</li>
+<li class="text-xl text-on-surface border-b border-on-surface/5 pb-4 flex justify-between items-end">
+<span>Silent accumulation of specialized knowledge</span>
+</li>
+</ul>
+<div class="mb-20">
+<p class="text-on-surface-variant/60 font-body text-sm italic">Note: you hold too much for too long, then shut down</p>
+</div>
+<div class="pt-8 flex justify-between items-center border-t border-on-surface/10">
+<label class="text-[10px] tracking-[0.3em] font-bold text-secondary font-label">
+                    TYPE: STEWARD
+                </label>
+</div>
+</section>
+</main>
+<!-- Visual Soul: Background Textures & Patterns -->
+<div aria-hidden="true" class="fixed inset-0 pointer-events-none z-[-1] opacity-[0.03]">
+<svg height="100%" width="100%">
+<pattern height="100" id="kolam" patternunits="userSpaceOnUse" width="100" x="0" y="0">
+<circle class="text-primary" cx="50" cy="50" fill="currentColor" r="1"></circle>
+<path class="text-primary" d="M50 20 L80 50 L50 80 L20 50 Z" fill="none" stroke="currentColor" stroke-width="0.5"></path>
+</pattern>
+<rect fill="url(#kolam)" height="100%" width="100%"></rect>
+</svg>
+</div>
+</body></html>

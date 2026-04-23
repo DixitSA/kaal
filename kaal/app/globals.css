@@ -1,0 +1,97 @@
+@import "tailwindcss";
+
+@theme {
+  --color-cream: #F5F0E8;
+  --color-charcoal: #2C2418;
+  --color-warm-grey: #7A7469;
+  --color-terracotta: #B5563E;
+  --color-brass-gold: #8A7240;
+  --color-act-green: #5E7A5E;
+  --color-avoid-red: #A04040;
+
+  --font-playfair: var(--font-playfair-display);
+  --font-inter: var(--font-inter-var);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: #F5F0E8;
+  color: #2C2418;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in-subtle {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slow-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes progress-fill {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.8s ease-out forwards;
+  opacity: 0;
+}
+
+.animate-fade-in-subtle {
+  animation: fade-in-subtle 0.5s ease-out forwards;
+  opacity: 0;
+}
+
+.animate-slow-spin {
+  animation: slow-spin 20s linear infinite;
+}
+
+.animate-progress {
+  animation: progress-fill 3s ease-out forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-in,
+  .animate-fade-in-subtle {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  .animate-slow-spin {
+    animation: none;
+  }
+
+  .animate-progress {
+    animation: none;
+    transform: scaleX(1);
+  }
+}
