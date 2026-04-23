@@ -337,6 +337,7 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
           <CeremonialInput
             id="timeOfBirth"
             type="time"
+            placeholder="HH:MM"
             value={timeOfBirth}
             disabled={unknownTime}
             autoComplete="off"
