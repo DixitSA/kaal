@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { motion, Variants } from "framer-motion";
 import { useUser } from "@/context/UserContext";
@@ -51,6 +51,35 @@ const reducedVariants: Variants = {
   visible: () => ({ opacity: 1, x: 0, transition: { duration: 0 } }),
 };
 
+// -----------------------------------------------------------------
+// Open-Meteo Geocoding (free, no API key required)
+// -----------------------------------------------------------------
+interface GeoResult {
+  latitude: number;
+  longitude: number;
+  timezone: string;
+  display: string; // "City, Country" for confirmation
+}
+
+async function geocodePlace(query: string): Promise<GeoResult | null> {
+  try {
+    const url = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(query)}&count=1&language=en&format=json`;
+    const res = await fetch(url);
+    if (!res.ok) return null;
+    const data = await res.json();
+    if (!data.results || data.results.length === 0) return null;
+    const r = data.results[0];
+    return {
+      latitude: r.latitude,
+      longitude: r.longitude,
+      timezone: r.timezone,
+      display: [r.name, r.admin1, r.country].filter(Boolean).join(", "),
+    };
+  } catch {
+    return null;
+  }
+}
+
 export default function BirthForm({ fieldVariants = defaultVariants, shouldReduce = false }: BirthFormProps) {
   const router = useRouter();
   const { setUserData } = useUser();
@@ -62,26 +91,95 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
   const [placeOfBirth, setPlaceOfBirth] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
 
+  // Geocoding state
+  const [geoResolved, setGeoResolved] = useState<GeoResult | null>(null);
+  const [geoLoading, setGeoLoading] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+
+  // Resolve place on blur (if changed since last resolve)
+  const resolvePlace = useCallback(async (value: string) => {
+    const trimmed = value.trim();
+    if (!trimmed) {
+      setGeoResolved(null);
+      return;
+    }
+    // Skip if already resolved for this exact input
+    if (geoResolved && geoResolved.display.toLowerCase().includes(trimmed.split(",")[0].toLowerCase())) {
+      return;
+    }
+    setGeoLoading(true);
+    const result = await geocodePlace(trimmed);
+    setGeoResolved(result);
+    setGeoLoading(false);
+    if (!result) {
+      setErrors(prev => ({ ...prev, place: "Could not find this location. Try a more specific city name." }));
+    } else {
+      setErrors(prev => {
+        const next = { ...prev };
+        delete next.place;
+        return next;
+      });
+    }
+  }, [geoResolved]);
+
   function validate() {
     const e: Record<string, string> = {};
     if (!name.trim()) e.name = "Name is required";
     if (!dob) e.dob = "Date of birth is required";
     if (!unknownTime && !timeOfBirth) e.time = "Enter birth time or check unknown";
     if (!placeOfBirth.trim()) e.place = "Place of birth is required";
+    else if (!geoResolved) e.place = "Could not resolve this location. Try a more specific city name.";
     return e;
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    if (submitting) return;
+
+    // If place hasn't been geocoded yet, do it now
+    if (!geoResolved && placeOfBirth.trim()) {
+      setSubmitting(true);
+      setGeoLoading(true);
+      const result = await geocodePlace(placeOfBirth.trim());
+      setGeoResolved(result);
+      setGeoLoading(false);
+
+      if (!result) {
+        setErrors(prev => ({ ...prev, place: "Could not find this location. Try a more specific city name." }));
+        setSubmitting(false);
+        return;
+      }
+
+      // Continue with resolved result
+      submitWithGeo(result);
+      return;
+    }
+
     const errs = validate();
     if (Object.keys(errs).length > 0) {
       setErrors(errs);
       const firstKey = Object.keys(errs)[0];
       const fieldMap: Record<string, string> = { name: "name", dob: "dob", time: "timeOfBirth", place: "placeOfBirth" };
       document.getElementById(fieldMap[firstKey] ?? firstKey)?.focus();
+      setSubmitting(false);
       return;
     }
-    setUserData({ name, dob, timeOfBirth, unknownTime, placeOfBirth });
+
+    submitWithGeo(geoResolved!);
+  }
+
+  function submitWithGeo(geo: GeoResult) {
+    setSubmitting(true);
+    setUserData({
+      name,
+      dob,
+      timeOfBirth,
+      unknownTime,
+      placeOfBirth,
+      latitude: geo.latitude,
+      longitude: geo.longitude,
+      timezone: geo.timezone,
+    });
     router.push("/loading-screen");
   }
 
@@ -189,13 +287,34 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
           placeholder="City, Country"
           value={placeOfBirth}
           autoComplete="address-level2"
-          onChange={(e) => setPlaceOfBirth(e.target.value)}
-          style={{ ...inputStyle, ...(errors.place ? { borderBottomColor: "#B5563E" } : {}) }}
+          onChange={(e) => {
+            setPlaceOfBirth(e.target.value);
+            // Clear resolved geo when user edits the field
+            setGeoResolved(null);
+          }}
+          onBlur={(e) => {
+            onBlur(e, !!errors.place);
+            // Geocode on blur
+            if (e.target.value.trim()) {
+              resolvePlace(e.target.value);
+            }
+          }}
           onFocus={onFocus}
-          onBlur={(e) => onBlur(e, !!errors.place)}
+          style={{ ...inputStyle, ...(errors.place ? { borderBottomColor: "#B5563E" } : {}) }}
           aria-invalid={!!errors.place}
           aria-describedby={errors.place ? "place-error" : undefined}
         />
+        {/* Geocoding status */}
+        {geoLoading && (
+          <p style={{ color: "#7A7469", fontSize: "12px", marginTop: "4px", fontFamily: "var(--font-inter-var)" }}>
+            Resolving location…
+          </p>
+        )}
+        {geoResolved && !geoLoading && (
+          <p style={{ color: "#5E7A5E", fontSize: "12px", marginTop: "4px", fontFamily: "var(--font-inter-var)" }}>
+            ✓ {geoResolved.display} ({geoResolved.timezone})
+          </p>
+        )}
         {errors.place && (
           <p id="place-error" role="alert" style={{ color: "#B5563E", fontSize: "12px", marginTop: "4px", fontFamily: "var(--font-inter-var)" }}>
             {errors.place}
@@ -207,13 +326,23 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
       <motion.div custom={3} variants={vars} initial="hidden" animate="visible">
         <motion.button
           type="submit"
+          disabled={submitting || geoLoading}
           className="w-full py-4 text-sm uppercase tracking-widest cursor-pointer mt-2"
-          style={{ backgroundColor: "#B5563E", color: "#F5F0E8", fontFamily: "var(--font-inter-var)", border: "none", borderRadius: "2px", minHeight: "44px" }}
-          whileHover={shouldReduce ? {} : { y: -2, boxShadow: "0 6px 20px rgba(181,86,62,0.35)" }}
-          whileTap={shouldReduce ? {} : { scale: 0.98, y: 0 }}
+          style={{
+            backgroundColor: (submitting || geoLoading) ? "#9C9488" : "#B5563E",
+            color: "#F5F0E8",
+            fontFamily: "var(--font-inter-var)",
+            border: "none",
+            borderRadius: "2px",
+            minHeight: "44px",
+            cursor: (submitting || geoLoading) ? "not-allowed" : "pointer",
+            transition: "background-color 0.2s ease",
+          }}
+          whileHover={shouldReduce || submitting ? {} : { y: -2, boxShadow: "0 6px 20px rgba(181,86,62,0.35)" }}
+          whileTap={shouldReduce || submitting ? {} : { scale: 0.98, y: 0 }}
           transition={{ duration: 0.2, ease: "easeOut" }}
         >
-          Generate Profile →
+          {submitting ? "Generating…" : "Generate Profile →"}
         </motion.button>
       </motion.div>
 

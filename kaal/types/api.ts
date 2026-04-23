@@ -64,9 +64,11 @@ export interface IntensityBreakdown {
   transits: TransitDelta[];
 }
 
+export type IntensityLevel = "low" | "medium" | "high" | "critical";
+
 export interface IntensityData {
   score: number;
-  level: string;
+  level: IntensityLevel;
   breakdown: IntensityBreakdown;
 }
 
