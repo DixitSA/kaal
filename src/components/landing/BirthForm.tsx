@@ -58,26 +58,47 @@ function DobWatermark() {
 /* ─── Editorial SVG arrow ────────────────────────────────────── */
 function EditorialArrow({ hover, reduced }: { hover: boolean; reduced: boolean }) {
   return (
-    <svg
-      width="34" height="10"
-      viewBox="0 0 34 10"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      aria-hidden="true"
-      style={{
-        flexShrink: 0,
-        transform: hover && !reduced ? "translateX(4px)" : "translateX(0)",
-        transition: "transform 0.22s ease",
-      }}
-    >
-      <path
-        d="M0 5 H28 M24 1.5 L30.5 5 L24 8.5"
-        stroke="currentColor"
-        strokeWidth="0.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
+    <svg width="34" height="10" viewBox="0 0 34 10" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style={{ flexShrink: 0, transform: hover && !reduced ? "translateX(4px)" : "translateX(0)", transition: "transform 0.22s ease" }}>
+      <path d="M0 5 H28 M24 1.5 L30.5 5 L24 8.5" stroke="currentColor" strokeWidth="0.5" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
+  );
+}
+
+/* ─── Ceremonial input with animated underline ─────────────── */
+function CeremonialInput({ id, type, placeholder, value, onChange, autoComplete, disabled, style, onFocus, onBlur, ariaInvalid, ariaDescribedBy, inputMode }: {
+  id: string;
+  type: string;
+  placeholder: string;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  autoComplete?: string;
+  disabled?: boolean;
+  style?: React.CSSProperties;
+  onFocus?: (e: React.FocusEvent<HTMLInputElement>) => void;
+  onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
+  ariaInvalid?: boolean;
+  ariaDescribedBy?: string;
+  inputMode?: React.HTMLAttributes<HTMLInputElement>["inputMode"];
+}) {
+  return (
+    <div className="input-underline-wrapper">
+      <input
+        id={id}
+        type={type}
+        placeholder={placeholder}
+        value={value}
+        onChange={onChange}
+        autoComplete={autoComplete}
+        disabled={disabled}
+        inputMode={inputMode}
+        style={style}
+        onFocus={onFocus}
+        onBlur={onBlur}
+        aria-invalid={ariaInvalid}
+        aria-describedby={ariaDescribedBy}
+      />
+      <div className="input-underline" />
+    </div>
   );
 }
 
@@ -98,7 +119,7 @@ const inputStyle: CSSProperties = {
   width: "100%",
   background: "transparent",
   border: "none",
-  borderBottom: "1px solid rgba(122, 116, 105, 0.1)",
+  borderBottom: "2px solid transparent",
   outline: "none",
   fontFamily: "var(--font-quattrocento-sans), var(--font-inter-var), sans-serif",
   fontSize: "1.125rem",
@@ -107,7 +128,7 @@ const inputStyle: CSSProperties = {
   minHeight: "44px",
   borderRadius: 0,
   display: "block",
-  transition: "border-color 0.25s ease",
+  position: "relative",
 };
 
 const defaultVariants: Variants = {
@@ -244,13 +265,18 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
       {/* Full Name */}
       <motion.div custom={0} variants={vars} initial="hidden" animate="visible">
         <label htmlFor="name" style={labelStyle}>full name</label>
-        <input
-          id="name" type="text" placeholder="full name" value={name}
-          autoComplete="name"
+        <CeremonialInput
+          id="name"
+          type="text"
+          placeholder="full name"
+          value={name}
           onChange={(e) => setName(e.target.value)}
-          style={{ ...inputStyle, ...(errors.name ? { borderBottomColor: "rgba(181,86,62,0.4)" } : {}) }}
-          onFocus={onFocus} onBlur={(e) => onBlur(e, !!errors.name)}
-          aria-invalid={!!errors.name} aria-describedby={errors.name ? "name-error" : undefined}
+          autoComplete="name"
+          style={inputStyle}
+          onFocus={onFocus}
+          onBlur={(e) => onBlur(e, !!errors.name)}
+          ariaInvalid={!!errors.name}
+          ariaDescribedBy={errors.name ? "name-error" : undefined}
         />
         {errors.name && <p id="name-error" role="alert" style={errStyle}>{errors.name}</p>}
       </motion.div>
@@ -277,12 +303,17 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
 
           <div style={{ position: "relative", zIndex: 1 }}>
             <label htmlFor="dob" style={labelStyle}>date of birth</label>
-            <input
-              id="dob" type="date" value={dob} autoComplete="bday"
+            <CeremonialInput
+              id="dob"
+              type="date"
+              value={dob}
+              autoComplete="bday"
               onChange={(e) => setDob(e.target.value)}
-              style={{ ...inputStyle, ...(errors.dob ? { borderBottomColor: "rgba(181,86,62,0.4)" } : {}) }}
-              onFocus={onFocus} onBlur={(e) => onBlur(e, !!errors.dob)}
-              aria-invalid={!!errors.dob} aria-describedby={errors.dob ? "dob-error" : undefined}
+              style={inputStyle}
+              onFocus={onFocus}
+              onBlur={(e) => onBlur(e, !!errors.dob)}
+              ariaInvalid={!!errors.dob}
+              ariaDescribedBy={errors.dob ? "dob-error" : undefined}
             />
             {errors.dob && <p id="dob-error" role="alert" style={errStyle}>{errors.dob}</p>}
           </div>
@@ -291,14 +322,18 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
         {/* Time of birth */}
         <div>
           <label htmlFor="timeOfBirth" style={labelStyle}>time of birth</label>
-          <input
-            id="timeOfBirth" type="time" value={timeOfBirth}
-            disabled={unknownTime} autoComplete="off"
+          <CeremonialInput
+            id="timeOfBirth"
+            type="time"
+            value={timeOfBirth}
+            disabled={unknownTime}
+            autoComplete="off"
             onChange={(e) => setTimeOfBirth(e.target.value)}
-            style={{ ...inputStyle, opacity: unknownTime ? 0.35 : 1, cursor: unknownTime ? "not-allowed" : "auto", ...(errors.time ? { borderBottomColor: "rgba(181,86,62,0.4)" } : {}) }}
-            onFocus={(e) => { if (!unknownTime) onFocus(e); }}
+            style={{ ...inputStyle, opacity: unknownTime ? 0.35 : 1, cursor: unknownTime ? "not-allowed" : "auto" }}
+            onFocus={(e) => { if (!unknownTime) onFocus?.(e); }}
             onBlur={(e) => onBlur(e, !!errors.time)}
-            aria-invalid={!!errors.time} aria-describedby={errors.time ? "time-error" : undefined}
+            ariaInvalid={!!errors.time}
+            ariaDescribedBy={errors.time ? "time-error" : undefined}
           />
 
           {/* Custom circular checkbox toggle */}
@@ -361,14 +396,18 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
             <span style={{ marginLeft: "8px", opacity: 0.5, fontStyle: "italic" }}>searching…</span>
           )}
         </label>
-        <input
-          id="placeOfBirth" type="text" placeholder="city, country"
-          value={placeOfBirth} autoComplete="address-level2"
+        <CeremonialInput
+          id="placeOfBirth"
+          type="text"
+          placeholder="city, country"
+          value={placeOfBirth}
+          autoComplete="address-level2"
           onChange={(e) => handlePlaceChange(e.target.value)}
-          style={{ ...inputStyle, ...(errors.place ? { borderBottomColor: "rgba(181,86,62,0.4)" } : {}) }}
-          onFocus={onFocus} onBlur={(e) => onBlur(e, !!errors.place)}
-          aria-invalid={!!errors.place} aria-describedby={errors.place ? "place-error" : undefined}
-          aria-autocomplete="list" aria-controls={lookupResults.length ? "place-results" : undefined}
+          style={inputStyle}
+          onFocus={onFocus}
+          onBlur={(e) => onBlur(e, !!errors.place)}
+          ariaInvalid={!!errors.place}
+          ariaDescribedBy={errors.place ? "place-error" : undefined}
         />
         {errors.place && <p id="place-error" role="alert" style={errStyle}>{errors.place}</p>}
         {lookupError && <p role="alert" style={{ ...errStyle, marginTop: "8px" }}>{lookupError}</p>}
@@ -416,13 +455,18 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
           <div style={{ marginTop: "20px", display: "flex", flexDirection: "column", gap: "24px" }}>
             <div>
               <label htmlFor="timezone" style={labelStyle}>birth timezone</label>
-              <input
-                id="timezone" type="text" placeholder="America/New_York"
-                value={timezone} autoComplete="off"
+              <CeremonialInput
+                id="timezone"
+                type="text"
+                placeholder="America/New_York"
+                value={timezone}
+                autoComplete="off"
                 onChange={(e) => setTimezone(e.target.value)}
-                style={{ ...inputStyle, ...(errors.timezone ? { borderBottomColor: "rgba(181,86,62,0.4)" } : {}) }}
-                onFocus={onFocus} onBlur={(e) => onBlur(e, !!errors.timezone)}
-                aria-invalid={!!errors.timezone} aria-describedby={errors.timezone ? "timezone-error" : undefined}
+                style={inputStyle}
+                onFocus={onFocus}
+                onBlur={(e) => onBlur(e, !!errors.timezone)}
+                ariaInvalid={!!errors.timezone}
+                ariaDescribedBy={errors.timezone ? "timezone-error" : undefined}
               />
               {errors.timezone && <p id="timezone-error" role="alert" style={errStyle}>{errors.timezone}</p>}
             </div>
@@ -430,25 +474,37 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label htmlFor="latitude" style={labelStyle}>latitude</label>
-                <input
-                  id="latitude" type="number" placeholder="40.7128"
-                  value={latitude} autoComplete="off" step="any"
+                <CeremonialInput
+                  id="latitude"
+                  type="number"
+                  placeholder="40.7128"
+                  value={latitude}
+                  autoComplete="off"
+                  inputMode="decimal"
                   onChange={(e) => setLatitude(e.target.value)}
-                  style={{ ...inputStyle, ...(errors.latitude ? { borderBottomColor: "rgba(181,86,62,0.4)" } : {}) }}
-                  onFocus={onFocus} onBlur={(e) => onBlur(e, !!errors.latitude)}
-                  aria-invalid={!!errors.latitude} aria-describedby={errors.latitude ? "latitude-error" : undefined}
+                  style={inputStyle}
+                  onFocus={onFocus}
+                  onBlur={(e) => onBlur(e, !!errors.latitude)}
+                  ariaInvalid={!!errors.latitude}
+                  ariaDescribedBy={errors.latitude ? "latitude-error" : undefined}
                 />
                 {errors.latitude && <p id="latitude-error" role="alert" style={errStyle}>{errors.latitude}</p>}
               </div>
               <div>
                 <label htmlFor="longitude" style={labelStyle}>longitude</label>
-                <input
-                  id="longitude" type="number" placeholder="-74.0060"
-                  value={longitude} autoComplete="off" step="any"
+                <CeremonialInput
+                  id="longitude"
+                  type="number"
+                  placeholder="-74.0060"
+                  value={longitude}
+                  autoComplete="off"
+                  inputMode="decimal"
                   onChange={(e) => setLongitude(e.target.value)}
-                  style={{ ...inputStyle, ...(errors.longitude ? { borderBottomColor: "rgba(181,86,62,0.4)" } : {}) }}
-                  onFocus={onFocus} onBlur={(e) => onBlur(e, !!errors.longitude)}
-                  aria-invalid={!!errors.longitude} aria-describedby={errors.longitude ? "longitude-error" : undefined}
+                  style={inputStyle}
+                  onFocus={onFocus}
+                  onBlur={(e) => onBlur(e, !!errors.longitude)}
+                  ariaInvalid={!!errors.longitude}
+                  ariaDescribedBy={errors.longitude ? "longitude-error" : undefined}
                 />
                 {errors.longitude && <p id="longitude-error" role="alert" style={errStyle}>{errors.longitude}</p>}
               </div>

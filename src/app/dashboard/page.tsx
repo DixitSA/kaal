@@ -54,7 +54,7 @@ export default function Dashboard() {
           <span
             style={{
               fontFamily: "var(--font-inter-var)",
-              fontSize: "11px",
+              fontSize: "13px",
               textTransform: "uppercase",
               letterSpacing: "0.16em",
               color: "#7A7469",

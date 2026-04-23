@@ -188,7 +188,7 @@ export default function PatternSection() {
           style={{
             perspective: "1400px",
             borderRadius: "4px",
-            backgroundColor: "#F5F0E8",
+            backgroundColor: "transparent",
             boxShadow: hovered
               ? "0 20px 60px rgba(44, 36, 24, 0.13), 0 4px 16px rgba(44, 36, 24, 0.07)"
               : "0 8px 40px rgba(44, 36, 24, 0.08), 0 2px 10px rgba(44, 36, 24, 0.04)",

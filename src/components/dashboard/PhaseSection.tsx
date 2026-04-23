@@ -49,7 +49,13 @@ export default function PhaseSection() {
   });
 
   return (
-    <motion.section initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-60px" }}>
+    <motion.section
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: "-60px" }}
+      className="ceremonial-section"
+      style={{ backgroundColor: "rgba(237, 230, 218, 0.85)", borderRadius: "4px", padding: "clamp(16px, 4vw, 24px)" }}
+    >
 
       {/* Header row: label + intensity dots */}
       <motion.div

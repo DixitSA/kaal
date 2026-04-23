@@ -54,8 +54,8 @@ export default function InsightCard({
         }}
       />
 
-      {/* Text block — 24px gap from bar */}
-      <div style={{ paddingLeft: "24px", paddingTop: "8px", paddingBottom: "8px" }}>
+      {/* Text block — centered alignment for ceremonial aesthetic */}
+      <div style={{ paddingLeft: "24px", paddingTop: "8px", paddingBottom: "8px", textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center" }}>
         {/* Label */}
         <p
           style={{

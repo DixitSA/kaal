@@ -266,3 +266,43 @@ a {
   color: rgba(92, 87, 79, 0.4);
   letter-spacing: 0.04em;
 }
+
+/* ─── Ceremonial input underline animation ─────────────── */
+
+.input-underline-wrapper {
+  position: relative;
+  display: block;
+  width: 100%;
+}
+
+.input-underline-wrapper input,
+.input-underline-wrapper select,
+.input-underline-wrapper textarea {
+  border-bottom: 2px solid transparent !important;
+}
+
+.input-underline {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background-color: #B5563E;
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+}
+
+.input-underline-wrapper:focus-within .input-underline {
+  width: 100%;
+  left: 0;
+}
+
+/* ─── Ceremonial section styling ─────────────────────── */
+.ceremonial-section {
+  border: "1px solid rgba(122, 116, 105, 0.08)";
+}
+
+/* ─── Pattern card transparent background ─────────── */
+.pattern-card-flip {
+  background-color: transparent !important;
+}
