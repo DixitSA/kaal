@@ -104,8 +104,8 @@ function CeremonialInput({ id, type, placeholder, value, onChange, autoComplete,
 
 /* ─── Styles ─────────────────────────────────────────────────── */
 const labelStyle: CSSProperties = {
-  fontFamily: "var(--font-quattrocento-sans), var(--font-inter-var), sans-serif",
-  fontSize: "11px",
+  fontFamily: "var(--font-inter-var), sans-serif",
+  fontSize: "13px",
   textTransform: "lowercase",
   letterSpacing: "0.06em",
   color: "#2C2418",
@@ -121,14 +121,13 @@ const inputStyle: CSSProperties = {
   border: "none",
   borderBottom: "2px solid transparent",
   outline: "none",
-  fontFamily: "var(--font-quattrocento-sans), var(--font-inter-var), sans-serif",
-  fontSize: "1.125rem",
+  fontFamily: "var(--font-inter-var), sans-serif",
+  fontSize: "16px",
   color: "#2C2418",
   padding: "10px 0",
   minHeight: "44px",
   borderRadius: 0,
   display: "block",
-  position: "relative",
 };
 
 const defaultVariants: Variants = {
@@ -246,8 +245,15 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
     debounceRef.current = setTimeout(() => { void runLookup(value); }, 600);
   }
 
+  function formatLocation(result: LocationLookupCandidate): string {
+    const parts = [result.name];
+    if (result.admin1) parts.push(result.admin1);
+    if (result.country) parts.push(result.country);
+    return parts.join(", ");
+  }
+
   function applyLookupResult(result: LocationLookupCandidate) {
-    setPlaceOfBirth(result.displayName);
+    setPlaceOfBirth(formatLocation(result));
     setTimezone(result.timezone);
     setLatitude(String(result.latitude));
     setLongitude(String(result.longitude));
@@ -260,7 +266,7 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
   const errStyle = { color: "#8B3620", fontSize: "12px", marginTop: "4px", fontFamily: "var(--font-inter-var)" };
 
   return (
-    <form onSubmit={handleSubmit} className="landing-form w-full flex flex-col gap-6 mobile:gap-4" noValidate style={{ paddingLeft: "clamp(0px, 0vw, 0px)", paddingRight: "clamp(0px, 0vw, 0px)" }}>
+    <form onSubmit={handleSubmit} className="landing-form w-full flex flex-col gap-6" noValidate>
 
       {/* Full Name */}
       <motion.div custom={0} variants={vars} initial="hidden" animate="visible">
@@ -268,7 +274,7 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
         <CeremonialInput
           id="name"
           type="text"
-          placeholder="full name"
+          placeholder="john doe"
           value={name}
           onChange={(e) => setName(e.target.value)}
           autoComplete="name"
@@ -294,7 +300,7 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
               top: "50%", left: "50%",
               transform: "translate(-50%, -44%)",
               pointerEvents: "none",
-              opacity: 0.055,
+              opacity: 0.05,
               zIndex: 0,
             }}
           >
@@ -305,10 +311,16 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
             <label htmlFor="dob" style={labelStyle}>date of birth</label>
             <CeremonialInput
               id="dob"
-              type="date"
+              type="text"
+              placeholder="MM/DD/YYYY"
               value={dob}
               autoComplete="bday"
-              onChange={(e) => setDob(e.target.value)}
+              onChange={(e) => {
+                let val = e.target.value.replace(/[^0-9/]/g, "");
+                if (val.length === 2 && dob.length <= 2) val += "/";
+                if (val.length === 5 && dob.length <= 5) val += "/";
+                if (val.length <= 10) setDob(val);
+              }}
               style={inputStyle}
               onFocus={onFocus}
               onBlur={(e) => onBlur(e, !!errors.dob)}

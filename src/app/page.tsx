@@ -88,7 +88,7 @@ export default function LandingPage() {
         Kaal
       </motion.div>
 
-      <div className="w-full max-w-full sm:max-w-[600px] flex flex-col items-center landing-form-container" style={{ position: "relative", zIndex: 2 }}>
+      <div className="w-full flex flex-col items-center" style={{ position: "relative", zIndex: 2, maxWidth: "450px" }}>
         {/* Yantra with rotation + pulse */}
         <div className="relative flex flex-col items-center w-full">
           <motion.div
@@ -99,13 +99,13 @@ export default function LandingPage() {
               scale: { duration: 4, ease: "easeInOut", repeat: Infinity },
             }}
           >
-            <YantraMandala size={500} opacity={0.12} />
+            <YantraMandala size={500} opacity={0.05} />
           </motion.div>
 
           {/* Headline word-by-word */}
           <h1
             className="relative z-10 text-center font-bold leading-tight"
-            style={{ fontFamily: "var(--font-playfair-display)", fontSize: "clamp(2.5rem, 8vw, 6rem)", color: "#2C2418", margin: 0 }}
+            style={{ fontFamily: "var(--font-playfair-display)", fontSize: "clamp(1.75rem, 5.6vw, 4.2rem)", color: "#2C2418", margin: 0, maxWidth: "700px" }}
           >
             <div className="flex flex-wrap justify-center gap-x-[0.25em]">
               {allWords.map(({ word, line }, i) => (
@@ -161,7 +161,7 @@ export default function LandingPage() {
         </motion.div>
 
         {/* Form with stagger slide-in */}
-        <div className="w-full" style={{ maxWidth: "100%", overflowX: "hidden" }}>
+        <div style={{ maxWidth: "450px", width: "100%", marginTop: "4rem" }}>
           <BirthForm fieldVariants={fieldVariants} shouldReduce={!!shouldReduce} />
         </div>
       </div>

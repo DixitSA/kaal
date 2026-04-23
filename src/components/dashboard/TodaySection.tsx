@@ -42,8 +42,12 @@ export default function TodaySection() {
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, margin: "-60px" }}
-      className="ceremonial-section"
-      style={{ backgroundColor: "rgba(237, 230, 218, 0.85)", borderRadius: "4px", padding: "clamp(16px, 4vw, 24px)" }}
+      style={{
+        backgroundColor: "rgba(237, 230, 218, 0.92)",
+        borderRadius: "4px",
+        padding: "clamp(20px, 5vw, 32px)",
+        border: "1px solid rgba(122, 116, 105, 0.08)",
+      }}
     >
       <motion.p
         variants={childAnim(0)}
@@ -74,7 +78,7 @@ export default function TodaySection() {
       <motion.p
         variants={childAnim(0.15)}
         className="mt-4 text-base"
-        style={{ color: "#7A7469", fontFamily: "var(--font-quattrocento-sans), var(--font-inter-var), sans-serif", fontStyle: "normal", letterSpacing: "0.02em", textTransform: "lowercase", textAlign: "center" }}
+        style={{ color: "#5C574F", fontFamily: "var(--font-quattrocento-sans), var(--font-inter-var), sans-serif", fontStyle: "normal", letterSpacing: "0.02em", textTransform: "lowercase", textAlign: "center" }}
       >
         focus area: {daily.focusArea}
       </motion.p>
