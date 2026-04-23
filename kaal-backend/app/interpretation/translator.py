@@ -33,7 +33,7 @@ FALLBACK = {
         "relationships": {"action": "ACT", "reason": "openness is supported now", "risk": "hesitation reads as disinterest", "shadow_caveat": None},
         "money": {"action": "WAIT", "reason": "numbers aren't settled yet", "risk": "early commitment locks you in", "shadow_caveat": None},
         "travel": {"action": "ACT", "reason": "movement creates new input", "risk": "over-planning kills momentum", "shadow_caveat": None},
-        "move": {"action": "AVOID", "reason": "ground isn't stable enough", "risk": "relocation compounds instability", "shadow_caveat": "Rahu distorts perception of stability."},
+        "move": {"action": "AVOID", "reason": "ground isn't stable enough", "risk": "relocation compounds instability", "shadow_caveat": None},
         "communication": {"action": "ACT", "reason": "your words land well today", "risk": "silence is being misread", "shadow_caveat": None},
     },
     "pattern": {
@@ -113,14 +113,54 @@ async def _safe_interpret(system_prompt: str, data: str, fallback: dict, section
     return fallback
 
 
-async def generate_profile(chart_data: dict, dasha_data: dict, transit_data: dict) -> dict:
+def _build_chart_summary(chart_data: dict) -> dict:
+    """Build a condensed chart summary with dignity data for LLM consumption."""
+    planets = chart_data.get("planets", {})
+    summary = {}
+    for name, data in planets.items():
+        summary[name] = {
+            "sign": data.get("sign_name", ""),
+            "degree": round(data.get("degree", 0), 2),
+            "house": data.get("house", 0),
+            "nakshatra": data.get("nakshatra", ""),
+            "pada": data.get("nakshatra_pada", 0),
+            "dignity": data.get("dignity", "neutral"),
+            "dignity_score": data.get("dignity_score", 50),
+            "is_retrograde": data.get("is_retrograde", False),
+            "is_combust": data.get("is_combust", False),
+        }
+    return {
+        "ascendant": chart_data.get("ascendant", {}),
+        "planets": summary,
+    }
+
+
+async def generate_profile(
+    chart_data: dict,
+    dasha_data: dict,
+    transit_data: dict,
+    phase_name: str,
+    phase_summary: str,
+) -> dict:
     """Orchestrate LLM calls to produce full Kaal profile — all 4 run in parallel."""
     import asyncio
+
+    chart_summary = _build_chart_summary(chart_data)
+    md_lord = dasha_data["mahadasha"]["planet"]
+    ad_lord = dasha_data["antardasha"]["planet"]
+
+    # Build phase fallback with deterministic name/summary
+    phase_fallback = {**FALLBACK["phase"], "name": phase_name, "summary": phase_summary}
+
     phase, today, decisions, pattern = await asyncio.gather(
         _safe_interpret(
             SYSTEM_PROMPT,
-            PHASE_PROMPT.format(calculation_data=json.dumps(dasha_data, indent=2)),
-            FALLBACK["phase"],
+            PHASE_PROMPT.format(
+                phase_name=phase_name,
+                phase_summary=phase_summary,
+                calculation_data=json.dumps(dasha_data, indent=2),
+            ),
+            phase_fallback,
             section_name="phase",
         ),
         _safe_interpret(
@@ -131,17 +171,28 @@ async def generate_profile(chart_data: dict, dasha_data: dict, transit_data: dic
         ),
         _safe_interpret(
             SYSTEM_PROMPT,
-            DECISION_PROMPT.format(calculation_data=json.dumps(
-                {"dasha": dasha_data, "transits": transit_data, "chart": chart_data}, indent=2
-            )),
+            DECISION_PROMPT.format(
+                md_lord=md_lord,
+                ad_lord=ad_lord,
+                calculation_data=json.dumps({
+                    "dasha": dasha_data,
+                    "transits": transit_data,
+                    "chart": chart_summary,
+                }, indent=2),
+            ),
             FALLBACK["decisions"],
             section_name="decisions",
         ),
         _safe_interpret(
             SYSTEM_PROMPT,
-            PATTERN_PROMPT.format(calculation_data=json.dumps(chart_data, indent=2)),
+            PATTERN_PROMPT.format(calculation_data=json.dumps(chart_summary, indent=2)),
             FALLBACK["pattern"],
             section_name="pattern",
         ),
     )
+
+    # Ensure phase name/summary are deterministic regardless of LLM output
+    phase["name"] = phase_name
+    phase["summary"] = phase_summary
+
     return {"phase": phase, "today": today, "decisions": decisions, "pattern": pattern}

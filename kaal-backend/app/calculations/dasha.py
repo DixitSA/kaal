@@ -109,5 +109,6 @@ def calculate_vimshottari_dasha(
         },
         "percent_through_maha": round((maha_elapsed / maha_total) * 100, 1) if maha_total else 0,
         "percent_through_antar": round((antar_elapsed / antar_total) * 100, 1) if antar_total else 0,
-        "birth_nakshatra": NAKSHATRA_LORDS[nakshatra_idx],
+        "birth_nakshatra_lord": NAKSHATRA_LORDS[nakshatra_idx],
+        "birth_nakshatra_index": nakshatra_idx,
     }

@@ -9,11 +9,12 @@ from app.models.schemas import BirthDataRequest, ProfileResponse, DecisionsData
 from app.calculations.chart import calculate_birth_chart
 from app.calculations.dasha import calculate_vimshottari_dasha
 from app.calculations.transits import calculate_current_transits
+from app.calculations.phases import get_phase_name
 from app.interpretation.translator import generate_profile
 
 logger = logging.getLogger("kaal")
 
-app = FastAPI(title="Kaal API", version="0.2.0")
+app = FastAPI(title="Kaal API", version="0.3.0")
 
 # --- CORS: restrict to known frontend origins ---
 _ALLOWED_ORIGINS = os.getenv(
@@ -64,6 +65,110 @@ async def health():
     return {"status": "ok"}
 
 
+# =====================================================================
+# Intensity scoring — per BPHS Ch. 3 graha classification
+# (Seshadri Iyer timing principles for transit modifiers)
+# =====================================================================
+
+# Base intensity by Maha Dasha lord (0-10 scale)
+MD_BASE_INTENSITY = {
+    "Rahu":    8.0,
+    "Saturn":  7.0,
+    "Mars":    7.0,
+    "Ketu":    6.0,
+    "Sun":     5.0,
+    "Moon":    4.0,
+    "Jupiter": 4.0,
+    "Mercury": 4.0,
+    "Venus":   3.0,
+}
+
+# AD lord modifiers (lighter touch — AD modifies, doesn't dominate)
+AD_INTENSITY_MODIFIER = {
+    "Rahu":    1.0,
+    "Saturn":  0.8,
+    "Mars":    0.8,
+    "Ketu":    0.5,
+    "Sun":     0.3,
+    "Moon":    0.0,
+    "Jupiter": -0.5,
+    "Mercury": 0.0,
+    "Venus":   -0.3,
+}
+
+
+def _compute_intensity(md_lord: str, ad_lord: str, transit_modifiers: list[dict]) -> dict:
+    """
+    Compute intensity score using classical model.
+
+    Base = MD lord intensity (0-10)
+    + AD modifier
+    + sum of transit modifiers (each has a delta)
+    Clamped to [0, 10]
+    """
+    base = MD_BASE_INTENSITY.get(md_lord, 5.0)
+    ad_mod = AD_INTENSITY_MODIFIER.get(ad_lord, 0.0)
+    transit_delta = sum(m["delta"] for m in transit_modifiers)
+
+    raw_score = base + ad_mod + transit_delta
+    score = max(0, min(10, raw_score))
+
+    # Thresholds per audit spec
+    if score <= 4:
+        level = "low"
+    elif score <= 6:
+        level = "medium"
+    elif score <= 8:
+        level = "high"
+    else:
+        level = "critical"
+
+    return {
+        "score": round(score * 10, 1),  # scale to 0-100 for frontend
+        "level": level,
+        "breakdown": {
+            "base_md": round(base * 10, 1),
+            "ad_modifier": round(ad_mod * 10, 1),
+            "transits": [{"name": m["name"], "delta": round(m["delta"] * 10, 1)} for m in transit_modifiers],
+        }
+    }
+
+
+# =====================================================================
+# Rahu/Ketu Dasha caveat rules (mandatory per BPHS)
+# =====================================================================
+
+RAHU_CAVEAT = (
+    "Rahu amplifies the visible signal but distorts scale. "
+    "What looks like the full picture is likely only part of it. "
+    "Commitments made now carry forward into the next cycle."
+)
+
+KETU_CAVEAT = (
+    "Ketu creates clarity through detachment, not through accumulation. "
+    "Acting from desire rather than discernment will dissatisfy regardless of outcome."
+)
+
+
+def _inject_shadow_caveats(decisions: dict, md_lord: str, ad_lord: str) -> dict:
+    """Inject mandatory shadow_caveat when MD or AD lord is Rahu or Ketu."""
+    caveat = None
+    if md_lord == "Rahu" or ad_lord == "Rahu":
+        caveat = RAHU_CAVEAT
+    elif md_lord == "Ketu" or ad_lord == "Ketu":
+        caveat = KETU_CAVEAT
+
+    if caveat:
+        for category in decisions:
+            if isinstance(decisions[category], dict):
+                # Only inject if action is ACT (per audit spec: "add to all ACT outputs")
+                if decisions[category].get("action") == "ACT":
+                    if not decisions[category].get("shadow_caveat"):
+                        decisions[category]["shadow_caveat"] = caveat
+
+    return decisions
+
+
 @app.post("/api/profile", response_model=ProfileResponse)
 async def create_profile(data: BirthDataRequest):
     try:
@@ -88,35 +193,20 @@ async def create_profile(data: BirthDataRequest):
 
         transits = calculate_current_transits(chart)
 
-        profile = await generate_profile(chart, dasha, transits)
+        # --- Deterministic phase name from MD+AD (Section 9) ---
+        md_lord = dasha["mahadasha"]["planet"]
+        ad_lord = dasha["antardasha"]["planet"]
+        phase_name, phase_summary = get_phase_name(md_lord, ad_lord)
 
-        # Build Intensity Data
-        transit_strength = transits.get("transit_strength", "mixed")
-        base_md_score = 50.0
-        ad_modifier = 0.0
-        transits_list = []
-        if transit_strength == "challenging":
-            level = "high"
-            score = 80.0
-            transits_list.append({"name": "Saturn Transit", "delta": 30.0})
-        elif transit_strength == "favorable":
-            level = "low"
-            score = 30.0
-            transits_list.append({"name": "Jupiter Transit", "delta": -20.0})
-        else:
-            level = "medium"
-            score = 50.0
-            transits_list.append({"name": "Mixed Transits", "delta": 0.0})
+        # --- Classical intensity scoring (Section 6) ---
+        transit_modifiers = transits.get("intensity_modifiers", [])
+        intensity = _compute_intensity(md_lord, ad_lord, transit_modifiers)
 
-        intensity = {
-            "score": score,
-            "level": level,
-            "breakdown": {
-                "base_md": base_md_score,
-                "ad_modifier": ad_modifier,
-                "transits": transits_list,
-            }
-        }
+        # --- LLM interpretation (enriched with chart analysis) ---
+        profile = await generate_profile(chart, dasha, transits, phase_name, phase_summary)
+
+        # --- Inject mandatory Rahu/Ketu caveats ---
+        decisions_raw = _inject_shadow_caveats(profile["decisions"], md_lord, ad_lord)
 
         # Build User Data
         user = {
@@ -125,15 +215,21 @@ async def create_profile(data: BirthDataRequest):
         }
 
         # Build Dasha Data mapping
+        maha_years = next(y for p, y in [
+            ("Ketu", 7), ("Venus", 20), ("Sun", 6), ("Moon", 10),
+            ("Mars", 7), ("Rahu", 18), ("Jupiter", 16), ("Saturn", 19),
+            ("Mercury", 17),
+        ] if p == md_lord)
+
         dasha_out = {
             "maha_dasha": {
-                "lord": dasha["mahadasha"]["planet"],
+                "lord": md_lord,
                 "start_date": dasha["mahadasha"]["start"][:10],
                 "end_date": dasha["mahadasha"]["end"][:10],
-                "years_elapsed": dasha.get("percent_through_maha", 0) / 100 * 10,
+                "years_elapsed": dasha.get("percent_through_maha", 0) / 100 * maha_years,
             },
             "antardasha": {
-                "lord": dasha["antardasha"]["planet"],
+                "lord": ad_lord,
                 "start_date": dasha["antardasha"]["start"][:10],
                 "end_date": dasha["antardasha"]["end"][:10],
             }
@@ -146,7 +242,7 @@ async def create_profile(data: BirthDataRequest):
         }
 
         # Build Decisions — wrap LLM output in the strict model
-        decisions = DecisionsData(**profile["decisions"])
+        decisions = DecisionsData(**decisions_raw)
 
         return ProfileResponse(
             user=user,
