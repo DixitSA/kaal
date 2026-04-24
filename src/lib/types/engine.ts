@@ -16,6 +16,15 @@ export const DECISION_FOOTER_NOTES: Record<string, string> = {
   communication: "ensure the message lands before you send it",
 };
 
+export const DECISION_CAVEATS: Record<string, string> = {
+  career: "the path forward is not linear — expect recalibrations",
+  relationships: "attachment styles shift with the moons nodes — stay adaptable",
+  money: "gains are real but context-dependent — protect upside",
+  travel: "movement is supported but routes may change — stay flexible",
+  move: "the foundation is being rebuilt — treat the new as provisional",
+  communication: "the message will evolve — send when it stabilizes",
+};
+
 export const DECISION_OUTCOMES = ["favorable", "neutral", "caution"] as const;
 export const ENERGY_LEVELS = ["low", "steady", "high"] as const;
 export const EMOTIONAL_STYLES = ["internalizing", "expressive", "steady"] as const;

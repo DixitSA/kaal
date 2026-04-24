@@ -44,9 +44,11 @@ export default function Dashboard() {
           <span
             style={{
               fontFamily: "var(--font-playfair-display)",
-              fontSize: "1.25rem",
+              fontSize: "1.1rem",
+              fontStyle: "italic",
               color: "#2C2418",
               lineHeight: 1.1,
+              opacity: 0.85,
             }}
           >
             Kaal

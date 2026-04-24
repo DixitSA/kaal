@@ -4,7 +4,7 @@ import { useLayoutEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 
 import { useUser } from "@/context/UserContext";
-import { DECISION_CATEGORIES, DECISION_FOOTER_NOTES, type DecisionCategory, type DecisionOutcome } from "@/lib/types/engine";
+import { DECISION_CATEGORIES, DECISION_FOOTER_NOTES, DECISION_CAVEATS, type DecisionCategory, type DecisionOutcome } from "@/lib/types/engine";
 
 /** Returns true when two strings share ≥4 meaningful words (cross-section dedup). */
 function tooSimilar(a: string, b: string): boolean {
@@ -217,7 +217,7 @@ export default function DecisionSection() {
                     lineHeight: 1.6,
                   }}
                 >
-                  {result.shadowCaveat}
+                  {DECISION_CAVEATS[active] || result.shadowCaveat}
                 </p>
               </div>
             )}
