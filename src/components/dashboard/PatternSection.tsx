@@ -279,7 +279,7 @@ export default function PatternSection() {
                     </span>
                   </div>
 
-                  <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", padding: "clamp(12px, 3vw, 28px) clamp(4px, 2vw, 8px) 2rem", overflowY: "auto", height: "auto" }}>
+                  <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", padding: "2rem clamp(4px, 2vw, 8px)", overflow: "visible" }}>
                     <p style={{ fontFamily: "var(--font-inter-var)", fontSize: "9px", textTransform: "uppercase", letterSpacing: "0.26em", color: "#8A7240", margin: 0, opacity: 0.8 }}>
                       your patterns
                     </p>
