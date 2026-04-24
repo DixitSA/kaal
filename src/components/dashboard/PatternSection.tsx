@@ -279,7 +279,7 @@ export default function PatternSection() {
                     </span>
                   </div>
 
-                  <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", padding: "clamp(12px, 3vw, 28px) clamp(4px, 2vw, 8px) clamp(8px, 2vw, 16px)" }}>
+                  <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", padding: "clamp(12px, 3vw, 28px) clamp(4px, 2vw, 8px) 2rem", overflowY: "auto", height: "auto" }}>
                     <p style={{ fontFamily: "var(--font-inter-var)", fontSize: "9px", textTransform: "uppercase", letterSpacing: "0.26em", color: "#8A7240", margin: 0, opacity: 0.8 }}>
                       your patterns
                     </p>
@@ -291,7 +291,7 @@ export default function PatternSection() {
                     </p>
                     <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
                       {traits.map((trait, i) => (
-                        <p key={i} style={{ fontFamily: "var(--font-playfair-display), Georgia, serif", fontSize: "clamp(0.82rem, 1.7vw, 1rem)", lineHeight: 1.8, letterSpacing: "0.02em", color: "#2C2418", margin: 0, opacity: 0.84 }}>
+                        <p key={i} style={{ fontFamily: "var(--font-playfair-display), Georgia, serif", fontSize: "clamp(0.82rem, 1.7vw, 1rem)", lineHeight: 1.6, letterSpacing: "0.02em", color: "#2C2418", margin: 0, opacity: 0.84 }}>
                           {trait.toLowerCase()}
                         </p>
                       ))}
@@ -310,11 +310,11 @@ export default function PatternSection() {
 
                 {/* Shadow zone */}
                 <div style={{
-                  height: "25%",
+                  flexShrink: 0,
                   background: "linear-gradient(to bottom, rgba(44,36,24,0.055), rgba(44,36,24,0.09))",
                   borderTop: "1px solid rgba(163, 72, 81, 0.35)",
-                  display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
-                  textAlign: "center", padding: "0 52px", gap: "4px",
+                  display: "flex", flexDirection: "column", alignItems: "center",
+                  textAlign: "center", padding: "1.5rem 52px", gap: "4px",
                   position: "relative", zIndex: 1,
                 }}>
                   <span style={{ fontFamily: "var(--font-inter-var), sans-serif", fontStyle: "italic", fontWeight: 300, fontSize: "0.95rem", letterSpacing: "0.12em", color: "#7A2010", opacity: 0.85, textTransform: "lowercase" }}>
