@@ -172,24 +172,8 @@ export default function PatternSection() {
   return (
     <motion.section initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-60px" }}>
 
-      {/* Section header — consistent with Phase / Today / Decision */}
-      <motion.div
-        variants={childAnim(0)}
-        style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "24px" }}
-      >
-        <p
-          className="tracking-[0.2em]"
-          style={{ color: "#8A7240", fontFamily: "var(--font-inter-var)", fontSize: "11px", textTransform: "lowercase", margin: 0 }}
-        >
-          Your Patterns
-        </p>
-        <span style={{ fontFamily: "var(--font-inter-var)", fontSize: "11px", textTransform: "lowercase", letterSpacing: "0.06em", color: "#B5563E" }}>
-          {nakshatra} · pada {padaRoman}
-        </span>
-      </motion.div>
-
       {/* Flip card — full container width, landscape */}
-      <motion.div variants={childAnim(0.1)}>
+      <motion.div variants={childAnim(0)}>
 
         {/*
           Outer wrapper: carries perspective + shadow hover.
@@ -296,7 +280,13 @@ export default function PatternSection() {
                   </div>
 
                   <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", padding: "1.5rem clamp(8px, 3vw, 24px)", overflow: "hidden" }}>
-                    <p style={{ fontFamily: "var(--font-playfair-display)", fontStyle: "italic", fontWeight: 700, fontSize: "clamp(1.1rem, 2.5vw, 1.55rem)", color: "#2C2418", lineHeight: 1.2, margin: "0 0 1.2rem", maxWidth: "26ch" }}>
+                    <p style={{ fontFamily: "var(--font-inter-var)", fontSize: "9px", textTransform: "uppercase", letterSpacing: "0.26em", color: "#8A7240", margin: 0, opacity: 0.8 }}>
+                      your patterns
+                    </p>
+                    <p style={{ fontFamily: "var(--font-playfair-display), Georgia, serif", fontStyle: "italic", fontSize: "clamp(0.68rem, 1.3vw, 0.78rem)", color: "#7A7469", margin: "4px 0 0", opacity: 0.6, letterSpacing: "0.04em" }}>
+                      {nakshatra} · pada {padaRoman}
+                    </p>
+                    <p style={{ fontFamily: "var(--font-playfair-display)", fontStyle: "italic", fontWeight: 700, fontSize: "clamp(1.1rem, 2.5vw, 1.55rem)", color: "#2C2418", lineHeight: 1.2, margin: "10px 0 1.2rem", maxWidth: "26ch" }}>
                       {identity.core}
                     </p>
                     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "2px" }}>
