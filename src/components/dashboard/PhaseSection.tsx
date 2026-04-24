@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { useUser } from "@/context/UserContext";
 import InsightCard from "@/components/ui/InsightCard";
@@ -22,34 +21,6 @@ const INTENSITY_LABELS: Record<IntensityLevel, string> = {
   critical: "critical intensity",
 };
 
-function Tooltip({ content, children }: { content: string; children: React.ReactNode }) {
-  const [show, setShow] = useState(false);
-  return (
-    <div style={{ position: "relative", display: "inline-flex" }}>
-      {children}
-      {show && (
-        <div style={{
-          position: "absolute", top: "100%", left: "50%", transform: "translateX(-50%)",
-          zIndex: 20, backgroundColor: "#2C2418", color: "#F5F0E8", padding: "8px 12px",
-          borderRadius: "2px", fontSize: "12px", maxWidth: "280px", whiteSpace: "normal",
-          boxShadow: "0 4px 12px rgba(0,0,0,0.15)", marginTop: "8px", textAlign: "center"
-        }}>
-          {content}
-        </div>
-      )}
-      <div
-        style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0 }}
-        onMouseEnter={() => setShow(true)}
-        onMouseLeave={() => setShow(false)}
-        onFocus={() => setShow(true)}
-        onBlur={() => setShow(false)}
-        tabIndex={0}
-        role="button"
-        aria-label="More information"
-      />
-    </div>
-  );
-}
 
 export default function PhaseSection() {
   const { computedData } = useUser();
@@ -95,14 +66,9 @@ export default function PhaseSection() {
         variants={childAnim(0)}
         style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "8px", marginBottom: "16px" }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-          <p className="tracking-[0.2em]" style={{ color: "#786030", fontFamily: "var(--font-inter-var)", fontSize: "12px", textTransform: "lowercase", margin: 0 }}>
-            Current Phase
-          </p>
-          <Tooltip content="Your current phase reflects the dominant planetary period affecting your life circumstances right now.">
-            <span style={{ cursor: "help", color: "#786030", fontSize: "12px", fontWeight: 600 }}>?</span>
-          </Tooltip>
-        </div>
+        <p className="tracking-[0.2em]" style={{ color: "#786030", fontFamily: "var(--font-inter-var)", fontSize: "12px", textTransform: "lowercase", margin: 0 }}>
+          Current Phase
+        </p>
 
         <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
           <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
@@ -126,9 +92,6 @@ export default function PhaseSection() {
           <span style={{ fontFamily: "var(--font-inter-var)", fontSize: "11px", textTransform: "lowercase", letterSpacing: "0.06em", color: isCritical ? "#A04040" : "#7A7469" }}>
             {INTENSITY_LABELS[intensityLevel]}
           </span>
-          <Tooltip content="Intensity measures how actively the planetary energies are expressing themselves in your current period.">
-            <span style={{ cursor: "help", color: isCritical ? "#A04040" : "#786030", fontSize: "12px", fontWeight: 600 }}>?</span>
-          </Tooltip>
         </div>
       </motion.div>
 

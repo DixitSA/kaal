@@ -205,8 +205,7 @@ export default function PatternSection() {
             style={{
               position: "relative",
               width: "100%",
-              aspectRatio: undefined,
-              maxHeight: "clamp(200px, 45vw, 360px)",
+              height: "clamp(200px, 45vw, 360px)",
               WebkitTransformStyle: "preserve-3d",
               transformStyle: "preserve-3d",
               transform: flipped ? "rotateY(180deg)" : "rotateY(0deg)",
