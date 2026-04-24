@@ -73,17 +73,19 @@ export default function LandingPage() {
       </div>
 
       {/* Wordmark */}
-      <Link href="/" style={{ textDecoration: "none", color: "inherit", transition: "opacity 0.3s ease" }} onMouseOver={(e) => (e.currentTarget.style.opacity = "1")} onMouseOut={(e) => (e.currentTarget.style.opacity = "0.85")}>
-        <motion.div
-          className="fixed top-4 left-4 z-20"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          style={{ fontFamily: "var(--font-playfair-display)", fontSize: "1.1rem", fontStyle: "italic", color: "#2C2418", opacity: 0.85 }}
-        >
-          Kaal
-        </motion.div>
-      </Link>
+      <div className="fixed top-0 left-0 right-0 z-20" style={{ maxWidth: "560px", margin: "0 auto" }}>
+        <Link href="/" style={{ textDecoration: "none", color: "inherit", transition: "opacity 0.3s ease" }} onMouseOver={(e) => (e.currentTarget.style.opacity = "1")} onMouseOut={(e) => (e.currentTarget.style.opacity = "0.85")}>
+          <motion.div
+            className="py-4 pl-6"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            style={{ fontFamily: "var(--font-playfair-display)", fontSize: "1.1rem", fontStyle: "italic", color: "#2C2418", opacity: 0.85 }}
+          >
+            Kaal
+          </motion.div>
+        </Link>
+      </div>
 
       {/* Content */}
       <div className="w-full flex flex-col items-center" style={{ position: "relative", zIndex: 2, maxWidth: "560px" }}>

@@ -40,34 +40,36 @@ export default function Dashboard() {
   return (
     <div style={{ minHeight: "100dvh" }} className="relative">
       {/* Top bar */}
-      <div className="fixed top-0 left-0 right-0 z-20 flex items-center justify-between pointer-events-none dashboard-header">
-        <div className="p-4 sm:p-4 pointer-events-auto" style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
-          <Link
-            href="/"
-            style={{
-              textDecoration: "none",
-              color: "inherit",
-              transition: "opacity 0.3s ease",
-            }}
-            onMouseOver={(e) => (e.currentTarget.style.opacity = "1")}
-            onMouseOut={(e) => (e.currentTarget.style.opacity = "0.85")}
-          >
-            <span
+      <div className="fixed top-0 left-0 right-0 z-20 pointer-events-none dashboard-header">
+        <div className="mx-auto px-4 sm:px-6 flex items-center justify-between" style={{ maxWidth: "720px" }}>
+          <div className="p-4 pointer-events-auto" style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
+            <Link
+              href="/"
               style={{
-                fontFamily: "var(--font-playfair-display)",
-                fontSize: "1.1rem",
-                fontStyle: "italic",
-                color: "#2C2418",
-                lineHeight: 1.1,
-                opacity: 0.85,
+                textDecoration: "none",
+                color: "inherit",
+                transition: "opacity 0.3s ease",
               }}
+              onMouseOver={(e) => (e.currentTarget.style.opacity = "1")}
+              onMouseOut={(e) => (e.currentTarget.style.opacity = "0.85")}
             >
-              Kaal
-            </span>
-          </Link>
-        </div>
-        <div className="pointer-events-auto">
-          <SettingsDropdown />
+              <span
+                style={{
+                  fontFamily: "var(--font-playfair-display)",
+                  fontSize: "1.1rem",
+                  fontStyle: "italic",
+                  color: "#2C2418",
+                  lineHeight: 1.1,
+                  opacity: 0.85,
+                }}
+              >
+                Kaal
+              </span>
+            </Link>
+          </div>
+          <div className="pointer-events-auto">
+            <SettingsDropdown />
+          </div>
         </div>
       </div>
 
