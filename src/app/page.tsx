@@ -73,7 +73,7 @@ export default function LandingPage() {
       </div>
 
       {/* Wordmark */}
-      <div className="fixed top-0 left-0 right-0 z-20" style={{ maxWidth: "560px", margin: "0 auto" }}>
+      <div className="fixed top-0 left-0 right-0 z-20" style={{ maxWidth: "1100px", margin: "0 auto", padding: "0 5vw" }}>
         <Link href="/" style={{ textDecoration: "none", color: "inherit", transition: "opacity 0.3s ease" }} onMouseOver={(e) => (e.currentTarget.style.opacity = "1")} onMouseOut={(e) => (e.currentTarget.style.opacity = "0.85")}>
           <motion.div
             className="py-4 pl-6"
