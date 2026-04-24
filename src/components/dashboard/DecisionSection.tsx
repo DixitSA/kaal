@@ -200,8 +200,12 @@ export default function DecisionSection() {
             {result.shadowCaveat && (
               <div
                 style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
                   marginTop: "24px",
-                  paddingBottom: "2rem",
+                  paddingTop: "6px",
+                  paddingBottom: "6px",
                   borderLeft: "2px solid rgba(122, 116, 105, 0.3)",
                   paddingLeft: "16px",
                   textAlign: "left",
@@ -216,6 +220,7 @@ export default function DecisionSection() {
                     textTransform: "lowercase",
                     letterSpacing: "0.02em",
                     lineHeight: 1.6,
+                    margin: 0,
                   }}
                 >
                   {DECISION_CAVEATS[active] || result.shadowCaveat}
