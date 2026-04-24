@@ -171,14 +171,30 @@ export default function PatternSection() {
 
   return (
     <motion.section initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-60px" }}>
-      <motion.div variants={childAnim(0)}>
+
+      {/* Section header — consistent with Phase / Today / Decision */}
+      <motion.div
+        variants={childAnim(0)}
+        style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "24px" }}
+      >
+        <p
+          className="tracking-[0.2em]"
+          style={{ color: "#8A7240", fontFamily: "var(--font-inter-var)", fontSize: "11px", textTransform: "lowercase", margin: 0 }}
+        >
+          Your Patterns
+        </p>
+        <span style={{ fontFamily: "var(--font-inter-var)", fontSize: "11px", textTransform: "lowercase", letterSpacing: "0.06em", color: "#B5563E" }}>
+          {nakshatra} · pada {padaRoman}
+        </span>
+      </motion.div>
+
+      {/* Portrait card — centered, constrained width */}
+      <motion.div variants={childAnim(0.1)} style={{ width: "min(360px, 100%)", margin: "0 auto" }}>
 
         {/*
-          Outer wrapper: carries perspective + cream fill (no white flash at 90°) +
-          shadow hover via JS state + CSS transition.
-          MUST be a plain <div> — no Framer Motion here. Any motion.div between
-          perspective and the face divs will corrupt the preserve-3d chain and
-          break backface-visibility:hidden, causing bleed-through.
+          Outer wrapper: carries perspective + shadow hover.
+          MUST be a plain <div> — no Framer Motion between perspective and face divs
+          or preserve-3d chain breaks and backfaceVisibility:hidden stops working.
         */}
         <div
           onMouseEnter={() => { if (!shouldReduce) setHovered(true); }}
@@ -195,7 +211,7 @@ export default function PatternSection() {
             transition: "box-shadow 0.3s ease",
           }}
         >
-          {/* Flip container — plain div + CSS transition only */}
+          {/* Flip container — portrait proportions (~2:3 ratio) */}
           <div
             role="button"
             aria-label={flipped ? "Flip to gana" : "Flip to pattern insights"}
@@ -205,7 +221,7 @@ export default function PatternSection() {
             style={{
               position: "relative",
               width: "100%",
-              height: "clamp(200px, 45vw, 360px)",
+              height: "clamp(480px, 130vw, 540px)",
               WebkitTransformStyle: "preserve-3d",
               transformStyle: "preserve-3d",
               transform: flipped ? "rotateY(180deg)" : "rotateY(0deg)",
@@ -279,19 +295,19 @@ export default function PatternSection() {
                     </span>
                   </div>
 
-                  <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", padding: "1rem clamp(4px, 2vw, 8px)", overflow: "hidden" }}>
+                  <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", padding: "1.5rem clamp(8px, 3vw, 16px)", overflow: "hidden" }}>
                     <p style={{ fontFamily: "var(--font-inter-var)", fontSize: "9px", textTransform: "uppercase", letterSpacing: "0.26em", color: "#8A7240", margin: 0, opacity: 0.8 }}>
                       your patterns
                     </p>
-                    <p style={{ fontFamily: "var(--font-playfair-display), Georgia, serif", fontStyle: "italic", fontSize: "clamp(0.62rem, 1.2vw, 0.72rem)", color: "#7A7469", margin: "4px 0 0", opacity: 0.6, letterSpacing: "0.04em" }}>
+                    <p style={{ fontFamily: "var(--font-playfair-display), Georgia, serif", fontStyle: "italic", fontSize: "clamp(0.68rem, 1.3vw, 0.78rem)", color: "#7A7469", margin: "5px 0 0", opacity: 0.6, letterSpacing: "0.04em" }}>
                       {nakshatra} · pada {padaRoman}
                     </p>
-                    <p style={{ fontFamily: "var(--font-playfair-display)", fontStyle: "italic", fontWeight: 700, fontSize: "clamp(0.85rem, 1.8vw, 1.15rem)", color: "#2C2418", lineHeight: 1.2, margin: "8px 0 0.9rem", maxWidth: "22ch" }}>
+                    <p style={{ fontFamily: "var(--font-playfair-display)", fontStyle: "italic", fontWeight: 700, fontSize: "clamp(0.95rem, 2vw, 1.25rem)", color: "#2C2418", lineHeight: 1.2, margin: "10px 0 1.2rem", maxWidth: "22ch" }}>
                       {identity.core}
                     </p>
-                    <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "2px" }}>
                       {traits.map((trait, i) => (
-                        <p key={i} style={{ fontFamily: "var(--font-playfair-display), Georgia, serif", fontSize: "clamp(0.68rem, 1.3vw, 0.82rem)", lineHeight: 1.5, letterSpacing: "0.02em", color: "#2C2418", margin: 0, opacity: 0.84 }}>
+                        <p key={i} style={{ fontFamily: "var(--font-playfair-display), Georgia, serif", fontSize: "clamp(0.78rem, 1.5vw, 0.92rem)", lineHeight: 1.55, letterSpacing: "0.02em", color: "#2C2418", margin: 0, opacity: 0.84 }}>
                           {trait.toLowerCase()}
                         </p>
                       ))}
@@ -314,13 +330,13 @@ export default function PatternSection() {
                   background: "linear-gradient(to bottom, rgba(44,36,24,0.055), rgba(44,36,24,0.09))",
                   borderTop: "1px solid rgba(163, 72, 81, 0.35)",
                   display: "flex", flexDirection: "column", alignItems: "center",
-                  textAlign: "center", padding: "0.75rem 40px", gap: "3px",
+                  textAlign: "center", padding: "1rem 32px", gap: "4px",
                   position: "relative", zIndex: 1,
                 }}>
                   <span style={{ fontFamily: "var(--font-inter-var), sans-serif", fontStyle: "italic", fontWeight: 300, fontSize: "0.95rem", letterSpacing: "0.12em", color: "#7A2010", opacity: 0.85, textTransform: "lowercase" }}>
                     shadow
                   </span>
-                  <p style={{ fontFamily: "var(--font-playfair-display), Georgia, serif", fontStyle: "italic", fontSize: "clamp(0.68rem, 1.2vw, 0.82rem)", lineHeight: 1.4, letterSpacing: "0.02em", color: "#2C2418", opacity: 0.6, margin: 0, maxWidth: "40ch" }}>
+                  <p style={{ fontFamily: "var(--font-playfair-display), Georgia, serif", fontStyle: "italic", fontSize: "clamp(0.72rem, 1.3vw, 0.88rem)", lineHeight: 1.45, letterSpacing: "0.02em", color: "#2C2418", opacity: 0.6, margin: 0, maxWidth: "30ch" }}>
                     {identity.challengeLine}
                   </p>
                 </div>
@@ -329,7 +345,7 @@ export default function PatternSection() {
 
           </div>{/* end flip */}
         </div>{/* end outer */}
-      </motion.div>
+      </motion.div>{/* end portrait wrapper */}
     </motion.section>
   );
 }

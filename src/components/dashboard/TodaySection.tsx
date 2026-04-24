@@ -76,7 +76,7 @@ export default function TodaySection() {
           fontSize: "clamp(1.5rem, 3vw, 1.875rem)",
           color: "#2C2418",
           lineHeight: 1.2,
-          maxWidth: "25ch",
+          maxWidth: "32ch",
           textAlign: "left",
         }}
       >

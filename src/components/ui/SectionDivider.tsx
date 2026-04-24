@@ -6,7 +6,7 @@ export default function SectionDivider() {
   const shouldReduce = useReducedMotion();
 
   return (
-    <div className="w-full my-16 md:my-20" style={{ height: "2px", overflow: "hidden" }}>
+    <div className="w-full my-10 md:my-12" style={{ height: "2px", overflow: "hidden" }}>
       <motion.div
         style={{ height: "2px", backgroundColor: "rgba(122, 116, 105, 0.05)", transformOrigin: "center" }}
         initial={{ scaleX: 0 }}
