@@ -7,15 +7,6 @@ export const DECISION_CATEGORIES = [
   "communication"
 ] as const;
 
-export const DECISION_FOOTER_NOTES: Record<string, string> = {
-  career: "when planetary aspects favor structured action",
-  relationships: "consider the emotional undercurrent, not just the logical choice",
-  money: "a favorable chart doesn't guarantee outcome — it signals potential",
-  travel: "check the chart for dashas that align with movement",
-  move: "the decision favors when rahu is well-aspected",
-  communication: "ensure the message lands before you send it",
-};
-
 export const DECISION_CAVEATS: Record<string, string> = {
   career: "the path forward is not linear — expect recalibrations",
   relationships: "attachment styles shift with the moons nodes — stay adaptable",

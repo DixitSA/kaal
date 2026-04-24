@@ -4,7 +4,7 @@ import { useLayoutEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 
 import { useUser } from "@/context/UserContext";
-import { DECISION_CATEGORIES, DECISION_FOOTER_NOTES, DECISION_CAVEATS, type DecisionCategory, type DecisionOutcome } from "@/lib/types/engine";
+import { DECISION_CATEGORIES, DECISION_CAVEATS, type DecisionCategory, type DecisionOutcome } from "@/lib/types/engine";
 
 /** Returns true when two strings share ≥4 meaningful words (cross-section dedup). */
 function tooSimilar(a: string, b: string): boolean {
@@ -201,6 +201,7 @@ export default function DecisionSection() {
               <div
                 style={{
                   marginTop: "24px",
+                  paddingBottom: "2rem",
                   borderLeft: "2px solid rgba(122, 116, 105, 0.3)",
                   paddingLeft: "16px",
                   textAlign: "left",
@@ -220,24 +221,6 @@ export default function DecisionSection() {
                   {DECISION_CAVEATS[active] || result.shadowCaveat}
                 </p>
               </div>
-            )}
-
-            {DECISION_FOOTER_NOTES[active] && (
-              <blockquote
-                style={{
-                  marginTop: "24px",
-                  fontFamily: "var(--font-quattrocento-sans), var(--font-inter-var), sans-serif",
-                  fontStyle: "italic",
-                  fontSize: "0.8rem",
-                  color: "#7A7469",
-                  textTransform: "lowercase",
-                  letterSpacing: "0.02em",
-                  lineHeight: 1.6,
-                  opacity: 0.75,
-                }}
-              >
-                {DECISION_FOOTER_NOTES[active]}
-              </blockquote>
             )}
           </motion.div>
         </AnimatePresence>
