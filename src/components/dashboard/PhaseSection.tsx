@@ -63,7 +63,7 @@ export default function PhaseSection() {
         variants={childAnim(0)}
         style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "8px", marginBottom: "16px" }}
       >
-        <p className="tracking-[0.2em]" style={{ color: "#786030", fontFamily: "var(--font-inter-var)", fontSize: "12px", textTransform: "lowercase", margin: 0 }}>
+        <p className="tracking-[0.2em]" style={{ color: "#786030", fontFamily: "var(--font-inter-var)", fontSize: "14px", fontWeight: 500, textTransform: "lowercase", margin: 0 }}>
           Current Phase
         </p>
 

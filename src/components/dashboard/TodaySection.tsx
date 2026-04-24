@@ -51,7 +51,7 @@ export default function TodaySection() {
       >
         <p
           className="tracking-[0.2em]"
-          style={{ color: "#8A7240", fontFamily: "var(--font-inter-var)", fontSize: "11px", textTransform: "lowercase", margin: 0 }}
+          style={{ color: "#8A7240", fontFamily: "var(--font-inter-var)", fontSize: "14px", fontWeight: 500, textTransform: "lowercase", margin: 0 }}
         >
           Today
         </p>

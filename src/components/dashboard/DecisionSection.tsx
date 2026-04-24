@@ -73,30 +73,25 @@ export default function DecisionSection() {
         viewport={{ once: true, margin: "-60px" }}
         variants={childAnim(0)}
         className="tracking-[0.2em]"
-        style={{ color: "#8A7240", fontFamily: "var(--font-inter-var)", fontSize: "11px", textTransform: "lowercase" }}
+        style={{ color: "#8A7240", fontFamily: "var(--font-inter-var)", fontSize: "14px", fontWeight: 500, textTransform: "lowercase" }}
       >
         Decision
       </motion.p>
 
-      {/* Tab bar — plain in-flow, scrolls with the page */}
+      {/* Tab bar */}
       <div
         style={{
           marginTop: "16px",
           borderBottom: "1px solid rgba(122, 116, 105, 0.12)",
-          marginLeft: "clamp(-12px, -3vw, -24px)",
-          marginRight: "clamp(-12px, -3vw, -24px)",
-          paddingLeft: "clamp(12px, 3vw, 24px)",
-          paddingRight: "clamp(12px, 3vw, 24px)",
           overflowX: "auto",
           WebkitOverflowScrolling: "touch",
         }}
       >
         <div
           ref={containerRef}
-          className="flex flex-wrap gap-x-6 gap-y-2"
           role="tablist"
           aria-label="Decision categories"
-          style={{ position: "relative" }}
+          style={{ position: "relative", display: "flex", justifyContent: "space-between", gap: "8px" }}
         >
           {DECISION_CATEGORIES.map((category) => (
             <button

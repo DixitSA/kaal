@@ -89,7 +89,9 @@ export default function Dashboard() {
         <SectionDivider />
         <DecisionSection />
         <SectionDivider />
-        <PatternSection />
+        <div style={{ marginTop: "3rem" }}>
+          <PatternSection />
+        </div>
       </main>
     </div>
   );
