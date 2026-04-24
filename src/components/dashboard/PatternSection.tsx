@@ -202,6 +202,7 @@ export default function PatternSection() {
             tabIndex={0}
             onClick={toggle}
             onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") toggle(); }}
+            className="pattern-card-flip"
             style={{
               position: "relative",
               width: "100%",
@@ -310,7 +311,7 @@ export default function PatternSection() {
                 </div>
 
                 {/* Shadow zone */}
-                <div style={{
+                <div className="pattern-card-shadow-zone" style={{
                   height: "25%",
                   background: "linear-gradient(to bottom, rgba(44,36,24,0.055), rgba(44,36,24,0.09))",
                   borderTop: "1px solid rgba(163, 72, 81, 0.35)",

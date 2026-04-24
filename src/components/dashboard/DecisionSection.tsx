@@ -80,6 +80,7 @@ export default function DecisionSection() {
 
       {/* Tab bar — plain in-flow, scrolls with the page */}
       <div
+        className="decision-tab-bar"
         style={{
           marginTop: "16px",
           borderBottom: "1px solid rgba(122, 116, 105, 0.12)",
@@ -93,7 +94,7 @@ export default function DecisionSection() {
       >
         <div
           ref={containerRef}
-          className="flex flex-wrap gap-x-6 gap-y-2"
+          className="flex flex-wrap gap-x-6 gap-y-2 decision-tab-inner"
           role="tablist"
           aria-label="Decision categories"
           style={{ position: "relative" }}

@@ -312,3 +312,71 @@ a {
 .pattern-card-flip {
   background-color: transparent !important;
 }
+
+/* ═══════════════════════════════════════════════════════════
+   Mobile Responsive — max-width: 768px
+   All rules here are strictly additive; desktop untouched.
+   ═══════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+
+  /* 1a. Kill horizontal scroll — viewport level */
+  html,
+  body {
+    overflow-x: hidden;
+    max-width: 100%;
+  }
+
+  /* 1b. Clip the spinning hero yantra so it can't push the viewport edge */
+  .landing-hero-section {
+    overflow: hidden;
+  }
+
+  /* 1c. Hero headline — allow long words to hyphenate */
+  .landing-hero {
+    hyphens: auto;
+    overflow-wrap: break-word;
+  }
+
+  /* 2. DOB + Time 2-col grid → stacked single column */
+  .dob-time-grid {
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+  }
+
+  /* 3. Decision categories — single swipeable row, hidden scrollbar */
+  .decision-tab-inner {
+    flex-wrap: nowrap !important;
+  }
+  .decision-tab-bar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .decision-tab-bar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* 4. Phase header row — stack "Current Phase" above intensity dots */
+  .phase-header-row {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 0.5rem !important;
+    margin-bottom: 20px !important;
+  }
+
+  /* 5. Insight cards (Guidance / Caution) — full width, left-aligned text */
+  .insight-card {
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .insight-card-text {
+    padding-left: 16px !important;
+    text-align: left !important;
+    align-items: flex-start !important;
+  }
+
+  /* 6. Pattern card — keep shadow zone readable on narrow screens */
+  .pattern-card-shadow-zone {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+}

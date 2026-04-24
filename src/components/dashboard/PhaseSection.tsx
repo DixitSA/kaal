@@ -93,6 +93,7 @@ export default function PhaseSection() {
       {/* Header row: label + intensity dots */}
       <motion.div
         variants={childAnim(0)}
+        className="phase-header-row"
         style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "8px", marginBottom: "16px" }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>

@@ -281,6 +281,7 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
       {/* ── Date of Birth + Time of Birth — 2 columns ── */}
       <motion.div
         custom={1} variants={vars} initial="hidden" animate="visible"
+        className="dob-time-grid"
         style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "24px", alignItems: "start" }}
       >
         {/* Date of Birth — calendar icon right */}

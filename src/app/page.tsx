@@ -85,7 +85,7 @@ export default function LandingPage() {
       {/* Content */}
       <div className="w-full flex flex-col items-center" style={{ position: "relative", zIndex: 2, maxWidth: "560px" }}>
         {/* Yantra spin + pulse */}
-        <div className="relative flex flex-col items-center w-full">
+        <div className="relative flex flex-col items-center w-full landing-hero-section">
           <motion.div
             className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
             animate={shouldReduce ? {} : { rotate: 360, scale: [1, 1.03, 1] }}
@@ -99,7 +99,7 @@ export default function LandingPage() {
 
           {/* Hero headline — line 2 italic */}
           <h1
-            className="relative z-10 text-center font-bold leading-tight"
+            className="relative z-10 text-center font-bold leading-tight landing-hero"
             style={{
               fontFamily: "var(--font-playfair-display)",
               fontSize: "clamp(1.9rem, 5vw, 2.75rem)",
