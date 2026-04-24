@@ -138,10 +138,10 @@ const MARGINALIA: React.CSSProperties = {
 };
 
 const CORNERS = [
-  { top: 6,    left:  6,   transform: "none" },
-  { top: 6,    right: 6,   transform: "scaleX(-1)" },
-  { bottom: 6, left:  6,   transform: "scaleY(-1)" },
-  { bottom: 6, right: 6,   transform: "scale(-1,-1)" },
+  { top: 2,    left:  2,   transform: "none" },
+  { top: 2,    right: 2,   transform: "scaleX(-1)" },
+  { bottom: 2, left:  2,   transform: "scaleY(-1)" },
+  { bottom: 2, right: 2,   transform: "scale(-1,-1)" },
 ] as const;
 
 // ─── Component ───────────────────────────────────────────────────────────────

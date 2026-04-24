@@ -73,7 +73,7 @@ export default function LandingPage() {
 
       {/* Wordmark */}
       <motion.div
-        className="fixed top-0 left-0 p-6 z-20"
+        className="fixed top-3 left-3 z-20"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.6, delay: 0.2 }}
