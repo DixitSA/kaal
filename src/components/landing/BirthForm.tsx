@@ -164,10 +164,21 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
     if (tz) setTimezone((c) => c || tz);
   }, []);
 
+  /** Converts MM/DD/YYYY → YYYY-MM-DD for the API schema. */
+  function toISODate(mmddyyyy: string): string {
+    const [mm, dd, yyyy] = mmddyyyy.split("/");
+    return `${yyyy ?? ""}-${(mm ?? "").padStart(2, "0")}-${(dd ?? "").padStart(2, "0")}`;
+  }
+
   function validate() {
     const e: Record<string, string> = {};
     if (!name.trim()) e.name = "name is required";
-    if (!dob) e.dob = "date of birth is required";
+    if (!dob || dob.length < 10) {
+      e.dob = "enter a full date — MM/DD/YYYY";
+    } else {
+      const d = new Date(toISODate(dob));
+      if (isNaN(d.getTime())) e.dob = "not a real calendar date";
+    }
     if (!unknownTime && !timeOfBirth) e.time = "enter birth time or check unknown";
     if (!placeOfBirth.trim()) e.place = "place of birth is required";
     if (!timezone.trim()) e.timezone = "timezone is required";
@@ -190,7 +201,7 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
       return;
     }
     setIsSubmitting(true);
-    setUserData({ name, dob, timeOfBirth, unknownTime, placeOfBirth, timezone, latitude, longitude });
+    setUserData({ name, dob: toISODate(dob), timeOfBirth, unknownTime, placeOfBirth, timezone, latitude, longitude });
     router.push("/loading-screen");
   }
 
