@@ -4,7 +4,7 @@ import { useLayoutEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 
 import { useUser } from "@/context/UserContext";
-import { DECISION_CATEGORIES, type DecisionCategory, type DecisionOutcome } from "@/lib/types/engine";
+import { DECISION_CATEGORIES, DECISION_FOOTER_NOTES, type DecisionCategory, type DecisionOutcome } from "@/lib/types/engine";
 
 /** Returns true when two strings share ≥4 meaningful words (cross-section dedup). */
 function tooSimilar(a: string, b: string): boolean {
@@ -49,6 +49,8 @@ export default function DecisionSection() {
 
   const result = computedData.decisions[active];
   const { phase, daily } = computedData;
+
+  const shadowCaveat = Object.values(computedData.decisions).find((d) => d.shadowCaveat)?.shadowCaveat;
 
   /** Sentences already covered in Phase and Today sections — filter these out of Decision body. */
   const crossSectionContext = [
@@ -218,6 +220,24 @@ export default function DecisionSection() {
                   {result.shadowCaveat}
                 </p>
               </div>
+            )}
+
+            {DECISION_FOOTER_NOTES[active] && (
+              <blockquote
+                style={{
+                  marginTop: "24px",
+                  fontFamily: "var(--font-quattrocento-sans), var(--font-inter-var), sans-serif",
+                  fontStyle: "italic",
+                  fontSize: "0.8rem",
+                  color: "#7A7469",
+                  textTransform: "lowercase",
+                  letterSpacing: "0.02em",
+                  lineHeight: 1.6,
+                  opacity: 0.75,
+                }}
+              >
+                {DECISION_FOOTER_NOTES[active]}
+              </blockquote>
             )}
           </motion.div>
         </AnimatePresence>
