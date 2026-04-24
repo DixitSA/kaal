@@ -166,13 +166,14 @@ export default function DecisionSection() {
                 fontSize: "clamp(2.5rem, 6vw, 3.75rem)",
                 color: actionColors[result.outcome],
                 lineHeight: 1,
+                textAlign: "center",
               }}
             >
               {actionByOutcome[result.outcome]}
             </motion.p>
             <p
-              className="mt-4"
-              style={{ color: "#7A7469", fontFamily: "var(--font-quattrocento-sans), var(--font-inter-var), sans-serif", fontSize: "clamp(1rem, 3vw, 1.4rem)", lineHeight: 1.5, fontStyle: "normal", letterSpacing: "0.02em", textTransform: "lowercase" }}
+              className="mt-1"
+              style={{ color: "#5C574F", fontFamily: "var(--font-quattrocento-sans), var(--font-inter-var), sans-serif", fontSize: "clamp(1rem, 3vw, 1.4rem)", lineHeight: 1.4, fontStyle: "normal", letterSpacing: "0.02em", textTransform: "lowercase", textAlign: "center" }}
             >
               {result.guidance}
             </p>
@@ -190,8 +191,8 @@ export default function DecisionSection() {
               .map((line, i) => (
                 <p
                   key={i}
-                  className="mt-1 text-sm sm:text-base"
-                  style={{ color: "#9C9488", fontFamily: "var(--font-quattrocento-sans), var(--font-inter-var), sans-serif", fontStyle: "normal", letterSpacing: "0.02em", textTransform: "lowercase", opacity: 0.6 }}
+                  className="mt-0.5"
+                  style={{ color: "#5C574F", fontFamily: "var(--font-quattrocento-sans), var(--font-inter-var), sans-serif", fontStyle: "normal", letterSpacing: "0.02em", textTransform: "lowercase", textAlign: "center" }}
                 >
                   {line}
                 </p>
@@ -203,7 +204,7 @@ export default function DecisionSection() {
                   display: "flex",
                   flexDirection: "column",
                   justifyContent: "center",
-                  marginTop: "24px",
+                  marginTop: "48px",
                   paddingTop: "6px",
                   paddingBottom: "6px",
                   borderLeft: "2px solid rgba(122, 116, 105, 0.3)",
