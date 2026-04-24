@@ -119,7 +119,7 @@ const inputStyle: CSSProperties = {
   color: "#2C2418",
   padding: 0,
   paddingBottom: "8px",
-  minHeight: "40px",
+  minHeight: "36px",
   borderRadius: 0,
   display: "block",
   textAlign: "left",
@@ -243,12 +243,13 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
   const errStyle: CSSProperties = { color: "#8B3620", fontSize: "10px", marginTop: "4px", fontFamily: "var(--font-inter-var)", letterSpacing: "0.02em" };
 
   /* ── Icon helper positioning ── */
-  const iconStyle: CSSProperties = { position: "absolute", bottom: "11px", color: "#9C9488", pointerEvents: "none", display: "flex", alignItems: "center" };
+  const iconStyle: CSSProperties = { position: "absolute", bottom: "9px", color: "#9C9488", pointerEvents: "none", display: "flex", alignItems: "center", zIndex: 1 };
 
   return (
     <form
       onSubmit={handleSubmit}
       noValidate
+      className="birth-form-card landing-form"
       style={{
         width: "100%",
         maxWidth: "500px",
@@ -280,32 +281,30 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
       {/* ── Date of Birth + Time of Birth — 2 columns ── */}
       <motion.div
         custom={1} variants={vars} initial="hidden" animate="visible"
-        style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "24px" }}
+        style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "24px", alignItems: "start" }}
       >
         {/* Date of Birth — calendar icon right */}
-        <div style={{ position: "relative" }}>
-          <div aria-hidden="true" style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-50%)", pointerEvents: "none", opacity: 0.025, zIndex: 0, width: "160px", height: "160px" }}>
-            <DobWatermark />
-          </div>
-          <div style={{ position: "relative", zIndex: 1 }}>
-            <label htmlFor="dob" style={labelStyle}>date of birth</label>
-            <div style={{ position: "relative" }}>
-              <CeremonialInput
-                id="dob" type="text" placeholder="MM/DD/YYYY" value={dob} autoComplete="bday"
-                onChange={(e) => {
-                  let val = e.target.value.replace(/[^0-9/]/g, "");
-                  if (val.length === 2 && dob.length <= 2) val += "/";
-                  if (val.length === 5 && dob.length <= 5) val += "/";
-                  if (val.length <= 10) setDob(val);
-                }}
-                style={{ ...inputStyle, paddingRight: "22px" }}
-                onFocus={onFocus} onBlur={(e) => onBlur(e, !!errors.dob)}
-                ariaInvalid={!!errors.dob} ariaDescribedBy={errors.dob ? "dob-error" : undefined}
-              />
-              <span style={{ ...iconStyle, right: 0 }}><CalendarIcon /></span>
+        <div>
+          <label htmlFor="dob" style={labelStyle}>date of birth</label>
+          <div style={{ position: "relative" }}>
+            <div aria-hidden="true" style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-50%)", pointerEvents: "none", opacity: 0.025, zIndex: 0, width: "160px", height: "160px" }}>
+              <DobWatermark />
             </div>
-            {errors.dob && <p id="dob-error" role="alert" style={errStyle}>{errors.dob}</p>}
+            <CeremonialInput
+              id="dob" type="text" placeholder="MM/DD/YYYY" value={dob} autoComplete="bday"
+              onChange={(e) => {
+                let val = e.target.value.replace(/[^0-9/]/g, "");
+                if (val.length === 2 && dob.length <= 2) val += "/";
+                if (val.length === 5 && dob.length <= 5) val += "/";
+                if (val.length <= 10) setDob(val);
+              }}
+              style={{ ...inputStyle, paddingRight: "22px" }}
+              onFocus={onFocus} onBlur={(e) => onBlur(e, !!errors.dob)}
+              ariaInvalid={!!errors.dob} ariaDescribedBy={errors.dob ? "dob-error" : undefined}
+            />
+            <span style={{ ...iconStyle, right: 0 }}><CalendarIcon /></span>
           </div>
+          {errors.dob && <p id="dob-error" role="alert" style={errStyle}>{errors.dob}</p>}
         </div>
 
         {/* Time of Birth — clock icon left, "I don't know" inline right */}
