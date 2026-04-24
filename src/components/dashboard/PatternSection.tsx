@@ -188,8 +188,8 @@ export default function PatternSection() {
         </span>
       </motion.div>
 
-      {/* Portrait card — centered, constrained width */}
-      <motion.div variants={childAnim(0.1)} style={{ width: "min(360px, 100%)", margin: "0 auto" }}>
+      {/* Flip card — full container width, landscape */}
+      <motion.div variants={childAnim(0.1)}>
 
         {/*
           Outer wrapper: carries perspective + shadow hover.
@@ -211,7 +211,7 @@ export default function PatternSection() {
             transition: "box-shadow 0.3s ease",
           }}
         >
-          {/* Flip container — portrait proportions (~2:3 ratio) */}
+          {/* Flip container — landscape card */}
           <div
             role="button"
             aria-label={flipped ? "Flip to gana" : "Flip to pattern insights"}
@@ -221,7 +221,7 @@ export default function PatternSection() {
             style={{
               position: "relative",
               width: "100%",
-              height: "clamp(480px, 130vw, 540px)",
+              height: "clamp(280px, 40vw, 360px)",
               WebkitTransformStyle: "preserve-3d",
               transformStyle: "preserve-3d",
               transform: flipped ? "rotateY(180deg)" : "rotateY(0deg)",
@@ -295,19 +295,13 @@ export default function PatternSection() {
                     </span>
                   </div>
 
-                  <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", padding: "1.5rem clamp(8px, 3vw, 16px)", overflow: "hidden" }}>
-                    <p style={{ fontFamily: "var(--font-inter-var)", fontSize: "9px", textTransform: "uppercase", letterSpacing: "0.26em", color: "#8A7240", margin: 0, opacity: 0.8 }}>
-                      your patterns
-                    </p>
-                    <p style={{ fontFamily: "var(--font-playfair-display), Georgia, serif", fontStyle: "italic", fontSize: "clamp(0.68rem, 1.3vw, 0.78rem)", color: "#7A7469", margin: "5px 0 0", opacity: 0.6, letterSpacing: "0.04em" }}>
-                      {nakshatra} · pada {padaRoman}
-                    </p>
-                    <p style={{ fontFamily: "var(--font-playfair-display)", fontStyle: "italic", fontWeight: 700, fontSize: "clamp(0.95rem, 2vw, 1.25rem)", color: "#2C2418", lineHeight: 1.2, margin: "10px 0 1.2rem", maxWidth: "22ch" }}>
+                  <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", padding: "1.5rem clamp(8px, 3vw, 24px)", overflow: "hidden" }}>
+                    <p style={{ fontFamily: "var(--font-playfair-display)", fontStyle: "italic", fontWeight: 700, fontSize: "clamp(1.1rem, 2.5vw, 1.55rem)", color: "#2C2418", lineHeight: 1.2, margin: "0 0 1.2rem", maxWidth: "26ch" }}>
                       {identity.core}
                     </p>
                     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "2px" }}>
                       {traits.map((trait, i) => (
-                        <p key={i} style={{ fontFamily: "var(--font-playfair-display), Georgia, serif", fontSize: "clamp(0.78rem, 1.5vw, 0.92rem)", lineHeight: 1.55, letterSpacing: "0.02em", color: "#2C2418", margin: 0, opacity: 0.84 }}>
+                        <p key={i} style={{ fontFamily: "var(--font-playfair-display), Georgia, serif", fontSize: "clamp(0.88rem, 1.8vw, 1.05rem)", lineHeight: 1.6, letterSpacing: "0.02em", color: "#2C2418", margin: 0, opacity: 0.84 }}>
                           {trait.toLowerCase()}
                         </p>
                       ))}
