@@ -163,34 +163,35 @@ export default function DecisionSection() {
               style={{
                 fontFamily: "var(--font-playfair-display)",
                 fontStyle: "normal",
-                fontSize: "clamp(1.5rem, 3vw, 2rem)",
+                fontSize: "clamp(2.5rem, 6vw, 3.75rem)",
                 color: actionColors[result.outcome],
                 lineHeight: 1,
-                textAlign: "left",
-                marginBottom: "4px",
               }}
             >
               {actionByOutcome[result.outcome]}
             </motion.p>
             <p
-              className="mt-2"
-              style={{ color: "#5C574F", fontFamily: "var(--font-quattrocento-sans), var(--font-inter-var), sans-serif", fontSize: "clamp(1rem, 3vw, 1.4rem)", lineHeight: 1.5, fontStyle: "normal", letterSpacing: "0.02em", textTransform: "lowercase", textAlign: "left" }}
+              className="mt-4"
+              style={{ color: "#7A7469", fontFamily: "var(--font-quattrocento-sans), var(--font-inter-var), sans-serif", fontSize: "clamp(1rem, 3vw, 1.4rem)", lineHeight: 1.5, fontStyle: "normal", letterSpacing: "0.02em", textTransform: "lowercase" }}
             >
               {result.guidance}
             </p>
             {result.rationale
               .filter((line, i, arr) => {
                 const norm = line.trim().toLowerCase();
+                // dedupe within rationale
                 if (arr.findIndex(l => l.trim().toLowerCase() === norm) !== i) return false;
+                // dedupe against guidance
                 if (norm === result.guidance.trim().toLowerCase()) return false;
+                // dedupe against phase + today content
                 if (crossSectionContext.some(ctx => tooSimilar(ctx, line))) return false;
                 return true;
               })
               .map((line, i) => (
                 <p
                   key={i}
-                  className="mt-0.5"
-                  style={{ color: "#5C574F", fontFamily: "var(--font-quattrocento-sans), var(--font-inter-var), sans-serif", fontStyle: "normal", letterSpacing: "0.02em", textTransform: "lowercase" }}
+                  className="mt-1 text-sm sm:text-base"
+                  style={{ color: "#9C9488", fontFamily: "var(--font-quattrocento-sans), var(--font-inter-var), sans-serif", fontStyle: "normal", letterSpacing: "0.02em", textTransform: "lowercase", opacity: 0.6 }}
                 >
                   {line}
                 </p>
