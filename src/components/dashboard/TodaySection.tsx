@@ -42,20 +42,29 @@ export default function TodaySection() {
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, margin: "-60px" }}
-      style={{
-        backgroundColor: "rgba(237, 230, 218, 0.92)",
-        borderRadius: "4px",
-        padding: "clamp(20px, 5vw, 32px)",
-        border: "1px solid rgba(122, 116, 105, 0.08)",
-      }}
+      style={{ padding: "clamp(20px, 5vw, 32px) 0" }}
     >
-      <motion.p
+      {/* Header row: Today + tara bala inline */}
+      <motion.div
         variants={childAnim(0)}
-        className="tracking-[0.2em]"
-        style={{ color: "#8A7240", fontFamily: "var(--font-inter-var)", fontSize: "11px", textTransform: "lowercase" }}
+        style={{ display: "flex", alignItems: "center", gap: "12px" }}
       >
-        Today
-      </motion.p>
+        <p
+          className="tracking-[0.2em]"
+          style={{ color: "#8A7240", fontFamily: "var(--font-inter-var)", fontSize: "11px", textTransform: "lowercase", margin: 0 }}
+        >
+          Today
+        </p>
+        <span style={{
+          fontFamily: "var(--font-inter-var)",
+          fontSize: "11px",
+          textTransform: "lowercase",
+          letterSpacing: "0.06em",
+          color: TARA_FAVORABLE.has(taraBala.level) ? "#5E7A5E" : "#B5563E",
+        }}>
+          {TARA_DISPLAY[taraBala.level].split("—")[0].trim()}
+        </span>
+      </motion.div>
 
       {/* Signal tone */}
       <motion.h2
@@ -68,26 +77,17 @@ export default function TodaySection() {
           color: "#2C2418",
           lineHeight: 1.2,
           maxWidth: "25ch",
-          textAlign: "center",
-          width: "100%",
+          textAlign: "left",
         }}
       >
         {daily.signalTone}
       </motion.h2>
 
-      <motion.p
-        variants={childAnim(0.15)}
-        className="mt-4 text-base"
-        style={{ color: "#5C574F", fontFamily: "var(--font-quattrocento-sans), var(--font-inter-var), sans-serif", fontStyle: "normal", letterSpacing: "0.02em", textTransform: "lowercase", textAlign: "center" }}
-      >
-        focus area: {daily.focusArea}
-      </motion.p>
-
-      {/* Guidance */}
+      {/* Guidance — label carries the focus area */}
       <motion.div variants={childAnim(0.2)} className="mt-8">
         <InsightCard
           type="positive"
-          label="Guidance"
+          label={`Focus Area: ${daily.focusArea}`}
           content={daily.guidance}
           animDelay={0.3}
         />
@@ -101,26 +101,6 @@ export default function TodaySection() {
           content={daily.caution}
           animDelay={0.45}
         />
-      </motion.div>
-
-      {/* Tara Bala */}
-      <motion.div variants={childAnim(0.4)} style={{ marginTop: "20px" }}>
-        <span
-          style={{
-            fontFamily: "var(--font-inter-var)",
-            fontSize: "11px",
-            textTransform: "lowercase",
-            letterSpacing: "0.06em",
-            color: TARA_FAVORABLE.has(taraBala.level) ? "#5E7A5E" : "#9C9488",
-            backgroundColor: TARA_FAVORABLE.has(taraBala.level)
-              ? "rgba(94, 122, 94, 0.08)"
-              : "rgba(122, 116, 105, 0.08)",
-            borderRadius: "2px",
-            padding: "3px 8px",
-          }}
-        >
-          {TARA_DISPLAY[taraBala.level]}
-        </span>
       </motion.div>
     </motion.section>
   );

@@ -55,10 +55,7 @@ export default function PhaseSection() {
       whileInView="visible"
       viewport={{ once: true, margin: "-60px" }}
       style={{
-        backgroundColor: "rgba(237, 230, 218, 0.92)",
-        borderRadius: "4px",
-        padding: "clamp(20px, 5vw, 32px)",
-        border: "1px solid rgba(122, 116, 105, 0.08)",
+        padding: "clamp(20px, 5vw, 32px) 0",
       }}
     >
       {/* Header row: label + intensity dots */}
