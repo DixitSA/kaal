@@ -18,7 +18,7 @@ export default function SectionDivider({ width = 180, opacity = 0.1, style }: Se
       whileInView={{ opacity: 1 }}
       viewport={{ once: true, margin: "-100px" }}
       transition={{ duration: shouldReduce ? 0 : 0.8 }}
-      style={{ marginTop: "7rem", marginBottom: "7rem", ...style }}
+      style={{ marginTop: "3rem", marginBottom: "3rem", ...style }}
     >
       <svg
         width={width}
