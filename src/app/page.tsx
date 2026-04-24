@@ -75,7 +75,7 @@ export default function LandingPage() {
       {/* Wordmark */}
       <Link href="/" style={{ textDecoration: "none", color: "inherit", transition: "opacity 0.3s ease" }} onMouseOver={(e) => (e.currentTarget.style.opacity = "1")} onMouseOut={(e) => (e.currentTarget.style.opacity = "0.85")}>
         <motion.div
-          className="fixed top-3 left-3 z-20"
+          className="fixed top-4 left-4 z-20"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.2 }}
