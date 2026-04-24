@@ -40,7 +40,7 @@ export default function Dashboard() {
   return (
     <div style={{ minHeight: "100dvh" }} className="relative">
       {/* Top bar */}
-      <div className="fixed top-0 left-0 right-0 z-20 pointer-events-none dashboard-header">
+      <div className="fixed top-0 left-0 right-0 z-50 pointer-events-none" style={{ backgroundColor: "#F5F0E8" }}>
         <div className="mx-auto px-4 sm:px-6 flex items-center justify-between" style={{ maxWidth: "720px" }}>
           <div className="p-4 pointer-events-auto" style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
             <Link
