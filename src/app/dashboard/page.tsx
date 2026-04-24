@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { useUser } from "@/context/UserContext";
 import { needsDailyRefresh } from "@/lib/client/kaalApp";
 import PhaseSection from "@/components/dashboard/PhaseSection";
@@ -41,18 +42,29 @@ export default function Dashboard() {
       {/* Top bar */}
       <div className="fixed top-0 left-0 right-0 z-20 flex items-center justify-between pointer-events-none dashboard-header">
         <div className="p-3 sm:p-4 pointer-events-auto" style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
-          <span
+          <Link
+            href="/"
             style={{
-              fontFamily: "var(--font-playfair-display)",
-              fontSize: "1.1rem",
-              fontStyle: "italic",
-              color: "#2C2418",
-              lineHeight: 1.1,
-              opacity: 0.85,
+              textDecoration: "none",
+              color: "inherit",
+              transition: "opacity 0.3s ease",
             }}
+            onMouseOver={(e) => (e.currentTarget.style.opacity = "1")}
+            onMouseOut={(e) => (e.currentTarget.style.opacity = "0.85")}
           >
-            Kaal
-          </span>
+            <span
+              style={{
+                fontFamily: "var(--font-playfair-display)",
+                fontSize: "1.1rem",
+                fontStyle: "italic",
+                color: "#2C2418",
+                lineHeight: 1.1,
+                opacity: 0.85,
+              }}
+            >
+              Kaal
+            </span>
+          </Link>
         </div>
         <div className="pointer-events-auto">
           <SettingsDropdown />

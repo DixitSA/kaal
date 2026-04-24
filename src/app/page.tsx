@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { motion, useReducedMotion, Variants } from "framer-motion";
 import { useUser } from "@/context/UserContext";
 import { needsDailyRefresh } from "@/lib/client/kaalApp";
@@ -72,15 +73,17 @@ export default function LandingPage() {
       </div>
 
       {/* Wordmark */}
-      <motion.div
-        className="fixed top-3 left-3 z-20"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.6, delay: 0.2 }}
-        style={{ fontFamily: "var(--font-playfair-display)", fontSize: "1.1rem", fontStyle: "italic", color: "#2C2418", opacity: 0.85 }}
-      >
-        Kaal
-      </motion.div>
+      <Link href="/" style={{ textDecoration: "none", color: "inherit", transition: "opacity 0.3s ease" }} onMouseOver={(e) => (e.currentTarget.style.opacity = "1")} onMouseOut={(e) => (e.currentTarget.style.opacity = "0.85")}>
+        <motion.div
+          className="fixed top-3 left-3 z-20"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          style={{ fontFamily: "var(--font-playfair-display)", fontSize: "1.1rem", fontStyle: "italic", color: "#2C2418", opacity: 0.85 }}
+        >
+          Kaal
+        </motion.div>
+      </Link>
 
       {/* Content */}
       <div className="w-full flex flex-col items-center" style={{ position: "relative", zIndex: 2, maxWidth: "560px" }}>
