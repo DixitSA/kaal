@@ -246,8 +246,6 @@ export default function PatternSection() {
                 ...FACE_CLIP,
                 background: "radial-gradient(ellipse at 50% 45%, #FDFBF3 0%, #F5F0E8 75%)",
                 display: "flex", alignItems: "center", justifyContent: "center",
-                padding: "clamp(2rem, 5vw, 3rem)",
-                boxSizing: "border-box",
               }}>
                 <CottonTexture id="cotton-front" />
                 {CORNERS.map((c, i) => <CornerGlyph key={i} style={c} />)}
@@ -280,16 +278,14 @@ export default function PatternSection() {
                 ...FACE_CLIP,
                 background: "radial-gradient(ellipse at 50% 30%, #FDFBF3 0%, #F5F0E8 80%)",
                 display: "flex", flexDirection: "column",
-                padding: "clamp(2rem, 5vw, 3rem)",
-                boxSizing: "border-box",
               }}>
                 <CottonTexture id="cotton-back" />
                 {CORNERS.map((c, i) => <CornerGlyph key={i} style={c} />)}
 
                 {/* Main area */}
-                <div style={{ flex: 1, display: "grid", gridTemplateColumns: "28px 1fr 28px", minHeight: 0, position: "relative", zIndex: 1 }}>
+                <div style={{ flex: 1, display: "flex", width: "100%", minHeight: 0, position: "relative", zIndex: 1 }}>
 
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "center", position: "relative", width: "28px", flexShrink: 0 }}>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "center", position: "relative", width: "3rem", flexShrink: 0, borderRight: "1px solid rgba(44,36,24,0.15)" }}>
                     <div style={{ position: "absolute", inset: 0, opacity: 0.05, pointerEvents: "none" }}>
                       <JaaliStrip id="jaali-bl" />
                     </div>
@@ -298,7 +294,7 @@ export default function PatternSection() {
                     </span>
                   </div>
 
-                  <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-start", textAlign: "center", padding: "0.5rem clamp(8px, 3vw, 20px) 1rem", overflow: "hidden" }}>
+                  <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-start", textAlign: "center", padding: "1.5rem 1rem", overflow: "hidden" }}>
                     <p style={{ fontFamily: "var(--font-inter-var)", fontSize: "8px", textTransform: "uppercase", letterSpacing: "0.3em", color: "#8A7240", margin: 0, opacity: 0.8, fontWeight: 300 }}>
                       your patterns
                     </p>
@@ -317,7 +313,7 @@ export default function PatternSection() {
                     </div>
                   </div>
 
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "center", position: "relative", width: "28px", flexShrink: 0 }}>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "center", position: "relative", width: "3rem", flexShrink: 0, borderLeft: "1px solid rgba(44,36,24,0.15)" }}>
                     <div style={{ position: "absolute", inset: 0, opacity: 0.05, pointerEvents: "none" }}>
                       <JaaliStrip id="jaali-br" />
                     </div>
@@ -330,8 +326,8 @@ export default function PatternSection() {
                 {/* Divider Line */}
                 <div style={{
                   height: "1px",
-                  backgroundColor: "rgba(163, 72, 81, 0.35)",
-                  margin: "0 clamp(2rem, 6vw, 4rem)",
+                  backgroundColor: "rgba(44,36,24,0.15)",
+                  width: "100%",
                   flexShrink: 0,
                   position: "relative",
                   zIndex: 1,
@@ -340,9 +336,10 @@ export default function PatternSection() {
                 {/* Shadow zone */}
                 <div style={{
                   flexShrink: 0,
+                  width: "100%",
                   background: "linear-gradient(to bottom, rgba(44,36,24,0.055), rgba(44,36,24,0.09))",
                   display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
-                  textAlign: "center", padding: "1.5rem clamp(16px, 4vw, 32px) 0.5rem", gap: "6px",
+                  textAlign: "center", padding: "2.5rem 1.5rem", gap: "6px",
                   position: "relative", zIndex: 1,
                   boxSizing: "border-box",
                 }}>
