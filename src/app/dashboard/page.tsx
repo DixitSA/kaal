@@ -41,7 +41,7 @@ export default function Dashboard() {
     <div style={{ minHeight: "100dvh" }} className="relative">
       {/* Top bar */}
       <div className="fixed top-0 left-0 right-0 z-50 pointer-events-none" style={{ backgroundColor: "#F5F0E8" }}>
-        <div className="w-full flex items-center justify-between" style={{ padding: "1rem 4rem 0" }}>
+        <div className="w-full flex items-center justify-between" style={{ padding: "1rem clamp(1rem, 5vw, 4rem) 0" }}>
           <div className="p-4 pointer-events-auto" style={{ display: "flex", flexDirection: "column", gap: "2px", marginLeft: "-0.5rem" }}>
             <Link
               href="/"
@@ -87,7 +87,7 @@ export default function Dashboard() {
           className="tracking-[0.2em] mb-12"
           style={{
             fontFamily: "var(--font-inter-var)",
-            fontSize: "12px",
+            fontSize: "13px",
             color: "#7A7469",
             textTransform: "lowercase",
           }}
