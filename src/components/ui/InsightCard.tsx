@@ -57,8 +57,8 @@ export default function InsightCard({
       {/* Text block — centered alignment for ceremonial aesthetic */}
       <div style={{
         paddingLeft: "24px",
-        paddingTop: "1rem",
-        paddingBottom: "1rem",
+        paddingTop: "8px",
+        paddingBottom: "8px",
         textAlign: "left",
         display: "flex",
         flexDirection: "column",

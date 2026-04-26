@@ -58,10 +58,16 @@ export default function PhaseSection() {
         padding: "clamp(20px, 5vw, 32px) 0",
       }}
     >
-      {/* Header row: label + intensity dots */}
+      {/* Unified header: label + intensity as single frame */}
       <motion.div
         variants={childAnim(0)}
-        style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "8px", marginBottom: "16px" }}
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          paddingRight: "4px",
+          marginBottom: "4px",
+        }}
       >
         <p className="tracking-[0.2em]" style={{ color: "#786030", fontFamily: "var(--font-inter-var)", fontSize: "14px", fontWeight: 500, textTransform: "lowercase", margin: 0 }}>
           Current Phase
@@ -92,6 +98,9 @@ export default function PhaseSection() {
         </div>
       </motion.div>
 
+      {/* Visual frame rule — closes the circuit */}
+      <div style={{ height: "1px", backgroundColor: "rgba(122, 116, 105, 0.15)", marginBottom: "12px" }} />
+
       {/* Phase name */}
       <motion.h2
         variants={container}
@@ -115,23 +124,6 @@ export default function PhaseSection() {
         ))}
       </motion.h2>
 
-      {/* State key pill */}
-      <motion.div variants={childAnim(0.15)} style={{ marginBottom: "16px" }}>
-        <span style={{
-          display: "inline-block",
-          fontFamily: "var(--font-inter-var)",
-          fontSize: "11px",
-          textTransform: "lowercase",
-          letterSpacing: "0.08em",
-          color: "#786030",
-          border: "1px solid rgba(138, 114, 64, 0.35)",
-          borderRadius: "2px",
-          padding: "3px 8px",
-        }}>
-          {phase.stateKey.replace(/-/g, " ")}
-        </span>
-      </motion.div>
-
       {/* Summary */}
       <motion.p
         variants={childAnim(0.2)}
@@ -151,12 +143,12 @@ export default function PhaseSection() {
       </motion.p>
 
       {/* Opportunity */}
-      <motion.div variants={childAnim(0.3)} className="mt-8">
+      <motion.div variants={childAnim(0.3)} className="mt-5">
         <InsightCard type="positive" label="Opportunity" content={phase.supportAction} animDelay={0.3} />
       </motion.div>
 
       {/* Risk */}
-      <motion.div variants={childAnim(0.4)} className="mt-6">
+      <motion.div variants={childAnim(0.4)} className="mt-4">
         <InsightCard type="negative" label="Risk" content={phase.cautionAction} animDelay={0.45} />
       </motion.div>
 
