@@ -2,7 +2,6 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import { motion, useReducedMotion, Variants } from "framer-motion";
 import { useUser } from "@/context/UserContext";
 import { needsDailyRefresh } from "@/lib/client/kaalApp";
@@ -47,42 +46,45 @@ export default function LandingPage() {
   };
 
   return (
-    <main
-      className="flex items-start sm:items-center justify-center px-4 sm:px-6 relative"
-      style={{
-        minHeight: "100dvh",
-        paddingTop: "4rem",
-        paddingBottom: "96px", /* reserve space for fixed footer */
-        background: "radial-gradient(ellipse at center, #FDFCF6 0%, #F2EFDF 100%)",
-        boxShadow: "inset 0 0 200px rgba(44, 36, 24, 0.10)",
-      }}
-    >
-      {/* Grain texture */}
-      <div aria-hidden="true" style={{ position: "fixed", inset: 0, pointerEvents: "none", zIndex: 1, opacity: 0.03 }}>
-        <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-          <filter id="landing-grain">
-            <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch" />
-          </filter>
-          <rect width="100%" height="100%" filter="url(#landing-grain)" />
-        </svg>
-      </div>
+    <>
+      {/* Header — logo anchor */}
+      <header style={{ display: "flex", justifyContent: "flex-start", alignItems: "center", padding: "2.5rem" }}>
+        <a href="/" style={{ textDecoration: "none", color: "inherit" }}>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            style={{ fontFamily: "var(--font-playfair-display)", fontSize: "1.1rem", fontStyle: "italic", color: "#2C2418", opacity: 0.85, maxWidth: "auto" }}
+          >
+            Kaal
+          </motion.div>
+        </a>
+      </header>
 
-      {/* Background mandala */}
-      <div aria-hidden="true" style={{ position: "fixed", top: "50%", left: "50%", transform: "translate(-50%, -50%)", pointerEvents: "none", zIndex: 0, width: "200vmax", height: "200vmax", maxWidth: "900px", maxHeight: "900px" }}>
-        <YantraMandala size={900} opacity={0.04} />
-      </div>
+      <main
+        className="flex items-start sm:items-center justify-center px-4 sm:px-6 relative"
+        style={{
+          minHeight: "100dvh",
+          paddingTop: "4rem",
+          paddingBottom: "96px",
+          background: "radial-gradient(ellipse at center, #FDFCF6 0%, #F2EFDF 100%)",
+          boxShadow: "inset 0 0 200px rgba(44, 36, 24, 0.10)",
+        }}
+      >
+        {/* Grain texture */}
+        <div aria-hidden="true" style={{ position: "fixed", inset: 0, pointerEvents: "none", zIndex: 1, opacity: 0.03 }}>
+          <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+            <filter id="landing-grain">
+              <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch" />
+            </filter>
+            <rect width="100%" height="100%" filter="url(#landing-grain)" />
+          </svg>
+        </div>
 
-      {/* Wordmark */}
-      <Link href="/" style={{ textDecoration: "none", color: "inherit", transition: "opacity 0.3s ease" }} onMouseOver={(e) => (e.currentTarget.style.opacity = "1")} onMouseOut={(e) => (e.currentTarget.style.opacity = "0.85")}>
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          style={{ position: "absolute", top: "2.5rem", left: "2.5rem", zIndex: 50, fontFamily: "var(--font-playfair-display)", fontSize: "1.1rem", fontStyle: "italic", color: "#2C2418", opacity: 0.85 }}
-        >
-          Kaal
-        </motion.div>
-      </Link>
+        {/* Background mandala */}
+        <div aria-hidden="true" style={{ position: "fixed", top: "50%", left: "50%", transform: "translate(-50%, -50%)", pointerEvents: "none", zIndex: 0, width: "200vmax", height: "200vmax", maxWidth: "900px", maxHeight: "900px" }}>
+          <YantraMandala size={900} opacity={0.04} />
+        </div>
 
       {/* Content */}
       <div className="w-full flex flex-col items-center" style={{ position: "relative", zIndex: 2, maxWidth: "560px" }}>
@@ -238,5 +240,6 @@ export default function LandingPage() {
         </nav>
       </footer>
     </main>
+    </>
   );
 }
