@@ -55,7 +55,7 @@ export default function Dashboard() {
         <Link href="/" style={{ textDecoration: "none", color: "inherit" }}>
           <span style={{ fontFamily: "var(--font-playfair-display)", fontSize: "1.1rem", fontWeight: 600, color: "#2C2418" }}>Kaal</span>
         </Link>
-        <nav style={{ display: "flex", alignItems: "center", gap: "clamp(0.5rem, 2vw, 1.5rem)", overflowX: "auto", maxWidth: "60vw" }}>
+        <nav style={{ position: "absolute", left: "50%", transform: "translateX(-50%)", display: "flex", alignItems: "center", gap: "clamp(0.75rem, 3vw, 2rem)" }}>
           {NAV_LINKS.map((link) => (
             <a key={link.href} href={link.href} style={{ fontFamily: "var(--font-playfair-display)", fontSize: "clamp(10px, 2vw, 12px)", color: "#7A7469", textTransform: "uppercase", letterSpacing: "0.08em", textDecoration: "none", whiteSpace: "nowrap", transition: "color 0.2s ease" }}
               onMouseEnter={(e) => e.currentTarget.style.color = "#2C2418"}
@@ -63,8 +63,8 @@ export default function Dashboard() {
               {link.label}
             </a>
           ))}
-          <SettingsDropdown />
         </nav>
+        <SettingsDropdown />
       </header>
 
       <main style={{ maxWidth: "720px", margin: "0 auto", padding: "0 clamp(1rem, 5vw, 3rem) 8rem" }}>

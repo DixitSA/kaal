@@ -18,7 +18,7 @@ export default function SettingsDropdown() {
   }
 
   function setFaded(e: SyntheticEvent<HTMLButtonElement>) {
-    e.currentTarget.style.opacity = "0.5";
+    e.currentTarget.style.opacity = "0.6";
   }
 
   return (
@@ -26,27 +26,27 @@ export default function SettingsDropdown() {
       onClick={handleClear}
       style={{
         background: "none",
-        border: "none",
+        border: "1px solid rgba(122,116,105,0.25)",
+        borderRadius: "4px",
         fontFamily: "var(--font-inter-var)",
-        fontSize: "11px",
+        fontSize: "10px",
         textTransform: "uppercase",
-        letterSpacing: "1px",
+        letterSpacing: "0.08em",
         color: "#7A7469",
-        opacity: 0.5,
+        opacity: 0.6,
         cursor: "pointer",
-        transition: "opacity 0.3s ease",
-        padding: "12px 16px",
-        minHeight: "44px",
-        minWidth: "44px",
+        transition: "all 0.2s ease",
+        padding: "6px 12px",
+        minHeight: "32px",
       }}
-      onMouseOver={setOpaque}
-      onMouseOut={setFaded}
+      onMouseOver={(e) => { e.currentTarget.style.opacity = "1"; e.currentTarget.style.borderColor = "rgba(122,116,105,0.4)"; }}
+      onMouseOut={(e) => { e.currentTarget.style.opacity = "0.6"; e.currentTarget.style.borderColor = "rgba(122,116,105,0.25)"; }}
       onTouchStart={setOpaque}
       onTouchEnd={setFaded}
       onFocus={setOpaque}
       onBlur={setFaded}
     >
-      CLEAR SESSION
+      Clear Session
     </button>
   );
 }
