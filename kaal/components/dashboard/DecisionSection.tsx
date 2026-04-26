@@ -52,16 +52,18 @@ export default function DecisionSection() {
     >
       <motion.p
         variants={childAnim(0)}
-        className="uppercase tracking-[0.2em]"
+        className="uppercase tracking-[0.2em] mb-8"
         style={{ color: "#8A7240", fontFamily: "var(--font-inter-var)", fontSize: "11px" }}
       >
         Decision
       </motion.p>
 
+      <div className="relative w-full h-px bg-[#9C9488] opacity-30 mb-6" />
+
       <motion.div
         variants={childAnim(0.1)}
         ref={containerRef}
-        className="flex flex-wrap gap-x-6 gap-y-2 mt-4"
+        className="flex flex-wrap justify-center gap-x-8 mt-6"
         role="group"
         aria-label="Decision categories"
         style={{ position: "relative" }}
@@ -76,7 +78,7 @@ export default function DecisionSection() {
             style={{
               fontFamily: "var(--font-inter-var)",
               fontSize: "0.875rem",
-              color: active === cat ? "#B5563E" : "#7A7469",
+              color: active === cat ? "#4A4F46" : "#7A7469",
               background: "none",
               border: "none",
               padding: "10px 4px",
@@ -93,11 +95,11 @@ export default function DecisionSection() {
         {/* Sliding underline */}
         {!shouldReduce && underline.width > 0 && (
           <motion.div
-            animate={{ left: underline.left, width: underline.width }}
+            animate={{ left: underline.left + (underline.width / 2) - 16, width: 32 }}
             transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
             style={{
               position: "absolute",
-              bottom: "6px",
+              bottom: "8px",
               height: "2px",
               backgroundColor: "#B5563E",
               borderRadius: "1px",
