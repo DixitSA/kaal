@@ -440,6 +440,7 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
             alignItems: "center",
             gap: "10px",
             padding: "14px 48px",
+            minHeight: "44px",
             backgroundColor: isSubmitting ? "rgba(181,86,62,0.6)" : "#B5563E",
             color: "#F5F0E8",
             fontFamily: "var(--font-inter-var), sans-serif",
