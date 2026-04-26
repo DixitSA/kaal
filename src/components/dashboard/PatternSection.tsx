@@ -3,6 +3,9 @@
 import { useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { useUser } from "@/context/UserContext";
+import Sigil from "@/components/ui/Sigils";
+
+type PatternType = "growth" | "shadow" | "stability" | "action";
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
@@ -49,26 +52,6 @@ function CornerGlyph({ style }: { style: React.CSSProperties }) {
       <circle cx="3.5" cy="3.5" r="1.3" fill="#A34851" opacity="0.5" />
       <circle cx={s / 2 - 1} cy="2.2" r="0.75" fill="#A34851" opacity="0.32" />
       <circle cx="2.2" cy={s / 2 - 1} r="0.75" fill="#A34851" opacity="0.32" />
-    </svg>
-  );
-}
-
-function PatternSigil() {
-  return (
-    <svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true" style={{ display: "block", margin: "0 auto 8px" }}>
-      <circle cx="14" cy="12" r="5" fill="none" stroke="#4A4F46" strokeWidth="0.8" />
-      <path d="M14 17 L14 22" stroke="#4A4F46" strokeWidth="0.8" />
-      <path d="M10 22 Q14 25 18 22" fill="none" stroke="#4A4F46" strokeWidth="0.6" />
-      <circle cx="14" cy="8" r="1" fill="#4A4F46" />
-    </svg>
-  );
-}
-
-function ShadowSigil() {
-  return (
-    <svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true" style={{ display: "block", margin: "0 auto 8px" }}>
-      <path d="M14 4 L18 10 L14 24 L10 10 Z" fill="none" stroke="#4A4F46" strokeWidth="0.8" />
-      <circle cx="14" cy="12" r="2" fill="#4A4F46" />
     </svg>
   );
 }
@@ -192,6 +175,13 @@ export default function PatternSection() {
   const padaRoman = PADA_ROMAN[pada] ?? String(pada);
   const traits    = [identity.emotionalLine, identity.decisionLine, identity.patternLine];
 
+  const patternTypeMap: Record<string, PatternType> = {
+    catalyst: "action",
+    steward: "stability",
+    seeker: "growth",
+  };
+  const patternType: PatternType = patternTypeMap[archetypeKey] || "growth";
+
   const childAnim = (delay: number) => ({
     hidden: { opacity: 0, y: shouldReduce ? 0 : 20 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.5, delay, ease: EASE } },
@@ -310,7 +300,7 @@ export default function PatternSection() {
                   </div>
 
                   <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", padding: "1.5rem clamp(8px, 3vw, 24px)", overflow: "hidden" }}>
-                    <PatternSigil />
+                    <Sigil type={patternType} />
                     <p style={{ fontFamily: "var(--font-inter-var)", fontSize: "8px", textTransform: "uppercase", letterSpacing: "0.3em", color: "#8A7240", margin: 0, opacity: 0.8, fontWeight: 300 }}>
                       your patterns
                     </p>
@@ -348,7 +338,7 @@ export default function PatternSection() {
                   textAlign: "center", padding: "1rem 32px", gap: "2px",
                   position: "relative", zIndex: 1,
                 }}>
-                  <ShadowSigil />
+                  <Sigil type="shadow" />
                   <span style={{ fontFamily: "var(--font-inter-var), sans-serif", fontStyle: "italic", fontWeight: 300, fontSize: "0.85rem", letterSpacing: "0.12em", color: "#7A2010", opacity: 0.85, textTransform: "lowercase" }}>
                     shadow
                   </span>
