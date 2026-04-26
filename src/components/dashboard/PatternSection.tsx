@@ -3,10 +3,7 @@
 import { useState, useRef } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { useUser } from "@/context/UserContext";
-import Sigil from "@/components/ui/Sigils";
 import { toPng } from "html-to-image";
-
-type PatternType = "growth" | "shadow" | "stability" | "action";
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
@@ -116,7 +113,7 @@ const FACE_BASE: React.CSSProperties = {
 // Inner wrapper handles all visual chrome without touching the compositing layer.
 const FACE_CLIP: React.CSSProperties = {
   ...FACE_BASE,
-  overflow: "visible",
+  overflow: "hidden",
 };
 
 const INNER_FRAME: React.CSSProperties = {
@@ -190,13 +187,6 @@ export default function PatternSection() {
   const pada      = chart.moonNakshatraPada;
   const padaRoman = PADA_ROMAN[pada] ?? String(pada);
   const traits    = [identity.emotionalLine, identity.decisionLine, identity.patternLine];
-
-  const patternTypeMap: Record<string, PatternType> = {
-    catalyst: "action",
-    steward: "stability",
-    seeker: "growth",
-  };
-  const patternType: PatternType = patternTypeMap[archetypeKey] || "growth";
 
   const childAnim = (delay: number) => ({
     hidden: { opacity: 0, y: shouldReduce ? 0 : 20 },
@@ -315,11 +305,8 @@ export default function PatternSection() {
                     </span>
                   </div>
 
-                  <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", padding: "1rem clamp(8px, 3vw, 24px)", overflow: "visible", position: "relative", zIndex: 10 }}>
-                    <div style={{ position: "relative", zIndex: 10 }}>
-                      <Sigil type={patternType} />
-                    </div>
-                    <p style={{ fontFamily: "var(--font-inter-var)", fontSize: "8px", textTransform: "uppercase", letterSpacing: "0.3em", color: "#8A7240", margin: "1.5rem 0 0", opacity: 0.8, fontWeight: 300 }}>
+                  <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", padding: "2rem clamp(8px, 3vw, 24px)", overflow: "visible" }}>
+                    <p style={{ fontFamily: "var(--font-inter-var)", fontSize: "8px", textTransform: "uppercase", letterSpacing: "0.3em", color: "#8A7240", margin: 0, opacity: 0.8, fontWeight: 300 }}>
                       your patterns
                     </p>
                     <p style={{ fontFamily: "var(--font-playfair-display), Georgia, serif", fontStyle: "italic", fontSize: "clamp(0.65rem, 1.3vw, 0.75rem)", color: "#7A7469", margin: "6px 0 0", opacity: 0.6, letterSpacing: "0.06em", fontWeight: 300 }}>
