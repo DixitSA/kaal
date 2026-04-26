@@ -256,23 +256,7 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
   const iconStyle: CSSProperties = { position: "absolute", bottom: "9px", color: "#9C9488", pointerEvents: "none", display: "flex", alignItems: "center", zIndex: 1 };
 
   return (
-    <>
-      <style>{`
-        @media (max-width: 767px) {
-          .birth-form-card input {
-            font-size: 16px !important;
-          }
-        }
-        .birth-form-card input[type=number]::-webkit-inner-spin-button,
-        .birth-form-card input[type=number]::-webkit-outer-spin-button {
-          -webkit-appearance: none;
-          margin: 0;
-        }
-        .birth-form-card input[type=number] {
-          -moz-appearance: textfield;
-        }
-      `}</style>
-      <form
+    <form
       onSubmit={handleSubmit}
       noValidate
       className="birth-form-card landing-form"
@@ -484,6 +468,5 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
       </motion.div>
 
     </form>
-    </>
   );
 }

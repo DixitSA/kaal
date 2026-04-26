@@ -342,4 +342,19 @@ a {
     grid-template-columns: 1fr !important;
     gap: 20px !important;
   }
+
+  /* 3. Mobile form inputs — prevent iOS auto-zoom on focus */
+  .birth-form-card input {
+    font-size: 16px !important;
+  }
+
+  /* 4. Number input spinners — kill browser chrome */
+  .birth-form-card input[type=number]::-webkit-inner-spin-button,
+  .birth-form-card input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  .birth-form-card input[type=number] {
+    -moz-appearance: textfield;
+  }
 }
