@@ -63,10 +63,12 @@ export default function PhaseSection() {
         variants={childAnim(0)}
         style={{
           display: "flex",
-          alignItems: "center",
+          alignItems: "baseline",
           justifyContent: "space-between",
           paddingRight: "4px",
-          marginBottom: "4px",
+          paddingBottom: "10px",
+          borderBottom: "1px solid rgba(61,52,40,0.12)",
+          marginBottom: "1rem",
         }}
       >
         <p className="tracking-[0.2em]" style={{ color: "#786030", fontFamily: "var(--font-inter-var)", fontSize: "14px", fontWeight: 500, textTransform: "lowercase", margin: 0 }}>

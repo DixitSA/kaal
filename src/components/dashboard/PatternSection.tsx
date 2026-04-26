@@ -279,19 +279,19 @@ export default function PatternSection() {
                     </span>
                   </div>
 
-                  <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", padding: "1.5rem clamp(8px, 3vw, 24px)", overflow: "hidden" }}>
-                    <p style={{ fontFamily: "var(--font-inter-var)", fontSize: "10px", textTransform: "uppercase", letterSpacing: "0.26em", color: "#8A7240", margin: 0, opacity: 0.8, fontWeight: 300 }}>
+                  <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", padding: "2rem clamp(8px, 3vw, 24px)", overflow: "hidden" }}>
+                    <p style={{ fontFamily: "var(--font-inter-var)", fontSize: "8px", textTransform: "uppercase", letterSpacing: "0.3em", color: "#8A7240", margin: 0, opacity: 0.8, fontWeight: 300 }}>
                       your patterns
                     </p>
-                    <p style={{ fontFamily: "var(--font-playfair-display), Georgia, serif", fontStyle: "italic", fontSize: "clamp(0.72rem, 1.4vw, 0.82rem)", color: "#7A7469", margin: "4px 0 0", opacity: 0.6, letterSpacing: "0.04em", fontWeight: 300 }}>
+                    <p style={{ fontFamily: "var(--font-playfair-display), Georgia, serif", fontStyle: "italic", fontSize: "clamp(0.65rem, 1.3vw, 0.75rem)", color: "#7A7469", margin: "6px 0 0", opacity: 0.6, letterSpacing: "0.06em", fontWeight: 300 }}>
                       {nakshatra} · pada {padaRoman}
                     </p>
-                    <p style={{ fontFamily: "var(--font-playfair-display)", fontStyle: "italic", fontWeight: 700, fontSize: "clamp(1.1rem, 2.5vw, 1.55rem)", color: "#2C2418", lineHeight: 1.2, margin: "10px 0 1.2rem", maxWidth: "26ch" }}>
+                    <p style={{ fontFamily: "var(--font-playfair-display)", fontStyle: "italic", fontWeight: 700, fontSize: "clamp(0.9rem, 2vw, 1.25rem)", color: "#2C2418", lineHeight: 1.25, margin: "1.5rem 0 1.5rem", maxWidth: "26ch" }}>
                       {identity.core}
                     </p>
-                    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "2px" }}>
+                    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "4px" }}>
                       {traits.map((trait, i) => (
-                        <p key={i} style={{ fontFamily: "var(--font-playfair-display), Georgia, serif", fontSize: "clamp(0.88rem, 1.8vw, 1.05rem)", lineHeight: 1.6, letterSpacing: "0.02em", color: "#2C2418", margin: 0, opacity: 0.84, fontWeight: 300 }}>
+                        <p key={i} style={{ fontFamily: "var(--font-playfair-display), Georgia, serif", fontSize: "clamp(0.8rem, 1.5vw, 0.95rem)", lineHeight: 1.75, letterSpacing: "0.02em", color: "#2C2418", margin: 0, opacity: 0.84, fontWeight: 300 }}>
                           {trait.toLowerCase()}
                         </p>
                       ))}
@@ -314,13 +314,13 @@ export default function PatternSection() {
                   background: "linear-gradient(to bottom, rgba(44,36,24,0.055), rgba(44,36,24,0.09))",
                   borderTop: "1px solid rgba(163, 72, 81, 0.35)",
                   display: "flex", flexDirection: "column", alignItems: "center",
-                  textAlign: "center", padding: "1rem 32px", gap: "4px",
+                  textAlign: "center", padding: "1.5rem 32px", gap: "4px",
                   position: "relative", zIndex: 1,
                 }}>
-                  <span style={{ fontFamily: "var(--font-inter-var), sans-serif", fontStyle: "italic", fontWeight: 300, fontSize: "0.95rem", letterSpacing: "0.12em", color: "#7A2010", opacity: 0.85, textTransform: "lowercase" }}>
+                  <span style={{ fontFamily: "var(--font-inter-var), sans-serif", fontStyle: "italic", fontWeight: 300, fontSize: "0.85rem", letterSpacing: "0.12em", color: "#7A2010", opacity: 0.85, textTransform: "lowercase" }}>
                     shadow
                   </span>
-                  <p style={{ fontFamily: "var(--font-playfair-display), Georgia, serif", fontStyle: "italic", fontSize: "clamp(0.75rem, 1.5vw, 0.88rem)", lineHeight: 1.45, letterSpacing: "0.02em", color: "#2C2418", opacity: 0.6, margin: 0, maxWidth: "30ch", fontWeight: 300 }}>
+                  <p style={{ fontFamily: "var(--font-playfair-display), Georgia, serif", fontStyle: "italic", fontSize: "clamp(0.7rem, 1.4vw, 0.82rem)", lineHeight: 1.5, letterSpacing: "0.02em", color: "#2C2418", opacity: 0.6, margin: 0, maxWidth: "30ch", fontWeight: 300 }}>
                     {identity.challengeLine}
                   </p>
                 </div>

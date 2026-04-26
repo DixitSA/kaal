@@ -47,7 +47,7 @@ export default function TodaySection() {
       {/* Header row: Today + tara bala inline */}
       <motion.div
         variants={childAnim(0)}
-        style={{ display: "flex", alignItems: "center", gap: "12px", paddingBottom: "10px", borderBottom: "1px solid rgba(61,52,40,0.12)", marginBottom: "1rem" }}
+        style={{ display: "flex", alignItems: "baseline", gap: "12px", paddingBottom: "10px", borderBottom: "1px solid rgba(61,52,40,0.12)", marginBottom: "1rem" }}
       >
         <p
           className="tracking-[0.2em]"
