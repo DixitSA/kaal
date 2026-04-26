@@ -57,7 +57,7 @@ export default function TodaySection() {
         </p>
         <span style={{
           fontFamily: "var(--font-inter-var)",
-          fontSize: "11px",
+          fontSize: "12px",
           textTransform: "lowercase",
           letterSpacing: "0.06em",
           color: TARA_FAVORABLE.has(taraBala.level) ? "#5E7A5E" : "#B5563E",
