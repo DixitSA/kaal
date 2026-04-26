@@ -81,20 +81,26 @@ export default function DecisionSection() {
       </motion.p>
 
       {/* Tab bar */}
+      <style>{`
+        .decision-tab-scroll { scrollbar-width: none; -ms-overflow-style: none; }
+        .decision-tab-scroll::-webkit-scrollbar { display: none; }
+      `}</style>
       <div
+        className="decision-tab-scroll"
         style={{
           marginTop: "16px",
           borderBottom: "1px solid rgba(122, 116, 105, 0.12)",
-          overflow: "hidden",
+          overflowX: "auto",
+          WebkitOverflowScrolling: "touch",
         }}
       >
         <div
           ref={containerRef}
           role="tablist"
           aria-label="Decision categories"
-          style={{ position: "relative", display: "flex", justifyContent: "space-between", gap: "8px" }}
+          style={{ position: "relative", display: "flex", justifyContent: "flex-start", gap: "0", minWidth: "max-content" }}
         >
-          {DECISION_CATEGORIES.map((category) => (
+          {DECISION_CATEGORIES.map((category, idx) => (
             <button
               key={category}
               ref={(el) => { btnRefs.current[category] = el; }}
@@ -112,12 +118,13 @@ export default function DecisionSection() {
                 background: "none",
                 border: "none",
                 borderBottom: active === category ? "2px solid rgba(122,116,105,0.4)" : "2px solid transparent",
-                padding: "10px 4px",
+                padding: "10px 12px",
+                paddingRight: idx === DECISION_CATEGORIES.length - 1 ? "2rem" : "12px",
                 marginBottom: "-1px",
                 minHeight: "44px",
-                minWidth: "44px",
                 cursor: "pointer",
                 transition: "color 0.2s ease",
+                whiteSpace: "nowrap",
               }}
             >
               {category}
