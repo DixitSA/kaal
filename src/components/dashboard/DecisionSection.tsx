@@ -91,7 +91,9 @@ export default function DecisionSection() {
           marginTop: "16px",
           borderBottom: "1px solid rgba(122, 116, 105, 0.12)",
           overflowX: "auto",
+          overflowY: "hidden",
           WebkitOverflowScrolling: "touch",
+          touchAction: "pan-x",
         }}
       >
         <div
