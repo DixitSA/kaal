@@ -255,6 +255,8 @@ export default function PatternSection() {
                 ...FACE_CLIP,
                 background: "radial-gradient(ellipse at 50% 45%, #FDFBF3 0%, #F5F0E8 75%)",
                 display: "flex", alignItems: "center", justifyContent: "center",
+                padding: "clamp(1.5rem, 4vw, 2.5rem)",
+                boxSizing: "border-box",
               }}>
                 <CottonTexture id="cotton-front" />
                 <div style={INNER_FRAME} />
@@ -288,15 +290,17 @@ export default function PatternSection() {
                 ...FACE_CLIP,
                 background: "radial-gradient(ellipse at 50% 30%, #FDFBF3 0%, #F5F0E8 80%)",
                 display: "flex", flexDirection: "column",
+                padding: "clamp(1.5rem, 4vw, 2.5rem)",
+                boxSizing: "border-box",
               }}>
                 <CottonTexture id="cotton-back" />
                 <div style={INNER_FRAME} />
                 {CORNERS.map((c, i) => <CornerGlyph key={i} style={c} />)}
 
                 {/* Main area */}
-                <div style={{ flex: 1, display: "grid", gridTemplateColumns: "minmax(24px, 36px) 1fr minmax(24px, 36px)", minHeight: 0, position: "relative", zIndex: 1 }}>
+                <div style={{ flex: 1, display: "grid", gridTemplateColumns: "28px 1fr 28px", minHeight: 0, position: "relative", zIndex: 1 }}>
 
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "center", position: "relative" }}>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "center", position: "relative", width: "28px", flexShrink: 0 }}>
                     <div style={{ position: "absolute", inset: 0, opacity: 0.05, pointerEvents: "none" }}>
                       <JaaliStrip id="jaali-bl" />
                     </div>
@@ -305,7 +309,7 @@ export default function PatternSection() {
                     </span>
                   </div>
 
-                  <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-start", textAlign: "center", padding: "clamp(0.75rem, 3vw, 1.75rem) clamp(8px, 3vw, 20px)", overflow: "hidden" }}>
+                  <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-start", textAlign: "center", padding: "0.5rem clamp(8px, 3vw, 20px) 1rem", overflow: "hidden" }}>
                     <p style={{ fontFamily: "var(--font-inter-var)", fontSize: "8px", textTransform: "uppercase", letterSpacing: "0.3em", color: "#8A7240", margin: 0, opacity: 0.8, fontWeight: 300 }}>
                       your patterns
                     </p>
@@ -324,7 +328,7 @@ export default function PatternSection() {
                     </div>
                   </div>
 
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "center", position: "relative" }}>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "center", position: "relative", width: "28px", flexShrink: 0 }}>
                     <div style={{ position: "absolute", inset: 0, opacity: 0.05, pointerEvents: "none" }}>
                       <JaaliStrip id="jaali-br" />
                     </div>
@@ -340,8 +344,9 @@ export default function PatternSection() {
                   background: "linear-gradient(to bottom, rgba(44,36,24,0.055), rgba(44,36,24,0.09))",
                   borderTop: "1px solid rgba(163, 72, 81, 0.35)",
                   display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
-                  textAlign: "center", padding: "1.5rem clamp(16px, 4vw, 32px)", gap: "6px",
+                  textAlign: "center", padding: "1.5rem clamp(16px, 4vw, 32px) 0.5rem", gap: "6px",
                   position: "relative", zIndex: 1,
+                  boxSizing: "border-box",
                 }}>
                   <span style={{ fontFamily: "var(--font-inter-var), sans-serif", fontStyle: "italic", fontWeight: 300, fontSize: "0.85rem", letterSpacing: "0.12em", color: "#7A2010", opacity: 0.85, textTransform: "lowercase" }}>
                     shadow
