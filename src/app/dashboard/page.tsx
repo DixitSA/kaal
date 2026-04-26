@@ -12,6 +12,13 @@ import PatternSection from "@/components/dashboard/PatternSection";
 import SectionDivider from "@/components/ui/SectionDivider";
 import SettingsDropdown from "@/components/ui/SettingsDropdown";
 
+const NAV_LINKS = [
+  { label: "Current Phase", href: "#current-phase" },
+  { label: "Today", href: "#today" },
+  { label: "Decision", href: "#decision" },
+  { label: "Card", href: "#card" },
+] as const;
+
 export default function Dashboard() {
   const router = useRouter();
   const { userData, computedData, isLoading } = useUser();
@@ -39,53 +46,91 @@ export default function Dashboard() {
 
   return (
     <div style={{ minHeight: "100dvh" }} className="relative">
-      {/* Top bar */}
-      <div className="fixed top-0 left-0 right-0 z-50 pointer-events-none" style={{ backgroundColor: "#F5F0E8", padding: "2.5rem" }}>
-        <div className="flex items-center justify-between">
-          <Link
-            href="/"
+      {/* Sticky header */}
+      <header
+        style={{
+          position: "sticky",
+          top: 0,
+          zIndex: 100,
+          backgroundColor: "rgba(245,240,232,0.85)",
+          backdropFilter: "blur(10px)",
+          WebkitBackdropFilter: "blur(10px)",
+          padding: "1rem clamp(1rem, 5vw, 3rem)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
+        <Link
+          href="/"
+          style={{
+            textDecoration: "none",
+            color: "inherit",
+          }}
+        >
+          <span
             style={{
-              textDecoration: "none",
-              color: "inherit",
-              transition: "opacity 0.3s ease",
+              fontFamily: "var(--font-playfair-display)",
+              fontSize: "1.1rem",
+              fontWeight: 600,
+              color: "#2C2418",
             }}
-            onMouseOver={(e) => (e.currentTarget.style.opacity = "1")}
-            onMouseOut={(e) => (e.currentTarget.style.opacity = "0.85")}
           >
-            <span
+            Kaal
+          </span>
+        </Link>
+        <nav
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "clamp(0.5rem, 2vw, 1.5rem)",
+            overflowX: "auto",
+            maxWidth: "60vw",
+          }}
+        >
+          {NAV_LINKS.map((link) => (
+            <a
+              key={link.href}
+              href={link.href}
               style={{
                 fontFamily: "var(--font-playfair-display)",
-                fontSize: "1.1rem",
-                fontWeight: 600,
-                color: "#2C2418",
+                fontSize: "clamp(10px, 2vw, 12px)",
+                color: "#7A7469",
+                textTransform: "uppercase",
+                letterSpacing: "0.08em",
+                textDecoration: "none",
+                whiteSpace: "nowrap",
+                transition: "color 0.2s ease",
               }}
+              onMouseEnter={(e) => { e.currentTarget.style.color = "#2C2418"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.color = "#7A7469"; }}
             >
-              Kaal
-            </span>
-          </Link>
-          <div>
-            <SettingsDropdown />
-          </div>
-        </div>
-      </div>
+              {link.label}
+            </a>
+          ))}
+          <SettingsDropdown />
+        </nav>
+      </header>
 
       <main
-        className="mx-auto px-4 sm:px-6 pt-24 pb-32"
-        style={{ maxWidth: "720px" }}
+        style={{
+          maxWidth: "720px",
+          margin: "0 auto",
+          padding: "1rem clamp(1rem, 5vw, 3rem) 8rem",
+        }}
       >
-        {/* Visually hidden h1 for screen-reader heading hierarchy */}
         <h1 style={{ position: "absolute", width: "1px", height: "1px", padding: 0, margin: "-1px", overflow: "hidden", clip: "rect(0,0,0,0)", whiteSpace: "nowrap", border: 0 }}>
           Kaal — your daily vedic report
         </h1>
 
-        {/* Date stamp — grounds the reading in today */}
         <p
-          className="tracking-[0.2em] mb-12"
           style={{
             fontFamily: "var(--font-inter-var)",
             fontSize: "13px",
             color: "#7A7469",
             textTransform: "lowercase",
+            letterSpacing: "0.2em",
+            marginBottom: "3rem",
           }}
         >
           {new Date().toLocaleDateString("en-GB", {
@@ -95,15 +140,21 @@ export default function Dashboard() {
           })}
         </p>
 
-        <PhaseSection />
+        <section id="current-phase" style={{ scrollMarginTop: "80px" }}>
+          <PhaseSection />
+        </section>
         <SectionDivider />
-        <TodaySection />
+        <section id="today" style={{ scrollMarginTop: "80px" }}>
+          <TodaySection />
+        </section>
         <SectionDivider />
-        <DecisionSection />
+        <section id="decision" style={{ scrollMarginTop: "80px" }}>
+          <DecisionSection />
+        </section>
         <SectionDivider />
-        <div style={{ marginTop: "3rem" }}>
+        <section id="card" style={{ scrollMarginTop: "80px", marginTop: "3rem" }}>
           <PatternSection />
-        </div>
+        </section>
       </main>
     </div>
   );
