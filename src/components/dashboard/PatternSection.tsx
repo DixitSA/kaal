@@ -235,13 +235,7 @@ export default function PatternSection() {
           >
 
             {/* ════════════════ FRONT ════════════════ */}
-            {/*
-              Outer shell: ONLY backfaceVisibility + explicit rotateY(0deg).
-              No overflow, no border, no background — those force flat 2D GPU
-              compositing and break backfaceVisibility:hidden in Chrome.
-            */}
             <div style={{ ...FACE_BASE, transform: "rotateY(0deg)" }}>
-              {/* Inner clip: safe to have overflow+border here, not in the 3D shell */}
               <div style={{
                 ...FACE_CLIP,
                 background: "radial-gradient(ellipse at 50% 45%, #FDFBF3 0%, #F5F0E8 75%)",
@@ -282,10 +276,11 @@ export default function PatternSection() {
                 <CottonTexture id="cotton-back" />
                 {CORNERS.map((c, i) => <CornerGlyph key={i} style={c} />)}
 
-                {/* Main area */}
+                {/* Top Section: Rigid 3-Column Layout */}
                 <div style={{ flex: 1, display: "flex", width: "100%", minHeight: 0, position: "relative", zIndex: 1 }}>
 
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "center", position: "relative", width: "3rem", flexShrink: 0, borderRight: "1px solid rgba(44,36,24,0.15)" }}>
+                  {/* Left Sidebar (Vedic Blueprint) */}
+                  <div style={{ width: "48px", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", borderRight: "1px solid rgba(44,36,24,0.15)", position: "relative" }}>
                     <div style={{ position: "absolute", inset: 0, opacity: 0.05, pointerEvents: "none" }}>
                       <JaaliStrip id="jaali-bl" />
                     </div>
@@ -294,26 +289,31 @@ export default function PatternSection() {
                     </span>
                   </div>
 
-                  <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-start", textAlign: "center", padding: "1.5rem 1rem", overflow: "hidden" }}>
-                    <p style={{ fontFamily: "var(--font-inter-var)", fontSize: "8px", textTransform: "uppercase", letterSpacing: "0.3em", color: "#8A7240", margin: 0, opacity: 0.8, fontWeight: 300 }}>
-                      your patterns
-                    </p>
-                    <p style={{ fontFamily: "var(--font-playfair-display), Georgia, serif", fontStyle: "italic", fontSize: "clamp(0.65rem, 1.3vw, 0.75rem)", color: "#7A7469", margin: "6px 0 0", opacity: 0.6, letterSpacing: "0.06em", fontWeight: 300 }}>
-                      {nakshatra} · pada {padaRoman}
-                    </p>
-                    <p style={{ fontFamily: "var(--font-playfair-display)", fontStyle: "italic", fontWeight: 700, fontSize: "clamp(0.9rem, 2vw, 1.25rem)", color: "#2C2418", lineHeight: 1.25, margin: "clamp(0.75rem, 2vw, 1.5rem) 0", maxWidth: "26ch" }}>
-                      {identity.core}
-                    </p>
-                    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "4px" }}>
-                      {traits.map((trait, i) => (
-                        <p key={i} style={{ fontFamily: "var(--font-playfair-display), Georgia, serif", fontSize: "clamp(0.78rem, 1.5vw, 0.95rem)", lineHeight: 1.45, letterSpacing: "0.02em", color: "#2C2418", margin: 0, opacity: 0.84, fontWeight: 300 }}>
-                          {trait.toLowerCase()}
-                        </p>
-                      ))}
+                  {/* Center Lane (Main Content) */}
+                  <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", padding: "2rem 0", overflow: "hidden" }}>
+                    {/* Content Protection Wrapper */}
+                    <div style={{ width: "100%", padding: "0 1rem", display: "flex", flexDirection: "column", alignItems: "center" }}>
+                      <p style={{ fontFamily: "var(--font-inter-var)", fontSize: "8px", textTransform: "uppercase", letterSpacing: "0.3em", color: "#8A7240", margin: 0, opacity: 0.8, fontWeight: 300 }}>
+                        your patterns
+                      </p>
+                      <p style={{ fontFamily: "var(--font-playfair-display), Georgia, serif", fontStyle: "italic", fontSize: "clamp(0.65rem, 1.3vw, 0.75rem)", color: "#7A7469", margin: "6px 0 0", opacity: 0.6, letterSpacing: "0.06em", fontWeight: 300 }}>
+                        {nakshatra} · pada {padaRoman}
+                      </p>
+                      <p style={{ fontFamily: "var(--font-playfair-display)", fontStyle: "italic", fontWeight: 700, fontSize: "clamp(0.9rem, 2vw, 1.25rem)", color: "#2C2418", lineHeight: 1.25, margin: "clamp(0.75rem, 2vw, 1.5rem) 0", maxWidth: "26ch" }}>
+                        {identity.core}
+                      </p>
+                      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "4px" }}>
+                        {traits.map((trait, i) => (
+                          <p key={i} style={{ fontFamily: "var(--font-playfair-display), Georgia, serif", fontSize: "clamp(0.78rem, 1.5vw, 0.95rem)", lineHeight: 1.45, letterSpacing: "0.02em", color: "#2C2418", margin: 0, opacity: 0.84, fontWeight: 300 }}>
+                            {trait.toLowerCase()}
+                          </p>
+                        ))}
+                      </div>
                     </div>
                   </div>
 
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "center", position: "relative", width: "3rem", flexShrink: 0, borderLeft: "1px solid rgba(44,36,24,0.15)" }}>
+                  {/* Right Sidebar (Gana) */}
+                  <div style={{ width: "48px", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", borderLeft: "1px solid rgba(44,36,24,0.15)", position: "relative" }}>
                     <div style={{ position: "absolute", inset: 0, opacity: 0.05, pointerEvents: "none" }}>
                       <JaaliStrip id="jaali-br" />
                     </div>
@@ -333,13 +333,13 @@ export default function PatternSection() {
                   zIndex: 1,
                 }} />
 
-                {/* Shadow zone */}
+                {/* Shadow Section (Standalone Block) */}
                 <div style={{
                   flexShrink: 0,
                   width: "100%",
                   background: "linear-gradient(to bottom, rgba(44,36,24,0.055), rgba(44,36,24,0.09))",
                   display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
-                  textAlign: "center", padding: "2.5rem 1.5rem", gap: "6px",
+                  textAlign: "center", padding: "2.5rem 1rem", gap: "6px",
                   position: "relative", zIndex: 1,
                   boxSizing: "border-box",
                 }}>
