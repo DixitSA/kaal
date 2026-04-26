@@ -326,7 +326,7 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
         {/* Time of Birth — clock icon left, "I don't know" inline right */}
         <div>
           <label htmlFor="timeOfBirth" style={labelStyle}>time of birth</label>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-start", gap: "8px" }}>
+          <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "flex-start", gap: "8px" }}>
             <div style={{ position: "relative", minWidth: "120px" }}>
               <span style={{ ...iconStyle, left: 0 }}><ClockIcon /></span>
               <CeremonialInput
@@ -344,12 +344,12 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
               />
             </div>
             {/* "I don't know" inline toggle */}
-            <label htmlFor="unknownTime" style={{ display: "flex", alignItems: "center", gap: "4px", cursor: "pointer", flexShrink: 0, whiteSpace: "nowrap", fontFamily: "var(--font-inter-var), sans-serif", fontSize: "11px", fontWeight: 600, letterSpacing: "1px", textTransform: "uppercase", color: "#3D3428" }}>
-              <span style={{ position: "relative", width: "18px", height: "18px", minWidth: "36px", minHeight: "36px", flexShrink: 0, display: "inline-flex", alignItems: "center", justifyContent: "center" }}>
+            <label htmlFor="unknownTime" style={{ display: "flex", alignItems: "center", gap: "3px", cursor: "pointer", flexShrink: 0, whiteSpace: "nowrap", fontFamily: "var(--font-inter-var), sans-serif", fontSize: "12px", fontWeight: 600, letterSpacing: "1px", textTransform: "uppercase", color: "#3D3428" }}>
+              <span style={{ position: "relative", width: "14px", height: "14px", minWidth: "28px", minHeight: "28px", flexShrink: 0, display: "inline-flex", alignItems: "center", justifyContent: "center" }}>
                 <input id="unknownTime" type="checkbox" checked={unknownTime} onChange={(e) => { setUnknownTime(e.target.checked); if (e.target.checked) setTimeOfBirth(""); }}
                   style={{ position: "absolute", inset: 0, margin: 0, opacity: 0, width: "100%", height: "100%", cursor: "pointer" }} />
-                <span aria-hidden="true" style={{ position: "absolute", width: "14px", height: "14px", borderRadius: "50%", border: `1px solid ${unknownTime ? "#B5563E" : "#5C574F"}`, backgroundColor: unknownTime ? "#B5563E" : "transparent", transition: "background-color 0.18s ease, border-color 0.18s ease", display: "flex", alignItems: "center", justifyContent: "center", pointerEvents: "none" }}>
-                  {unknownTime && <span style={{ width: "5px", height: "5px", borderRadius: "50%", backgroundColor: "#F5F0E8", display: "block" }} />}
+                <span aria-hidden="true" style={{ position: "absolute", width: "12px", height: "12px", borderRadius: "50%", border: `1px solid ${unknownTime ? "#B5563E" : "#5C574F"}`, backgroundColor: unknownTime ? "#B5563E" : "transparent", transition: "background-color 0.18s ease, border-color 0.18s ease", display: "flex", alignItems: "center", justifyContent: "center", pointerEvents: "none" }}>
+                  {unknownTime && <span style={{ width: "4px", height: "4px", borderRadius: "50%", backgroundColor: "#F5F0E8", display: "block" }} />}
                 </span>
               </span>
               i don&apos;t know

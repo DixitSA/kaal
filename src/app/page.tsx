@@ -49,33 +49,33 @@ export default function LandingPage() {
     <div style={{ minHeight: "100dvh", background: "radial-gradient(ellipse at center, #FDFCF6 0%, #F2EFDF 100%)", boxShadow: "inset 0 0 200px rgba(44, 36, 24, 0.10)" }}>
 
       {/* Star chart texture — antique constellation watermark */}
-      <div aria-hidden="true" style={{ position: "fixed", inset: 0, pointerEvents: "none", zIndex: 0, opacity: 0.15 }}>
+      <div aria-hidden="true" style={{ position: "fixed", inset: 0, pointerEvents: "none", zIndex: 0, opacity: 0.25 }}>
         <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <pattern id="star-chart" x="0" y="0" width="200" height="200" patternUnits="userSpaceOnUse">
               {/* Stars — varying radii for depth */}
-              <circle cx="30" cy="25" r="0.9" fill="#2C2418" />
-              <circle cx="80" cy="58" r="1.1" fill="#2C2418" />
-              <circle cx="142" cy="38" r="0.7" fill="#2C2418" />
-              <circle cx="168" cy="82" r="1.0" fill="#2C2418" />
-              <circle cx="52" cy="118" r="0.8" fill="#2C2418" />
-              <circle cx="112" cy="98" r="1.2" fill="#2C2418" />
-              <circle cx="157" cy="143" r="0.9" fill="#2C2418" />
-              <circle cx="28" cy="168" r="0.7" fill="#2C2418" />
-              <circle cx="92" cy="178" r="1.0" fill="#2C2418" />
-              <circle cx="174" cy="162" r="0.8" fill="#2C2418" />
+              <circle cx="30" cy="25" r="0.9" fill="#3E3E3E" />
+              <circle cx="80" cy="58" r="1.1" fill="#3E3E3E" />
+              <circle cx="142" cy="38" r="0.7" fill="#3E3E3E" />
+              <circle cx="168" cy="82" r="1.0" fill="#3E3E3E" />
+              <circle cx="52" cy="118" r="0.8" fill="#3E3E3E" />
+              <circle cx="112" cy="98" r="1.2" fill="#3E3E3E" />
+              <circle cx="157" cy="143" r="0.9" fill="#3E3E3E" />
+              <circle cx="28" cy="168" r="0.7" fill="#3E3E3E" />
+              <circle cx="92" cy="178" r="1.0" fill="#3E3E3E" />
+              <circle cx="174" cy="162" r="0.8" fill="#3E3E3E" />
               {/* Micro dust dots */}
-              <circle cx="62" cy="44" r="0.4" fill="#2C2418" />
-              <circle cx="122" cy="68" r="0.35" fill="#2C2418" />
-              <circle cx="42" cy="88" r="0.4" fill="#2C2418" />
-              <circle cx="162" cy="122" r="0.35" fill="#2C2418" />
-              <circle cx="132" cy="158" r="0.4" fill="#2C2418" />
+              <circle cx="62" cy="44" r="0.4" fill="#3E3E3E" />
+              <circle cx="122" cy="68" r="0.35" fill="#3E3E3E" />
+              <circle cx="42" cy="88" r="0.4" fill="#3E3E3E" />
+              <circle cx="162" cy="122" r="0.35" fill="#3E3E3E" />
+              <circle cx="132" cy="158" r="0.4" fill="#3E3E3E" />
               {/* Constellation lines */}
-              <line x1="30" y1="25" x2="80" y2="58" stroke="#2C2418" strokeWidth="0.3" opacity="0.6" />
-              <line x1="80" y1="58" x2="112" y2="98" stroke="#2C2418" strokeWidth="0.3" opacity="0.6" />
-              <line x1="142" y1="38" x2="168" y2="82" stroke="#2C2418" strokeWidth="0.3" opacity="0.6" />
-              <line x1="52" y1="118" x2="112" y2="98" stroke="#2C2418" strokeWidth="0.3" opacity="0.6" />
-              <line x1="157" y1="143" x2="174" y2="162" stroke="#2C2418" strokeWidth="0.3" opacity="0.6" />
+              <line x1="30" y1="25" x2="80" y2="58" stroke="#3E3E3E" strokeWidth="1" opacity="0.4" />
+              <line x1="80" y1="58" x2="112" y2="98" stroke="#3E3E3E" strokeWidth="1" opacity="0.4" />
+              <line x1="142" y1="38" x2="168" y2="82" stroke="#3E3E3E" strokeWidth="1" opacity="0.4" />
+              <line x1="52" y1="118" x2="112" y2="98" stroke="#3E3E3E" strokeWidth="1" opacity="0.4" />
+              <line x1="157" y1="143" x2="174" y2="162" stroke="#3E3E3E" strokeWidth="1" opacity="0.4" />
             </pattern>
           </defs>
           <rect width="100%" height="100%" fill="url(#star-chart)" />
