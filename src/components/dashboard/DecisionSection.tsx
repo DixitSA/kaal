@@ -107,6 +107,11 @@ export default function DecisionSection() {
               style={{
                 fontFamily: "var(--font-inter-var)",
                 fontSize: "0.875rem",
+                background: "none",
+                border: "none",
+                borderBottom: active === category ? "1px solid rgba(122,116,105,0.4)" : "1px solid transparent",
+                paddingBottom: "6px",
+                color: active === category ? "#2C2418" : "#7A7469",
                 textTransform: "lowercase",
                 letterSpacing: "0.02em",
                 color: active === category ? "#B5563E" : "#7A7469",
@@ -147,7 +152,7 @@ export default function DecisionSection() {
         role="tabpanel"
         aria-live="polite"
         aria-atomic="true"
-        style={{ minHeight: "190px", position: "relative" }}
+        style={{ minHeight: "190px", position: "relative", paddingTop: "1.5rem" }}
       >
         <AnimatePresence mode="wait">
           <motion.div
