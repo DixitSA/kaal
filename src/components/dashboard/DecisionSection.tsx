@@ -85,8 +85,7 @@ export default function DecisionSection() {
         style={{
           marginTop: "16px",
           borderBottom: "1px solid rgba(122, 116, 105, 0.12)",
-          overflowX: "auto",
-          WebkitOverflowScrolling: "touch",
+          overflow: "hidden",
         }}
       >
         <div

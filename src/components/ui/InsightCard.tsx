@@ -86,14 +86,14 @@ export default function InsightCard({
             fontSize: "1.1rem",
             lineHeight: 1.6,
             letterSpacing: "0.02em",
-            textTransform: "lowercase",
             color: text,
             fontStyle: "normal",
             fontWeight: 400,
             margin: "6px 0 0",
+            textTransform: "none",
           }}
         >
-          {content}
+          {content.charAt(0).toUpperCase() + content.slice(1)}
         </p>
       </div>
     </div>
