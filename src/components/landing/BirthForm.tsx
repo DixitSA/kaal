@@ -292,7 +292,7 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
       <motion.div
         custom={1} variants={vars} initial="hidden" animate="visible"
         className="dob-time-grid"
-        style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "24px", alignItems: "start" }}
+        style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "24px", alignItems: "flex-end" }}
       >
         <style>{`
           @media (max-width: 767px) {
@@ -344,7 +344,7 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
               <span style={{ ...iconStyle, right: 0 }}><ClockIcon /></span>
             </div>
             {/* "I don't know" inline toggle */}
-            <label htmlFor="unknownTime" style={{ display: "flex", alignItems: "center", gap: "5px", cursor: "pointer", flexShrink: 0, whiteSpace: "nowrap", fontFamily: "var(--font-inter-var), sans-serif", fontSize: "11px", letterSpacing: "0.5px", color: "#3D3428" }}>
+            <label htmlFor="unknownTime" style={{ display: "flex", alignItems: "center", gap: "5px", cursor: "pointer", flexShrink: 0, whiteSpace: "nowrap", fontFamily: "var(--font-inter-var), sans-serif", fontSize: "11px", fontWeight: 600, letterSpacing: "1px", textTransform: "uppercase", color: "#3D3428" }}>
               <span style={{ position: "relative", width: "22px", height: "22px", minWidth: "44px", minHeight: "44px", flexShrink: 0, display: "inline-flex", alignItems: "center", justifyContent: "center" }}>
                 <input id="unknownTime" type="checkbox" checked={unknownTime} onChange={(e) => { setUnknownTime(e.target.checked); if (e.target.checked) setTimeOfBirth(""); }}
                   style={{ position: "absolute", inset: 0, margin: 0, opacity: 0, width: "100%", height: "100%", cursor: "pointer" }} />

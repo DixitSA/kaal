@@ -49,7 +49,7 @@ export default function LandingPage() {
     <div style={{ minHeight: "100dvh", background: "radial-gradient(ellipse at center, #FDFCF6 0%, #F2EFDF 100%)", boxShadow: "inset 0 0 200px rgba(44, 36, 24, 0.10)" }}>
 
       {/* Star chart texture — antique constellation watermark */}
-      <div aria-hidden="true" style={{ position: "fixed", inset: 0, pointerEvents: "none", zIndex: 0, opacity: 0.07 }}>
+      <div aria-hidden="true" style={{ position: "fixed", inset: 0, pointerEvents: "none", zIndex: 0, opacity: 0.15 }}>
         <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <pattern id="star-chart" x="0" y="0" width="200" height="200" patternUnits="userSpaceOnUse">
