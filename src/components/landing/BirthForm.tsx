@@ -111,7 +111,7 @@ const inputStyle: CSSProperties = {
   width: "100%",
   background: "transparent",
   border: "none",
-  borderBottom: "1px solid #5C574F",
+  borderBottom: "1px solid #3D3428",
   outline: "none",
   fontFamily: "var(--font-inter-var), sans-serif",
   fontSize: "15px",
@@ -205,10 +205,10 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
   }
 
   function onFocus(e: FocusEvent<HTMLInputElement>) {
-    e.target.style.borderBottom = "1px solid #5C574F";
+    e.target.style.borderBottom = "1px solid #2C2418";
   }
   function onBlur(e: FocusEvent<HTMLInputElement>, hasError: boolean) {
-    e.target.style.borderBottom = hasError ? "1px solid rgba(181,86,62,0.6)" : "1px solid #5C574F";
+    e.target.style.borderBottom = hasError ? "1px solid rgba(181,86,62,0.6)" : "1px solid #3D3428";
     e.target.style.boxShadow = "none";
   }
 
@@ -253,7 +253,7 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
   const errStyle: CSSProperties = { color: "#8B3620", fontSize: "10px", marginTop: "4px", fontFamily: "var(--font-inter-var)", letterSpacing: "0.02em" };
 
   /* ── Icon helper positioning ── */
-  const iconStyle: CSSProperties = { position: "absolute", top: "50%", transform: "translateY(-50%)", color: "#9C9488", pointerEvents: "none", display: "flex", alignItems: "center", zIndex: 1 };
+  const iconStyle: CSSProperties = { position: "absolute", top: "50%", transform: "translateY(-50%)", color: "#5C574F", pointerEvents: "none", display: "flex", alignItems: "center", zIndex: 1 };
 
   return (
     <form
@@ -326,7 +326,7 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
         {/* Time of Birth — clock icon left, "I don't know" inline right */}
         <div>
           <label htmlFor="timeOfBirth" style={labelStyle}>time of birth</label>
-          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-start", gap: "8px" }}>
             <div style={{ flex: 1, position: "relative" }}>
               <CeremonialInput
                 id="timeOfBirth" type="text" placeholder="HH:MM" value={timeOfBirth}
