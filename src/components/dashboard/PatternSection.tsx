@@ -53,6 +53,26 @@ function CornerGlyph({ style }: { style: React.CSSProperties }) {
   );
 }
 
+function PatternSigil() {
+  return (
+    <svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true" style={{ display: "block", margin: "0 auto 8px" }}>
+      <circle cx="14" cy="12" r="5" fill="none" stroke="#4A4F46" strokeWidth="0.8" />
+      <path d="M14 17 L14 22" stroke="#4A4F46" strokeWidth="0.8" />
+      <path d="M10 22 Q14 25 18 22" fill="none" stroke="#4A4F46" strokeWidth="0.6" />
+      <circle cx="14" cy="8" r="1" fill="#4A4F46" />
+    </svg>
+  );
+}
+
+function ShadowSigil() {
+  return (
+    <svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true" style={{ display: "block", margin: "0 auto 8px" }}>
+      <path d="M14 4 L18 10 L14 24 L10 10 Z" fill="none" stroke="#4A4F46" strokeWidth="0.8" />
+      <circle cx="14" cy="12" r="2" fill="#4A4F46" />
+    </svg>
+  );
+}
+
 function JaaliStrip({ id }: { id: string }) {
   return (
     <svg
@@ -151,6 +171,16 @@ export default function PatternSection() {
   const shouldReduce = useReducedMotion();
   const [flipped, setFlipped] = useState(false);
   const [hovered, setHovered] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  function handleShare() {
+    if (typeof window === "undefined") return;
+    const url = window.location.href;
+    navigator.clipboard.writeText(url).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  }
 
   if (!computedData) return null;
 
@@ -279,7 +309,8 @@ export default function PatternSection() {
                     </span>
                   </div>
 
-                  <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", padding: "2rem clamp(8px, 3vw, 24px)", overflow: "hidden" }}>
+                  <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", padding: "1.5rem clamp(8px, 3vw, 24px)", overflow: "hidden" }}>
+                    <PatternSigil />
                     <p style={{ fontFamily: "var(--font-inter-var)", fontSize: "8px", textTransform: "uppercase", letterSpacing: "0.3em", color: "#8A7240", margin: 0, opacity: 0.8, fontWeight: 300 }}>
                       your patterns
                     </p>
@@ -314,9 +345,10 @@ export default function PatternSection() {
                   background: "linear-gradient(to bottom, rgba(44,36,24,0.055), rgba(44,36,24,0.09))",
                   borderTop: "1px solid rgba(163, 72, 81, 0.35)",
                   display: "flex", flexDirection: "column", alignItems: "center",
-                  textAlign: "center", padding: "1.5rem 32px", gap: "4px",
+                  textAlign: "center", padding: "1rem 32px", gap: "2px",
                   position: "relative", zIndex: 1,
                 }}>
+                  <ShadowSigil />
                   <span style={{ fontFamily: "var(--font-inter-var), sans-serif", fontStyle: "italic", fontWeight: 300, fontSize: "0.85rem", letterSpacing: "0.12em", color: "#7A2010", opacity: 0.85, textTransform: "lowercase" }}>
                     shadow
                   </span>
@@ -330,6 +362,30 @@ export default function PatternSection() {
           </div>{/* end flip */}
         </div>{/* end outer */}
       </motion.div>{/* end portrait wrapper */}
+      
+      {/* Share button */}
+      <motion.div variants={childAnim(0.5)} style={{ textAlign: "center", marginTop: "2rem" }}>
+        <button
+          onClick={handleShare}
+          style={{
+            background: "none",
+            border: "none",
+            fontFamily: "var(--font-playfair-display)",
+            fontSize: "11px",
+            color: "#7A7469",
+            textTransform: "uppercase",
+            letterSpacing: "0.1em",
+            opacity: 0.6,
+            cursor: "pointer",
+            transition: "opacity 0.2s ease",
+            padding: "8px 16px",
+          }}
+          onMouseOver={(e) => e.currentTarget.style.opacity = "1"}
+          onMouseOut={(e) => e.currentTarget.style.opacity = "0.6"}
+        >
+          {copied ? "Link Copied" : "Share This Insight"}
+        </button>
+      </motion.div>
     </motion.section>
   );
 }

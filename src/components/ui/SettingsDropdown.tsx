@@ -28,14 +28,18 @@ export default function SettingsDropdown() {
       onMouseOut={setFaded}
       style={{
         fontFamily: "var(--font-playfair-display)",
-        fontSize: "clamp(10px, 2vw, 12px)",
+        fontSize: "11px",
         color: "#7A7469",
         textTransform: "uppercase",
-        letterSpacing: "0.08em",
+        letterSpacing: "0.1em",
         opacity: 0.6,
         cursor: "pointer",
         transition: "opacity 0.2s ease",
+        borderBottom: "1px solid transparent",
+        paddingBottom: "2px",
       }}
+      onFocus={setOpaque}
+      onBlur={setFaded}
     >
       Clear Session
     </span>
