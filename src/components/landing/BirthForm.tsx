@@ -292,7 +292,7 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
       <motion.div
         custom={1} variants={vars} initial="hidden" animate="visible"
         className="dob-time-grid"
-        style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "24px", alignItems: "flex-end" }}
+        style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "24px", alignItems: "start" }}
       >
         <style>{`
           @media (max-width: 767px) {
