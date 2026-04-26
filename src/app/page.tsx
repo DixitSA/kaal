@@ -204,7 +204,7 @@ export default function LandingPage() {
           style={{
             fontFamily: "var(--font-inter-var), sans-serif",
             fontStyle: "italic",
-            fontSize: "10px",
+            fontSize: "11px",
             color: "#9C9488",
             letterSpacing: "0.04em",
             margin: "0 0 6px",
@@ -219,11 +219,11 @@ export default function LandingPage() {
                 href="#"
                 style={{
                   fontFamily: "var(--font-inter-var), sans-serif",
-                  fontSize: "9px",
+                  fontSize: "11px",
                   color: "#9C9488",
                   letterSpacing: "0.07em",
                   textTransform: "uppercase",
-                  padding: "2px 6px",
+                  padding: "10px 12px",
                   transition: "color 0.15s ease",
                 }}
                 onMouseEnter={(e) => { (e.currentTarget).style.color = "#2C2418"; }}
@@ -232,7 +232,7 @@ export default function LandingPage() {
                 {link}
               </a>
               {i < FOOTER_LINKS.length - 1 && (
-                <span style={{ color: "rgba(122,116,105,0.3)", fontSize: "9px", userSelect: "none" }}>|</span>
+                <span style={{ color: "rgba(122,116,105,0.3)", fontSize: "11px", userSelect: "none" }}>|</span>
               )}
             </span>
           ))}
