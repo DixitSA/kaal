@@ -116,15 +116,6 @@ const FACE_CLIP: React.CSSProperties = {
   overflow: "hidden",
 };
 
-const INNER_FRAME: React.CSSProperties = {
-  position: "absolute",
-  inset: "10px",
-  border: "1px solid rgba(163, 72, 81, 0.28)",
-  borderRadius: "2px",
-  pointerEvents: "none",
-  zIndex: 0,
-};
-
 const MARGINALIA: React.CSSProperties = {
   fontFamily: "var(--font-inter-var)",
   fontSize: "0.65rem",
@@ -255,11 +246,10 @@ export default function PatternSection() {
                 ...FACE_CLIP,
                 background: "radial-gradient(ellipse at 50% 45%, #FDFBF3 0%, #F5F0E8 75%)",
                 display: "flex", alignItems: "center", justifyContent: "center",
-                padding: "clamp(1.5rem, 4vw, 2.5rem)",
+                padding: "clamp(2rem, 5vw, 3rem)",
                 boxSizing: "border-box",
               }}>
                 <CottonTexture id="cotton-front" />
-                <div style={INNER_FRAME} />
                 {CORNERS.map((c, i) => <CornerGlyph key={i} style={c} />)}
 
                 <div style={{ position: "absolute", top: 0, left: 0, width: "36px", bottom: 0, opacity: 0.05, pointerEvents: "none" }}>
@@ -290,11 +280,10 @@ export default function PatternSection() {
                 ...FACE_CLIP,
                 background: "radial-gradient(ellipse at 50% 30%, #FDFBF3 0%, #F5F0E8 80%)",
                 display: "flex", flexDirection: "column",
-                padding: "clamp(1.5rem, 4vw, 2.5rem)",
+                padding: "clamp(2rem, 5vw, 3rem)",
                 boxSizing: "border-box",
               }}>
                 <CottonTexture id="cotton-back" />
-                <div style={INNER_FRAME} />
                 {CORNERS.map((c, i) => <CornerGlyph key={i} style={c} />)}
 
                 {/* Main area */}
@@ -338,11 +327,20 @@ export default function PatternSection() {
                   </div>
                 </div>
 
+                {/* Divider Line */}
+                <div style={{
+                  height: "1px",
+                  backgroundColor: "rgba(163, 72, 81, 0.35)",
+                  margin: "0 clamp(2rem, 6vw, 4rem)",
+                  flexShrink: 0,
+                  position: "relative",
+                  zIndex: 1,
+                }} />
+
                 {/* Shadow zone */}
                 <div style={{
                   flexShrink: 0,
                   background: "linear-gradient(to bottom, rgba(44,36,24,0.055), rgba(44,36,24,0.09))",
-                  borderTop: "1px solid rgba(163, 72, 81, 0.35)",
                   display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
                   textAlign: "center", padding: "1.5rem clamp(16px, 4vw, 32px) 0.5rem", gap: "6px",
                   position: "relative", zIndex: 1,
