@@ -315,9 +315,11 @@ export default function PatternSection() {
                     </span>
                   </div>
 
-                  <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", padding: "1rem clamp(8px, 3vw, 24px)", overflow: "visible" }}>
-                    <Sigil type={patternType} />
-                    <p style={{ fontFamily: "var(--font-inter-var)", fontSize: "8px", textTransform: "uppercase", letterSpacing: "0.3em", color: "#8A7240", margin: "8px 0 0", opacity: 0.8, fontWeight: 300 }}>
+                  <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", padding: "1rem clamp(8px, 3vw, 24px)", overflow: "visible", position: "relative", zIndex: 10 }}>
+                    <div style={{ position: "relative", zIndex: 10 }}>
+                      <Sigil type={patternType} />
+                    </div>
+                    <p style={{ fontFamily: "var(--font-inter-var)", fontSize: "8px", textTransform: "uppercase", letterSpacing: "0.3em", color: "#8A7240", margin: "1.5rem 0 0", opacity: 0.8, fontWeight: 300 }}>
                       your patterns
                     </p>
                     <p style={{ fontFamily: "var(--font-playfair-display), Georgia, serif", fontStyle: "italic", fontSize: "clamp(0.65rem, 1.3vw, 0.75rem)", color: "#7A7469", margin: "6px 0 0", opacity: 0.6, letterSpacing: "0.06em", fontWeight: 300 }}>
