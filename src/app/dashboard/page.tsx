@@ -59,20 +59,44 @@ export default function Dashboard() {
   return (
     <div style={{ minHeight: "100dvh" }} className="relative">
       {/* Sticky header */}
-      <header style={{ position: "sticky", top: 0, zIndex: 100, backgroundColor: "rgba(245,240,232,0.9)", backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)", padding: "1rem clamp(1rem, 5vw, 3rem)", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-        <Link href="/" style={{ textDecoration: "none", color: "inherit" }}>
-          <span style={{ fontFamily: "var(--font-playfair-display)", fontSize: "1.1rem", fontWeight: 600, color: "#2C2418" }}>Kaal</span>
-        </Link>
-        <nav style={{ position: "absolute", left: "50%", transform: "translateX(-50%)", display: "flex", alignItems: "center", gap: "clamp(0.75rem, 3vw, 2rem)" }}>
+      <header style={{ position: "sticky", top: 0, zIndex: 100, backgroundColor: "rgba(245,240,232,0.9)", backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)" }}>
+        <style>{`
+          .dash-header-bar { display: flex; align-items: center; justify-content: space-between; padding: 1rem clamp(1rem, 5vw, 3rem); position: relative; }
+          .dash-nav { position: absolute; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: clamp(0.75rem, 3vw, 2rem); }
+          .dash-nav-mobile { display: none; justify-content: center; padding: 0.3rem 1rem 0.65rem; gap: 0; border-top: 1px solid rgba(122,116,105,0.08); }
+          @media (max-width: 768px) {
+            .dash-header-bar { padding: 0.75rem 1rem; }
+            .dash-nav { display: none; }
+            .dash-nav-mobile { display: flex; }
+          }
+        `}</style>
+        {/* Row 1: Logo + Settings — always visible */}
+        <div className="dash-header-bar">
+          <Link href="/" style={{ textDecoration: "none", color: "inherit" }}>
+            <span style={{ fontFamily: "var(--font-playfair-display)", fontSize: "1.1rem", fontWeight: 600, color: "#2C2418" }}>Kaal</span>
+          </Link>
+          {/* Desktop nav — absolutely centered */}
+          <nav className="dash-nav" aria-label="Page sections">
+            {NAV_LINKS.map((link) => (
+              <a key={link.href} href={link.href} style={{ fontFamily: "var(--font-playfair-display)", fontSize: "clamp(10px, 2vw, 12px)", color: "#7A7469", textTransform: "uppercase", letterSpacing: "0.08em", textDecoration: "none", whiteSpace: "nowrap", transition: "color 0.2s ease" }}
+                onMouseEnter={(e) => e.currentTarget.style.color = "#2C2418"}
+                onMouseLeave={(e) => e.currentTarget.style.color = "#7A7469"}>
+                {link.label}
+              </a>
+            ))}
+          </nav>
+          <SettingsDropdown />
+        </div>
+        {/* Row 2: Mobile nav — second row below logo/settings */}
+        <nav className="dash-nav-mobile" aria-label="Page sections">
           {NAV_LINKS.map((link) => (
-            <a key={link.href} href={link.href} style={{ fontFamily: "var(--font-playfair-display)", fontSize: "clamp(10px, 2vw, 12px)", color: "#7A7469", textTransform: "uppercase", letterSpacing: "0.08em", textDecoration: "none", whiteSpace: "nowrap", transition: "color 0.2s ease" }}
+            <a key={link.href} href={link.href} style={{ fontFamily: "var(--font-playfair-display)", fontSize: "9px", color: "#7A7469", textTransform: "uppercase", letterSpacing: "0.12em", textDecoration: "none", whiteSpace: "nowrap", transition: "color 0.2s ease", padding: "8px 12px" }}
               onMouseEnter={(e) => e.currentTarget.style.color = "#2C2418"}
               onMouseLeave={(e) => e.currentTarget.style.color = "#7A7469"}>
               {link.label}
             </a>
           ))}
         </nav>
-        <SettingsDropdown />
       </header>
 
       <main style={{ maxWidth: "720px", margin: "0 auto", padding: "0 clamp(1rem, 5vw, 3rem) 8rem" }}>
