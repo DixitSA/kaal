@@ -339,8 +339,8 @@ export default function PatternSection() {
                   flexShrink: 0,
                   background: "linear-gradient(to bottom, rgba(44,36,24,0.055), rgba(44,36,24,0.09))",
                   borderTop: "1px solid rgba(163, 72, 81, 0.35)",
-                  display: "flex", flexDirection: "column", alignItems: "center",
-                  textAlign: "center", padding: "clamp(0.5rem, 2vw, 1rem) clamp(16px, 4vw, 32px)", gap: "2px",
+                  display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+                  textAlign: "center", padding: "1.5rem clamp(16px, 4vw, 32px)", gap: "6px",
                   position: "relative", zIndex: 1,
                 }}>
                   <span style={{ fontFamily: "var(--font-inter-var), sans-serif", fontStyle: "italic", fontWeight: 300, fontSize: "0.85rem", letterSpacing: "0.12em", color: "#7A2010", opacity: 0.85, textTransform: "lowercase" }}>
