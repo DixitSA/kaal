@@ -54,7 +54,7 @@ export default function LandingPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            style={{ fontFamily: "var(--font-playfair-display)", fontSize: "1.1rem", fontStyle: "italic", color: "#2C2418", opacity: 0.85, maxWidth: "auto" }}
+            style={{ fontFamily: "var(--font-playfair-display)", fontSize: "1.1rem", fontWeight: 600, color: "#2C2418", maxWidth: "auto" }}
           >
             Kaal
           </motion.div>
