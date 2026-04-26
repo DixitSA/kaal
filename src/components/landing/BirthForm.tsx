@@ -253,7 +253,7 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
   const errStyle: CSSProperties = { color: "#8B3620", fontSize: "10px", marginTop: "4px", fontFamily: "var(--font-inter-var)", letterSpacing: "0.02em" };
 
   /* ── Icon helper positioning ── */
-  const iconStyle: CSSProperties = { position: "absolute", bottom: "9px", color: "#9C9488", pointerEvents: "none", display: "flex", alignItems: "center", zIndex: 1 };
+  const iconStyle: CSSProperties = { position: "absolute", top: "50%", transform: "translateY(-50%)", color: "#9C9488", pointerEvents: "none", display: "flex", alignItems: "center", zIndex: 1 };
 
   return (
     <form
@@ -326,7 +326,7 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
         {/* Time of Birth — clock icon left, "I don't know" inline right */}
         <div>
           <label htmlFor="timeOfBirth" style={labelStyle}>time of birth</label>
-          <div style={{ display: "flex", alignItems: "flex-end", gap: "10px" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
             <div style={{ flex: 1, position: "relative" }}>
               <CeremonialInput
                 id="timeOfBirth" type="text" placeholder="HH:MM" value={timeOfBirth}
@@ -344,7 +344,7 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
               <span style={{ ...iconStyle, right: 0 }}><ClockIcon /></span>
             </div>
             {/* "I don't know" inline toggle */}
-            <label htmlFor="unknownTime" style={{ display: "flex", alignItems: "center", gap: "5px", paddingBottom: "8px", cursor: "pointer", flexShrink: 0, whiteSpace: "nowrap", fontFamily: "var(--font-inter-var), sans-serif", fontSize: "11px", letterSpacing: "0.5px", color: "#3D3428" }}>
+            <label htmlFor="unknownTime" style={{ display: "flex", alignItems: "center", gap: "5px", cursor: "pointer", flexShrink: 0, whiteSpace: "nowrap", fontFamily: "var(--font-inter-var), sans-serif", fontSize: "11px", letterSpacing: "0.5px", color: "#3D3428" }}>
               <span style={{ position: "relative", width: "22px", height: "22px", minWidth: "44px", minHeight: "44px", flexShrink: 0, display: "inline-flex", alignItems: "center", justifyContent: "center" }}>
                 <input id="unknownTime" type="checkbox" checked={unknownTime} onChange={(e) => { setUnknownTime(e.target.checked); if (e.target.checked) setTimeOfBirth(""); }}
                   style={{ position: "absolute", inset: 0, margin: 0, opacity: 0, width: "100%", height: "100%", cursor: "pointer" }} />
@@ -368,7 +368,7 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
         <div style={{ position: "relative" }}>
           <span style={{ ...iconStyle, left: 0 }}><LocationPinIcon /></span>
           <CeremonialInput
-            id="placeOfBirth" type="text" placeholder="city, country" value={placeOfBirth}
+            id="placeOfBirth" type="text" placeholder="city, state, country" value={placeOfBirth}
             autoComplete="address-level2" onChange={(e) => handlePlaceChange(e.target.value)}
             style={{ ...inputStyle, paddingLeft: "20px" }}
             onFocus={onFocus} onBlur={(e) => { handlePlaceBlur(); onBlur(e, !!errors.place); }}
