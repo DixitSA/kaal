@@ -75,7 +75,7 @@ export default function DecisionSection() {
         viewport={{ once: true, margin: "-60px" }}
         variants={childAnim(0)}
         className="tracking-[0.2em]"
-        style={{ color: "#8A7240", fontFamily: "var(--font-inter-var)", fontSize: "14px", fontWeight: 500, textTransform: "lowercase" }}
+        style={{ color: "#8A7240", fontFamily: "var(--font-inter-var)", fontSize: "14px", fontWeight: 500, textTransform: "lowercase", paddingBottom: "10px", borderBottom: "1px solid rgba(61,52,40,0.12)", marginBottom: "1rem" }}
       >
         Decision
       </motion.p>
