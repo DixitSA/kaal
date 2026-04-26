@@ -146,10 +146,10 @@ export default function LandingPage() {
             fontFamily: "var(--font-quattrocento-sans), var(--font-inter-var), sans-serif",
             fontSize: "clamp(0.88rem, 2.2vw, 1rem)",
             fontWeight: 300,
-            color: "#7A7469",
+            color: "#5C574F",
             textAlign: "center",
-            marginTop: "20px",
-            marginBottom: "1.5rem",
+            marginTop: "12px",
+            marginBottom: "0.75rem",
             position: "relative",
             zIndex: 10,
             textTransform: "lowercase",
@@ -161,7 +161,6 @@ export default function LandingPage() {
 
         {/* Divider */}
         <motion.div
-          className="my-5"
           initial={{ opacity: 0, scaleX: 0 }}
           animate={{ opacity: 1, scaleX: 1 }}
           transition={{ delay: allWords.length * 0.1 + 0.1, duration: shouldReduce ? 0 : 1, ease: EASE }}
@@ -171,7 +170,7 @@ export default function LandingPage() {
         </motion.div>
 
         {/* Form */}
-        <div style={{ width: "100%" }}>
+        <div style={{ width: "100%", marginTop: "1rem" }}>
           <BirthForm fieldVariants={fieldVariants} shouldReduce={!!shouldReduce} />
         </div>
       </div>

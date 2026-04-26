@@ -97,14 +97,13 @@ function CeremonialInput({ id, type, placeholder, value, onChange, autoComplete,
 /* ─── Styles ─────────────────────────────────────────────────── */
 const labelStyle: CSSProperties = {
   fontFamily: "var(--font-inter-var), sans-serif",
-  fontSize: "10px",
+  fontSize: "11px",
   textTransform: "uppercase",
   letterSpacing: "1px",
-  color: "#2C2418",
+  color: "#3D3428",
   display: "block",
   marginBottom: "10px",
   fontWeight: 600,
-  opacity: 0.5,
   textAlign: "left",
 };
 
@@ -112,10 +111,10 @@ const inputStyle: CSSProperties = {
   width: "100%",
   background: "transparent",
   border: "none",
-  borderBottom: "1px solid rgba(0, 0, 0, 0.12)",
+  borderBottom: "1px solid #5C574F",
   outline: "none",
   fontFamily: "var(--font-inter-var), sans-serif",
-  fontSize: "14px",
+  fontSize: "15px",
   color: "#2C2418",
   padding: 0,
   paddingBottom: "8px",
@@ -206,10 +205,10 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
   }
 
   function onFocus(e: FocusEvent<HTMLInputElement>) {
-    e.target.style.borderBottom = "1px solid #A34851";
+    e.target.style.borderBottom = "1px solid #5C574F";
   }
   function onBlur(e: FocusEvent<HTMLInputElement>, hasError: boolean) {
-    e.target.style.borderBottom = hasError ? "1px solid rgba(181,86,62,0.4)" : "1px solid rgba(0,0,0,0.12)";
+    e.target.style.borderBottom = hasError ? "1px solid rgba(181,86,62,0.6)" : "1px solid #5C574F";
     e.target.style.boxShadow = "none";
   }
 
@@ -257,7 +256,15 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
   const iconStyle: CSSProperties = { position: "absolute", bottom: "9px", color: "#9C9488", pointerEvents: "none", display: "flex", alignItems: "center", zIndex: 1 };
 
   return (
-    <form
+    <>
+      <style>{`
+        @media (max-width: 767px) {
+          .birth-form-card input {
+            font-size: 16px !important;
+          }
+        }
+      `}</style>
+      <form
       onSubmit={handleSubmit}
       noValidate
       className="birth-form-card landing-form"
@@ -289,12 +296,17 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
         {errors.name && <p id="name-error" role="alert" style={errStyle}>{errors.name}</p>}
       </motion.div>
 
-      {/* ── Date of Birth + Time of Birth — 2 columns ── */}
+      {/* ── Date of Birth + Time of Birth — 2 columns, stacked on mobile ── */}
       <motion.div
         custom={1} variants={vars} initial="hidden" animate="visible"
         className="dob-time-grid"
         style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "24px", alignItems: "start" }}
       >
+        <style>{`
+          @media (max-width: 767px) {
+            .dob-time-grid { grid-template-columns: 1fr !important; }
+          }
+        `}</style>
         {/* Date of Birth — calendar icon right */}
         <div>
           <label htmlFor="dob" style={labelStyle}>date of birth</label>
@@ -340,12 +352,12 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
               <span style={{ ...iconStyle, right: 0 }}><ClockIcon /></span>
             </div>
             {/* "I don't know" inline toggle */}
-            <label htmlFor="unknownTime" style={{ display: "flex", alignItems: "center", gap: "5px", paddingBottom: "8px", cursor: "pointer", flexShrink: 0, whiteSpace: "nowrap", fontFamily: "var(--font-inter-var), sans-serif", fontSize: "10px", letterSpacing: "0.5px", color: "#2C2418", opacity: 0.5 }}>
-              <span style={{ position: "relative", width: "13px", height: "13px", flexShrink: 0, display: "inline-flex" }}>
+            <label htmlFor="unknownTime" style={{ display: "flex", alignItems: "center", gap: "5px", paddingBottom: "8px", cursor: "pointer", flexShrink: 0, whiteSpace: "nowrap", fontFamily: "var(--font-inter-var), sans-serif", fontSize: "11px", letterSpacing: "0.5px", color: "#3D3428" }}>
+              <span style={{ position: "relative", width: "22px", height: "22px", minWidth: "44px", minHeight: "44px", flexShrink: 0, display: "inline-flex", alignItems: "center", justifyContent: "center" }}>
                 <input id="unknownTime" type="checkbox" checked={unknownTime} onChange={(e) => { setUnknownTime(e.target.checked); if (e.target.checked) setTimeOfBirth(""); }}
                   style={{ position: "absolute", inset: 0, margin: 0, opacity: 0, width: "100%", height: "100%", cursor: "pointer" }} />
-                <span aria-hidden="true" style={{ position: "absolute", inset: 0, borderRadius: "50%", border: `1px solid ${unknownTime ? "#B5563E" : "rgba(122,116,105,0.5)"}`, backgroundColor: unknownTime ? "#B5563E" : "transparent", transition: "background-color 0.18s ease, border-color 0.18s ease", display: "flex", alignItems: "center", justifyContent: "center", pointerEvents: "none" }}>
-                  {unknownTime && <span style={{ width: "4px", height: "4px", borderRadius: "50%", backgroundColor: "#F5F0E8", display: "block" }} />}
+                <span aria-hidden="true" style={{ position: "absolute", width: "18px", height: "18px", borderRadius: "50%", border: `1px solid ${unknownTime ? "#B5563E" : "#5C574F"}`, backgroundColor: unknownTime ? "#B5563E" : "transparent", transition: "background-color 0.18s ease, border-color 0.18s ease", display: "flex", alignItems: "center", justifyContent: "center", pointerEvents: "none" }}>
+                  {unknownTime && <span style={{ width: "6px", height: "6px", borderRadius: "50%", backgroundColor: "#F5F0E8", display: "block" }} />}
                 </span>
               </span>
               i don&apos;t know
