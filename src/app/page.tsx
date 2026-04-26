@@ -46,7 +46,7 @@ export default function LandingPage() {
   };
 
   return (
-    <>
+    <div style={{ minHeight: "100dvh", background: "radial-gradient(ellipse at center, #FDFCF6 0%, #F2EFDF 100%)", boxShadow: "inset 0 0 200px rgba(44, 36, 24, 0.10)" }}>
       {/* Header — logo anchor */}
       <header style={{ display: "flex", justifyContent: "flex-start", alignItems: "center", padding: "2.5rem" }}>
         <a href="/" style={{ textDecoration: "none", color: "inherit" }}>
@@ -54,7 +54,7 @@ export default function LandingPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            style={{ fontFamily: "var(--font-playfair-display)", fontSize: "1.1rem", fontWeight: 600, color: "#2C2418", maxWidth: "auto" }}
+            style={{ fontFamily: "var(--font-playfair-display)", fontSize: "1.1rem", fontWeight: 600, color: "#2C2418" }}
           >
             Kaal
           </motion.div>
@@ -64,11 +64,8 @@ export default function LandingPage() {
       <main
         className="flex items-start sm:items-center justify-center px-4 sm:px-6 relative"
         style={{
-          minHeight: "100dvh",
           paddingTop: "4rem",
           paddingBottom: "96px",
-          background: "radial-gradient(ellipse at center, #FDFCF6 0%, #F2EFDF 100%)",
-          boxShadow: "inset 0 0 200px rgba(44, 36, 24, 0.10)",
         }}
       >
         {/* Grain texture */}
@@ -239,6 +236,6 @@ export default function LandingPage() {
         </nav>
       </footer>
     </main>
-    </>
+    </div>
   );
 }
