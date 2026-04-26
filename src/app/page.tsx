@@ -15,7 +15,13 @@ const headline1 = "know what's happening.".split(" ");
 const headline2 = "know what to do.".split(" ");
 const allWords = [...headline1.map(w => ({ word: w, line: 0 })), ...headline2.map(w => ({ word: w, line: 1 }))];
 
-const FOOTER_LINKS = ["Readings", "Muhurta", "Privacy", "Terms", "Methodology"] as const;
+const FOOTER_LINKS = [
+  { label: "Readings", href: "/readings" },
+  { label: "Muhurta", href: "/muhurta" },
+  { label: "Privacy", href: "/privacy" },
+  { label: "Terms", href: "/terms" },
+  { label: "Methodology", href: "/methodology" },
+] as const;
 
 export default function LandingPage() {
   const router = useRouter();
@@ -242,13 +248,13 @@ export default function LandingPage() {
             margin: "0 0 6px",
           }}
         >
-          built on vedic timing systems. © 2024 Kaal Astrology
+          built on vedic timing systems. © 2026 Kaal Astrology
         </p>
         <nav style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0", flexWrap: "wrap" }}>
           {FOOTER_LINKS.map((link, i) => (
-            <span key={link} style={{ display: "flex", alignItems: "center" }}>
+            <span key={link.href} style={{ display: "flex", alignItems: "center" }}>
               <a
-                href="#"
+                href={link.href}
                 style={{
                   fontFamily: "var(--font-inter-var), sans-serif",
                   fontSize: "11px",
@@ -256,12 +262,13 @@ export default function LandingPage() {
                   letterSpacing: "0.07em",
                   textTransform: "uppercase",
                   padding: "10px 12px",
+                  textDecoration: "none",
                   transition: "color 0.15s ease",
                 }}
                 onMouseEnter={(e) => { (e.currentTarget).style.color = "#2C2418"; }}
                 onMouseLeave={(e) => { (e.currentTarget).style.color = "#9C9488"; }}
               >
-                {link}
+                {link.label}
               </a>
               {i < FOOTER_LINKS.length - 1 && (
                 <span style={{ color: "rgba(122,116,105,0.3)", fontSize: "11px", userSelect: "none" }}>|</span>

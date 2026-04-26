@@ -40,34 +40,30 @@ export default function Dashboard() {
   return (
     <div style={{ minHeight: "100dvh" }} className="relative">
       {/* Top bar */}
-      <div className="fixed top-0 left-0 right-0 z-50 pointer-events-none" style={{ backgroundColor: "#F5F0E8" }}>
-        <div className="w-full flex items-center justify-between" style={{ padding: "1rem clamp(1rem, 5vw, 4rem) 0" }}>
-          <div className="p-4 pointer-events-auto" style={{ display: "flex", flexDirection: "column", gap: "2px", marginLeft: "-0.5rem" }}>
-            <Link
-              href="/"
+      <div className="fixed top-0 left-0 right-0 z-50 pointer-events-none" style={{ backgroundColor: "#F5F0E8", padding: "2.5rem" }}>
+        <div className="flex items-center justify-between">
+          <Link
+            href="/"
+            style={{
+              textDecoration: "none",
+              color: "inherit",
+              transition: "opacity 0.3s ease",
+            }}
+            onMouseOver={(e) => (e.currentTarget.style.opacity = "1")}
+            onMouseOut={(e) => (e.currentTarget.style.opacity = "0.85")}
+          >
+            <span
               style={{
-                textDecoration: "none",
-                color: "inherit",
-                transition: "opacity 0.3s ease",
+                fontFamily: "var(--font-playfair-display)",
+                fontSize: "1.1rem",
+                fontWeight: 600,
+                color: "#2C2418",
               }}
-              onMouseOver={(e) => (e.currentTarget.style.opacity = "1")}
-              onMouseOut={(e) => (e.currentTarget.style.opacity = "0.85")}
             >
-              <span
-                style={{
-                  fontFamily: "var(--font-playfair-display)",
-                  fontSize: "1.1rem",
-                  fontStyle: "italic",
-                  color: "#2C2418",
-                  lineHeight: 1.1,
-                  opacity: 0.85,
-                }}
-              >
-                Kaal
-              </span>
-            </Link>
-          </div>
-          <div className="pointer-events-auto">
+              Kaal
+            </span>
+          </Link>
+          <div>
             <SettingsDropdown />
           </div>
         </div>
