@@ -263,6 +263,14 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
             font-size: 16px !important;
           }
         }
+        .birth-form-card input[type=number]::-webkit-inner-spin-button,
+        .birth-form-card input[type=number]::-webkit-outer-spin-button {
+          -webkit-appearance: none;
+          margin: 0;
+        }
+        .birth-form-card input[type=number] {
+          -moz-appearance: textfield;
+        }
       `}</style>
       <form
       onSubmit={handleSubmit}
@@ -431,7 +439,7 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
                 {errors.longitude && <p id="longitude-error" role="alert" style={errStyle}>{errors.longitude}</p>}
               </div>
             </div>
-            <p style={{ color: "#9C9488", fontSize: "10px", fontFamily: "var(--font-inter-var)", lineHeight: 1.7, letterSpacing: "0.03em" }}>
+            <p style={{ color: "#6B6560", fontSize: "11px", fontFamily: "var(--font-inter-var)", lineHeight: 1.7, letterSpacing: "0.03em" }}>
               place lookup fills these automatically. adjust only if the match is wrong.
             </p>
           </div>
