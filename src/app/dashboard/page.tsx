@@ -9,7 +9,7 @@ import PhaseSection from "@/components/dashboard/PhaseSection";
 import TodaySection from "@/components/dashboard/TodaySection";
 import DecisionSection from "@/components/dashboard/DecisionSection";
 import PatternSection from "@/components/dashboard/PatternSection";
-import SectionDivider from "@/components/ui/SectionDivider";
+import VedicDivider from "@/components/ui/VedicDivider";
 import SettingsDropdown from "@/components/ui/SettingsDropdown";
 
 const CONTEMPLATIONS = [
@@ -81,11 +81,11 @@ export default function Dashboard() {
         </section>
 
         <section id="current-phase" style={{ scrollMarginTop: "80px" }}><PhaseSection /></section>
-        <SectionDivider />
+        <VedicDivider />
         <section id="today" style={{ scrollMarginTop: "80px" }}><TodaySection /></section>
-        <SectionDivider />
+        <VedicDivider />
         <section id="decision" style={{ scrollMarginTop: "80px" }}><DecisionSection /></section>
-        <SectionDivider />
+        <VedicDivider />
         <section id="card" style={{ scrollMarginTop: "80px", marginTop: "3rem" }}><PatternSection /></section>
       </main>
     </div>
