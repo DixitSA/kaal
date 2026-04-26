@@ -100,9 +100,6 @@ export default function PhaseSection() {
         </div>
       </motion.div>
 
-      {/* Visual frame rule — closes the circuit */}
-      <div style={{ height: "1px", backgroundColor: "rgba(122, 116, 105, 0.15)", marginBottom: "12px" }} />
-
       {/* Phase name */}
       <motion.h2
         variants={container}
