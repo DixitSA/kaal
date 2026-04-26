@@ -476,5 +476,6 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
       </motion.div>
 
     </form>
+    </>
   );
 }
