@@ -68,7 +68,7 @@ export default function InsightCard({
         <p
           style={{
             fontFamily: "var(--font-inter-var)",
-            fontSize: "0.75rem",
+            fontSize: "0.8rem",
             textTransform: "lowercase",
             letterSpacing: "0.12em",
             color: accent,
