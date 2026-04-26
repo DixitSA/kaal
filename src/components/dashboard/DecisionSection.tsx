@@ -75,20 +75,22 @@ export default function DecisionSection() {
         viewport={{ once: true, margin: "-60px" }}
         variants={childAnim(0)}
         className="tracking-[0.2em]"
-        style={{ color: "#8A7240", fontFamily: "var(--font-inter-var)", fontSize: "14px", fontWeight: 500, textTransform: "lowercase", paddingBottom: "10px", borderBottom: "1px solid rgba(61,52,40,0.12)", marginBottom: "1rem" }}
+        style={{ color: "#8A7240", fontFamily: "var(--font-inter-var)", fontSize: "14px", fontWeight: 500, textTransform: "lowercase", paddingBottom: "10px", borderBottom: "1px solid rgba(61,52,40,0.12)", marginBottom: "1.5rem" }}
       >
         Decision
       </motion.p>
 
-      {/* Tab bar */}
       <style>{`
         .decision-tab-scroll { scrollbar-width: none; -ms-overflow-style: none; }
         .decision-tab-scroll::-webkit-scrollbar { display: none; }
+        @media (min-width: 768px) {
+          .decision-tab-scroll { overflow-x: visible !important; }
+        }
       `}</style>
       <div
         className="decision-tab-scroll"
         style={{
-          marginTop: "16px",
+          marginTop: "24px",
           borderBottom: "1px solid rgba(122, 116, 105, 0.12)",
           overflowX: "auto",
           overflowY: "hidden",
@@ -100,6 +102,7 @@ export default function DecisionSection() {
           ref={containerRef}
           role="tablist"
           aria-label="Decision categories"
+          className="md:justify-center md:gap-x-8"
           style={{ position: "relative", display: "flex", justifyContent: "flex-start", gap: "0", minWidth: "max-content" }}
         >
           {DECISION_CATEGORIES.map((category, idx) => (
@@ -107,25 +110,24 @@ export default function DecisionSection() {
               key={category}
               ref={(el) => { btnRefs.current[category] = el; }}
               onClick={() => setActive(category)}
-              className="transition-colors"
+              className="transition-colors duration-200 ease-out"
               role="tab"
               aria-selected={active === category}
               aria-controls={`decision-panel-${category}`}
               style={{
                 fontFamily: "var(--font-inter-var)",
                 fontSize: "0.875rem",
-                color: active === category ? "#2C2418" : "#7A7469",
+                color: active === category ? "#4A4F46" : "#7A7469",
                 textTransform: "lowercase",
                 letterSpacing: "0.02em",
                 background: "none",
                 border: "none",
-                borderBottom: active === category ? "2px solid rgba(122,116,105,0.4)" : "2px solid transparent",
+                borderBottom: active === category ? "2px solid transparent" : "2px solid transparent",
                 padding: "10px 12px",
                 paddingRight: idx === DECISION_CATEGORIES.length - 1 ? "2rem" : "12px",
                 marginBottom: "-1px",
                 minHeight: "44px",
                 cursor: "pointer",
-                transition: "color 0.2s ease",
                 whiteSpace: "nowrap",
               }}
             >
@@ -140,7 +142,7 @@ export default function DecisionSection() {
               transition={{ duration: 0.25, ease: EASE }}
               style={{
                 position: "absolute",
-                bottom: "0px",
+                bottom: "-1px",
                 height: "2px",
                 backgroundColor: "#B5563E",
                 borderRadius: "1px",
