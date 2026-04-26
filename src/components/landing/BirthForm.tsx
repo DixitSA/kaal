@@ -292,20 +292,21 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
       <motion.div
         custom={1} variants={vars} initial="hidden" animate="visible"
         className="dob-time-grid"
-        style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "24px", alignItems: "start" }}
+        style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "24px", alignItems: "flex-end" }}
       >
         <style>{`
           @media (max-width: 767px) {
             .dob-time-grid { grid-template-columns: 1fr !important; }
           }
         `}</style>
-        {/* Date of Birth — calendar icon right */}
+        {/* Date of Birth — calendar icon left */}
         <div>
           <label htmlFor="dob" style={labelStyle}>date of birth</label>
           <div style={{ position: "relative" }}>
             <div aria-hidden="true" style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-50%)", pointerEvents: "none", opacity: 0.025, zIndex: 0, width: "160px", height: "160px" }}>
               <DobWatermark />
             </div>
+            <span style={{ ...iconStyle, left: 0 }}><CalendarIcon /></span>
             <CeremonialInput
               id="dob" type="text" placeholder="MM/DD/YYYY" value={dob} autoComplete="bday"
               onChange={(e) => {
@@ -314,11 +315,10 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
                 if (val.length === 5 && dob.length <= 5) val += "/";
                 if (val.length <= 10) setDob(val);
               }}
-              style={{ ...inputStyle, paddingRight: "22px" }}
+              style={{ ...inputStyle, paddingLeft: "22px" }}
               onFocus={onFocus} onBlur={(e) => onBlur(e, !!errors.dob)}
               ariaInvalid={!!errors.dob} ariaDescribedBy={errors.dob ? "dob-error" : undefined}
             />
-            <span style={{ ...iconStyle, right: 0 }}><CalendarIcon /></span>
           </div>
           {errors.dob && <p id="dob-error" role="alert" style={errStyle}>{errors.dob}</p>}
         </div>
@@ -327,7 +327,8 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
         <div>
           <label htmlFor="timeOfBirth" style={labelStyle}>time of birth</label>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-start", gap: "8px" }}>
-            <div style={{ flex: 1, position: "relative" }}>
+            <div style={{ position: "relative", minWidth: "120px" }}>
+              <span style={{ ...iconStyle, left: 0 }}><ClockIcon /></span>
               <CeremonialInput
                 id="timeOfBirth" type="text" placeholder="HH:MM" value={timeOfBirth}
                 disabled={unknownTime} autoComplete="off"
@@ -336,20 +337,19 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
                   if (val.length === 2 && !val.includes(":")) val += ":";
                   if (val.length <= 5) setTimeOfBirth(val);
                 }}
-                style={{ ...inputStyle, paddingRight: "22px", opacity: unknownTime ? 0.35 : 1, cursor: unknownTime ? "not-allowed" : "auto" }}
+                style={{ ...inputStyle, paddingLeft: "22px", width: "100%", minWidth: "120px", opacity: unknownTime ? 0.35 : 1, cursor: unknownTime ? "not-allowed" : "auto" }}
                 onFocus={(e) => { if (!unknownTime) onFocus(e); }}
                 onBlur={(e) => onBlur(e, !!errors.time)}
                 ariaInvalid={!!errors.time} ariaDescribedBy={errors.time ? "time-error" : undefined}
               />
-              <span style={{ ...iconStyle, right: 0 }}><ClockIcon /></span>
             </div>
             {/* "I don't know" inline toggle */}
-            <label htmlFor="unknownTime" style={{ display: "flex", alignItems: "center", gap: "5px", cursor: "pointer", flexShrink: 0, whiteSpace: "nowrap", fontFamily: "var(--font-inter-var), sans-serif", fontSize: "11px", fontWeight: 600, letterSpacing: "1px", textTransform: "uppercase", color: "#3D3428" }}>
-              <span style={{ position: "relative", width: "22px", height: "22px", minWidth: "44px", minHeight: "44px", flexShrink: 0, display: "inline-flex", alignItems: "center", justifyContent: "center" }}>
+            <label htmlFor="unknownTime" style={{ display: "flex", alignItems: "center", gap: "4px", cursor: "pointer", flexShrink: 0, whiteSpace: "nowrap", fontFamily: "var(--font-inter-var), sans-serif", fontSize: "11px", fontWeight: 600, letterSpacing: "1px", textTransform: "uppercase", color: "#3D3428" }}>
+              <span style={{ position: "relative", width: "18px", height: "18px", minWidth: "36px", minHeight: "36px", flexShrink: 0, display: "inline-flex", alignItems: "center", justifyContent: "center" }}>
                 <input id="unknownTime" type="checkbox" checked={unknownTime} onChange={(e) => { setUnknownTime(e.target.checked); if (e.target.checked) setTimeOfBirth(""); }}
                   style={{ position: "absolute", inset: 0, margin: 0, opacity: 0, width: "100%", height: "100%", cursor: "pointer" }} />
-                <span aria-hidden="true" style={{ position: "absolute", width: "18px", height: "18px", borderRadius: "50%", border: `1px solid ${unknownTime ? "#B5563E" : "#5C574F"}`, backgroundColor: unknownTime ? "#B5563E" : "transparent", transition: "background-color 0.18s ease, border-color 0.18s ease", display: "flex", alignItems: "center", justifyContent: "center", pointerEvents: "none" }}>
-                  {unknownTime && <span style={{ width: "6px", height: "6px", borderRadius: "50%", backgroundColor: "#F5F0E8", display: "block" }} />}
+                <span aria-hidden="true" style={{ position: "absolute", width: "14px", height: "14px", borderRadius: "50%", border: `1px solid ${unknownTime ? "#B5563E" : "#5C574F"}`, backgroundColor: unknownTime ? "#B5563E" : "transparent", transition: "background-color 0.18s ease, border-color 0.18s ease", display: "flex", alignItems: "center", justifyContent: "center", pointerEvents: "none" }}>
+                  {unknownTime && <span style={{ width: "5px", height: "5px", borderRadius: "50%", backgroundColor: "#F5F0E8", display: "block" }} />}
                 </span>
               </span>
               i don&apos;t know
