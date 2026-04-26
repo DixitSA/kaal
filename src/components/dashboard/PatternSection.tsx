@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { useUser } from "@/context/UserContext";
 import Sigil from "@/components/ui/Sigils";
+import { toPng } from "html-to-image";
 
 type PatternType = "growth" | "shadow" | "stability" | "action";
 
@@ -155,14 +156,32 @@ export default function PatternSection() {
   const [flipped, setFlipped] = useState(false);
   const [hovered, setHovered] = useState(false);
   const [copied, setCopied] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
 
-  function handleShare() {
+  function handleCopyLink() {
     if (typeof window === "undefined") return;
     const url = window.location.href;
     navigator.clipboard.writeText(url).then(() => {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     });
+  }
+
+  async function handleDownloadImage() {
+    if (!cardRef.current) return;
+    try {
+      const dataUrl = await toPng(cardRef.current, {
+        backgroundColor: "#F5F0E8",
+        pixelRatio: 2,
+        cacheBust: true,
+      });
+      const link = document.createElement("a");
+      link.download = `kaal-pattern-${Date.now()}.png`;
+      link.href = dataUrl;
+      link.click();
+    } catch (err) {
+      console.error("Failed to download image:", err);
+    }
   }
 
   if (!computedData) return null;
@@ -194,13 +213,13 @@ export default function PatternSection() {
 
       {/* Flip card — full container width, landscape */}
       <motion.div variants={childAnim(0)}>
-
         {/*
           Outer wrapper: carries perspective + shadow hover.
           MUST be a plain <div> — no Framer Motion between perspective and face divs
           or preserve-3d chain breaks and backfaceVisibility:hidden stops working.
         */}
         <div
+          ref={cardRef}
           onMouseEnter={() => { if (!shouldReduce) setHovered(true); }}
           onMouseLeave={() => { if (!shouldReduce) setHovered(false); }}
           onTouchStart={() => { if (!shouldReduce) setHovered(true); }}
@@ -353,10 +372,10 @@ export default function PatternSection() {
         </div>{/* end outer */}
       </motion.div>{/* end portrait wrapper */}
       
-      {/* Share button */}
-      <motion.div variants={childAnim(0.5)} style={{ textAlign: "center", marginTop: "2rem" }}>
+      {/* Share buttons */}
+      <motion.div variants={childAnim(0.5)} style={{ display: "flex", justifyContent: "center", gap: "1.5rem", marginTop: "2rem" }}>
         <button
-          onClick={handleShare}
+          onClick={handleCopyLink}
           style={{
             background: "none",
             border: "none",
@@ -373,7 +392,27 @@ export default function PatternSection() {
           onMouseOver={(e) => e.currentTarget.style.opacity = "1"}
           onMouseOut={(e) => e.currentTarget.style.opacity = "0.6"}
         >
-          {copied ? "Link Copied" : "Share This Insight"}
+          {copied ? "Link Copied" : "Copy Link"}
+        </button>
+        <button
+          onClick={handleDownloadImage}
+          style={{
+            background: "none",
+            border: "none",
+            fontFamily: "var(--font-playfair-display)",
+            fontSize: "11px",
+            color: "#7A7469",
+            textTransform: "uppercase",
+            letterSpacing: "0.1em",
+            opacity: 0.6,
+            cursor: "pointer",
+            transition: "opacity 0.2s ease",
+            padding: "8px 16px",
+          }}
+          onMouseOver={(e) => e.currentTarget.style.opacity = "1"}
+          onMouseOut={(e) => e.currentTarget.style.opacity = "0.6"}
+        >
+          Download Image
         </button>
       </motion.div>
     </motion.section>
