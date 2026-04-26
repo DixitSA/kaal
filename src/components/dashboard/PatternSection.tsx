@@ -280,19 +280,19 @@ export default function PatternSection() {
                 <div style={{ flex: 1, display: "flex", width: "100%", minHeight: 0, position: "relative", zIndex: 1 }}>
 
                   {/* Left Sidebar (Vedic Blueprint) */}
-                  <div style={{ width: "48px", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", borderRight: "1px solid rgba(44,36,24,0.15)", position: "relative" }}>
+                  <div style={{ width: "40px", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", borderRight: "1px solid rgba(44,36,24,0.15)", position: "relative" }}>
                     <div style={{ position: "absolute", inset: 0, opacity: 0.05, pointerEvents: "none" }}>
                       <JaaliStrip id="jaali-bl" />
                     </div>
-                    <span style={{ ...MARGINALIA, writingMode: "vertical-lr", transform: "rotate(180deg)", position: "relative" }}>
+                    <span style={{ ...MARGINALIA, writingMode: "vertical-rl", transform: "rotate(180deg)", position: "relative", whiteSpace: "nowrap" }}>
                       Vedic Blueprint
                     </span>
                   </div>
 
                   {/* Center Lane (Main Content) */}
-                  <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", padding: "2rem 0", overflow: "hidden" }}>
-                    {/* Content Protection Wrapper */}
-                    <div style={{ width: "100%", padding: "0 1rem", display: "flex", flexDirection: "column", alignItems: "center" }}>
+                  <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", padding: "2.5rem 0", overflow: "hidden" }}>
+                    {/* Content Protection Wrapper (px-6) */}
+                    <div style={{ width: "100%", padding: "0 1.5rem", display: "flex", flexDirection: "column", alignItems: "center" }}>
                       <p style={{ fontFamily: "var(--font-inter-var)", fontSize: "8px", textTransform: "uppercase", letterSpacing: "0.3em", color: "#8A7240", margin: 0, opacity: 0.8, fontWeight: 300 }}>
                         your patterns
                       </p>
@@ -313,11 +313,11 @@ export default function PatternSection() {
                   </div>
 
                   {/* Right Sidebar (Gana) */}
-                  <div style={{ width: "48px", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", borderLeft: "1px solid rgba(44,36,24,0.15)", position: "relative" }}>
+                  <div style={{ width: "40px", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", borderLeft: "1px solid rgba(44,36,24,0.15)", position: "relative" }}>
                     <div style={{ position: "absolute", inset: 0, opacity: 0.05, pointerEvents: "none" }}>
                       <JaaliStrip id="jaali-br" />
                     </div>
-                    <span style={{ ...MARGINALIA, writingMode: "vertical-lr", position: "relative" }}>
+                    <span style={{ ...MARGINALIA, writingMode: "vertical-rl", position: "relative", whiteSpace: "nowrap" }}>
                       Gana
                     </span>
                   </div>
@@ -339,7 +339,7 @@ export default function PatternSection() {
                   width: "100%",
                   background: "linear-gradient(to bottom, rgba(44,36,24,0.055), rgba(44,36,24,0.09))",
                   display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
-                  textAlign: "center", padding: "2.5rem 1rem", gap: "6px",
+                  textAlign: "center", padding: "2.5rem 1.5rem", gap: "6px",
                   position: "relative", zIndex: 1,
                   boxSizing: "border-box",
                 }}>
