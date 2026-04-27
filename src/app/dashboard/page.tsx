@@ -35,11 +35,9 @@ function getContemplation() {
 }
 
 const FOOTER_LINKS = [
-  { label: "Readings", href: "/readings" },
-  { label: "Muhurta", href: "/muhurta" },
-  { label: "Privacy", href: "/privacy" },
-  { label: "Terms", href: "/terms" },
   { label: "Methodology", href: "/methodology" },
+  { label: "Privacy", href: "/legal" },
+  { label: "Terms", href: "/legal" },
 ] as const;
 
 export default function Dashboard() {
@@ -125,7 +123,7 @@ export default function Dashboard() {
       <footer style={{ position: "relative", zIndex: 30, padding: "4rem 24px 2rem", textAlign: "center", marginTop: "8rem" }}>
         <div style={{ fontFamily: "var(--font-playfair-display)", fontSize: "0.9rem", fontStyle: "italic", color: "#2C2418", marginBottom: "6px", opacity: 0.7 }}>Kaal</div>
         <p style={{ fontFamily: "var(--font-inter-var), sans-serif", fontStyle: "italic", fontSize: "11px", color: "#9C9488", letterSpacing: "0.04em", margin: "0 0 1.5rem" }}>built on vedic timing systems. © 2026 Kaal Astrology</p>
-        <nav style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0", flexWrap: "wrap" }}>
+        <nav style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "0" }}>
           {FOOTER_LINKS.map((link, i) => (
             <span key={link.href} style={{ display: "flex", alignItems: "center" }}>
               <a href={link.href} style={{ fontFamily: "var(--font-inter-var), sans-serif", fontSize: "11px", color: "#9C9488", letterSpacing: "0.07em", textTransform: "uppercase", padding: "16px 14px", minHeight: "44px", display: "inline-flex", alignItems: "center", textDecoration: "none", transition: "color 0.15s ease" }}
