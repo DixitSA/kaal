@@ -278,7 +278,7 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
       <motion.div custom={0} variants={vars} initial="hidden" animate="visible">
         <label htmlFor="name" style={labelStyle}>full name</label>
         <CeremonialInput
-          id="name" type="text" placeholder="arjun sharma" value={name}
+          id="name" type="text" placeholder="rohan sharma" value={name}
           onChange={(e) => setName(e.target.value)} autoComplete="name"
           style={inputStyle} onFocus={onFocus} onBlur={(e) => onBlur(e, !!errors.name)}
           ariaInvalid={!!errors.name} ariaDescribedBy={errors.name ? "name-error" : undefined}
