@@ -42,6 +42,7 @@
   "exclude": [
     "node_modules",
     "kaal",
-    "kaal-backend"
+    "kaal-backend",
+    "capacitor.config.ts"
   ]
 }

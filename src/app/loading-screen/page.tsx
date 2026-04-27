@@ -133,7 +133,7 @@ export default function LoadingScreen() {
           style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "14px" }}
         >
           {/* Phase label — Playfair, crossfades between Chart / Interpretation / Dashboard */}
-          <div style={{ height: "22px", position: "relative", width: "240px", textAlign: "center" }}>
+          <div style={{ height: "22px", position: "relative", width: "min(240px, 80vw)", textAlign: "center" }}>
             <AnimatePresence mode="wait">
               <motion.span
                 key={errorMessage ? "error" : PHASE_LABELS[phase]}
@@ -146,7 +146,7 @@ export default function LoadingScreen() {
                   left: 0,
                   right: 0,
                   fontFamily: "var(--font-playfair-display)",
-                  fontSize: "15px",
+                  fontSize: "clamp(13px, 3.5vw, 15px)",
                   letterSpacing: "0.04em",
                   color: errorMessage ? "#A04040" : "#2C2418",
                 }}
@@ -159,7 +159,7 @@ export default function LoadingScreen() {
           {/* Single track bar */}
           <div
             style={{
-              width: "240px",
+              width: "min(240px, 80vw)",
               height: "1px",
               backgroundColor: "rgba(122, 116, 105, 0.2)",
               position: "relative",
@@ -224,7 +224,7 @@ export default function LoadingScreen() {
           </div>
 
           {/* Status message */}
-          <div style={{ height: "18px", position: "relative", width: "260px", textAlign: "center" }}>
+          <div style={{ height: "18px", position: "relative", width: "min(260px, 80vw)", textAlign: "center" }}>
             <AnimatePresence mode="wait">
               <motion.span
                 key={errorMessage ?? statusMessage}
@@ -237,7 +237,7 @@ export default function LoadingScreen() {
                   left: 0,
                   right: 0,
                   fontFamily: "var(--font-inter-var)",
-                  fontSize: "12px",
+                  fontSize: "14px",
                   letterSpacing: "0.03em",
                   color: errorMessage ? "#A04040" : "#7A7469",
                 }}

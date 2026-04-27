@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Playfair_Display, Inter, Quattrocento_Sans } from "next/font/google";
 import "./globals.css";
 import { UserProvider } from "@/context/UserContext";
@@ -22,6 +22,14 @@ const quattrocentoSans = Quattrocento_Sans({
   subsets: ["latin"],
   weight: ["400", "700"],
 });
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  themeColor: "#F5F0E8",
+  viewportFit: "cover",
+};
 
 export const metadata: Metadata = {
   title: "Kaal",

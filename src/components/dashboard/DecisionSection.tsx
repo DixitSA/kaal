@@ -4,7 +4,7 @@ import { useLayoutEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 
 import { useUser } from "@/context/UserContext";
-import { DECISION_CATEGORIES, type DecisionCategory, type DecisionOutcome } from "@/lib/types/engine";
+import { DECISION_CATEGORIES, DECISION_CAVEATS, type DecisionCategory, type DecisionOutcome } from "@/lib/types/engine";
 
 /** Returns true when two strings share ≥4 meaningful words (cross-section dedup). */
 function tooSimilar(a: string, b: string): boolean {
@@ -50,6 +50,8 @@ export default function DecisionSection() {
   const result = computedData.decisions[active];
   const { phase, daily } = computedData;
 
+  const shadowCaveat = Object.values(computedData.decisions).find((d) => d.shadowCaveat)?.shadowCaveat;
+
   /** Sentences already covered in Phase and Today sections — filter these out of Decision body. */
   const crossSectionContext = [
     phase.summary,
@@ -73,55 +75,66 @@ export default function DecisionSection() {
         viewport={{ once: true, margin: "-60px" }}
         variants={childAnim(0)}
         className="tracking-[0.2em]"
-        style={{ color: "#8A7240", fontFamily: "var(--font-inter-var)", fontSize: "11px", textTransform: "lowercase" }}
+        style={{ color: "#8A7240", fontFamily: "var(--font-inter-var)", fontSize: "14px", fontWeight: 500, textTransform: "lowercase", paddingBottom: "10px", borderBottom: "1px solid rgba(61,52,40,0.12)", marginBottom: "1.5rem" }}
       >
         Decision
       </motion.p>
 
-      {/* Tab bar — plain in-flow, scrolls with the page */}
+      <style>{`
+        .decision-tab-scroll { scrollbar-width: none; -ms-overflow-style: none; }
+        .decision-tab-scroll::-webkit-scrollbar { display: none; }
+        @media (min-width: 768px) {
+          .decision-tab-scroll { overflow-x: visible !important; }
+        }
+      `}</style>
       <div
+        className="decision-tab-scroll"
         style={{
-          marginTop: "16px",
+          marginTop: "24px",
           borderBottom: "1px solid rgba(122, 116, 105, 0.12)",
-          marginLeft: "-24px",
-          marginRight: "-24px",
-          paddingLeft: "24px",
-          paddingRight: "24px",
+          overflowX: "auto",
+          overflowY: "hidden",
+          WebkitOverflowScrolling: "touch",
+          touchAction: "pan-x",
         }}
       >
         <div
           ref={containerRef}
-          className="flex flex-wrap gap-x-6 gap-y-2"
           role="tablist"
           aria-label="Decision categories"
-          style={{ position: "relative" }}
+          className="md:justify-center md:gap-x-8"
+          style={{ position: "relative", display: "flex", justifyContent: "flex-start", gap: "0", minWidth: "max-content" }}
         >
-          {DECISION_CATEGORIES.map((category) => (
-            <button
+          {DECISION_CATEGORIES.map((category, idx) => (
+            <motion.button
               key={category}
               ref={(el) => { btnRefs.current[category] = el; }}
               onClick={() => setActive(category)}
-              className="transition-colors"
+              whileTap={shouldReduce ? {} : { scale: 0.97 }}
+              transition={{ duration: 0.1, ease: "easeOut" }}
+              className="transition-colors duration-200 ease-out"
               role="tab"
               aria-selected={active === category}
               aria-controls={`decision-panel-${category}`}
               style={{
                 fontFamily: "var(--font-inter-var)",
                 fontSize: "0.875rem",
+                color: active === category ? "#4A4F46" : "#7A7469",
                 textTransform: "lowercase",
                 letterSpacing: "0.02em",
-                color: active === category ? "#B5563E" : "#7A7469",
                 background: "none",
                 border: "none",
-                padding: "10px 4px",
+                borderBottom: active === category ? "2px solid transparent" : "2px solid transparent",
+                padding: "10px 12px",
+                paddingRight: idx === DECISION_CATEGORIES.length - 1 ? "2rem" : "12px",
+                marginBottom: "-1px",
                 minHeight: "44px",
-                minWidth: "44px",
                 cursor: "pointer",
-                transition: "color 0.2s ease",
+                whiteSpace: "nowrap",
               }}
             >
               {category}
-            </button>
+            </motion.button>
           ))}
 
           {/* Sliding underline */}
@@ -131,7 +144,7 @@ export default function DecisionSection() {
               transition={{ duration: 0.25, ease: EASE }}
               style={{
                 position: "absolute",
-                bottom: "0px",
+                bottom: "-1px",
                 height: "2px",
                 backgroundColor: "#B5563E",
                 borderRadius: "1px",
@@ -148,7 +161,7 @@ export default function DecisionSection() {
         role="tabpanel"
         aria-live="polite"
         aria-atomic="true"
-        style={{ minHeight: "190px", position: "relative" }}
+        style={{ minHeight: "190px", position: "relative", paddingTop: "1.5rem" }}
       >
         <AnimatePresence mode="wait">
           <motion.div
@@ -167,13 +180,14 @@ export default function DecisionSection() {
                 fontSize: "clamp(2.5rem, 6vw, 3.75rem)",
                 color: actionColors[result.outcome],
                 lineHeight: 1,
+                textAlign: "center",
               }}
             >
               {actionByOutcome[result.outcome]}
             </motion.p>
             <p
-              className="mt-4"
-              style={{ color: "#7A7469", fontFamily: "var(--font-quattrocento-sans), var(--font-inter-var), sans-serif", fontSize: "1.4rem", lineHeight: 1.5, fontStyle: "normal", letterSpacing: "0.02em", textTransform: "lowercase" }}
+              className="mt-1"
+              style={{ color: "#5C574F", fontFamily: "var(--font-quattrocento-sans), var(--font-inter-var), sans-serif", fontSize: "clamp(1rem, 3vw, 1.4rem)", lineHeight: 1.4, fontStyle: "normal", letterSpacing: "0.02em", textTransform: "lowercase", textAlign: "center" }}
             >
               {result.guidance}
             </p>
@@ -191,8 +205,8 @@ export default function DecisionSection() {
               .map((line, i) => (
                 <p
                   key={i}
-                  className="mt-1 text-sm sm:text-base"
-                  style={{ color: "#9C9488", fontFamily: "var(--font-quattrocento-sans), var(--font-inter-var), sans-serif", fontStyle: "normal", letterSpacing: "0.02em", textTransform: "lowercase", opacity: 0.6 }}
+                  className="mt-0.5"
+                  style={{ color: "#5C574F", fontFamily: "var(--font-quattrocento-sans), var(--font-inter-var), sans-serif", fontStyle: "normal", letterSpacing: "0.02em", textTransform: "lowercase", textAlign: "center" }}
                 >
                   {line}
                 </p>
@@ -201,7 +215,12 @@ export default function DecisionSection() {
             {result.shadowCaveat && (
               <div
                 style={{
-                  marginTop: "24px",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  marginTop: "48px",
+                  paddingTop: "6px",
+                  paddingBottom: "6px",
                   borderLeft: "2px solid rgba(122, 116, 105, 0.3)",
                   paddingLeft: "16px",
                   textAlign: "left",
@@ -216,9 +235,10 @@ export default function DecisionSection() {
                     textTransform: "lowercase",
                     letterSpacing: "0.02em",
                     lineHeight: 1.6,
+                    margin: 0,
                   }}
                 >
-                  {result.shadowCaveat}
+                  {DECISION_CAVEATS[active] || result.shadowCaveat}
                 </p>
               </div>
             )}

@@ -37,7 +37,7 @@ export default function InsightCard({
   const text   = bodyColor[type];
 
   return (
-    <div style={{ display: "flex", alignItems: "center" }}>
+    <div className="insight-card" style={{ display: "flex", alignItems: "stretch" }}>
       {/* Animated side bar — flex child, stretches to full card height */}
       <motion.div
         initial={{ scaleY: 0 }}
@@ -54,13 +54,21 @@ export default function InsightCard({
         }}
       />
 
-      {/* Text block — 24px gap from bar */}
-      <div style={{ paddingLeft: "24px", paddingTop: "8px", paddingBottom: "8px" }}>
+      {/* Text block — centered alignment for ceremonial aesthetic */}
+      <div style={{
+        paddingLeft: "24px",
+        paddingTop: "8px",
+        paddingBottom: "8px",
+        textAlign: "left",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+      }}>
         {/* Label */}
         <p
           style={{
             fontFamily: "var(--font-inter-var)",
-            fontSize: "0.75rem",
+            fontSize: "0.8rem",
             textTransform: "lowercase",
             letterSpacing: "0.12em",
             color: accent,
@@ -78,14 +86,14 @@ export default function InsightCard({
             fontSize: "1.1rem",
             lineHeight: 1.6,
             letterSpacing: "0.02em",
-            textTransform: "lowercase",
             color: text,
             fontStyle: "normal",
             fontWeight: 400,
             margin: "6px 0 0",
+            textTransform: "none",
           }}
         >
-          {content}
+          {content.charAt(0).toUpperCase() + content.slice(1)}
         </p>
       </div>
     </div>

@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { useUser } from "@/context/UserContext";
+import { toPng } from "html-to-image";
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
@@ -103,33 +104,23 @@ function SealGlyph() {
 // compositing — Chrome will promote such elements to a 2D GPU layer and
 // backface-visibility:hidden stops working.  Visual clipping lives on FACE_CLIP.
 const FACE_BASE: React.CSSProperties = {
-  position: "absolute",
-  inset: 0,
+  gridArea: "1 / 1",
   WebkitBackfaceVisibility: "hidden",
   backfaceVisibility: "hidden",
 };
 
 // Inner wrapper handles all visual chrome without touching the compositing layer.
 const FACE_CLIP: React.CSSProperties = {
-  position: "absolute",
-  inset: 0,
-  overflow: "hidden",
-  border: "1px solid rgba(122, 116, 105, 0.18)",
-  borderRadius: "3px",
-};
-
-const INNER_FRAME: React.CSSProperties = {
-  position: "absolute",
-  inset: "10px",
-  border: "1px solid rgba(163, 72, 81, 0.28)",
-  borderRadius: "2px",
-  pointerEvents: "none",
-  zIndex: 0,
+  position: "relative",
+  width: "100%",
+  height: "100%",
+  overflow: "clip",
+  boxSizing: "border-box",
 };
 
 const MARGINALIA: React.CSSProperties = {
   fontFamily: "var(--font-inter-var)",
-  fontSize: "0.6rem",
+  fontSize: "0.65rem",
   textTransform: "uppercase",
   letterSpacing: "0.26em",
   color: "#7A7469",
@@ -138,10 +129,10 @@ const MARGINALIA: React.CSSProperties = {
 };
 
 const CORNERS = [
-  { top: 6,    left:  6,   transform: "none" },
-  { top: 6,    right: 6,   transform: "scaleX(-1)" },
-  { bottom: 6, left:  6,   transform: "scaleY(-1)" },
-  { bottom: 6, right: 6,   transform: "scale(-1,-1)" },
+  { top: 2,    left:  2,   transform: "none" },
+  { top: 2,    right: 2,   transform: "scaleX(-1)" },
+  { bottom: 2, left:  2,   transform: "scaleY(-1)" },
+  { bottom: 2, right: 2,   transform: "scale(-1,-1)" },
 ] as const;
 
 // ─── Component ───────────────────────────────────────────────────────────────
@@ -151,6 +142,34 @@ export default function PatternSection() {
   const shouldReduce = useReducedMotion();
   const [flipped, setFlipped] = useState(false);
   const [hovered, setHovered] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  function handleCopyLink() {
+    if (typeof window === "undefined") return;
+    const url = window.location.href;
+    navigator.clipboard.writeText(url).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  }
+
+  async function handleDownloadImage() {
+    if (!cardRef.current) return;
+    try {
+      const dataUrl = await toPng(cardRef.current, {
+        backgroundColor: "#F5F0E8",
+        pixelRatio: 2,
+        cacheBust: true,
+      });
+      const link = document.createElement("a");
+      link.download = `kaal-pattern-${Date.now()}.png`;
+      link.href = dataUrl;
+      link.click();
+    } catch (err) {
+      console.error("Failed to download image:", err);
+    }
+  }
 
   if (!computedData) return null;
 
@@ -171,29 +190,31 @@ export default function PatternSection() {
 
   return (
     <motion.section initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-60px" }}>
-      <motion.div variants={childAnim(0)}>
 
+      {/* Flip card — full container width, landscape */}
+      <motion.div variants={childAnim(0)}>
         {/*
-          Outer wrapper: carries perspective + cream fill (no white flash at 90°) +
-          shadow hover via JS state + CSS transition.
-          MUST be a plain <div> — no Framer Motion here. Any motion.div between
-          perspective and the face divs will corrupt the preserve-3d chain and
-          break backface-visibility:hidden, causing bleed-through.
+          Outer wrapper: carries perspective + shadow hover.
+          MUST be a plain <div> — no Framer Motion between perspective and face divs
+          or preserve-3d chain breaks and backfaceVisibility:hidden stops working.
         */}
         <div
+          ref={cardRef}
           onMouseEnter={() => { if (!shouldReduce) setHovered(true); }}
-          onMouseLeave={() => setHovered(false)}
+          onMouseLeave={() => { if (!shouldReduce) setHovered(false); }}
+          onTouchStart={() => { if (!shouldReduce) setHovered(true); }}
+          onTouchEnd={() => { if (!shouldReduce) setHovered(false); }}
           style={{
             perspective: "1400px",
             borderRadius: "4px",
-            backgroundColor: "#F5F0E8",
+            backgroundColor: "transparent",
             boxShadow: hovered
               ? "0 20px 60px rgba(44, 36, 24, 0.13), 0 4px 16px rgba(44, 36, 24, 0.07)"
               : "0 8px 40px rgba(44, 36, 24, 0.08), 0 2px 10px rgba(44, 36, 24, 0.04)",
             transition: "box-shadow 0.3s ease",
           }}
         >
-          {/* Flip container — plain div + CSS transition only */}
+          {/* Flip container — landscape card */}
           <div
             role="button"
             aria-label={flipped ? "Flip to gana" : "Flip to pattern insights"}
@@ -202,8 +223,9 @@ export default function PatternSection() {
             onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") toggle(); }}
             style={{
               position: "relative",
+              display: "grid",
               width: "100%",
-              aspectRatio: "1.6",
+              minHeight: "clamp(320px, 55vw, 380px)",
               WebkitTransformStyle: "preserve-3d",
               transformStyle: "preserve-3d",
               transform: flipped ? "rotateY(180deg)" : "rotateY(0deg)",
@@ -211,24 +233,20 @@ export default function PatternSection() {
               cursor: "pointer",
               userSelect: "none",
               borderRadius: "3px",
+              touchAction: "manipulation",
             }}
           >
 
             {/* ════════════════ FRONT ════════════════ */}
-            {/*
-              Outer shell: ONLY backfaceVisibility + explicit rotateY(0deg).
-              No overflow, no border, no background — those force flat 2D GPU
-              compositing and break backfaceVisibility:hidden in Chrome.
-            */}
             <div style={{ ...FACE_BASE, transform: "rotateY(0deg)" }}>
-              {/* Inner clip: safe to have overflow+border here, not in the 3D shell */}
               <div style={{
                 ...FACE_CLIP,
                 background: "radial-gradient(ellipse at 50% 45%, #FDFBF3 0%, #F5F0E8 75%)",
                 display: "flex", alignItems: "center", justifyContent: "center",
+                border: "1px solid rgba(44,36,24,0.15)",
+                borderRadius: "3px",
               }}>
                 <CottonTexture id="cotton-front" />
-                <div style={INNER_FRAME} />
                 {CORNERS.map((c, i) => <CornerGlyph key={i} style={c} />)}
 
                 <div style={{ position: "absolute", top: 0, left: 0, width: "36px", bottom: 0, opacity: 0.05, pointerEvents: "none" }}>
@@ -259,65 +277,83 @@ export default function PatternSection() {
                 ...FACE_CLIP,
                 background: "radial-gradient(ellipse at 50% 30%, #FDFBF3 0%, #F5F0E8 80%)",
                 display: "flex", flexDirection: "column",
+                border: "1px solid rgba(44,36,24,0.15)",
+                borderRadius: "3px",
               }}>
                 <CottonTexture id="cotton-back" />
-                <div style={INNER_FRAME} />
                 {CORNERS.map((c, i) => <CornerGlyph key={i} style={c} />)}
 
-                {/* Main area */}
-                <div style={{ flex: 1, display: "grid", gridTemplateColumns: "36px 1fr 36px", minHeight: 0, position: "relative", zIndex: 1 }}>
+                {/* Top Section: Rigid 3-Column Layout */}
+                <div style={{ flex: 1, display: "flex", width: "100%", minHeight: 0, position: "relative", zIndex: 1 }}>
 
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "center", position: "relative" }}>
+                  {/* Left Sidebar (Vedic Blueprint) */}
+                  <div style={{ width: "48px", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", position: "relative" }}>
                     <div style={{ position: "absolute", inset: 0, opacity: 0.05, pointerEvents: "none" }}>
                       <JaaliStrip id="jaali-bl" />
                     </div>
-                    <span style={{ ...MARGINALIA, writingMode: "vertical-lr", transform: "rotate(180deg)", position: "relative" }}>
+                    <span style={{ ...MARGINALIA, writingMode: "vertical-rl", transform: "rotate(180deg)", position: "relative", whiteSpace: "nowrap" }}>
                       Vedic Blueprint
                     </span>
                   </div>
 
-                  <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", padding: "28px 8px 16px" }}>
-                    <p style={{ fontFamily: "var(--font-inter-var)", fontSize: "9px", textTransform: "uppercase", letterSpacing: "0.26em", color: "#8A7240", margin: 0, opacity: 0.8 }}>
-                      your patterns
-                    </p>
-                    <p style={{ fontFamily: "var(--font-playfair-display), Georgia, serif", fontStyle: "italic", fontSize: "clamp(0.7rem, 1.5vw, 0.82rem)", color: "#7A7469", margin: "5px 0 0", opacity: 0.6, letterSpacing: "0.04em" }}>
-                      {nakshatra} · pada {padaRoman}
-                    </p>
-                    <p style={{ fontFamily: "var(--font-playfair-display)", fontStyle: "italic", fontWeight: 700, fontSize: "clamp(1.05rem, 2.4vw, 1.55rem)", color: "#2C2418", lineHeight: 1.25, margin: "10px 0 1.8rem", maxWidth: "22ch" }}>
-                      {identity.core}
-                    </p>
-                    <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-                      {traits.map((trait, i) => (
-                        <p key={i} style={{ fontFamily: "var(--font-playfair-display), Georgia, serif", fontSize: "clamp(0.82rem, 1.7vw, 1rem)", lineHeight: 1.8, letterSpacing: "0.02em", color: "#2C2418", margin: 0, opacity: 0.84 }}>
-                          {trait.toLowerCase()}
-                        </p>
-                      ))}
+                  {/* Center Lane (Main Content) */}
+                  <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", paddingTop: "clamp(2rem, 6vw, 3rem)", paddingBottom: "2.5rem", overflow: "hidden" }}>
+                    {/* Content Protection Wrapper (px-6) */}
+                    <div style={{ width: "100%", padding: "0 1.5rem", display: "flex", flexDirection: "column", alignItems: "center" }}>
+                      <p style={{ fontFamily: "var(--font-inter-var)", fontSize: "8px", textTransform: "uppercase", letterSpacing: "0.3em", color: "#8A7240", margin: 0, opacity: 0.8, fontWeight: 300 }}>
+                        your patterns
+                      </p>
+                      <p style={{ fontFamily: "var(--font-playfair-display), Georgia, serif", fontStyle: "italic", fontSize: "clamp(0.65rem, 1.3vw, 0.75rem)", color: "#7A7469", margin: "6px 0 0", opacity: 0.6, letterSpacing: "0.06em", fontWeight: 300 }}>
+                        {nakshatra} · pada {padaRoman}
+                      </p>
+                      <p style={{ fontFamily: "var(--font-playfair-display)", fontStyle: "italic", fontWeight: 700, fontSize: "clamp(0.9rem, 2vw, 1.25rem)", color: "#2C2418", lineHeight: 1.25, margin: "clamp(0.75rem, 2vw, 1.5rem) 0", maxWidth: "26ch" }}>
+                        {identity.core}
+                      </p>
+                      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "4px" }}>
+                        {traits.map((trait, i) => (
+                          <p key={i} style={{ fontFamily: "var(--font-playfair-display), Georgia, serif", fontSize: "clamp(0.78rem, 1.5vw, 0.95rem)", lineHeight: 1.45, letterSpacing: "0.02em", color: "#2C2418", margin: 0, opacity: 0.84, fontWeight: 300 }}>
+                            {trait.toLowerCase()}
+                          </p>
+                        ))}
+                      </div>
                     </div>
                   </div>
 
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "center", position: "relative" }}>
+                  {/* Right Sidebar (Gana) */}
+                  <div style={{ width: "48px", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", position: "relative" }}>
                     <div style={{ position: "absolute", inset: 0, opacity: 0.05, pointerEvents: "none" }}>
                       <JaaliStrip id="jaali-br" />
                     </div>
-                    <span style={{ ...MARGINALIA, writingMode: "vertical-lr", position: "relative" }}>
+                    <span style={{ ...MARGINALIA, writingMode: "vertical-rl", position: "relative", whiteSpace: "nowrap" }}>
                       Gana
                     </span>
                   </div>
                 </div>
 
-                {/* Shadow zone */}
+                {/* Divider Line */}
                 <div style={{
-                  height: "25%",
+                  height: "1px",
+                  backgroundColor: "rgba(44,36,24,0.15)",
+                  width: "100%",
+                  flexShrink: 0,
+                  position: "relative",
+                  zIndex: 1,
+                }} />
+
+                {/* Shadow Section (Standalone Block) */}
+                <div style={{
+                  flexShrink: 0,
+                  width: "100%",
                   background: "linear-gradient(to bottom, rgba(44,36,24,0.055), rgba(44,36,24,0.09))",
-                  borderTop: "1px solid rgba(163, 72, 81, 0.35)",
                   display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
-                  textAlign: "center", padding: "0 52px", gap: "4px",
+                  textAlign: "center", padding: "2.5rem 1.5rem", gap: "6px",
                   position: "relative", zIndex: 1,
+                  boxSizing: "border-box",
                 }}>
-                  <span style={{ fontFamily: "var(--font-inter-var), sans-serif", fontStyle: "italic", fontWeight: 300, fontSize: "0.95rem", letterSpacing: "0.12em", color: "#7A2010", opacity: 0.85, textTransform: "lowercase" }}>
+                  <span style={{ fontFamily: "var(--font-inter-var), sans-serif", fontStyle: "italic", fontWeight: 300, fontSize: "0.85rem", letterSpacing: "0.12em", color: "#7A2010", opacity: 0.85, textTransform: "lowercase" }}>
                     shadow
                   </span>
-                  <p style={{ fontFamily: "var(--font-playfair-display), Georgia, serif", fontStyle: "italic", fontSize: "clamp(0.78rem, 1.5vw, 0.95rem)", lineHeight: 1.5, letterSpacing: "0.02em", color: "#2C2418", opacity: 0.6, margin: 0, maxWidth: "40ch" }}>
+                  <p style={{ fontFamily: "var(--font-playfair-display), Georgia, serif", fontStyle: "italic", fontSize: "clamp(0.7rem, 1.4vw, 0.82rem)", lineHeight: 1.5, letterSpacing: "0.02em", color: "#2C2418", opacity: 0.6, margin: 0, maxWidth: "30ch", fontWeight: 300 }}>
                     {identity.challengeLine}
                   </p>
                 </div>
@@ -326,6 +362,50 @@ export default function PatternSection() {
 
           </div>{/* end flip */}
         </div>{/* end outer */}
+      </motion.div>{/* end portrait wrapper */}
+      
+      {/* Share buttons */}
+      <motion.div variants={childAnim(0.5)} style={{ display: "flex", justifyContent: "center", gap: "1.5rem", marginTop: "2rem" }}>
+        <button
+          onClick={handleCopyLink}
+          style={{
+            background: "none",
+            border: "none",
+            fontFamily: "var(--font-playfair-display)",
+            fontSize: "11px",
+            color: "#7A7469",
+            textTransform: "uppercase",
+            letterSpacing: "0.1em",
+            opacity: 0.6,
+            cursor: "pointer",
+            transition: "opacity 0.2s ease",
+            padding: "8px 16px",
+          }}
+          onMouseOver={(e) => e.currentTarget.style.opacity = "1"}
+          onMouseOut={(e) => e.currentTarget.style.opacity = "0.6"}
+        >
+          {copied ? "Link Copied" : "Copy Link"}
+        </button>
+        <button
+          onClick={handleDownloadImage}
+          style={{
+            background: "none",
+            border: "none",
+            fontFamily: "var(--font-playfair-display)",
+            fontSize: "11px",
+            color: "#7A7469",
+            textTransform: "uppercase",
+            letterSpacing: "0.1em",
+            opacity: 0.6,
+            cursor: "pointer",
+            transition: "opacity 0.2s ease",
+            padding: "8px 16px",
+          }}
+          onMouseOver={(e) => e.currentTarget.style.opacity = "1"}
+          onMouseOut={(e) => e.currentTarget.style.opacity = "0.6"}
+        >
+          Download Image
+        </button>
       </motion.div>
     </motion.section>
   );

@@ -2,12 +2,14 @@ interface DecorativeDividerProps {
   width?: number;
   opacity?: number;
   className?: string;
+  style?: React.CSSProperties;
 }
 
 export default function DecorativeDivider({
   width = 300,
   opacity = 0.25,
   className = "",
+  style,
 }: DecorativeDividerProps) {
   const color = "#C4A96A";
   const height = 20;
@@ -20,7 +22,7 @@ export default function DecorativeDivider({
       height={height}
       viewBox={`0 0 ${width} ${height}`}
       className={className}
-      style={{ opacity }}
+      style={{ opacity, maxWidth: "100%", ...style }}
       aria-hidden="true"
     >
       {/* Horizontal line */}
