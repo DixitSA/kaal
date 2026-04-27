@@ -143,7 +143,7 @@ export default function LandingPage() {
             style={{
               fontFamily: "var(--font-playfair-display)",
               fontSize: "clamp(1.9rem, 5vw, 2.75rem)",
-              color: "#4A4F46",
+              color: "#2C2418",
               letterSpacing: "0.06em",
               margin: 0,
               marginBottom: "1rem",
@@ -183,7 +183,7 @@ export default function LandingPage() {
             fontFamily: "var(--font-inter-var), sans-serif",
             fontSize: "clamp(0.88rem, 2.2vw, 1rem)",
             fontWeight: 300,
-            color: "#4A4F46",
+            color: "#B35C44",
             textAlign: "center",
             marginTop: "12px",
             marginBottom: "0.75rem",

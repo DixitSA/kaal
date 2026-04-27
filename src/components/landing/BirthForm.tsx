@@ -66,7 +66,7 @@ function LocationPinIcon() {
 function EditorialArrow({ hover, reduced }: { hover: boolean; reduced: boolean }) {
   return (
     <svg width="28" height="10" viewBox="0 0 28 10" fill="none" aria-hidden="true"
-      style={{ flexShrink: 0, transform: hover && !reduced ? "translateX(4px)" : "translateX(0)", transition: "transform 0.22s ease" }}>
+      style={{ flexShrink: 0, transform: hover && !reduced ? "translateX(4px)" : "translateX(0)", transition: "transform 0.22s ease", color: "#F5F0E8" }}>
       <path d="M0 5 H22 M18 1.5 L24.5 5 L18 8.5" stroke="currentColor" strokeWidth="0.5" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
@@ -101,6 +101,7 @@ const labelStyle: CSSProperties = {
   textTransform: "uppercase",
   letterSpacing: "0.15em",
   color: "#4A4F46",
+  opacity: 0.7,
   display: "block",
   marginBottom: "10px",
   fontWeight: 500,
@@ -124,6 +125,8 @@ const inputStyle: CSSProperties = {
   textAlign: "left",
 };
 
+const TERRACOTTA = "#B35C44";
+
 const defaultVariants: Variants = {
   hidden: { opacity: 0, y: 12 },
   visible: (i: number) => ({
@@ -144,6 +147,7 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
   const [name, setName] = useState("");
   const [dob, setDob] = useState("");
   const [timeOfBirth, setTimeOfBirth] = useState("");
+  const [timePeriod, setTimePeriod] = useState<"AM" | "PM">("AM");
   const [unknownTime, setUnknownTime] = useState(false);
   const [placeOfBirth, setPlaceOfBirth] = useState("");
   const [timezone, setTimezone] = useState("");
@@ -205,10 +209,10 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
   }
 
   function onFocus(e: FocusEvent<HTMLInputElement>) {
-    e.target.style.borderBottom = "2px solid #2C2418";
+    e.target.style.borderBottom = `2px solid ${TERRACOTTA}`;
   }
   function onBlur(e: FocusEvent<HTMLInputElement>, hasError: boolean) {
-    e.target.style.borderBottom = hasError ? "1px solid rgba(181,86,62,0.6)" : "1px solid #4A4F46";
+    e.target.style.borderBottom = hasError ? `1px solid ${TERRACOTTA}` : "1px solid #4A4F46";
     e.target.style.boxShadow = "none";
   }
 
@@ -250,10 +254,10 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
   }
 
   const vars = shouldReduce ? reducedVariants : fieldVariants;
-  const errStyle: CSSProperties = { color: "#4A4F46", fontSize: "10px", marginTop: "4px", fontFamily: "var(--font-inter-var)", letterSpacing: "0.02em" };
+  const errStyle: CSSProperties = { color: TERRACOTTA, fontSize: "10px", marginTop: "4px", fontFamily: "var(--font-inter-var)", letterSpacing: "0.02em" };
 
   /* ── Icon helper positioning ── */
-  const iconStyle: CSSProperties = { position: "absolute", top: "50%", transform: "translateY(-50%)", color: "#4A4F46", pointerEvents: "none", display: "flex", alignItems: "center", zIndex: 1 };
+  const iconStyle: CSSProperties = { position: "absolute", top: "50%", transform: "translateY(-50%)", color: TERRACOTTA, pointerEvents: "none", display: "flex", alignItems: "center", zIndex: 1 };
 
   return (
     <form
@@ -317,11 +321,11 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
           {errors.dob && <p id="dob-error" role="alert" style={errStyle}>{errors.dob}</p>}
         </div>
 
-        {/* Time of Birth — clock icon left, "I don't know" inline right */}
+        {/* Time of Birth — clock icon left, AM/PM toggle right */}
         <div>
           <label htmlFor="timeOfBirth" style={labelStyle}>time of birth</label>
           <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "flex-start", gap: "8px" }}>
-            <div style={{ position: "relative", minWidth: "120px" }}>
+            <div style={{ position: "relative", minWidth: "100px" }}>
               <span style={{ ...iconStyle, left: 0 }}><ClockIcon /></span>
               <CeremonialInput
                 id="timeOfBirth" type="text" placeholder="HH:MM" value={timeOfBirth}
@@ -331,18 +335,44 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
                   if (val.length === 2 && !val.includes(":")) val += ":";
                   if (val.length <= 5) setTimeOfBirth(val);
                 }}
-                style={{ ...inputStyle, paddingLeft: "22px", width: "100%", minWidth: "120px", opacity: unknownTime ? 0.35 : 1, cursor: unknownTime ? "not-allowed" : "auto" }}
+                style={{ ...inputStyle, paddingLeft: "22px", width: "100%", minWidth: "100px", opacity: unknownTime ? 0.35 : 1, cursor: unknownTime ? "not-allowed" : "auto" }}
                 onFocus={(e) => { if (!unknownTime) onFocus(e); }}
                 onBlur={(e) => onBlur(e, !!errors.time)}
                 ariaInvalid={!!errors.time} ariaDescribedBy={errors.time ? "time-error" : undefined}
               />
+            </div>
+            {/* AM/PM Toggle */}
+            <div style={{ display: "flex", border: "1px solid #4A4F46", borderRadius: "2px", overflow: "hidden" }}>
+              {(["AM", "PM"] as const).map((p) => (
+                <button
+                  key={p}
+                  type="button"
+                  onClick={() => setTimePeriod(p)}
+                  disabled={unknownTime}
+                  style={{
+                    padding: "8px 10px",
+                    backgroundColor: timePeriod === p ? TERRACOTTA : "transparent",
+                    color: timePeriod === p ? "#F5F0E8" : "#4A4F46",
+                    fontFamily: "var(--font-inter-var), sans-serif",
+                    fontSize: "10px",
+                    fontWeight: 600,
+                    letterSpacing: "0.1em",
+                    border: "none",
+                    cursor: unknownTime ? "not-allowed" : "pointer",
+                    transition: "background-color 0.15s ease, color 0.15s ease",
+                    opacity: unknownTime ? 0.35 : 1,
+                  }}
+                >
+                  {p}
+                </button>
+              ))}
             </div>
             {/* "I don't know" inline toggle */}
             <label htmlFor="unknownTime" style={{ display: "flex", alignItems: "center", gap: "6px", cursor: "pointer", flexShrink: 0, whiteSpace: "nowrap", fontFamily: "var(--font-inter-var), sans-serif", fontSize: "10px", fontWeight: 500, letterSpacing: "0.12em", textTransform: "uppercase", color: "#4A4F46", textDecoration: "underline", textUnderlineOffset: "3px" }}>
               <span style={{ position: "relative", width: "14px", height: "14px", minWidth: "28px", minHeight: "28px", flexShrink: 0, display: "inline-flex", alignItems: "center", justifyContent: "center" }}>
                 <input id="unknownTime" type="checkbox" checked={unknownTime} onChange={(e) => { setUnknownTime(e.target.checked); if (e.target.checked) setTimeOfBirth(""); }}
                   style={{ position: "absolute", inset: 0, margin: 0, opacity: 0, width: "100%", height: "100%", cursor: "pointer" }} />
-                <span aria-hidden="true" style={{ position: "absolute", width: "12px", height: "12px", borderRadius: "50%", border: `1px solid ${unknownTime ? "#4A4F46" : "#5C574F"}`, backgroundColor: unknownTime ? "#4A4F46" : "transparent", transition: "background-color 0.18s ease, border-color 0.18s ease", display: "flex", alignItems: "center", justifyContent: "center", pointerEvents: "none" }}>
+                <span aria-hidden="true" style={{ position: "absolute", width: "12px", height: "12px", borderRadius: "50%", border: `1px solid ${unknownTime ? TERRACOTTA : "#5C574F"}`, backgroundColor: unknownTime ? TERRACOTTA : "transparent", transition: "background-color 0.18s ease, border-color 0.18s ease", display: "flex", alignItems: "center", justifyContent: "center", pointerEvents: "none" }}>
                   {unknownTime && <span style={{ width: "4px", height: "4px", borderRadius: "50%", backgroundColor: "#F5F0E8", display: "block" }} />}
                 </span>
               </span>
@@ -424,7 +454,7 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
         )}
       </motion.div>
 
-      {/* ── Submit — centered, ghost style button ── */}
+      {/* ── Submit — centered, solid terracotta button ── */}
       <motion.div custom={4} variants={vars} initial="hidden" animate="visible" style={{ textAlign: "center" }}>
         <motion.button
           type="submit"
@@ -435,7 +465,7 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
             gap: "12px",
             padding: "14px 48px",
             minHeight: "44px",
-            backgroundColor: "#4A4F46",
+            backgroundColor: TERRACOTTA,
             color: "#F5F0E8",
             fontFamily: "var(--font-playfair-display), sans-serif",
             fontWeight: 400,
@@ -447,7 +477,7 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
             cursor: isSubmitting ? "wait" : "pointer",
             transition: "background-color 0.2s ease",
           }}
-          whileHover={shouldReduce || isSubmitting ? {} : { y: -2, boxShadow: "0 8px 24px rgba(74,79,70,0.3)" }}
+          whileHover={shouldReduce || isSubmitting ? {} : { y: -2, boxShadow: `0 8px 24px ${TERRACOTTA}66` }}
           whileTap={shouldReduce || isSubmitting ? {} : { scale: 0.97, y: 0 }}
           transition={{ duration: 0.2, ease: "easeOut" }}
           onMouseEnter={() => { if (!isSubmitting) setArrowHover(true); }}
