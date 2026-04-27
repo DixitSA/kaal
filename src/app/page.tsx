@@ -17,8 +17,8 @@ const allWords = [...headline1.map(w => ({ word: w, line: 0 })), ...headline2.ma
 
 const FOOTER_LINKS = [
   { label: "Methodology", href: "/methodology" },
-  { label: "Privacy", href: "/legal" },
-  { label: "Terms", href: "/legal" },
+  { label: "Privacy", href: "/privacy" },
+  { label: "Terms", href: "/terms" },
 ] as const;
 
 export default function LandingPage() {
