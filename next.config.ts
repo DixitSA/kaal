@@ -5,6 +5,13 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   outputFileTracingRoot: path.join(__dirname, "../../"),
   serverExternalPackages: ["astronomia"],
+  experimental: {
+    serverComponentsExternalPackages: ["astronomia"],
+  },
+  webpack: (config) => {
+    config.module.exprContextCritical = false;
+    return config;
+  },
 };
 
 export default nextConfig;
