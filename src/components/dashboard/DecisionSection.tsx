@@ -23,9 +23,9 @@ const actionByOutcome: Record<DecisionOutcome, "ACT" | "WAIT" | "AVOID"> = {
 };
 
 const actionColors: Record<DecisionOutcome, string> = {
-  favorable: "#5E7A5E",
-  neutral: "#8A7240",
-  caution: "#A04040",
+  favorable: "#A65D46",
+  neutral: "#A65D46",
+  caution: "#A65D46",
 };
 
 export default function DecisionSection() {
@@ -74,8 +74,8 @@ export default function DecisionSection() {
         whileInView="visible"
         viewport={{ once: true, margin: "-60px" }}
         variants={childAnim(0)}
-        className="tracking-[0.2em]"
-        style={{ color: "#8A7240", fontFamily: "var(--font-inter-var)", fontSize: "14px", fontWeight: 500, textTransform: "lowercase", paddingBottom: "10px", borderBottom: "1px solid rgba(61,52,40,0.12)", marginBottom: "1.5rem" }}
+        className="uppercase tracking-[0.15em]"
+        style={{ color: "#8A7240", fontFamily: "var(--font-inter-var)", fontSize: "11px", fontWeight: 500, marginBottom: "12px" }}
       >
         Decision
       </motion.p>
@@ -88,22 +88,16 @@ export default function DecisionSection() {
         }
       `}</style>
       <div
-        className="decision-tab-scroll"
         style={{
-          marginTop: "24px",
+          marginTop: "16px",
           borderBottom: "1px solid rgba(122, 116, 105, 0.12)",
-          overflowX: "auto",
-          overflowY: "hidden",
-          WebkitOverflowScrolling: "touch",
-          touchAction: "pan-x",
         }}
       >
         <div
           ref={containerRef}
           role="tablist"
           aria-label="Decision categories"
-          className="md:justify-center md:gap-x-8"
-          style={{ position: "relative", display: "flex", justifyContent: "flex-start", gap: "0", minWidth: "max-content" }}
+          style={{ position: "relative", display: "flex", justifyContent: "center", gap: "0", flexWrap: "wrap" }}
         >
           {DECISION_CATEGORIES.map((category, idx) => (
             <motion.button
@@ -118,15 +112,14 @@ export default function DecisionSection() {
               aria-controls={`decision-panel-${category}`}
               style={{
                 fontFamily: "var(--font-inter-var)",
-                fontSize: "0.875rem",
-                color: active === category ? "#4A4F46" : "#7A7469",
-                textTransform: "lowercase",
-                letterSpacing: "0.02em",
+                fontSize: "11px",
+                color: active === category ? "#2C2418" : "#7A7469",
+                textTransform: "uppercase",
+                letterSpacing: "0.15em",
+                fontWeight: 500,
                 background: "none",
                 border: "none",
-                borderBottom: active === category ? "2px solid transparent" : "2px solid transparent",
-                padding: "10px 12px",
-                paddingRight: idx === DECISION_CATEGORIES.length - 1 ? "2rem" : "12px",
+                padding: "12px 16px",
                 marginBottom: "-1px",
                 minHeight: "44px",
                 cursor: "pointer",
@@ -140,13 +133,13 @@ export default function DecisionSection() {
           {/* Sliding underline */}
           {!shouldReduce && underline.width > 0 && (
             <motion.div
-              animate={{ left: underline.left, width: underline.width }}
+              animate={{ left: underline.left + (underline.width / 2) - 20, width: 40 }}
               transition={{ duration: 0.25, ease: EASE }}
               style={{
                 position: "absolute",
                 bottom: "-1px",
                 height: "2px",
-                backgroundColor: "#B5563E",
+                backgroundColor: "#A65D46",
                 borderRadius: "1px",
               }}
             />
@@ -157,11 +150,11 @@ export default function DecisionSection() {
       {/* Decision result panel */}
       <div
         id={`decision-panel-${active}`}
-        className="mt-10 text-center"
+        className="mt-6 text-center"
         role="tabpanel"
         aria-live="polite"
         aria-atomic="true"
-        style={{ minHeight: "190px", position: "relative", paddingTop: "1.5rem" }}
+        style={{ minHeight: "160px", position: "relative" }}
       >
         <AnimatePresence mode="wait">
           <motion.div
@@ -187,18 +180,15 @@ export default function DecisionSection() {
             </motion.p>
             <p
               className="mt-1"
-              style={{ color: "#5C574F", fontFamily: "var(--font-quattrocento-sans), var(--font-inter-var), sans-serif", fontSize: "clamp(1rem, 3vw, 1.4rem)", lineHeight: 1.4, fontStyle: "normal", letterSpacing: "0.02em", textTransform: "lowercase", textAlign: "center" }}
+              style={{ color: "#2C2418", opacity: 0.8, fontFamily: "var(--font-inter-var), sans-serif", fontSize: "15px", lineHeight: 1.5, letterSpacing: "0.02em", textTransform: "lowercase", textAlign: "center" }}
             >
               {result.guidance}
             </p>
-            {result.rationale
+{result.rationale
               .filter((line, i, arr) => {
                 const norm = line.trim().toLowerCase();
-                // dedupe within rationale
                 if (arr.findIndex(l => l.trim().toLowerCase() === norm) !== i) return false;
-                // dedupe against guidance
                 if (norm === result.guidance.trim().toLowerCase()) return false;
-                // dedupe against phase + today content
                 if (crossSectionContext.some(ctx => tooSimilar(ctx, line))) return false;
                 return true;
               })
@@ -206,45 +196,47 @@ export default function DecisionSection() {
                 <p
                   key={i}
                   className="mt-0.5"
-                  style={{ color: "#5C574F", fontFamily: "var(--font-quattrocento-sans), var(--font-inter-var), sans-serif", fontStyle: "normal", letterSpacing: "0.02em", textTransform: "lowercase", textAlign: "center" }}
+                  style={{ color: "#2C2418", opacity: 0.8, fontFamily: "var(--font-inter-var), sans-serif", fontSize: "15px", lineHeight: 1.5, letterSpacing: "0.02em", textTransform: "lowercase", textAlign: "center" }}
                 >
                   {line}
                 </p>
               ))}
-
-            {result.shadowCaveat && (
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  marginTop: "48px",
-                  paddingTop: "6px",
-                  paddingBottom: "6px",
-                  borderLeft: "2px solid rgba(122, 116, 105, 0.3)",
-                  paddingLeft: "16px",
-                  textAlign: "left",
-                }}
-              >
-                <p
-                  style={{
-                    fontFamily: "var(--font-quattrocento-sans), var(--font-inter-var), sans-serif",
-                    fontStyle: "italic",
-                    fontSize: "0.875rem",
-                    color: "#9C9488",
-                    textTransform: "lowercase",
-                    letterSpacing: "0.02em",
-                    lineHeight: 1.6,
-                    margin: 0,
-                  }}
-                >
-                  {DECISION_CAVEATS[active] || result.shadowCaveat}
-                </p>
-              </div>
-            )}
           </motion.div>
         </AnimatePresence>
       </div>
+
+      {/* Shadow caveat */}
+      {shadowCaveat && (
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            marginTop: "32px",
+            paddingTop: "6px",
+            paddingBottom: "6px",
+            borderLeft: "2px solid rgba(166, 93, 70, 0.3)",
+            paddingLeft: "16px",
+            textAlign: "left",
+          }}
+        >
+          <p
+            style={{
+              fontFamily: "var(--font-inter-var), sans-serif",
+              fontStyle: "italic",
+              fontSize: "13px",
+              color: "#2C2418",
+              opacity: 0.7,
+              textTransform: "lowercase",
+              letterSpacing: "0.02em",
+              lineHeight: 1.6,
+              margin: 0,
+            }}
+          >
+            {DECISION_CAVEATS[active] || result.shadowCaveat}
+          </p>
+        </div>
+      )}
     </section>
   );
 }
