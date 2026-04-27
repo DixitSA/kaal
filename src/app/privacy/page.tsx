@@ -202,10 +202,10 @@ export default function PrivacyPage() {
           >
             Questions? Reach us at{" "}
             <a
-              href="mailto:hello@kaal.app"
+              href="mailto:support@getkaal.com"
               style={{ color: "var(--kaal-footer-text)", textDecoration: "underline", textUnderlineOffset: "3px" }}
             >
-              hello@kaal.app
+              support@getkaal.com
             </a>
           </motion.p>
 
