@@ -66,13 +66,13 @@ export default function DecisionSection() {
       >
         <p
           className="tracking-[0.2em]"
-          style={{ color: "#8A7240", fontFamily: "var(--font-inter-var)", fontSize: "11px", fontWeight: 500, textTransform: "lowercase", margin: 0 }}
+          style={{ color: "#8A7240", fontFamily: "var(--font-inter-var)", fontSize: "14px", fontWeight: 500, textTransform: "lowercase", margin: 0 }}
         >
           decision
         </p>
         <span style={{
           fontFamily: "var(--font-inter-var)",
-          fontSize: "11px",
+          fontSize: "12px",
           textTransform: "lowercase",
           letterSpacing: "0.06em",
           color: "#A65D46",
@@ -88,8 +88,9 @@ export default function DecisionSection() {
           justifyContent: "flex-start",
           gap: "0",
           marginBottom: "1rem",
-          paddingBottom: "10px",
-          borderBottom: "1px solid rgba(122, 116, 105, 0.12)",
+          overflowX: "auto",
+          scrollbarWidth: "none",
+          WebkitOverflowScrolling: "touch",
         }}
       >
         {DECISION_CATEGORIES.map((category) => (
@@ -99,16 +100,19 @@ export default function DecisionSection() {
             style={{
               fontFamily: "var(--font-inter-var)",
               fontSize: "11px",
-              color: active === category ? "#A65D46" : "#7A7469",
+              color: "#3D3428",
+              opacity: active === category ? 0.9 : 0.6,
               textTransform: "lowercase",
               letterSpacing: "0.02em",
-              fontWeight: active === category ? 500 : 400,
+              fontWeight: 400,
               background: "none",
               border: "none",
+              borderBottom: active === category ? "2px solid #A65D46" : "2px solid transparent",
               padding: "8px 0",
               paddingRight: "20px",
               cursor: "pointer",
               whiteSpace: "nowrap",
+              transition: "opacity 0.15s ease, border-color 0.15s ease",
             }}
           >
             {category}
@@ -119,7 +123,7 @@ export default function DecisionSection() {
       {/* Decision result panel */}
       <div
         id={`decision-panel-${active}`}
-        className="mt-6 text-center"
+        className="mt-3 text-center"
         role="tabpanel"
         aria-live="polite"
         aria-atomic="true"
