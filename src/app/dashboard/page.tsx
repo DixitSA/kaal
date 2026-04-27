@@ -35,6 +35,11 @@ function getContemplation() {
   return CONTEMPLATIONS[dayOfYear % CONTEMPLATIONS.length];
 }
 
+const FOOTER_LINKS = [
+  { label: "Methodology", href: "/methodology" },
+  { label: "Privacy", href: "/legal" },
+  { label: "Terms", href: "/legal" },
+] as const;
 
 export default function Dashboard() {
   const router = useRouter();
@@ -115,7 +120,23 @@ export default function Dashboard() {
         <section id="card" style={{ scrollMarginTop: "80px", marginTop: "3rem" }}><PatternSection /></section>
       </main>
 
-      <Footer />
+      {/* Footer */}
+      <footer style={{ position: "relative", zIndex: 30, padding: "4rem 24px 2rem", textAlign: "center", marginTop: "8rem" }}>
+        <div style={{ fontFamily: "var(--font-playfair-display)", fontSize: "0.9rem", fontStyle: "italic", color: "#2C2418", marginBottom: "6px", opacity: 0.7 }}>Kaal</div>
+        <p style={{ fontFamily: "var(--font-inter-var), sans-serif", fontStyle: "italic", fontSize: "11px", color: "#9C9488", letterSpacing: "0.04em", margin: "0 0 1.5rem" }}>built on vedic timing systems. © 2026 Kaal Astrology</p>
+        <nav style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "0" }}>
+          {FOOTER_LINKS.map((link, i) => (
+            <span key={link.href} style={{ display: "flex", alignItems: "center" }}>
+              <a href={link.href} style={{ fontFamily: "var(--font-inter-var), sans-serif", fontSize: "11px", color: "#9C9488", letterSpacing: "0.07em", textTransform: "uppercase", padding: "16px 14px", minHeight: "44px", display: "inline-flex", alignItems: "center", textDecoration: "none", transition: "color 0.15s ease" }}
+                onMouseEnter={(e) => e.currentTarget.style.color = "#2C2418"}
+                onMouseLeave={(e) => e.currentTarget.style.color = "#9C9488"}>
+                {link.label}
+              </a>
+              {i < FOOTER_LINKS.length - 1 && <span style={{ color: "rgba(122,116,105,0.3)", fontSize: "11px", userSelect: "none" }}>|</span>}
+            </span>
+          ))}
+        </nav>
+      </footer>
     </div>
   );
 }
