@@ -19,6 +19,9 @@
   --accent-gold: #786030;            /* 4.7:1 on cream — passes AA */
   --accent-green: #5E7A5E;
   --accent-red: #A04040;             /* 5.2:1 on cream — passes AA */
+
+  /* Footer — unified across all pages */
+  --kaal-footer-text: #8C867A;       /* warm taupe; lighter than charcoal, darker than --text-muted */
 }
 
 *,

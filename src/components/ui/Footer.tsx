@@ -50,8 +50,9 @@ export default function Footer() {
               style={{
                 fontFamily: "var(--font-inter-var), sans-serif",
                 fontSize: "11px",
-                color: "#4A4F46",
-                letterSpacing: "0.12em",
+                fontWeight: 400,
+                color: "var(--kaal-footer-text)",
+                letterSpacing: "0.14em",
                 textTransform: "uppercase",
                 padding: "16px 14px",
                 minHeight: "44px",
@@ -61,12 +62,12 @@ export default function Footer() {
                 transition: "color 0.15s ease",
               }}
               onMouseEnter={(e) => (e.currentTarget.style.color = "#2C2418")}
-              onMouseLeave={(e) => (e.currentTarget.style.color = "#4A4F46")}
+              onMouseLeave={(e) => (e.currentTarget.style.color = "var(--kaal-footer-text)")}
             >
               {link.label}
             </Link>
             {i < links.length - 1 && (
-              <span aria-hidden="true" style={{ color: "rgba(122,116,105,0.3)", fontSize: "11px", userSelect: "none" }}>|</span>
+              <span aria-hidden="true" style={{ color: "rgba(140,134,122,0.35)", fontSize: "11px", userSelect: "none" }}>|</span>
             )}
           </span>
         ))}
