@@ -167,6 +167,27 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
     if (tz) setTimezone((c) => c || tz);
   }, []);
 
+  /** Normalizes time to hh:mm format (e.g., "4:15" → "04:15") */
+  function normalizeTime(value: string): string {
+    const trimmed = value.trim();
+    if (!trimmed) return "";
+    const parts = trimmed.split(":");
+    if (parts.length !== 2) return trimmed;
+    const [h, m] = parts;
+    const paddedH = h.padStart(2, "0");
+    return `${paddedH}:${m}`;
+  }
+
+  /** Validates time is in hh:mm format with valid values */
+  function isValidTime(value: string): boolean {
+    const normalized = normalizeTime(value);
+    if (!normalized || normalized.length < 5) return false;
+    const [h, m] = normalized.split(":").map(Number);
+    if (isNaN(h) || isNaN(m)) return false;
+    if (h < 0 || h > 23 || m < 0 || m > 59) return false;
+    return true;
+  }
+
   /** Converts MM/DD/YYYY → YYYY-MM-DD for the API schema. */
   function toISODate(mmddyyyy: string): string {
     const [mm, dd, yyyy] = mmddyyyy.split("/");
@@ -183,6 +204,7 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
       if (isNaN(d.getTime())) e.dob = "not a real calendar date";
     }
     if (!unknownTime && !timeOfBirth) e.time = "enter birth time or check unknown";
+    else if (!unknownTime && !isValidTime(timeOfBirth)) e.time = "please use hh:mm format";
     if (!placeOfBirth.trim()) e.place = "place of birth is required";
     if (!timezone.trim()) e.timezone = "timezone is required";
     const parsedLat = Number(latitude);
@@ -337,7 +359,13 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
                 }}
                 style={{ ...inputStyle, paddingLeft: "22px", width: "100%", minWidth: "90px", opacity: unknownTime ? 0.35 : 1, cursor: unknownTime ? "not-allowed" : "auto", fontSize: "16px" }}
                 onFocus={(e) => { if (!unknownTime) onFocus(e); }}
-                onBlur={(e) => onBlur(e, !!errors.time)}
+                onBlur={(e) => {
+                  const normalized = normalizeTime(timeOfBirth);
+                  if (normalized !== timeOfBirth && normalized.length === 5) {
+                    setTimeOfBirth(normalized);
+                  }
+                  onBlur(e, !!errors.time);
+                }}
                 ariaInvalid={!!errors.time} ariaDescribedBy={errors.time ? "time-error" : undefined}
               />
             </div>
