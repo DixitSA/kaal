@@ -80,22 +80,33 @@ export default function DecisionSection() {
             textTransform: "lowercase",
             color: "#8A7240",
             whiteSpace: "nowrap",
-            paddingBottom: "8px",
-            paddingRight: "20px",
+            padding: "8px 0",
+            marginRight: "24px",
             marginBottom: "-1px",
-            borderBottom: "2px solid transparent",
             flexShrink: 0,
           }}
         >
           decision
         </span>
 
-        {/* Category tabs */}
+        {/* Category tabs — button width = text width so the absolute underline is text-wide */}
         {DECISION_CATEGORIES.map((category) => (
           <button
             key={category}
             onClick={() => setActive(category)}
             style={{
+              position: "relative",
+              background: "none",
+              border: "none",
+              padding: "8px 0",
+              marginRight: "20px",
+              marginBottom: "-1px",
+              cursor: "pointer",
+              whiteSpace: "nowrap",
+              flexShrink: 0,
+            }}
+          >
+            <span style={{
               fontFamily: "var(--font-inter-var)",
               fontSize: "11px",
               color: active === category ? "#A65D46" : "#3D3428",
@@ -103,19 +114,26 @@ export default function DecisionSection() {
               textTransform: "lowercase",
               letterSpacing: "0.04em",
               fontWeight: 400,
-              background: "none",
-              border: "none",
-              borderBottom: active === category ? "2px solid #A65D46" : "2px solid transparent",
-              marginBottom: "-1px",
-              padding: "8px 0",
-              paddingRight: "20px",
-              cursor: "pointer",
-              whiteSpace: "nowrap",
-              flexShrink: 0,
-              transition: "opacity 0.15s ease, color 0.15s ease, border-color 0.15s ease",
-            }}
-          >
-            {category}
+              display: "block",
+              transition: "color 0.15s ease, opacity 0.15s ease",
+            }}>
+              {category}
+            </span>
+            {active === category && (
+              <motion.span
+                layoutId="decision-underline"
+                style={{
+                  position: "absolute",
+                  bottom: "-1px",
+                  left: 0,
+                  right: 0,
+                  height: "2px",
+                  backgroundColor: "#A65D46",
+                  borderRadius: "1px",
+                }}
+                transition={{ type: "spring", stiffness: 380, damping: 30 }}
+              />
+            )}
           </button>
         ))}
       </motion.div>
