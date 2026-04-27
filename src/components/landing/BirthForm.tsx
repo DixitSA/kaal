@@ -36,7 +36,7 @@ function DobWatermark() {
 /* ─── Icons ──────────────────────────────────────────────────── */
 function CalendarIcon() {
   return (
-    <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" strokeWidth="1" aria-hidden="true">
+    <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" strokeWidth="1" aria-hidden="true" style={{ display: "block" }}>
       <rect x="0.5" y="1.5" width="12" height="11" rx="1.5" />
       <line x1="0.5" y1="4.5" x2="12.5" y2="4.5" />
       <line x1="3.5" y1="0" x2="3.5" y2="3" strokeLinecap="round" />
@@ -47,7 +47,7 @@ function CalendarIcon() {
 
 function ClockIcon() {
   return (
-    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1" aria-hidden="true">
+    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1" aria-hidden="true" style={{ display: "block" }}>
       <circle cx="6" cy="6" r="5.5" />
       <polyline points="6,2.5 6,6 8,8" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
@@ -56,7 +56,7 @@ function ClockIcon() {
 
 function LocationPinIcon() {
   return (
-    <svg width="11" height="14" viewBox="0 0 11 14" fill="currentColor" aria-hidden="true">
+    <svg width="11" height="14" viewBox="0 0 11 14" fill="currentColor" aria-hidden="true" style={{ display: "block" }}>
       <path d="M5.5 0C2.46 0 0 2.46 0 5.5 0 9.35 5.5 14 5.5 14S11 9.35 11 5.5C11 2.46 8.54 0 5.5 0zm0 7.5c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z" />
     </svg>
   );
@@ -86,7 +86,7 @@ function CeremonialInput({ id, type, placeholder, value, onChange, autoComplete,
     <div className="input-underline-wrapper">
       <input id={id} type={type} placeholder={placeholder} value={value} onChange={onChange}
         autoComplete={autoComplete} disabled={disabled} inputMode={inputMode}
-        style={style} onFocus={onFocus} onBlur={onBlur}
+        style={{ ...style, fontSize: "16px" }} onFocus={onFocus} onBlur={onBlur}
         aria-invalid={ariaInvalid} aria-describedby={ariaDescribedBy}
       />
       <div className="input-underline" />
@@ -270,7 +270,7 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
         margin: "0 auto",
         display: "flex",
         flexDirection: "column",
-        gap: "28px",
+        gap: "32px",
       }}
     >
 
@@ -325,7 +325,7 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
         <div>
           <label htmlFor="timeOfBirth" style={labelStyle}>time of birth</label>
           <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "flex-start", gap: "8px" }}>
-            <div style={{ position: "relative", minWidth: "100px" }}>
+            <div style={{ position: "relative", minWidth: "90px", flex: "1" }}>
               <span style={{ ...iconStyle, left: 0 }}><ClockIcon /></span>
               <CeremonialInput
                 id="timeOfBirth" type="text" placeholder="HH:MM" value={timeOfBirth}
@@ -335,14 +335,14 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
                   if (val.length === 2 && !val.includes(":")) val += ":";
                   if (val.length <= 5) setTimeOfBirth(val);
                 }}
-                style={{ ...inputStyle, paddingLeft: "22px", width: "100%", minWidth: "100px", opacity: unknownTime ? 0.35 : 1, cursor: unknownTime ? "not-allowed" : "auto" }}
+                style={{ ...inputStyle, paddingLeft: "22px", width: "100%", minWidth: "90px", opacity: unknownTime ? 0.35 : 1, cursor: unknownTime ? "not-allowed" : "auto", fontSize: "16px" }}
                 onFocus={(e) => { if (!unknownTime) onFocus(e); }}
                 onBlur={(e) => onBlur(e, !!errors.time)}
                 ariaInvalid={!!errors.time} ariaDescribedBy={errors.time ? "time-error" : undefined}
               />
             </div>
-            {/* AM/PM Toggle */}
-            <div style={{ display: "flex", border: "1px solid #4A4F46", borderRadius: "2px", overflow: "hidden" }}>
+            {/* AM/PM Toggle — small square */}
+            <div style={{ display: "flex", border: "1px solid #4A4F46", borderRadius: "2px", overflow: "hidden", flexShrink: 0 }}>
               {(["AM", "PM"] as const).map((p) => (
                 <button
                   key={p}
@@ -350,7 +350,8 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
                   onClick={() => setTimePeriod(p)}
                   disabled={unknownTime}
                   style={{
-                    padding: "8px 10px",
+                    width: "40px",
+                    height: "36px",
                     backgroundColor: timePeriod === p ? TERRACOTTA : "transparent",
                     color: timePeriod === p ? "#F5F0E8" : "#4A4F46",
                     fontFamily: "var(--font-inter-var), sans-serif",

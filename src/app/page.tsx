@@ -86,25 +86,30 @@ export default function LandingPage() {
         </svg>
       </div>
 
-      {/* Header — logo anchor */}
-      <header style={{ display: "flex", justifyContent: "flex-start", alignItems: "center", padding: "2.5rem" }}>
-        <a href="/" style={{ textDecoration: "none", color: "inherit" }}>
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            style={{ fontFamily: "var(--font-playfair-display)", fontSize: "1.1rem", fontWeight: 600, color: "#2C2418" }}
-          >
-            Kaal
-          </motion.div>
-        </a>
+      {/* Header — centered logo */}
+      <header style={{ display: "flex", justifyContent: "center", alignItems: "center", padding: "2rem 2.5rem 1rem" }}>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          style={{
+            fontFamily: "var(--font-playfair-display)",
+            fontSize: "1rem",
+            fontWeight: 400,
+            color: "#2C2418",
+            letterSpacing: "0.2em",
+            textTransform: "uppercase",
+          }}
+        >
+          KAAL
+        </motion.div>
       </header>
 
       <main
-        className="flex items-start sm:items-center justify-center px-4 sm:px-6 relative"
+        className="flex items-start sm:items-center justify-center px-6 sm:px-6 relative"
         style={{
-          paddingTop: "4rem",
-          paddingBottom: "96px",
+          paddingTop: "2rem",
+          paddingBottom: "120px",
         }}
       >
         {/* Grain texture */}
@@ -142,11 +147,11 @@ export default function LandingPage() {
             className="relative z-10 text-center font-bold leading-tight landing-hero"
             style={{
               fontFamily: "var(--font-playfair-display)",
-              fontSize: "clamp(1.9rem, 5vw, 2.75rem)",
+              fontSize: "clamp(1.9rem, 6vw, 3rem)",
               color: "#2C2418",
-              letterSpacing: "0.06em",
+              letterSpacing: "0.04em",
               margin: 0,
-              marginBottom: "1rem",
+              marginBottom: "0.5rem",
               textAlign: "center",
             }}
           >
@@ -181,16 +186,16 @@ export default function LandingPage() {
           transition={{ delay: allWords.length * 0.1 + 0.05, duration: 0.7, ease: EASE }}
           style={{
             fontFamily: "var(--font-inter-var), sans-serif",
-            fontSize: "clamp(0.88rem, 2.2vw, 1rem)",
-            fontWeight: 300,
+            fontSize: "11px",
+            fontWeight: 400,
             color: "#B35C44",
             textAlign: "center",
-            marginTop: "12px",
-            marginBottom: "0.75rem",
+            marginTop: "20px",
+            marginBottom: "1.5rem",
             position: "relative",
             zIndex: 10,
-            letterSpacing: "0.08em",
-            textTransform: "lowercase",
+            letterSpacing: "0.1em",
+            textTransform: "uppercase",
           }}
         >
           Built on Vedic Timing Systems
@@ -201,13 +206,13 @@ export default function LandingPage() {
           initial={{ opacity: 0, scaleX: 0 }}
           animate={{ opacity: 1, scaleX: 1 }}
           transition={{ delay: allWords.length * 0.1 + 0.1, duration: shouldReduce ? 0 : 1, ease: EASE }}
-          style={{ transformOrigin: "center" }}
+          style={{ transformOrigin: "center", marginBottom: "2rem" }}
         >
-          <DecorativeDivider width={260} opacity={0.2} style={{ maxWidth: "calc(100vw - 48px)" }} />
+          <DecorativeDivider width={200} opacity={0.25} style={{ maxWidth: "calc(100vw - 64px)" }} />
         </motion.div>
 
         {/* Form */}
-        <div style={{ width: "100%", marginTop: "1rem" }}>
+        <div style={{ width: "100%", maxWidth: "480px" }}>
           <BirthForm fieldVariants={fieldVariants} shouldReduce={!!shouldReduce} />
         </div>
       </div>
