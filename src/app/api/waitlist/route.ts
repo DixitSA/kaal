@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { LoopsClient } from "loops";
 
-const loops = new LoopsClient(process.env.LOOPS_API_KEY!);
-
 export async function POST(req: NextRequest) {
   const { email } = await req.json();
 
@@ -10,10 +8,17 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Invalid email" }, { status: 400 });
   }
 
+  const apiKey = process.env.LOOPS_API_KEY;
+  if (!apiKey) {
+    console.error("[waitlist] LOOPS_API_KEY not set");
+    return NextResponse.json({ error: "Service unavailable" }, { status: 503 });
+  }
+
   const trimmed = email.trim().toLowerCase();
+  const loops = new LoopsClient(apiKey);
 
   try {
-    await loops.createContact(trimmed, { source: "waitlist" });
+    await loops.createContact({ email: trimmed, properties: { source: "waitlist" } });
     await loops.sendEvent({ email: trimmed, eventName: "waitlist_signup" });
     console.log("[waitlist] added to Loops:", trimmed);
   } catch (err) {
