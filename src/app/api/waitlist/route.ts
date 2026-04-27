@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { LoopsClient } from "loops";
+import { LoopsClient, APIError } from "loops";
 
 export async function POST(req: NextRequest) {
   const { email } = await req.json();
@@ -17,20 +17,23 @@ export async function POST(req: NextRequest) {
   const trimmed = email.trim().toLowerCase();
   const loops = new LoopsClient(apiKey);
 
-  // createContact is the critical step — success: false means duplicate, which is fine
-  let contactResult;
   try {
-    contactResult = await loops.createContact({ email: trimmed, properties: { source: "waitlist" } });
-    console.log("[waitlist] createContact:", JSON.stringify(contactResult));
+    await loops.createContact({ email: trimmed });
+    console.log("[waitlist] createContact: success");
   } catch (err) {
-    console.error("[waitlist] createContact error:", err);
-    return NextResponse.json({ error: "Failed to add to waitlist" }, { status: 500 });
+    if (err instanceof APIError && err.statusCode === 409) {
+      // Duplicate contact — already on the waitlist, treat as success
+      console.log("[waitlist] createContact: duplicate, already exists");
+    } else {
+      console.error("[waitlist] createContact error:", err);
+      return NextResponse.json({ error: "Failed to add to waitlist" }, { status: 500 });
+    }
   }
 
   // sendEvent is best-effort — don't fail the request if the event isn't configured yet
   try {
-    const eventResult = await loops.sendEvent({ email: trimmed, eventName: "waitlist_signup" });
-    console.log("[waitlist] sendEvent:", JSON.stringify(eventResult));
+    await loops.sendEvent({ email: trimmed, eventName: "waitlist_signup" });
+    console.log("[waitlist] sendEvent: success");
   } catch (err) {
     console.error("[waitlist] sendEvent error (non-fatal):", err);
   }
