@@ -55,42 +55,42 @@ export default function DecisionSection() {
   });
 
   return (
-    <section>
-      {/* Header row: Decision + active category inline */}
+    <section style={{ paddingTop: "24px" }}>
+      {/* Single-row nav: 'decision' label + category tabs on one scrollable rail */}
       <motion.div
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: "-60px" }}
         variants={childAnim(0)}
-        style={{ display: "flex", alignItems: "baseline", gap: "12px", paddingBottom: "8px", borderBottom: "1px solid rgba(61,52,40,0.12)", marginBottom: "0.75rem" }}
-      >
-        <p
-          className="tracking-[0.2em]"
-          style={{ color: "#8A7240", fontFamily: "var(--font-inter-var)", fontSize: "14px", fontWeight: 500, textTransform: "lowercase", margin: 0 }}
-        >
-          decision
-        </p>
-        <span style={{
-          fontFamily: "var(--font-inter-var)",
-          fontSize: "12px",
-          textTransform: "lowercase",
-          letterSpacing: "0.06em",
-          color: "#A65D46",
-        }}>
-          {active}
-        </span>
-      </motion.div>
-
-      {/* Category navigation — border acts as the tab rail; active button's -1px margin overlaps it */}
-      <div
         className="nav-scroll"
         style={{
           display: "flex",
-          justifyContent: "flex-start",
-          marginBottom: "1rem",
+          alignItems: "baseline",
           borderBottom: "1px solid rgba(61,52,40,0.12)",
+          marginBottom: "1.25rem",
         }}
       >
+        {/* Static 'decision' label — not a tab */}
+        <span
+          className="tracking-[0.2em]"
+          style={{
+            fontFamily: "var(--font-inter-var)",
+            fontSize: "14px",
+            fontWeight: 500,
+            textTransform: "lowercase",
+            color: "#8A7240",
+            whiteSpace: "nowrap",
+            paddingBottom: "8px",
+            paddingRight: "20px",
+            marginBottom: "-1px",
+            borderBottom: "2px solid transparent",
+            flexShrink: 0,
+          }}
+        >
+          decision
+        </span>
+
+        {/* Category tabs */}
         {DECISION_CATEGORIES.map((category) => (
           <button
             key={category}
@@ -99,25 +99,26 @@ export default function DecisionSection() {
               fontFamily: "var(--font-inter-var)",
               fontSize: "11px",
               color: active === category ? "#A65D46" : "#3D3428",
-              opacity: active === category ? 1 : 0.55,
+              opacity: active === category ? 1 : 0.4,
               textTransform: "lowercase",
-              letterSpacing: "0.02em",
+              letterSpacing: "0.04em",
               fontWeight: 400,
               background: "none",
               border: "none",
               borderBottom: active === category ? "2px solid #A65D46" : "2px solid transparent",
               marginBottom: "-1px",
-              padding: "6px 0",
+              padding: "8px 0",
               paddingRight: "20px",
               cursor: "pointer",
               whiteSpace: "nowrap",
+              flexShrink: 0,
               transition: "opacity 0.15s ease, color 0.15s ease, border-color 0.15s ease",
             }}
           >
             {category}
           </button>
         ))}
-      </div>
+      </motion.div>
 
       {/* Decision result panel */}
       <div
