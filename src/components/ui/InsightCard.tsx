@@ -37,7 +37,7 @@ export default function InsightCard({
   const text   = bodyColor[type];
 
   return (
-    <div style={{ display: "flex", alignItems: "stretch" }}>
+    <div className="insight-card" style={{ display: "flex", alignItems: "stretch" }}>
       {/* Animated side bar — flex child, stretches to full card height */}
       <motion.div
         initial={{ scaleY: 0 }}
