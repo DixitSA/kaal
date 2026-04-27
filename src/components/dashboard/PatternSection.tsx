@@ -104,16 +104,18 @@ function SealGlyph() {
 // compositing — Chrome will promote such elements to a 2D GPU layer and
 // backface-visibility:hidden stops working.  Visual clipping lives on FACE_CLIP.
 const FACE_BASE: React.CSSProperties = {
-  position: "absolute",
-  inset: 0,
+  gridArea: "1 / 1",
   WebkitBackfaceVisibility: "hidden",
   backfaceVisibility: "hidden",
 };
 
 // Inner wrapper handles all visual chrome without touching the compositing layer.
 const FACE_CLIP: React.CSSProperties = {
-  ...FACE_BASE,
-  overflow: "hidden",
+  position: "relative",
+  width: "100%",
+  height: "100%",
+  overflow: "clip",
+  boxSizing: "border-box",
 };
 
 const MARGINALIA: React.CSSProperties = {
@@ -221,8 +223,9 @@ export default function PatternSection() {
             onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") toggle(); }}
             style={{
               position: "relative",
+              display: "grid",
               width: "100%",
-              height: "clamp(320px, 55vw, 380px)",
+              minHeight: "clamp(320px, 55vw, 380px)",
               WebkitTransformStyle: "preserve-3d",
               transformStyle: "preserve-3d",
               transform: flipped ? "rotateY(180deg)" : "rotateY(0deg)",
@@ -240,8 +243,7 @@ export default function PatternSection() {
                 ...FACE_CLIP,
                 background: "radial-gradient(ellipse at 50% 45%, #FDFBF3 0%, #F5F0E8 75%)",
                 display: "flex", alignItems: "center", justifyContent: "center",
-                border: "2px solid #D5A021",
-                boxSizing: "border-box",
+                border: "1px solid rgba(44,36,24,0.15)",
                 borderRadius: "3px",
               }}>
                 <CottonTexture id="cotton-front" />
@@ -275,8 +277,7 @@ export default function PatternSection() {
                 ...FACE_CLIP,
                 background: "radial-gradient(ellipse at 50% 30%, #FDFBF3 0%, #F5F0E8 80%)",
                 display: "flex", flexDirection: "column",
-                border: "2px solid #D5A021",
-                boxSizing: "border-box",
+                border: "1px solid rgba(44,36,24,0.15)",
                 borderRadius: "3px",
               }}>
                 <CottonTexture id="cotton-back" />
@@ -296,7 +297,7 @@ export default function PatternSection() {
                   </div>
 
                   {/* Center Lane (Main Content) */}
-                  <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", padding: "3rem 0", overflow: "hidden" }}>
+                  <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", paddingTop: "clamp(2rem, 6vw, 3rem)", paddingBottom: "2.5rem", overflow: "hidden" }}>
                     {/* Content Protection Wrapper (px-6) */}
                     <div style={{ width: "100%", padding: "0 1.5rem", display: "flex", flexDirection: "column", alignItems: "center" }}>
                       <p style={{ fontFamily: "var(--font-inter-var)", fontSize: "8px", textTransform: "uppercase", letterSpacing: "0.3em", color: "#8A7240", margin: 0, opacity: 0.8, fontWeight: 300 }}>
@@ -332,7 +333,7 @@ export default function PatternSection() {
                 {/* Divider Line */}
                 <div style={{
                   height: "1px",
-                  backgroundColor: "#D5A021",
+                  backgroundColor: "rgba(44,36,24,0.15)",
                   width: "100%",
                   flexShrink: 0,
                   position: "relative",
