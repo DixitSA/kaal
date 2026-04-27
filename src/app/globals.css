@@ -43,6 +43,23 @@ body {
   margin: 0;
   background-color: var(--bg-cream);
   color: var(--text-primary);
+  /* Disable rubber-band/pull-to-refresh on iOS WebView — both axes */
+  overscroll-behavior: none;
+  /* Prevent text selection — native app feel */
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* Allow text selection inside inputs and content-editable elements */
+input, textarea, [contenteditable] {
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+/* Sticky header: respect Dynamic Island / Notch */
+header[style*="sticky"],
+.sticky-header {
+  padding-top: env(safe-area-inset-top);
 }
 
 button,
@@ -168,6 +185,19 @@ select,
 textarea,
 a {
   touch-action: manipulation;
+}
+
+/* ─── Physical press feedback ─────────────────────────────── */
+
+.insight-card {
+  transition: transform 0.1s ease;
+}
+.insight-card:active {
+  transform: scale(0.98);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .insight-card:active { transform: none; }
 }
 
 /* ─── Sizing ──────────────────────────────────────────────── */

@@ -57,7 +57,7 @@ export default function Dashboard() {
   return (
     <div style={{ minHeight: "100dvh" }} className="relative">
       {/* Sticky header */}
-      <header style={{ position: "sticky", top: 0, zIndex: 100, backgroundColor: "rgba(245,240,232,0.9)", backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)" }}>
+      <header style={{ position: "sticky", top: 0, zIndex: 100, backgroundColor: "rgba(245,240,232,0.9)", backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)", paddingTop: "env(safe-area-inset-top)" }}>
         <style>{`
           .dash-header-bar { display: flex; align-items: center; justify-content: space-between; padding: 1rem clamp(1rem, 5vw, 3rem); position: relative; }
           .dash-nav { position: absolute; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: clamp(0.75rem, 3vw, 2rem); }
@@ -125,8 +125,8 @@ export default function Dashboard() {
         <p style={{ fontFamily: "var(--font-inter-var), sans-serif", fontStyle: "italic", fontSize: "11px", color: "#9C9488", letterSpacing: "0.04em", margin: "0 0 1.5rem" }}>built on vedic timing systems. © 2026 Kaal Astrology</p>
         <nav style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "0" }}>
           {FOOTER_LINKS.map((link, i) => (
-            <span key={link.href + link.label} style={{ display: "flex", alignItems: "center" }}>
-              <a href={link.href} style={{ fontFamily: "var(--font-inter-var), sans-serif", fontSize: "11px", color: "#9C9488", letterSpacing: "0.07em", textTransform: "uppercase", padding: "10px 12px", textDecoration: "none", transition: "color 0.15s ease" }}
+            <span key={link.href} style={{ display: "flex", alignItems: "center" }}>
+              <a href={link.href} style={{ fontFamily: "var(--font-inter-var), sans-serif", fontSize: "11px", color: "#9C9488", letterSpacing: "0.07em", textTransform: "uppercase", padding: "16px 14px", minHeight: "44px", display: "inline-flex", alignItems: "center", textDecoration: "none", transition: "color 0.15s ease" }}
                 onMouseEnter={(e) => e.currentTarget.style.color = "#2C2418"}
                 onMouseLeave={(e) => e.currentTarget.style.color = "#9C9488"}>
                 {link.label}
