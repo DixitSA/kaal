@@ -240,6 +240,9 @@ export default function PatternSection() {
                 ...FACE_CLIP,
                 background: "radial-gradient(ellipse at 50% 45%, #FDFBF3 0%, #F5F0E8 75%)",
                 display: "flex", alignItems: "center", justifyContent: "center",
+                border: "2px solid #D5A021",
+                boxSizing: "border-box",
+                borderRadius: "3px",
               }}>
                 <CottonTexture id="cotton-front" />
                 {CORNERS.map((c, i) => <CornerGlyph key={i} style={c} />)}
@@ -272,6 +275,9 @@ export default function PatternSection() {
                 ...FACE_CLIP,
                 background: "radial-gradient(ellipse at 50% 30%, #FDFBF3 0%, #F5F0E8 80%)",
                 display: "flex", flexDirection: "column",
+                border: "2px solid #D5A021",
+                boxSizing: "border-box",
+                borderRadius: "3px",
               }}>
                 <CottonTexture id="cotton-back" />
                 {CORNERS.map((c, i) => <CornerGlyph key={i} style={c} />)}
@@ -280,7 +286,7 @@ export default function PatternSection() {
                 <div style={{ flex: 1, display: "flex", width: "100%", minHeight: 0, position: "relative", zIndex: 1 }}>
 
                   {/* Left Sidebar (Vedic Blueprint) */}
-                  <div style={{ width: "40px", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", borderRight: "1px solid rgba(44,36,24,0.15)", position: "relative" }}>
+                  <div style={{ width: "48px", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", position: "relative" }}>
                     <div style={{ position: "absolute", inset: 0, opacity: 0.05, pointerEvents: "none" }}>
                       <JaaliStrip id="jaali-bl" />
                     </div>
@@ -290,7 +296,7 @@ export default function PatternSection() {
                   </div>
 
                   {/* Center Lane (Main Content) */}
-                  <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", padding: "2.5rem 0", overflow: "hidden" }}>
+                  <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", padding: "3rem 0", overflow: "hidden" }}>
                     {/* Content Protection Wrapper (px-6) */}
                     <div style={{ width: "100%", padding: "0 1.5rem", display: "flex", flexDirection: "column", alignItems: "center" }}>
                       <p style={{ fontFamily: "var(--font-inter-var)", fontSize: "8px", textTransform: "uppercase", letterSpacing: "0.3em", color: "#8A7240", margin: 0, opacity: 0.8, fontWeight: 300 }}>
@@ -313,7 +319,7 @@ export default function PatternSection() {
                   </div>
 
                   {/* Right Sidebar (Gana) */}
-                  <div style={{ width: "40px", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", borderLeft: "1px solid rgba(44,36,24,0.15)", position: "relative" }}>
+                  <div style={{ width: "48px", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", position: "relative" }}>
                     <div style={{ position: "absolute", inset: 0, opacity: 0.05, pointerEvents: "none" }}>
                       <JaaliStrip id="jaali-br" />
                     </div>
@@ -326,7 +332,7 @@ export default function PatternSection() {
                 {/* Divider Line */}
                 <div style={{
                   height: "1px",
-                  backgroundColor: "rgba(44,36,24,0.15)",
+                  backgroundColor: "#D5A021",
                   width: "100%",
                   flexShrink: 0,
                   position: "relative",
