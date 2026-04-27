@@ -11,7 +11,6 @@ const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
 const PHASE_LABELS = ["Chart", "Interpretation", "Dashboard"] as const;
 
-/** Map status message → 0-based phase index (0 / 1 / 2) */
 function getPhase(msg: string): number {
   const m = msg.toLowerCase();
   if (m.includes("opening") || m.includes("dashboard")) return 2;
@@ -19,12 +18,11 @@ function getPhase(msg: string): number {
   return 0;
 }
 
-/** Phase → progress fraction for the single bar */
 const PHASE_PROGRESS = [0.34, 0.67, 1.0] as const;
 
 export default function LoadingScreen() {
   const router = useRouter();
-  const { userData, computedData, setComputedData, isLoading } = useUser();
+  const { userData, computedData, setComputedData, clearUserData, isLoading } = useUser();
   const shouldReduce = useReducedMotion();
   const [statusMessage, setStatusMessage] = useState("preparing your profile...");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -76,7 +74,9 @@ export default function LoadingScreen() {
           error instanceof Error
             ? error.message
             : "We couldn't complete the profile pipeline.";
+        console.error("Chart compute failed:", error);
         setErrorMessage(message);
+        startedRef.current = false;
       });
 
     return () => { cancelled = true; };
@@ -254,18 +254,36 @@ export default function LoadingScreen() {
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, ease: EASE }}
-            style={{ display: "flex", gap: "12px" }}
+            style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "16px" }}
           >
             <button
               type="button"
-              onClick={() => window.location.reload()}
+              onClick={() => {
+                setErrorMessage(null);
+                startedRef.current = false;
+                setTimeout(() => {
+                  if (!userData) return;
+                  void runProfilePipeline(userData, setStatusMessage)
+                    .then((snapshot) => {
+                      setStatusMessage("opening your dashboard...");
+                      readyToNavigateRef.current = true;
+                      setComputedData(snapshot);
+                    })
+                    .catch((error: unknown) => {
+                      const msg = error instanceof Error ? error.message : "We couldn't complete the profile pipeline.";
+                      console.error("Chart compute failed:", error);
+                      setErrorMessage(msg);
+                      startedRef.current = false;
+                    });
+                }, 100);
+              }}
               style={{
-                backgroundColor: "#B5563E",
+                backgroundColor: "#A65D46",
                 color: "#F5F0E8",
                 border: "none",
                 borderRadius: "2px",
                 minHeight: "44px",
-                padding: "0 20px",
+                padding: "0 24px",
                 cursor: "pointer",
                 fontFamily: "var(--font-inter-var)",
                 textTransform: "uppercase",
@@ -277,22 +295,24 @@ export default function LoadingScreen() {
             </button>
             <button
               type="button"
-              onClick={() => router.push("/")}
+              onClick={() => {
+                clearUserData();
+                router.push("/");
+              }}
               style={{
                 backgroundColor: "transparent",
-                color: "#2C2418",
-                border: "1px solid rgba(122, 116, 105, 0.4)",
-                borderRadius: "2px",
-                minHeight: "44px",
-                padding: "0 20px",
+                color: "#A65D46",
+                border: "none",
+                padding: "8px 16px",
                 cursor: "pointer",
                 fontFamily: "var(--font-inter-var)",
+                fontSize: "11px",
                 textTransform: "uppercase",
                 letterSpacing: "0.12em",
-                fontSize: "11px",
+                borderBottom: "1px solid #A65D46",
               }}
             >
-              Back
+              Reset & Edit Profile
             </button>
           </motion.div>
         )}
