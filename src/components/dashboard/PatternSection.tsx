@@ -275,6 +275,34 @@ export default function PatternSection() {
                   <JaaliStrip id="jaali-fr" />
                 </div>
 
+                {/* Dog-ear fold — top-right parchment curl */}
+                <div aria-hidden="true" style={{
+                  position: "absolute", top: 0, right: 0,
+                  width: "22px", height: "22px",
+                  background: "linear-gradient(225deg, rgba(44,36,24,0.14) 50%, transparent 50%)",
+                  borderRadius: "0 3px 0 0",
+                  zIndex: 3, pointerEvents: "none",
+                }} />
+
+                {/* Reveal hint — floats at bottom, brightens on hover */}
+                <motion.div
+                  animate={shouldReduce ? undefined : { y: [0, -2, 0] }}
+                  transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                  style={{
+                    position: "absolute", bottom: "16px", left: 0, right: 0,
+                    textAlign: "center", zIndex: 2, pointerEvents: "none",
+                    opacity: hovered ? 0.6 : 0.28,
+                    transition: "opacity 0.35s ease",
+                    fontFamily: "var(--font-inter-var)",
+                    fontSize: "10px",
+                    textTransform: "lowercase",
+                    letterSpacing: "0.2em",
+                    color: "#2C2418",
+                  }}
+                >
+                  ✧ reveal insight
+                </motion.div>
+
                 <div style={{ position: "relative", zIndex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: "6px" }}>
                   <SealGlyph />
                   <span style={{
@@ -376,6 +404,25 @@ export default function PatternSection() {
                     {identity.challengeLine}
                   </p>
                 </div>
+
+                {/* Return hint */}
+                <motion.div
+                  animate={shouldReduce ? undefined : { y: [0, -2, 0] }}
+                  transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                  style={{
+                    position: "absolute", bottom: "8px", left: 0, right: 0,
+                    textAlign: "center", zIndex: 3, pointerEvents: "none",
+                    opacity: hovered ? 0.6 : 0.28,
+                    transition: "opacity 0.35s ease",
+                    fontFamily: "var(--font-inter-var)",
+                    fontSize: "10px",
+                    textTransform: "lowercase",
+                    letterSpacing: "0.2em",
+                    color: "#2C2418",
+                  }}
+                >
+                  ✧ return
+                </motion.div>
               </div>
             </div>
 
