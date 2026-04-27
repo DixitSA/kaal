@@ -4,6 +4,13 @@ import { motion, useReducedMotion } from "framer-motion";
 import { useUser } from "@/context/UserContext";
 import InsightCard from "@/components/ui/InsightCard";
 import type { IntensityLevel } from "@/lib/types/engine";
+import { PHASE_INSIGHTS } from "@/lib/content/phaseInsights";
+import { deterministicPick } from "@/lib/utils/deterministicPick";
+
+function getLocalDateKey(): string {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+}
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
@@ -33,6 +40,11 @@ export default function PhaseSection() {
   const filledDots = INTENSITY_DOTS[intensityLevel];
   const isCritical = intensityLevel === "critical";
   const words = phase.label.split(" ");
+
+  const dailyInsight = deterministicPick(
+    PHASE_INSIGHTS[phase.stateKey],
+    `${getLocalDateKey()}:${phase.stateKey}`
+  );
 
   const container = {
     hidden: {},
@@ -122,6 +134,25 @@ export default function PhaseSection() {
           </motion.span>
         ))}
       </motion.h2>
+
+      {/* Daily rotating insight */}
+      <motion.p
+        variants={childAnim(0.15)}
+        className="mt-3"
+        style={{
+          fontFamily: "var(--font-quattrocento-sans), var(--font-inter-var), sans-serif",
+          fontStyle: "italic",
+          fontSize: "0.9rem",
+          color: "#8A7240",
+          lineHeight: 1.6,
+          letterSpacing: "0.02em",
+          textTransform: "lowercase",
+          maxWidth: "48ch",
+          opacity: 0.85,
+        }}
+      >
+        &ldquo;{dailyInsight}&rdquo;
+      </motion.p>
 
       {/* Summary */}
       <motion.p
