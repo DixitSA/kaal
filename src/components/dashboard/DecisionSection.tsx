@@ -1,6 +1,6 @@
 "use client";
 
-import { useLayoutEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 
 import { useUser } from "@/context/UserContext";
@@ -32,18 +32,6 @@ export default function DecisionSection() {
   const { computedData } = useUser();
   const [active, setActive] = useState<DecisionCategory>("career");
   const shouldReduce = useReducedMotion();
-  const btnRefs = useRef<Record<string, HTMLButtonElement | null>>({});
-  const [underline, setUnderline] = useState({ left: 0, width: 0 });
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  useLayoutEffect(() => {
-    const btn = btnRefs.current[active];
-    const container = containerRef.current;
-    if (!btn || !container) return;
-    const btnRect = btn.getBoundingClientRect();
-    const containerRect = container.getBoundingClientRect();
-    setUnderline({ left: btnRect.left - containerRect.left, width: btnRect.width });
-  }, [active]);
 
   if (!computedData) return null;
 
@@ -68,83 +56,64 @@ export default function DecisionSection() {
 
   return (
     <section>
-      {/* Section label */}
-      <motion.p
+      {/* Header row: Decision + active category inline */}
+      <motion.div
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: "-60px" }}
         variants={childAnim(0)}
-        className="uppercase tracking-[0.15em]"
-        style={{ color: "#8A7240", fontFamily: "var(--font-inter-var)", fontSize: "11px", fontWeight: 500, marginBottom: "12px" }}
+        style={{ display: "flex", alignItems: "baseline", gap: "12px", paddingBottom: "10px", borderBottom: "1px solid rgba(61,52,40,0.12)", marginBottom: "1rem" }}
       >
-        Decision
-      </motion.p>
+        <p
+          className="tracking-[0.2em]"
+          style={{ color: "#8A7240", fontFamily: "var(--font-inter-var)", fontSize: "11px", fontWeight: 500, textTransform: "lowercase", margin: 0 }}
+        >
+          decision
+        </p>
+        <span style={{
+          fontFamily: "var(--font-inter-var)",
+          fontSize: "11px",
+          textTransform: "lowercase",
+          letterSpacing: "0.06em",
+          color: "#A65D46",
+        }}>
+          {active}
+        </span>
+      </motion.div>
 
-      <style>{`
-        .decision-tab-scroll { scrollbar-width: none; -ms-overflow-style: none; }
-        .decision-tab-scroll::-webkit-scrollbar { display: none; }
-        @media (min-width: 768px) {
-          .decision-tab-scroll { overflow-x: visible !important; }
-        }
-      `}</style>
+      {/* Category navigation */}
       <div
         style={{
-          marginTop: "16px",
+          display: "flex",
+          justifyContent: "flex-start",
+          gap: "0",
+          marginBottom: "1rem",
+          paddingBottom: "10px",
           borderBottom: "1px solid rgba(122, 116, 105, 0.12)",
         }}
       >
-        <div
-          ref={containerRef}
-          role="tablist"
-          aria-label="Decision categories"
-          style={{ position: "relative", display: "flex", justifyContent: "center", gap: "0", flexWrap: "wrap" }}
-        >
-          {DECISION_CATEGORIES.map((category, idx) => (
-            <motion.button
-              key={category}
-              ref={(el) => { btnRefs.current[category] = el; }}
-              onClick={() => setActive(category)}
-              whileTap={shouldReduce ? {} : { scale: 0.97 }}
-              transition={{ duration: 0.1, ease: "easeOut" }}
-              className="transition-colors duration-200 ease-out"
-              role="tab"
-              aria-selected={active === category}
-              aria-controls={`decision-panel-${category}`}
-              style={{
-                fontFamily: "var(--font-inter-var)",
-                fontSize: "11px",
-                color: active === category ? "#2C2418" : "#7A7469",
-                textTransform: "uppercase",
-                letterSpacing: "0.15em",
-                fontWeight: 500,
-                background: "none",
-                border: "none",
-                padding: "12px 16px",
-                marginBottom: "-1px",
-                minHeight: "44px",
-                cursor: "pointer",
-                whiteSpace: "nowrap",
-              }}
-            >
-              {category}
-            </motion.button>
-          ))}
-
-          {/* Sliding underline */}
-          {!shouldReduce && underline.width > 0 && (
-            <motion.div
-              animate={{ left: underline.left + (underline.width / 2) - 20, width: 40 }}
-              transition={{ duration: 0.25, ease: EASE }}
-              style={{
-                position: "absolute",
-                bottom: "-1px",
-                height: "2px",
-                backgroundColor: "#A65D46",
-                borderRadius: "1px",
-              }}
-            />
-          )}
-        </div>
+        {DECISION_CATEGORIES.map((category) => (
+          <button
+            key={category}
+            onClick={() => setActive(category)}
+            style={{
+              fontFamily: "var(--font-inter-var)",
+              fontSize: "11px",
+              color: active === category ? "#A65D46" : "#7A7469",
+              textTransform: "lowercase",
+              letterSpacing: "0.02em",
+              fontWeight: active === category ? 500 : 400,
+              background: "none",
+              border: "none",
+              padding: "8px 0",
+              paddingRight: "20px",
+              cursor: "pointer",
+              whiteSpace: "nowrap",
+            }}
+          >
+            {category}
+          </button>
+        ))}
       </div>
 
       {/* Decision result panel */}
