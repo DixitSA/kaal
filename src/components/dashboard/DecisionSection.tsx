@@ -106,10 +106,12 @@ export default function DecisionSection() {
           style={{ position: "relative", display: "flex", justifyContent: "flex-start", gap: "0", minWidth: "max-content" }}
         >
           {DECISION_CATEGORIES.map((category, idx) => (
-            <button
+            <motion.button
               key={category}
               ref={(el) => { btnRefs.current[category] = el; }}
               onClick={() => setActive(category)}
+              whileTap={shouldReduce ? {} : { scale: 0.97 }}
+              transition={{ duration: 0.1, ease: "easeOut" }}
               className="transition-colors duration-200 ease-out"
               role="tab"
               aria-selected={active === category}
@@ -132,7 +134,7 @@ export default function DecisionSection() {
               }}
             >
               {category}
-            </button>
+            </motion.button>
           ))}
 
           {/* Sliding underline */}
