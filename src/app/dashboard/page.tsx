@@ -11,6 +11,7 @@ import DecisionSection from "@/components/dashboard/DecisionSection";
 import PatternSection from "@/components/dashboard/PatternSection";
 import VedicDivider from "@/components/ui/VedicDivider";
 import SettingsDropdown from "@/components/ui/SettingsDropdown";
+import Footer from "@/components/ui/Footer";
 
 const CONTEMPLATIONS = [
   { quote: "The stars impel, they do not compel.", source: "B. V. Raman" },
