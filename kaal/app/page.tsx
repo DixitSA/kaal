@@ -1,120 +1,218 @@
 "use client";
 
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { motion, useReducedMotion, Variants } from "framer-motion";
-import { useUser } from "@/context/UserContext";
-import YantraMandala from "@/components/svg/YantraMandala";
-import DecorativeDivider from "@/components/svg/DecorativeDivider";
-import BirthForm from "@/components/landing/BirthForm";
+import { useState } from "react";
+import Image from "next/image";
+import { motion } from "framer-motion";
 
-const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
+export default function EarlyAccessPage() {
+  const [email, setEmail] = useState("");
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
 
-const headline1 = "know what's happening.".split(" ");
-const headline2 = "know what to do.".split(" ");
-const allWords = [...headline1.map(w => ({ word: w, line: 0 })), ...headline2.map(w => ({ word: w, line: 1 }))];
-
-export default function LandingPage() {
-  const router = useRouter();
-  const { userData, isLoading } = useUser();
-  const shouldReduce = useReducedMotion();
-
-  useEffect(() => {
-    if (!isLoading && userData) router.replace("/dashboard");
-  }, [isLoading, userData, router]);
-
-  if (isLoading) return <div style={{ minHeight: "100dvh", backgroundColor: "#F5F0E8" }} />;
-
-  const wordVariants: Variants = {
-    hidden: { opacity: 0, y: shouldReduce ? 0 : 20 },
-    visible: (i: number) => ({
-      opacity: 1,
-      y: 0,
-      transition: { delay: i * 0.1, duration: shouldReduce ? 0 : 0.5, ease: EASE },
-    }),
-  };
-
-  const fieldVariants: Variants = {
-    hidden: { opacity: 0, x: shouldReduce ? 0 : 30 },
-    visible: (i: number) => ({
-      opacity: 1,
-      x: 0,
-      transition: { delay: allWords.length * 0.1 + 0.3 + i * 0.15, duration: shouldReduce ? 0 : 0.5, ease: EASE },
-    }),
-  };
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!email.trim()) return;
+    setStatus("loading");
+    try {
+      const res = await fetch("/api/waitlist", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      if (!res.ok) throw new Error();
+      setStatus("success");
+      setEmail("");
+    } catch {
+      setStatus("error");
+    }
+  }
 
   return (
-    <main
-      className="flex items-center justify-center px-6 py-16 relative"
-      style={{ minHeight: "100dvh" }}
+    <div
+      style={{
+        minHeight: "100dvh",
+        backgroundColor: "#F5F2E9",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        position: "relative",
+        overflow: "hidden",
+      }}
     >
-      {/* Wordmark */}
-      <motion.div
-        className="fixed top-0 left-0 p-6 z-20"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.6, delay: 0.2 }}
-        style={{ fontFamily: "var(--font-playfair-display)", fontSize: "1.25rem", color: "#2C2418" }}
+      {/* Vault door — centered content */}
+      <main
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: "2rem",
+          padding: "0 1.5rem",
+          maxWidth: "420px",
+          width: "100%",
+          textAlign: "center",
+        }}
       >
-        Kaal
-      </motion.div>
-
-      <div className="w-full max-w-[600px] flex flex-col items-center">
-        {/* Yantra with rotation + pulse */}
-        <div className="relative flex flex-col items-center w-full">
-          <motion.div
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
-            animate={shouldReduce ? {} : { rotate: 360, scale: [1, 1.03, 1] }}
-            transition={{
-              rotate: { duration: 20, ease: "linear", repeat: Infinity },
-              scale: { duration: 4, ease: "easeInOut", repeat: Infinity },
-            }}
-          >
-            <YantraMandala size={500} opacity={0.12} />
-          </motion.div>
-
-          {/* Headline word-by-word */}
-          <div
-            className="relative z-10 text-center font-bold leading-tight"
-            style={{ fontFamily: "var(--font-playfair-display)", fontSize: "clamp(2.5rem, 8vw, 6rem)", color: "#2C2418" }}
-          >
-            <div className="flex flex-wrap justify-center gap-x-[0.25em]">
-              {allWords.map(({ word, line }, i) => (
-                <span key={i} style={{ display: "contents" }}>
-                  {line === 1 && i === headline1.length && (
-                    <div className="w-full" />
-                  )}
-                  <motion.span
-                    custom={i}
-                    variants={wordVariants}
-                    initial="hidden"
-                    animate="visible"
-                    style={{ display: "inline-block" }}
-                  >
-                    {word}
-                  </motion.span>
-                </span>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Decorative divider draw-in */}
+        {/* Sigil with breathing pulse */}
         <motion.div
-          className="my-5"
-          initial={{ opacity: 0, scaleX: 0 }}
-          animate={{ opacity: 1, scaleX: 1 }}
-          transition={{ delay: allWords.length * 0.1 + 0.1, duration: shouldReduce ? 0 : 1, ease: EASE }}
-          style={{ transformOrigin: "center" }}
+          animate={{ scale: [1, 1.04, 1], opacity: [0.88, 1, 0.88], rotate: 360 }}
+          transition={{
+            scale: { duration: 3, ease: "easeInOut", repeat: Infinity },
+            opacity: { duration: 3, ease: "easeInOut", repeat: Infinity },
+            rotate: { duration: 30, ease: "linear", repeat: Infinity },
+          }}
+          style={{ width: 96, height: 96, position: "relative" }}
         >
-          <DecorativeDivider width={300} opacity={0.25} />
+          <Image
+            src="/yantra-sigil.svg"
+            alt="Kaal sigil"
+            fill
+            sizes="96px"
+            style={{ objectFit: "contain" }}
+            priority
+            unoptimized
+          />
         </motion.div>
 
-        {/* Form with stagger slide-in */}
-        <div className="w-full">
-          <BirthForm fieldVariants={fieldVariants} shouldReduce={!!shouldReduce} />
-        </div>
-      </div>
-    </main>
+        {/* Headline */}
+        <h1
+          style={{
+            fontFamily: "var(--font-playfair-display)",
+            fontStyle: "italic",
+            fontWeight: 400,
+            fontSize: "clamp(1.5rem, 5vw, 2rem)",
+            color: "#2C2C2C",
+            margin: 0,
+            lineHeight: 1.3,
+            letterSpacing: "0.01em",
+          }}
+        >
+          the signal is stabilizing.
+        </h1>
+
+        {/* Subheadline */}
+        <p
+          style={{
+            fontFamily: "var(--font-inter-var), sans-serif",
+            fontWeight: 500,
+            fontSize: "10px",
+            color: "#2C2C2C",
+            margin: 0,
+            letterSpacing: "0.22em",
+            textTransform: "uppercase",
+          }}
+        >
+          Request Early Access to the Relic
+        </p>
+
+        {/* Email capture form */}
+        <form
+          onSubmit={handleSubmit}
+          style={{
+            width: "100%",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: "1.25rem",
+          }}
+        >
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="your@email.com"
+            disabled={status === "loading" || status === "success"}
+            style={{
+              width: "100%",
+              background: "transparent",
+              border: "none",
+              borderBottom: "1px solid #2C2C2C",
+              outline: "none",
+              padding: "0.5rem 0",
+              fontFamily: "var(--font-inter-var), sans-serif",
+              fontSize: "14px",
+              color: "#2C2C2C",
+              textAlign: "center",
+              letterSpacing: "0.04em",
+            }}
+          />
+
+          {status === "success" ? (
+            <p
+              style={{
+                fontFamily: "var(--font-inter-var), sans-serif",
+                fontSize: "11px",
+                color: "#BC5434",
+                letterSpacing: "0.14em",
+                textTransform: "uppercase",
+                margin: 0,
+              }}
+            >
+              you&apos;re on the list.
+            </p>
+          ) : (
+            <button
+              type="submit"
+              disabled={status === "loading"}
+              style={{
+                background: "none",
+                border: "none",
+                cursor: status === "loading" ? "wait" : "pointer",
+                fontFamily: "var(--font-inter-var), sans-serif",
+                fontSize: "11px",
+                fontWeight: 500,
+                color: "#BC5434",
+                letterSpacing: "0.18em",
+                textTransform: "uppercase",
+                padding: "0.25rem 0",
+                opacity: status === "loading" ? 0.5 : 1,
+                transition: "opacity 0.2s ease",
+              }}
+            >
+              [ Enter the Fold ]
+            </button>
+          )}
+
+          {status === "error" && (
+            <p
+              style={{
+                fontFamily: "var(--font-inter-var), sans-serif",
+                fontSize: "10px",
+                color: "#BC5434",
+                letterSpacing: "0.1em",
+                margin: 0,
+                opacity: 0.7,
+              }}
+            >
+              something went wrong — try again
+            </p>
+          )}
+        </form>
+      </main>
+
+      {/* Fixed footer */}
+      <footer
+        style={{
+          position: "fixed",
+          bottom: 0,
+          left: 0,
+          right: 0,
+          padding: "0 0 1.25rem",
+          textAlign: "center",
+        }}
+      >
+        <p
+          style={{
+            fontFamily: "var(--font-inter-var), sans-serif",
+            fontSize: "10px",
+            color: "#2C2C2C",
+            letterSpacing: "0.1em",
+            margin: 0,
+            opacity: 0.45,
+          }}
+        >
+          v1.0 beta | built in private — 2026
+        </p>
+      </footer>
+    </div>
   );
 }
