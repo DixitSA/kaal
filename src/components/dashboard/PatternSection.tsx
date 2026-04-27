@@ -143,6 +143,7 @@ export default function PatternSection() {
   const [flipped, setFlipped] = useState(false);
   const [hovered, setHovered] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [sharing, setSharing] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
 
   function handleCopyLink() {
@@ -154,20 +155,38 @@ export default function PatternSection() {
     });
   }
 
-  async function handleDownloadImage() {
+  async function handleShareImage() {
     if (!cardRef.current) return;
+    setSharing(true);
     try {
       const dataUrl = await toPng(cardRef.current, {
         backgroundColor: "#F5F0E8",
-        pixelRatio: 2,
+        pixelRatio: window.devicePixelRatio || 2,
         cacheBust: true,
       });
-      const link = document.createElement("a");
-      link.download = `kaal-pattern-${Date.now()}.png`;
-      link.href = dataUrl;
-      link.click();
-    } catch (err) {
-      console.error("Failed to download image:", err);
+
+      const blob = await (await fetch(dataUrl)).blob();
+      const file = new File([blob], "kaal-pattern.png", { type: "image/png" });
+
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({
+          title: "My Kaal Pattern",
+          files: [file],
+        });
+      } else {
+        // Fallback: anchor download for desktop
+        const link = document.createElement("a");
+        link.download = "kaal-pattern.png";
+        link.href = dataUrl;
+        link.click();
+      }
+    } catch (err: unknown) {
+      // AbortError = user dismissed the share sheet — not a real error
+      if (err instanceof Error && err.name !== "AbortError") {
+        console.error("Failed to share image:", err);
+      }
+    } finally {
+      setSharing(false);
     }
   }
 
@@ -387,7 +406,8 @@ export default function PatternSection() {
           {copied ? "Link Copied" : "Copy Link"}
         </button>
         <button
-          onClick={handleDownloadImage}
+          onClick={handleShareImage}
+          disabled={sharing}
           style={{
             background: "none",
             border: "none",
@@ -396,15 +416,15 @@ export default function PatternSection() {
             color: "#7A7469",
             textTransform: "uppercase",
             letterSpacing: "0.1em",
-            opacity: 0.6,
-            cursor: "pointer",
+            opacity: sharing ? 0.4 : 0.6,
+            cursor: sharing ? "default" : "pointer",
             transition: "opacity 0.2s ease",
             padding: "8px 16px",
           }}
-          onMouseOver={(e) => e.currentTarget.style.opacity = "1"}
-          onMouseOut={(e) => e.currentTarget.style.opacity = "0.6"}
+          onMouseOver={(e) => { if (!sharing) e.currentTarget.style.opacity = "1"; }}
+          onMouseOut={(e) => { if (!sharing) e.currentTarget.style.opacity = "0.6"; }}
         >
-          Download Image
+          {sharing ? "Generating…" : "Share Pattern"}
         </button>
       </motion.div>
     </motion.section>
