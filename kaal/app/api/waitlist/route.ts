@@ -15,12 +15,15 @@ export async function POST(req: NextRequest) {
     const loops = new LoopsClient(apiKey);
 
     try {
-      await loops.createContact({ email: trimmed });
+      await loops.createContact({ email: trimmed, source: "waitlist" });
       console.log("[waitlist] createContact: success", trimmed);
     } catch (err: unknown) {
-      // Log the real error for debugging — don't block the user
       const status = (err as { statusCode?: number })?.statusCode;
-      console.error("[waitlist] createContact failed — status:", status, err);
+      if (status === 409) {
+        console.log("[waitlist] createContact: duplicate contact, already on list");
+      } else {
+        console.error("[waitlist] createContact failed — status:", status, err);
+      }
     }
 
     try {
