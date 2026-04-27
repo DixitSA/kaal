@@ -72,6 +72,16 @@ select {
   font: inherit;
 }
 
+/* Horizontally-scrollable nav strip with no visible scrollbar */
+.nav-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;       /* Firefox */
+}
+.nav-scroll::-webkit-scrollbar {
+  display: none;               /* Chrome / Safari / Edge */
+}
+
 a {
   color: inherit;
   text-decoration: none;

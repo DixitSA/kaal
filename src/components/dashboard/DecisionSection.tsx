@@ -62,7 +62,7 @@ export default function DecisionSection() {
         whileInView="visible"
         viewport={{ once: true, margin: "-60px" }}
         variants={childAnim(0)}
-        style={{ display: "flex", alignItems: "baseline", gap: "12px", paddingBottom: "10px", borderBottom: "1px solid rgba(61,52,40,0.12)", marginBottom: "1rem" }}
+        style={{ display: "flex", alignItems: "baseline", gap: "12px", paddingBottom: "8px", borderBottom: "1px solid rgba(61,52,40,0.12)", marginBottom: "0.75rem" }}
       >
         <p
           className="tracking-[0.2em]"
@@ -81,16 +81,14 @@ export default function DecisionSection() {
         </span>
       </motion.div>
 
-      {/* Category navigation */}
+      {/* Category navigation — border acts as the tab rail; active button's -1px margin overlaps it */}
       <div
+        className="nav-scroll"
         style={{
           display: "flex",
           justifyContent: "flex-start",
-          gap: "0",
           marginBottom: "1rem",
-          overflowX: "auto",
-          scrollbarWidth: "none",
-          WebkitOverflowScrolling: "touch",
+          borderBottom: "1px solid rgba(61,52,40,0.12)",
         }}
       >
         {DECISION_CATEGORIES.map((category) => (
@@ -100,19 +98,20 @@ export default function DecisionSection() {
             style={{
               fontFamily: "var(--font-inter-var)",
               fontSize: "11px",
-              color: "#3D3428",
-              opacity: active === category ? 0.9 : 0.6,
+              color: active === category ? "#A65D46" : "#3D3428",
+              opacity: active === category ? 1 : 0.55,
               textTransform: "lowercase",
               letterSpacing: "0.02em",
               fontWeight: 400,
               background: "none",
               border: "none",
               borderBottom: active === category ? "2px solid #A65D46" : "2px solid transparent",
-              padding: "8px 0",
+              marginBottom: "-1px",
+              padding: "6px 0",
               paddingRight: "20px",
               cursor: "pointer",
               whiteSpace: "nowrap",
-              transition: "opacity 0.15s ease, border-color 0.15s ease",
+              transition: "opacity 0.15s ease, color 0.15s ease, border-color 0.15s ease",
             }}
           >
             {category}
