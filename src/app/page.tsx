@@ -16,11 +16,9 @@ const headline2 = "know what to do.".split(" ");
 const allWords = [...headline1.map(w => ({ word: w, line: 0 })), ...headline2.map(w => ({ word: w, line: 1 }))];
 
 const FOOTER_LINKS = [
-  { label: "Readings", href: "/readings" },
-  { label: "Muhurta", href: "/muhurta" },
-  { label: "Privacy", href: "/privacy" },
-  { label: "Terms", href: "/terms" },
   { label: "Methodology", href: "/methodology" },
+  { label: "Privacy", href: "/legal" },
+  { label: "Terms", href: "/legal" },
 ] as const;
 
 export default function LandingPage() {
@@ -52,36 +50,36 @@ export default function LandingPage() {
   };
 
   return (
-    <div style={{ minHeight: "100dvh", background: "radial-gradient(ellipse at center, #FDFCF6 0%, #F2EFDF 100%)", boxShadow: "inset 0 0 200px rgba(44, 36, 24, 0.10)" }}>
+    <div style={{ minHeight: "100dvh", background: "#F5F2ED" }}>
 
       {/* Star chart texture — antique constellation watermark */}
       <div aria-hidden="true" style={{ position: "fixed", inset: 0, pointerEvents: "none", zIndex: 0, opacity: 0.25 }}>
         <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <pattern id="star-chart" x="0" y="0" width="200" height="200" patternUnits="userSpaceOnUse">
-              {/* Stars — varying radii for depth */}
-              <circle cx="30" cy="25" r="0.9" fill="#3E3E3E" />
-              <circle cx="80" cy="58" r="1.1" fill="#3E3E3E" />
-              <circle cx="142" cy="38" r="0.7" fill="#3E3E3E" />
-              <circle cx="168" cy="82" r="1.0" fill="#3E3E3E" />
-              <circle cx="52" cy="118" r="0.8" fill="#3E3E3E" />
-              <circle cx="112" cy="98" r="1.2" fill="#3E3E3E" />
-              <circle cx="157" cy="143" r="0.9" fill="#3E3E3E" />
-              <circle cx="28" cy="168" r="0.7" fill="#3E3E3E" />
-              <circle cx="92" cy="178" r="1.0" fill="#3E3E3E" />
-              <circle cx="174" cy="162" r="0.8" fill="#3E3E3E" />
+              {/* Stars — muted green, varying radii */}
+              <circle cx="30" cy="25" r="0.9" fill="#4A4F46" opacity="0.15" />
+              <circle cx="80" cy="58" r="1.1" fill="#4A4F46" opacity="0.15" />
+              <circle cx="142" cy="38" r="0.7" fill="#4A4F46" opacity="0.15" />
+              <circle cx="168" cy="82" r="1.0" fill="#4A4F46" opacity="0.15" />
+              <circle cx="52" cy="118" r="0.8" fill="#4A4F46" opacity="0.15" />
+              <circle cx="112" cy="98" r="1.2" fill="#4A4F46" opacity="0.15" />
+              <circle cx="157" cy="143" r="0.9" fill="#4A4F46" opacity="0.15" />
+              <circle cx="28" cy="168" r="0.7" fill="#4A4F46" opacity="0.15" />
+              <circle cx="92" cy="178" r="1.0" fill="#4A4F46" opacity="0.15" />
+              <circle cx="174" cy="162" r="0.8" fill="#4A4F46" opacity="0.15" />
               {/* Micro dust dots */}
-              <circle cx="62" cy="44" r="0.4" fill="#3E3E3E" />
-              <circle cx="122" cy="68" r="0.35" fill="#3E3E3E" />
-              <circle cx="42" cy="88" r="0.4" fill="#3E3E3E" />
-              <circle cx="162" cy="122" r="0.35" fill="#3E3E3E" />
-              <circle cx="132" cy="158" r="0.4" fill="#3E3E3E" />
-              {/* Constellation lines */}
-              <line x1="30" y1="25" x2="80" y2="58" stroke="#3E3E3E" strokeWidth="1" opacity="0.4" />
-              <line x1="80" y1="58" x2="112" y2="98" stroke="#3E3E3E" strokeWidth="1" opacity="0.4" />
-              <line x1="142" y1="38" x2="168" y2="82" stroke="#3E3E3E" strokeWidth="1" opacity="0.4" />
-              <line x1="52" y1="118" x2="112" y2="98" stroke="#3E3E3E" strokeWidth="1" opacity="0.4" />
-              <line x1="157" y1="143" x2="174" y2="162" stroke="#3E3E3E" strokeWidth="1" opacity="0.4" />
+              <circle cx="62" cy="44" r="0.4" fill="#4A4F46" opacity="0.15" />
+              <circle cx="122" cy="68" r="0.35" fill="#4A4F46" opacity="0.15" />
+              <circle cx="42" cy="88" r="0.4" fill="#4A4F46" opacity="0.15" />
+              <circle cx="162" cy="122" r="0.35" fill="#4A4F46" opacity="0.15" />
+              <circle cx="132" cy="158" r="0.4" fill="#4A4F46" opacity="0.15" />
+              {/* Constellation lines — 12% opacity watermark */}
+              <line x1="30" y1="25" x2="80" y2="58" stroke="#4A4F46" strokeWidth="0.5" opacity="0.12" />
+              <line x1="80" y1="58" x2="112" y2="98" stroke="#4A4F46" strokeWidth="0.5" opacity="0.12" />
+              <line x1="142" y1="38" x2="168" y2="82" stroke="#4A4F46" strokeWidth="0.5" opacity="0.12" />
+              <line x1="52" y1="118" x2="112" y2="98" stroke="#4A4F46" strokeWidth="0.5" opacity="0.12" />
+              <line x1="157" y1="143" x2="174" y2="162" stroke="#4A4F46" strokeWidth="0.5" opacity="0.12" />
             </pattern>
           </defs>
           <rect width="100%" height="100%" fill="url(#star-chart)" />
@@ -139,13 +137,14 @@ export default function LandingPage() {
             <YantraMandala size={500} opacity={0.05} />
           </motion.div>
 
-          {/* Hero headline — line 2 italic */}
+          {/* Hero headline */}
           <h1
             className="relative z-10 text-center font-bold leading-tight landing-hero"
             style={{
               fontFamily: "var(--font-playfair-display)",
               fontSize: "clamp(1.9rem, 5vw, 2.75rem)",
-              color: "#2C2418",
+              color: "#4A4F46",
+              letterSpacing: "0.06em",
               margin: 0,
               marginBottom: "1rem",
               textAlign: "center",
@@ -181,20 +180,20 @@ export default function LandingPage() {
           animate={{ opacity: 1 }}
           transition={{ delay: allWords.length * 0.1 + 0.05, duration: 0.7, ease: EASE }}
           style={{
-            fontFamily: "var(--font-quattrocento-sans), var(--font-inter-var), sans-serif",
+            fontFamily: "var(--font-inter-var), sans-serif",
             fontSize: "clamp(0.88rem, 2.2vw, 1rem)",
             fontWeight: 300,
-            color: "#5C574F",
+            color: "#4A4F46",
             textAlign: "center",
             marginTop: "12px",
             marginBottom: "0.75rem",
             position: "relative",
             zIndex: 10,
+            letterSpacing: "0.08em",
             textTransform: "lowercase",
-            letterSpacing: "0.02em",
           }}
         >
-          Vedic timing intelligence, interpreted for modern life.
+          Built on Vedic Timing Systems
         </motion.p>
 
         {/* Divider */}
@@ -223,42 +222,30 @@ export default function LandingPage() {
           zIndex: 30,
           padding: "12px 24px 18px",
           textAlign: "center",
-          background: "linear-gradient(to top, rgba(242,239,223,1) 0%, rgba(242,239,223,0.9) 60%, transparent 100%)",
+          background: "linear-gradient(to top, rgba(245,242,237,1) 0%, rgba(245,242,237,0.9) 60%, transparent 100%)",
         }}
       >
-        <div
-          style={{
-            fontFamily: "var(--font-playfair-display)",
-            fontSize: "0.9rem",
-            fontStyle: "italic",
-            color: "#2C2418",
-            marginBottom: "3px",
-            opacity: 0.7,
-          }}
-        >
-          Kaal
-        </div>
         <p
           style={{
             fontFamily: "var(--font-inter-var), sans-serif",
             fontStyle: "italic",
             fontSize: "11px",
-            color: "#9C9488",
+            color: "#4A4F46",
             letterSpacing: "0.04em",
             margin: "0 0 6px",
           }}
         >
-          built on vedic timing systems. © 2026 Kaal Astrology
+          Built on Vedic Timing Systems · © 2026 Kaal
         </p>
         <nav style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0", flexWrap: "wrap" }}>
           {FOOTER_LINKS.map((link, i) => (
-            <span key={link.href} style={{ display: "flex", alignItems: "center" }}>
+            <span key={link.href + link.label} style={{ display: "flex", alignItems: "center" }}>
               <a
                 href={link.href}
                 style={{
                   fontFamily: "var(--font-inter-var), sans-serif",
                   fontSize: "11px",
-                  color: "#9C9488",
+                  color: "#4A4F46",
                   letterSpacing: "0.07em",
                   textTransform: "uppercase",
                   padding: "10px 12px",
@@ -266,12 +253,12 @@ export default function LandingPage() {
                   transition: "color 0.15s ease",
                 }}
                 onMouseEnter={(e) => { (e.currentTarget).style.color = "#2C2418"; }}
-                onMouseLeave={(e) => { (e.currentTarget).style.color = "#9C9488"; }}
+                onMouseLeave={(e) => { (e.currentTarget).style.color = "#4A4F46"; }}
               >
                 {link.label}
               </a>
               {i < FOOTER_LINKS.length - 1 && (
-                <span style={{ color: "rgba(122,116,105,0.3)", fontSize: "11px", userSelect: "none" }}>|</span>
+                <span style={{ color: "rgba(74,79,70,0.3)", fontSize: "11px", userSelect: "none" }}>|</span>
               )}
             </span>
           ))}

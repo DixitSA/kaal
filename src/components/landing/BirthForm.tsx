@@ -97,13 +97,13 @@ function CeremonialInput({ id, type, placeholder, value, onChange, autoComplete,
 /* ─── Styles ─────────────────────────────────────────────────── */
 const labelStyle: CSSProperties = {
   fontFamily: "var(--font-inter-var), sans-serif",
-  fontSize: "11px",
+  fontSize: "10px",
   textTransform: "uppercase",
-  letterSpacing: "1px",
-  color: "#3D3428",
+  letterSpacing: "0.15em",
+  color: "#4A4F46",
   display: "block",
   marginBottom: "10px",
-  fontWeight: 600,
+  fontWeight: 500,
   textAlign: "left",
 };
 
@@ -111,7 +111,7 @@ const inputStyle: CSSProperties = {
   width: "100%",
   background: "transparent",
   border: "none",
-  borderBottom: "1px solid #3D3428",
+  borderBottom: "1px solid #4A4F46",
   outline: "none",
   fontFamily: "var(--font-inter-var), sans-serif",
   fontSize: "15px",
@@ -205,10 +205,10 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
   }
 
   function onFocus(e: FocusEvent<HTMLInputElement>) {
-    e.target.style.borderBottom = "1px solid #2C2418";
+    e.target.style.borderBottom = "2px solid #2C2418";
   }
   function onBlur(e: FocusEvent<HTMLInputElement>, hasError: boolean) {
-    e.target.style.borderBottom = hasError ? "1px solid rgba(181,86,62,0.6)" : "1px solid #3D3428";
+    e.target.style.borderBottom = hasError ? "1px solid rgba(181,86,62,0.6)" : "1px solid #4A4F46";
     e.target.style.boxShadow = "none";
   }
 
@@ -250,10 +250,10 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
   }
 
   const vars = shouldReduce ? reducedVariants : fieldVariants;
-  const errStyle: CSSProperties = { color: "#8B3620", fontSize: "10px", marginTop: "4px", fontFamily: "var(--font-inter-var)", letterSpacing: "0.02em" };
+  const errStyle: CSSProperties = { color: "#4A4F46", fontSize: "10px", marginTop: "4px", fontFamily: "var(--font-inter-var)", letterSpacing: "0.02em" };
 
   /* ── Icon helper positioning ── */
-  const iconStyle: CSSProperties = { position: "absolute", top: "50%", transform: "translateY(-50%)", color: "#5C574F", pointerEvents: "none", display: "flex", alignItems: "center", zIndex: 1 };
+  const iconStyle: CSSProperties = { position: "absolute", top: "50%", transform: "translateY(-50%)", color: "#4A4F46", pointerEvents: "none", display: "flex", alignItems: "center", zIndex: 1 };
 
   return (
     <form
@@ -264,12 +264,6 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
         width: "100%",
         maxWidth: "500px",
         margin: "0 auto",
-        background: "rgba(252, 250, 245, 0.97)",
-        backdropFilter: "blur(6px)",
-        WebkitBackdropFilter: "blur(6px)",
-        borderRadius: "12px",
-        padding: "2.5rem 2.75rem",
-        boxShadow: "0 0 0 1px rgba(44, 36, 24, 0.06)",
         display: "flex",
         flexDirection: "column",
         gap: "28px",
@@ -344,11 +338,11 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
               />
             </div>
             {/* "I don't know" inline toggle */}
-            <label htmlFor="unknownTime" style={{ display: "flex", alignItems: "center", gap: "3px", cursor: "pointer", flexShrink: 0, whiteSpace: "nowrap", fontFamily: "var(--font-inter-var), sans-serif", fontSize: "12px", fontWeight: 600, letterSpacing: "1px", textTransform: "uppercase", color: "#3D3428" }}>
+            <label htmlFor="unknownTime" style={{ display: "flex", alignItems: "center", gap: "6px", cursor: "pointer", flexShrink: 0, whiteSpace: "nowrap", fontFamily: "var(--font-inter-var), sans-serif", fontSize: "10px", fontWeight: 500, letterSpacing: "0.12em", textTransform: "uppercase", color: "#4A4F46", textDecoration: "underline", textUnderlineOffset: "3px" }}>
               <span style={{ position: "relative", width: "14px", height: "14px", minWidth: "28px", minHeight: "28px", flexShrink: 0, display: "inline-flex", alignItems: "center", justifyContent: "center" }}>
                 <input id="unknownTime" type="checkbox" checked={unknownTime} onChange={(e) => { setUnknownTime(e.target.checked); if (e.target.checked) setTimeOfBirth(""); }}
                   style={{ position: "absolute", inset: 0, margin: 0, opacity: 0, width: "100%", height: "100%", cursor: "pointer" }} />
-                <span aria-hidden="true" style={{ position: "absolute", width: "12px", height: "12px", borderRadius: "50%", border: `1px solid ${unknownTime ? "#B5563E" : "#5C574F"}`, backgroundColor: unknownTime ? "#B5563E" : "transparent", transition: "background-color 0.18s ease, border-color 0.18s ease", display: "flex", alignItems: "center", justifyContent: "center", pointerEvents: "none" }}>
+                <span aria-hidden="true" style={{ position: "absolute", width: "12px", height: "12px", borderRadius: "50%", border: `1px solid ${unknownTime ? "#4A4F46" : "#5C574F"}`, backgroundColor: unknownTime ? "#4A4F46" : "transparent", transition: "background-color 0.18s ease, border-color 0.18s ease", display: "flex", alignItems: "center", justifyContent: "center", pointerEvents: "none" }}>
                   {unknownTime && <span style={{ width: "4px", height: "4px", borderRadius: "50%", backgroundColor: "#F5F0E8", display: "block" }} />}
                 </span>
               </span>
@@ -430,7 +424,7 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
         )}
       </motion.div>
 
-      {/* ── Submit — centered, not full-width ── */}
+      {/* ── Submit — centered, ghost style button ── */}
       <motion.div custom={4} variants={vars} initial="hidden" animate="visible" style={{ textAlign: "center" }}>
         <motion.button
           type="submit"
@@ -438,22 +432,22 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
           style={{
             display: "inline-flex",
             alignItems: "center",
-            gap: "10px",
+            gap: "12px",
             padding: "14px 48px",
             minHeight: "44px",
-            backgroundColor: isSubmitting ? "rgba(181,86,62,0.6)" : "#B5563E",
+            backgroundColor: "#4A4F46",
             color: "#F5F0E8",
-            fontFamily: "var(--font-inter-var), sans-serif",
-            fontWeight: 700,
-            fontSize: "0.7rem",
-            letterSpacing: "0.12em",
-            textTransform: "uppercase",
+            fontFamily: "var(--font-playfair-display), sans-serif",
+            fontWeight: 400,
+            fontSize: "0.95rem",
+            fontStyle: "italic",
+            letterSpacing: "0.04em",
             border: "none",
             borderRadius: "2px",
             cursor: isSubmitting ? "wait" : "pointer",
             transition: "background-color 0.2s ease",
           }}
-          whileHover={shouldReduce || isSubmitting ? {} : { y: -2, boxShadow: "0 8px 24px rgba(181,86,62,0.3)" }}
+          whileHover={shouldReduce || isSubmitting ? {} : { y: -2, boxShadow: "0 8px 24px rgba(74,79,70,0.3)" }}
           whileTap={shouldReduce || isSubmitting ? {} : { scale: 0.97, y: 0 }}
           transition={{ duration: 0.2, ease: "easeOut" }}
           onMouseEnter={() => { if (!isSubmitting) setArrowHover(true); }}
