@@ -4,6 +4,7 @@ import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import VedicDivider from "@/components/ui/VedicDivider";
 import InsightCard from "@/components/ui/InsightCard";
+import Footer from "@/components/ui/Footer";
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
@@ -202,29 +203,7 @@ export default function MethodologyPage() {
         </main>
       </div>
 
-      {/* Footer */}
-      <footer style={{ padding: "2rem 24px 3rem", textAlign: "center" }}>
-        <div style={{
-          fontFamily: "var(--font-playfair-display)",
-          fontSize: "0.9rem",
-          fontStyle: "italic",
-          color: "#2C2418",
-          marginBottom: "4px",
-          opacity: 0.6,
-        }}>
-          Kaal
-        </div>
-        <p style={{
-          fontFamily: "var(--font-inter-var), sans-serif",
-          fontStyle: "italic",
-          fontSize: "11px",
-          color: "#9C9488",
-          letterSpacing: "0.04em",
-          margin: 0,
-        }}>
-          built on vedic timing systems. © 2026 Kaal Astrology
-        </p>
-      </footer>
+      <Footer />
     </div>
   );
 }
