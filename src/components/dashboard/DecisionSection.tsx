@@ -23,9 +23,9 @@ const actionByOutcome: Record<DecisionOutcome, "ACT" | "WAIT" | "AVOID"> = {
 };
 
 const actionColors: Record<DecisionOutcome, string> = {
-  favorable: "#A65D46",
+  favorable: "#5E7A5E",
   neutral: "#A65D46",
-  caution: "#A65D46",
+  caution: "#A04040",
 };
 
 export default function DecisionSection() {

@@ -350,18 +350,29 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
             <div style={{ position: "relative", minWidth: "90px", flex: "1" }}>
               <span style={{ ...iconStyle, left: 0 }}><ClockIcon /></span>
               <CeremonialInput
-                id="timeOfBirth" type="text" placeholder="HH:MM" value={timeOfBirth}
+                id="timeOfBirth" type="text" placeholder="hh:mm" value={timeOfBirth}
                 disabled={unknownTime} autoComplete="off"
                 onChange={(e) => {
-                  let val = e.target.value.replace(/[^0-9:]/g, "");
-                  if (val.length === 2 && !val.includes(":")) val += ":";
-                  if (val.length <= 5) setTimeOfBirth(val);
+                  const raw = e.target.value;
+                  if (!raw) { setTimeOfBirth(""); return; }
+                  const digitsOnly = raw.replace(/[^0-9]/g, "");
+                  let formatted = digitsOnly;
+                  if (digitsOnly.length >= 2) {
+                    const h = digitsOnly.slice(0, 2);
+                    let hour = parseInt(h, 10);
+                    if (hour > 23) hour = hour > 9 ? hour % 10 : hour;
+                    formatted = hour.toString().padStart(2, "0") + (digitsOnly.length > 2 ? ":" + digitsOnly.slice(2, 4) : "");
+                  } else if (digitsOnly.length === 1 && parseInt(digitsOnly, 10) > 2) {
+                    formatted = "0" + digitsOnly + ":";
+                  }
+                  if (formatted.length > 5) formatted = formatted.slice(0, 5);
+                  setTimeOfBirth(formatted);
                 }}
                 style={{ ...inputStyle, paddingLeft: "22px", width: "100%", minWidth: "90px", opacity: unknownTime ? 0.35 : 1, cursor: unknownTime ? "not-allowed" : "auto", fontSize: "16px" }}
                 onFocus={(e) => { if (!unknownTime) onFocus(e); }}
                 onBlur={(e) => {
                   const normalized = normalizeTime(timeOfBirth);
-                  if (normalized !== timeOfBirth && normalized.length === 5) {
+                  if (normalized.length === 5) {
                     setTimeOfBirth(normalized);
                   }
                   onBlur(e, !!errors.time);
