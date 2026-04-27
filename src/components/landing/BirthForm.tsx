@@ -125,7 +125,7 @@ const inputStyle: CSSProperties = {
   textAlign: "left",
 };
 
-const TERRACOTTA = "#B35C44";
+const TERRACOTTA = "#A65D46";
 
 const defaultVariants: Variants = {
   hidden: { opacity: 0, y: 12 },
@@ -369,11 +369,11 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
               ))}
             </div>
             {/* "I don't know" inline toggle */}
-            <label htmlFor="unknownTime" style={{ display: "flex", alignItems: "center", gap: "6px", cursor: "pointer", flexShrink: 0, whiteSpace: "nowrap", fontFamily: "var(--font-inter-var), sans-serif", fontSize: "10px", fontWeight: 500, letterSpacing: "0.12em", textTransform: "uppercase", color: "#4A4F46", textDecoration: "underline", textUnderlineOffset: "3px" }}>
-              <span style={{ position: "relative", width: "14px", height: "14px", minWidth: "28px", minHeight: "28px", flexShrink: 0, display: "inline-flex", alignItems: "center", justifyContent: "center" }}>
+            <label htmlFor="unknownTime" style={{ display: "flex", alignItems: "center", gap: "4px", marginLeft: "12px", cursor: "pointer", flexShrink: 0, whiteSpace: "nowrap", fontFamily: "var(--font-inter-var), sans-serif", fontSize: "10px", fontWeight: 500, letterSpacing: "0.12em", textTransform: "uppercase", color: "#4A4F46", borderBottom: `1px solid ${TERRACOTTA}66`, paddingBottom: "2px" }}>
+              <span style={{ position: "relative", width: "12px", height: "12px", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
                 <input id="unknownTime" type="checkbox" checked={unknownTime} onChange={(e) => { setUnknownTime(e.target.checked); if (e.target.checked) setTimeOfBirth(""); }}
                   style={{ position: "absolute", inset: 0, margin: 0, opacity: 0, width: "100%", height: "100%", cursor: "pointer" }} />
-                <span aria-hidden="true" style={{ position: "absolute", width: "12px", height: "12px", borderRadius: "50%", border: `1px solid ${unknownTime ? TERRACOTTA : "#5C574F"}`, backgroundColor: unknownTime ? TERRACOTTA : "transparent", transition: "background-color 0.18s ease, border-color 0.18s ease", display: "flex", alignItems: "center", justifyContent: "center", pointerEvents: "none" }}>
+                <span aria-hidden="true" style={{ position: "absolute", width: "12px", height: "12px", borderRadius: "50%", border: `1.5px solid ${TERRACOTTA}`, backgroundColor: unknownTime ? TERRACOTTA : "transparent", transition: "background-color 0.18s ease, border-color 0.18s ease", display: "flex", alignItems: "center", justifyContent: "center", pointerEvents: "none" }}>
                   {unknownTime && <span style={{ width: "4px", height: "4px", borderRadius: "50%", backgroundColor: "#F5F0E8", display: "block" }} />}
                 </span>
               </span>
