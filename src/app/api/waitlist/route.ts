@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
     const loops = new LoopsClient(apiKey);
 
     try {
-      await loops.createContact({ email: trimmed, source: "waitlist" });
+      await loops.createContact({ email: trimmed });
       console.log("[waitlist] createContact: success", trimmed);
     } catch (err: unknown) {
       const status = (err as { statusCode?: number })?.statusCode;
