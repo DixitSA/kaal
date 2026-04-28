@@ -1,27 +1,39 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useState } from "react";
 import { useSubscription } from "@/hooks/useSubscription";
 
 interface PaywallModalProps {
   open: boolean;
   onClose: () => void;
+  email?: string;
 }
 
-export default function PaywallModal({ open, onClose }: PaywallModalProps) {
+export default function PaywallModal({ open, onClose, email }: PaywallModalProps) {
   const { handleUpgrade, handleManage } = useSubscription();
-  const modalRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!open) return;
-    const handleEsc = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
-    };
-    document.addEventListener("keydown", handleEsc);
-    return () => document.removeEventListener("keydown", handleEsc);
-  }, [open, onClose]);
+  const [loading, setLoading] = useState(false);
 
   if (!open) return null;
+
+  const onClickUpgrade = async () => {
+    if (!email) { alert("Please sign in first."); return; }
+    setLoading(true);
+    try {
+      const res = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      const data = await res.json();
+      if (data.url) window.location.href = data.url;
+      else { console.error("[PaywallModal] checkout error:", data.error); alert("Unable to start checkout. Please try again."); }
+    } catch (err) {
+      console.error("[PaywallModal] checkout error:", err);
+      alert("Unable to start checkout. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div
@@ -37,7 +49,6 @@ export default function PaywallModal({ open, onClose }: PaywallModalProps) {
       onClick={onClose}
     >
       <div
-        ref={modalRef}
         style={{
           backgroundColor: "#F5F0E8",
           borderRadius: "4px",
@@ -92,11 +103,12 @@ export default function PaywallModal({ open, onClose }: PaywallModalProps) {
         </p>
 
         <button
-          onClick={handleUpgrade}
+          onClick={onClickUpgrade}
+          disabled={loading}
           style={{
             width: "100%",
             padding: "14px 24px",
-            backgroundColor: "#C75B3A",
+            backgroundColor: loading ? "#999" : "#C75B3A",
             color: "#F5F0E8",
             border: "none",
             borderRadius: "4px",
@@ -105,13 +117,11 @@ export default function PaywallModal({ open, onClose }: PaywallModalProps) {
             fontWeight: 600,
             letterSpacing: "0.2em",
             textTransform: "uppercase",
-            cursor: "pointer",
+            cursor: loading ? "not-allowed" : "pointer",
             transition: "opacity 0.2s ease",
           }}
-          onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.85")}
-          onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
         >
-          unlock kaal →
+          {loading ? "redirecting..." : "unlock kaal →"}
         </button>
 
         <p

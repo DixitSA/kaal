@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getUserByEmail } from "@/lib/db";
+import { getUserByEmail, updateUser } from "@/lib/db";
 import { stripe } from "@/lib/stripe";
 
 export async function POST(req: NextRequest) {
@@ -10,9 +10,23 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Valid email required" }, { status: 400 });
   }
 
-  const user = getUserByEmail(email);
-  if (!user || !user.stripeCustomerId) {
-    return NextResponse.json({ error: "User not found or missing Stripe customer" }, { status: 404 });
+  let user = getUserByEmail(email);
+  if (!user) {
+    return NextResponse.json({ error: "User not found" }, { status: 404 });
+  }
+
+  // Create Stripe customer if missing
+  if (!user.stripeCustomerId) {
+    try {
+      const customer = await stripe.customers.create({
+        email: user.email,
+        name: user.name || undefined,
+      });
+      user = updateUser(user.email, { stripeCustomerId: customer.id })!;
+    } catch (err) {
+      console.error("[checkout] stripe customer create error:", err);
+      return NextResponse.json({ error: "Failed to create Stripe customer" }, { status: 500 });
+    }
   }
 
   const priceId = process.env.STRIPE_PRO_PRICE_ID;

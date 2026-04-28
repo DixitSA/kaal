@@ -82,7 +82,6 @@ function DashboardContent() {
   }, [hasMounted, computedData, isLoading, router, userData]);
 
   const showTrialBanner = hasMounted && !isProUser && !isFreeTrialExpired && daysOnFree >= 0;
-  const showPaywall = hasMounted && isFreeTrialExpired && (lockedSection === "today" || lockedSection === "decision");
 
   if (!hasMounted) return <div style={{ minHeight: "100dvh", backgroundColor: "#F5F0E8" }} />;
   if (isLoading) return <div style={{ minHeight: "100dvh", backgroundColor: "#F5F0E8" }} />;
@@ -300,7 +299,7 @@ function DashboardContent() {
       </footer>
 
       {/* Paywall modal */}
-      <PaywallModal open={paywallOpen || showPaywall} onClose={() => { setPaywallOpen(false); setLockedSection(null); }} />
+      <PaywallModal open={paywallOpen || !!lockedSection} onClose={() => { setPaywallOpen(false); setLockedSection(null); }} email={userData?.email} />
     </div>
   );
 }
