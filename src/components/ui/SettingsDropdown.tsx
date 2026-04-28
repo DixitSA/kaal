@@ -8,17 +8,12 @@ import { useSubscription } from "@/hooks/useSubscription";
 export default function SettingsDropdown() {
   const router = useRouter();
   const { clearUserData, isProUser } = useUser();
-  const { handleUpgrade, handleManage } = useSubscription();
+  const { handleManage } = useSubscription();
 
   function handleClear(e: SyntheticEvent<HTMLSpanElement>) {
     e.stopPropagation();
     clearUserData();
     router.push("/");
-  }
-
-  function handleUpgradeClick(e: SyntheticEvent<HTMLSpanElement>) {
-    e.stopPropagation();
-    handleUpgrade();
   }
 
   function handleManageClick(e: SyntheticEvent<HTMLSpanElement>) {
@@ -36,31 +31,6 @@ export default function SettingsDropdown() {
 
   return (
     <>
-      {!isProUser && (
-        <span
-          onClick={handleUpgradeClick}
-          onMouseOver={setOpaque}
-          onMouseOut={setFaded}
-          style={{
-            fontFamily: "var(--font-playfair-display)",
-            fontSize: "11px",
-            color: "#C75B3A",
-            textTransform: "uppercase",
-            letterSpacing: "0.1em",
-            opacity: 0.6,
-            cursor: "pointer",
-            transition: "opacity 0.2s ease",
-            borderBottom: "1px solid transparent",
-            paddingBottom: "2px",
-            display: "block",
-            marginBottom: "8px",
-          }}
-          onFocus={setOpaque}
-          onBlur={setFaded}
-        >
-          Upgrade to Pro →
-        </span>
-      )}
       {isProUser && (
         <span
           onClick={handleManageClick}

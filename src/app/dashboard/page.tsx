@@ -51,7 +51,7 @@ const FOOTER_LINKS = [
 function DashboardContent() {
   const router = useRouter();
   const { userData, computedData, isLoading, isFreeTrialExpired, daysOnFree } = useUser();
-  const { isProUser, daysRemaining, handleUpgrade } = useSubscription();
+  const { isProUser } = useSubscription();
   const [contemplation, setContemplation] = useState<Contemplation | null>(null);
   const [clientDate, setClientDate] = useState("");
   const [hasMounted, setHasMounted] = useState(false);
@@ -147,24 +147,6 @@ function DashboardContent() {
             }}
           >
             welcome to kaal pro. your signal is now unlocked.
-          </div>
-        )}
-
-        {/* Trial countdown banner */}
-        {!showUpgradeSuccess && showTrialBanner && (
-          <div
-            style={{
-              backgroundColor: "rgba(184,168,120,0.1)",
-              fontFamily: "var(--font-inter-var), sans-serif",
-              fontSize: "0.75rem",
-              color: "#2C2418",
-              textAlign: "center",
-              padding: "0.5rem 1rem",
-              cursor: "pointer",
-            }}
-            onClick={() => setPaywallOpen(true)}
-          >
-            {daysRemaining} days of full access remaining — upgrade to keep your signal going →
           </div>
         )}
       </div>
