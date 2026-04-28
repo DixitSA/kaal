@@ -21,24 +21,21 @@ import type { PlanetKey } from "@/lib/types/astrology";
 // Webpack bundler detection — short-circuit if not running in Node
 const IS_NODE = typeof process !== "undefined" && process.release?.name === "node";
 
-function getNodeRequire(): NodeRequire | null {
-  if (!IS_NODE) return null;
-  try { return eval("require") as NodeRequire; }
-  catch { return null; }
+function getNodeRequire(): (id: string) => any {
+  if (!IS_NODE) return (id: string) => { throw new Error("not node"); };
+  // String concatenation to hide require() from webpack static analysis
+  const fn = (0, eval)("req" + "uire");
+  return fn as (id: string) => any;
 }
 
 function loadAstronomia(): any | null {
-  const r = getNodeRequire();
-  if (!r) return null;
-  try { return r("astronomia"); }
+  try { return getNodeRequire()("astronomia"); }
   catch { return null; }
 }
 
 function loadVsop(planet: string): any | null {
-  const r = getNodeRequire();
-  if (!r) return null;
   try {
-    const mod = r(`astronomia/data/vsop87B${planet}`);
+    const mod = getNodeRequire()(("astronomia/data/vsop87B" + planet));
     return (mod as any).default ?? mod;
   } catch { return null; }
 }
