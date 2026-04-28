@@ -10,9 +10,20 @@ export default function SettingsDropdown() {
   const { clearUserData, isProUser } = useUser();
   const { handleUpgrade, handleManage } = useSubscription();
 
-  function handleClear() {
+  function handleClear(e: SyntheticEvent<HTMLSpanElement>) {
+    e.stopPropagation();
     clearUserData();
     router.push("/");
+  }
+
+  function handleUpgradeClick(e: SyntheticEvent<HTMLSpanElement>) {
+    e.stopPropagation();
+    handleUpgrade();
+  }
+
+  function handleManageClick(e: SyntheticEvent<HTMLSpanElement>) {
+    e.stopPropagation();
+    handleManage();
   }
 
   function setOpaque(e: SyntheticEvent<HTMLSpanElement>) {
@@ -27,7 +38,7 @@ export default function SettingsDropdown() {
     <>
       {!isProUser && (
         <span
-          onClick={handleUpgrade}
+          onClick={handleUpgradeClick}
           onMouseOver={setOpaque}
           onMouseOut={setFaded}
           style={{
@@ -52,7 +63,7 @@ export default function SettingsDropdown() {
       )}
       {isProUser && (
         <span
-          onClick={handleManage}
+          onClick={handleManageClick}
           onMouseOver={setOpaque}
           onMouseOut={setFaded}
           style={{

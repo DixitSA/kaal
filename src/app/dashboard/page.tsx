@@ -75,40 +75,6 @@ function DashboardContent() {
 
   return (
     <div style={{ minHeight: "100dvh" }} className="relative">
-      {/* Upgrade success banner */}
-      {showUpgradeSuccess && (
-        <div
-          style={{
-            backgroundColor: "rgba(120,140,120,0.1)",
-            fontFamily: "var(--font-inter-var), sans-serif",
-            fontSize: "0.75rem",
-            color: "#2C2418",
-            textAlign: "center",
-            padding: "0.5rem 1rem",
-          }}
-        >
-          welcome to kaal pro. your signal is now unlocked.
-        </div>
-      )}
-
-      {/* Trial countdown banner */}
-      {!showUpgradeSuccess && showTrialBanner && (
-        <div
-          style={{
-            backgroundColor: "rgba(184,168,120,0.1)",
-            fontFamily: "var(--font-inter-var), sans-serif",
-            fontSize: "0.75rem",
-            color: "#2C2418",
-            textAlign: "center",
-            padding: "0.5rem 1rem",
-            cursor: "pointer",
-          }}
-          onClick={() => setPaywallOpen(true)}
-        >
-          {daysRemaining} days of full access remaining — upgrade to keep your signal going →
-        </div>
-      )}
-
       {/* Sticky header */}
       <header style={{ position: "sticky", top: 0, zIndex: 100, backgroundColor: "rgba(245,240,232,0.9)", backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)", paddingTop: showTrialBanner ? 0 : "env(safe-area-inset-top)" }}>
         <style>{`
@@ -151,6 +117,43 @@ function DashboardContent() {
           ))}
         </nav>
       </header>
+
+      {/* Banner area — below header, outside sticky */}
+      <div style={{ position: "sticky", top: showTrialBanner ? "0" : undefined, zIndex: showTrialBanner ? 99 : undefined }}>
+        {/* Upgrade success banner */}
+        {showUpgradeSuccess && (
+          <div
+            style={{
+              backgroundColor: "rgba(120,140,120,0.1)",
+              fontFamily: "var(--font-inter-var), sans-serif",
+              fontSize: "0.75rem",
+              color: "#2C2418",
+              textAlign: "center",
+              padding: "0.5rem 1rem",
+            }}
+          >
+            welcome to kaal pro. your signal is now unlocked.
+          </div>
+        )}
+
+        {/* Trial countdown banner */}
+        {!showUpgradeSuccess && showTrialBanner && (
+          <div
+            style={{
+              backgroundColor: "rgba(184,168,120,0.1)",
+              fontFamily: "var(--font-inter-var), sans-serif",
+              fontSize: "0.75rem",
+              color: "#2C2418",
+              textAlign: "center",
+              padding: "0.5rem 1rem",
+              cursor: "pointer",
+            }}
+            onClick={() => setPaywallOpen(true)}
+          >
+            {daysRemaining} days of full access remaining — upgrade to keep your signal going →
+          </div>
+        )}
+      </div>
 
       <main style={{ maxWidth: "720px", margin: "0 auto", padding: "0 clamp(1rem, 5vw, 3rem) 8rem", touchAction: "pan-y" }}>
         <h1 style={{ position: "absolute", width: "1px", height: "1px", padding: 0, margin: "-1px", overflow: "hidden", clip: "rect(0,0,0,0)", whiteSpace: "nowrap", border: 0 }}>Kaal — your daily vedic report</h1>
