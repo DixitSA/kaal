@@ -118,8 +118,8 @@ function DashboardContent() {
         </nav>
       </header>
 
-      {/* Banner area — below header, outside sticky */}
-      <div style={{ position: "sticky", top: showTrialBanner ? "0" : undefined, zIndex: showTrialBanner ? 99 : undefined }}>
+      {/* Banner area — below header, above all content */}
+      <div style={{ position: "sticky", top: showTrialBanner ? "0" : undefined, zIndex: showTrialBanner ? 98 : undefined }}>
         {/* Upgrade success banner */}
         {showUpgradeSuccess && (
           <div
