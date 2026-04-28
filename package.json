@@ -16,6 +16,7 @@
     "@capacitor/core": "^8.3.1",
     "@capacitor/ios": "^8.3.1",
     "@vercel/speed-insights": "^2.0.0",
+    "@stripe/stripe-js": "^9.3.1",
     "astronomia": "^4.2.0",
     "framer-motion": "^12.38.0",
     "html-to-image": "^1.11.11",
@@ -23,6 +24,7 @@
     "next": "^15.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "stripe": "^22.1.0",
     "zod": "^3.24.1"
   },
   "optionalDependencies": {
@@ -32,7 +34,9 @@
     "@types/node": "^22.13.9",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
+    "@types/stripe": "^8.0.416",
     "@vitest/coverage-v8": "^2.1.8",
+    "prisma": "^5.22.0",
     "typescript": "^5.8.2",
     "vitest": "^2.1.8"
   }

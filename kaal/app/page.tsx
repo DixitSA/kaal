@@ -77,16 +77,16 @@ export default function EarlyAccessPage() {
         <h1
           style={{
             fontFamily: "var(--font-playfair-display)",
-            fontStyle: "italic",
-            fontWeight: 400,
+            fontStyle: "normal",
+            fontWeight: 600,
             fontSize: "clamp(1.5rem, 5vw, 2rem)",
             color: "#2C2C2C",
             margin: 0,
             lineHeight: 1.3,
-            letterSpacing: "0.01em",
+            letterSpacing: "0.02em",
           }}
         >
-          the signal is stabilizing.
+          vedic timing, simplified.
         </h1>
 
         {/* Subheadline */}
@@ -168,7 +168,7 @@ export default function EarlyAccessPage() {
                 transition: "opacity 0.2s ease",
               }}
             >
-              [ Enter the Fold ]
+              [ REQUEST ACCESS ]
             </button>
           )}
 
@@ -183,7 +183,7 @@ export default function EarlyAccessPage() {
                 opacity: 0.7,
               }}
             >
-              something went wrong — try again
+              Error joining waitlist — please try again.
             </p>
           )}
         </form>
