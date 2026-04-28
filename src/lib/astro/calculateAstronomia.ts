@@ -33,7 +33,7 @@ function loadAstronomia(): any | null {
   catch { return null; }
 }
 
-function loadVsop(planet: string): any | null {
+function loadVsopData(planet: string): any | null {
   try {
     const mod = getNodeRequire()(("astronomia/data/vsop87B" + planet));
     return (mod as any).default ?? mod;
@@ -157,13 +157,13 @@ export function computeAstronomiaPositions(jd: number): AstronomiaPositions {
   }
 
   // Load VSOP87B data
-  const vsopEarth = loadVsop("earth");
+  const vsopEarth = loadVsopData("earth");
   const vsopData = {
-    mercury: loadVsop("mercury"),
-    venus:   loadVsop("venus"),
-    mars:    loadVsop("mars"),
-    jupiter: loadVsop("jupiter"),
-    saturn:  loadVsop("saturn"),
+    mercury: loadVsopData("mercury"),
+    venus:   loadVsopData("venus"),
+    mars:    loadVsopData("mars"),
+    jupiter: loadVsopData("jupiter"),
+    saturn:  loadVsopData("saturn"),
   };
 
   if (!vsopEarth || Object.values(vsopData).some(v => !v)) {
@@ -206,6 +206,6 @@ export function computeAstronomiaPositions(jd: number): AstronomiaPositions {
 export function isAstronomiaAvailable(): boolean {
   const astro = loadAstronomia();
   if (!astro) return false;
-  const earth = loadVsop("earth");
+  const earth = loadVsopData("earth");
   return earth !== null;
 }
