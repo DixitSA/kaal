@@ -187,16 +187,27 @@ function DashboardContent() {
                 justifyContent: "center",
                 backgroundColor: "rgba(245,240,232,0.8)",
               }}>
-                <span style={{
-                  fontFamily: "var(--font-inter-var), sans-serif",
-                  fontSize: "0.875rem",
-                  color: "#C75B3A",
-                  fontWeight: 600,
-                  letterSpacing: "0.05em",
-                  textTransform: "uppercase",
-                }}>
-                  unlock →
-                </span>
+                <button
+                  onClick={(e) => { e.stopPropagation(); setLockedSection("today"); setPaywallOpen(true); }}
+                  style={{
+                    padding: "12px 24px",
+                    backgroundColor: "#C75B3A",
+                    color: "#F5F0E8",
+                    border: "none",
+                    borderRadius: "4px",
+                    fontFamily: "var(--font-inter-var), sans-serif",
+                    fontSize: "0.75rem",
+                    fontWeight: 600,
+                    letterSpacing: "0.2em",
+                    textTransform: "uppercase",
+                    cursor: "pointer",
+                    transition: "opacity 0.2s ease",
+                  }}
+                  onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.85")}
+                  onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
+                >
+                  Upgrade to Pro →
+                </button>
               </div>
             </div>
           ) : (
@@ -221,16 +232,27 @@ function DashboardContent() {
                 justifyContent: "center",
                 backgroundColor: "rgba(245,240,232,0.8)",
               }}>
-                <span style={{
-                  fontFamily: "var(--font-inter-var), sans-serif",
-                  fontSize: "0.875rem",
-                  color: "#C75B3A",
-                  fontWeight: 600,
-                  letterSpacing: "0.05em",
-                  textTransform: "uppercase",
-                }}>
-                  unlock →
-                </span>
+                <button
+                  onClick={(e) => { e.stopPropagation(); setLockedSection("decision"); setPaywallOpen(true); }}
+                  style={{
+                    padding: "12px 24px",
+                    backgroundColor: "#C75B3A",
+                    color: "#F5F0E8",
+                    border: "none",
+                    borderRadius: "4px",
+                    fontFamily: "var(--font-inter-var), sans-serif",
+                    fontSize: "0.75rem",
+                    fontWeight: 600,
+                    letterSpacing: "0.2em",
+                    textTransform: "uppercase",
+                    cursor: "pointer",
+                    transition: "opacity 0.2s ease",
+                  }}
+                  onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.85")}
+                  onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
+                >
+                  Upgrade to Pro →
+                </button>
               </div>
             </div>
           ) : (
