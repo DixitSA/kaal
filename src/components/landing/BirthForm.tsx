@@ -236,8 +236,8 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
         body: JSON.stringify({ email, name, dob: toISODate(dob), timeOfBirth, placeOfBirth }),
       });
       if (res.ok) {
-        const userData = await res.json();
-        setUserData({ ...userData, name, dob: toISODate(dob), timeOfBirth, unknownTime, placeOfBirth, timezone, latitude, longitude });
+        const userFromDb = await res.json();
+        setUserData(userFromDb);
       } else {
         setUserData({ email, name, dob: toISODate(dob), timeOfBirth, unknownTime, placeOfBirth, timezone, latitude, longitude } as any);
       }

@@ -18,58 +18,70 @@ export async function POST(req: NextRequest) {
   try {
     const event = stripe.webhooks.constructEvent(body, signature, webhookSecret);
 
-    switch (event.type) {
-      case "checkout.session.completed": {
-        const session = event.data.object as { customer?: string; subscription?: string };
-        if (session.customer && session.subscription) {
-          const customers = await stripe.customers.list({ limit: 1 });
-          const customer = customers.data.find((c) => c.id === session.customer);
-          if (customer?.email) {
+  switch (event.type) {
+    case "checkout.session.completed": {
+      const session = event.data.object as { customer?: string; subscription?: string };
+      if (session.customer && session.subscription) {
+        try {
+          const customer = await stripe.customers.retrieve(session.customer as string);
+          if (customer.deleted) break;
+          if (customer.email) {
             updateUser(customer.email, {
               subscriptionStatus: "pro",
               subscriptionId: session.subscription as string,
             });
           }
+        } catch (err) {
+          console.error("[webhook] customer.retrieve failed:", err);
         }
-        break;
       }
+      break;
+    }
 
-      case "customer.subscription.updated": {
-        const subscription = event.data.object as {
-          customer: string;
-          status: string;
-          id: string;
-        };
-        const statusMap: Record<string, "free" | "pro"> = {
-          active: "pro",
-          past_due: "pro",
-          canceled: "free",
-          unpaid: "free",
-        };
-        const customers = await stripe.customers.list({ limit: 100 });
-        const customer = customers.data.find((c) => c.id === subscription.customer);
-        if (customer?.email) {
+    case "customer.subscription.updated": {
+      const subscription = event.data.object as {
+        customer: string;
+        status: string;
+        id: string;
+      };
+      const statusMap: Record<string, "free" | "pro"> = {
+        active: "pro",
+        past_due: "pro",
+        canceled: "free",
+        unpaid: "free",
+      };
+      try {
+        const customer = await stripe.customers.retrieve(subscription.customer as string);
+        if (customer.deleted) break;
+        if (customer.email) {
           updateUser(customer.email, {
             subscriptionStatus: statusMap[subscription.status] || "free",
             subscriptionId: subscription.id,
           });
         }
-        break;
+      } catch (err) {
+        console.error("[webhook] customer.retrieve failed:", err);
       }
+      break;
+    }
 
-      case "customer.subscription.deleted": {
-        const subscription = event.data.object as { customer: string; id: string };
-        const customers = await stripe.customers.list({ limit: 100 });
-        const customer = customers.data.find((c) => c.id === subscription.customer);
-        if (customer?.email) {
+    case "customer.subscription.deleted": {
+      const subscription = event.data.object as { customer: string; id: string };
+      try {
+        const customer = await stripe.customers.retrieve(subscription.customer as string);
+        if (customer.deleted) break;
+        if (customer.email) {
           updateUser(customer.email, {
             subscriptionStatus: "free",
             subscriptionId: undefined,
           });
         }
-        break;
+      } catch (err) {
+        console.error("[webhook] customer.retrieve failed:", err);
       }
+      break;
     }
+  }
 
     return NextResponse.json({ received: true });
   } catch (err) {

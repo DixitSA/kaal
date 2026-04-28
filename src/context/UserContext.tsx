@@ -84,6 +84,7 @@ export function UserProvider({ children }: { children: ReactNode }) {
     setComputedDataState(null);
     localStorage.removeItem(USER_STORAGE_KEY);
     localStorage.removeItem(SNAPSHOT_STORAGE_KEY);
+    setIsLoading(true);
   }
 
   return (
