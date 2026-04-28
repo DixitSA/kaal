@@ -4,20 +4,22 @@
   "private": true,
   "scripts": {
     "dev": "next dev -p 3000",
-    "build": "next build",
+    "build": "prisma generate && next build",
     "start": "next start -p ${PORT:-3000}",
     "typecheck": "tsc --noEmit",
     "test": "vitest",
     "test:run": "vitest run",
-    "build:app": "next build && npx cap sync ios"
+    "build:app": "next build && npx cap sync ios",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@capacitor/cli": "^8.3.1",
     "@capacitor/core": "^8.3.1",
     "@capacitor/ios": "^8.3.1",
+    "@prisma/client": "^5.22.0",
+    "@stripe/stripe-js": "^9.3.1",
     "@vercel/analytics": "^2.0.1",
     "@vercel/speed-insights": "^2.0.0",
-    "@stripe/stripe-js": "^9.3.1",
     "astronomia": "^4.2.0",
     "framer-motion": "^12.38.0",
     "html-to-image": "^1.11.11",

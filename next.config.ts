@@ -1,9 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  experimental: {
-    serverComponentsExternalPackages: ["astronomia"],
-  },
+  transpilePackages: ["astronomia"],
   webpack: (config) => {
     config.module.exprContextCritical = false;
     return config;
