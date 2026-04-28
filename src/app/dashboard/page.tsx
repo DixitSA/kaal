@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useUser } from "@/context/UserContext";
+import { useSubscription } from "@/hooks/useSubscription";
 import { needsDailyRefresh } from "@/lib/client/kaalApp";
 import PhaseSection from "@/components/dashboard/PhaseSection";
 import TodaySection from "@/components/dashboard/TodaySection";
@@ -12,6 +13,7 @@ import PatternSection from "@/components/dashboard/PatternSection";
 import VedicDivider from "@/components/ui/VedicDivider";
 import SettingsDropdown from "@/components/ui/SettingsDropdown";
 import Footer from "@/components/ui/Footer";
+import PaywallModal from "@/components/ui/PaywallModal";
 
 const CONTEMPLATIONS = [
   { quote: "The stars impel, they do not compel.", source: "B. V. Raman" },
@@ -43,8 +45,11 @@ const FOOTER_LINKS = [
 
 export default function Dashboard() {
   const router = useRouter();
-  const { userData, computedData, isLoading } = useUser();
+  const { userData, computedData, isLoading, isFreeTrialExpired, daysOnFree } = useUser();
+  const { isProUser, daysRemaining, handleUpgrade } = useSubscription();
   const [contemplation] = useState(getContemplation);
+  const [paywallOpen, setPaywallOpen] = useState(false);
+  const [lockedSection, setLockedSection] = useState<"today" | "decision" | null>(null);
 
   useEffect(() => {
     if (isLoading) return;
@@ -52,13 +57,34 @@ export default function Dashboard() {
     if (needsDailyRefresh(computedData) || !computedData) { router.replace("/loading-screen"); }
   }, [computedData, isLoading, router, userData]);
 
+  const showTrialBanner = !isProUser && !isFreeTrialExpired && daysOnFree >= 0;
+  const showPaywall = isFreeTrialExpired && (lockedSection === "today" || lockedSection === "decision");
+
   if (isLoading) return <div style={{ minHeight: "100dvh", backgroundColor: "#F5F0E8" }} />;
   if (!userData || !computedData) return null;
 
   return (
     <div style={{ minHeight: "100dvh" }} className="relative">
+      {/* Trial countdown banner */}
+      {showTrialBanner && (
+        <div
+          style={{
+            backgroundColor: "rgba(184,168,120,0.1)",
+            fontFamily: "var(--font-inter-var), sans-serif",
+            fontSize: "0.75rem",
+            color: "#2C2418",
+            textAlign: "center",
+            padding: "0.5rem 1rem",
+            cursor: "pointer",
+          }}
+          onClick={() => setPaywallOpen(true)}
+        >
+          {daysRemaining} days of full access remaining — upgrade to keep your signal going →
+        </div>
+      )}
+
       {/* Sticky header */}
-      <header style={{ position: "sticky", top: 0, zIndex: 100, backgroundColor: "rgba(245,240,232,0.9)", backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)", paddingTop: "env(safe-area-inset-top)" }}>
+      <header style={{ position: "sticky", top: 0, zIndex: 100, backgroundColor: "rgba(245,240,232,0.9)", backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)", paddingTop: showTrialBanner ? 0 : "env(safe-area-inset-top)" }}>
         <style>{`
           .dash-header-bar { display: flex; align-items: center; justify-content: space-between; padding: 1rem clamp(1rem, 5vw, 3rem); position: relative; }
           .dash-nav { position: absolute; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: clamp(0.75rem, 3vw, 2rem); }
@@ -113,12 +139,79 @@ export default function Dashboard() {
 
         <section id="current-phase" style={{ scrollMarginTop: "80px" }}><PhaseSection /></section>
         <VedicDivider />
-        <section id="today" style={{ scrollMarginTop: "80px" }}><TodaySection /></section>
+        <section id="today" style={{ scrollMarginTop: "80px" }}>
+          {isFreeTrialExpired ? (
+            <div
+              style={{ position: "relative", cursor: "pointer" }}
+              onClick={() => { setLockedSection("today"); setPaywallOpen(true); }}
+            >
+              <div style={{ filter: "blur(4px)", pointerEvents: "none" }}>
+                <TodaySection />
+              </div>
+              <div style={{
+                position: "absolute",
+                inset: 0,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                backgroundColor: "rgba(245,240,232,0.8)",
+              }}>
+                <span style={{
+                  fontFamily: "var(--font-inter-var), sans-serif",
+                  fontSize: "0.875rem",
+                  color: "#C75B3A",
+                  fontWeight: 600,
+                  letterSpacing: "0.05em",
+                  textTransform: "uppercase",
+                }}>
+                  unlock →
+                </span>
+              </div>
+            </div>
+          ) : (
+            <TodaySection />
+          )}
+        </section>
         <VedicDivider />
-        <section id="decision" style={{ scrollMarginTop: "80px" }}><DecisionSection /></section>
+        <section id="decision" style={{ scrollMarginTop: "80px" }}>
+          {isFreeTrialExpired ? (
+            <div
+              style={{ position: "relative", cursor: "pointer" }}
+              onClick={() => { setLockedSection("decision"); setPaywallOpen(true); }}
+            >
+              <div style={{ filter: "blur(4px)", pointerEvents: "none" }}>
+                <DecisionSection />
+              </div>
+              <div style={{
+                position: "absolute",
+                inset: 0,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                backgroundColor: "rgba(245,240,232,0.8)",
+              }}>
+                <span style={{
+                  fontFamily: "var(--font-inter-var), sans-serif",
+                  fontSize: "0.875rem",
+                  color: "#C75B3A",
+                  fontWeight: 600,
+                  letterSpacing: "0.05em",
+                  textTransform: "uppercase",
+                }}>
+                  unlock →
+                </span>
+              </div>
+            </div>
+          ) : (
+            <DecisionSection />
+          )}
+        </section>
         <VedicDivider />
         <section id="card" style={{ scrollMarginTop: "80px", marginTop: "3rem" }}><PatternSection /></section>
       </main>
+
+      {/* Paywall modal */}
+      <PaywallModal open={paywallOpen || showPaywall} onClose={() => { setPaywallOpen(false); setLockedSection(null); }} />
 
       {/* Footer */}
       <footer style={{ position: "relative", zIndex: 30, padding: "4rem 24px 2rem", textAlign: "center", marginTop: "8rem" }}>
