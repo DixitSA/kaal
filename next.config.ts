@@ -1,7 +1,6 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  transpilePackages: ["astronomia"],
   outputFileTracingRoot: process.cwd(),
   webpack: (config, { isServer }) => {
     config.module.exprContextCritical = false;
