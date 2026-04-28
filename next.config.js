@@ -3,17 +3,13 @@ const nextConfig = {
   webpack: (config, { isServer }) => {
     config.module.exprContextCritical = false;
     
-    // Tell webpack to skip bundling calculateAstronomia
-    // It's server-only code that uses Node.js require()
     if (isServer) {
       config.externals = config.externals || [];
       config.externals.push(
         (data, callback) => {
-          if (data.request?.includes("calculateAstronomia")) {
-            return callback(null, `module.exports = {}`);
-          }
-          if (data.request?.includes("astronomia")) {
-            return callback(null, `module.exports = {}`);
+          const request = data.request || "";
+          if (request.toLowerCase().includes("astronomia")) {
+            return callback(null, "var {}");
           }
           callback();
         }

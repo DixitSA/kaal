@@ -16,7 +16,7 @@ import { normalizeLongitude } from "@/lib/astro/calculateNakshatra";
 import {
   computeAstronomiaPositions,
   isAstronomiaAvailable,
-} from "@/lib/astro/calculateAstronomia";
+} from "@/lib/astro/_calculateAstronomia";
 import type {
   AyanamshaKey,
   BirthInput,
