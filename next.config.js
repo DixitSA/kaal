@@ -1,6 +1,4 @@
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
+const nextConfig = {
   outputFileTracingRoot: process.cwd(),
   webpack: (config, { isServer }) => {
     config.module.exprContextCritical = false;
@@ -10,7 +8,7 @@ const nextConfig: NextConfig = {
     if (isServer) {
       config.externals = config.externals || [];
       config.externals.push(
-        (data: { request?: string }, callback: (err: any, result?: string) => void) => {
+        (data, callback) => {
           if (data.request?.includes("calculateAstronomia")) {
             return callback(null, `module.exports = {}`);
           }
