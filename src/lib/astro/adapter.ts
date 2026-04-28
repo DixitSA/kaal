@@ -1,3 +1,10 @@
+// ── Server-only guard ───────────────────────────────────────────────
+// This file must only run in Node.js. The following line prevents
+// webpack from bundling it for the client.
+if (typeof window !== "undefined") {
+  throw new Error("adapter.ts is server-only");
+}
+
 import { DEFAULT_AYANAMSHA, J2000_JULIAN_DAY } from "@/lib/astro/constants";
 import { buildChartPrimitives } from "@/lib/astro/calculateChart";
 import {
