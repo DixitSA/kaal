@@ -149,6 +149,24 @@ function DashboardContent() {
             welcome to kaal pro. your signal is now unlocked.
           </div>
         )}
+
+        {/* Trial countdown banner */}
+        {!showUpgradeSuccess && showTrialBanner && (
+          <div
+            style={{
+              backgroundColor: "rgba(184,168,120,0.1)",
+              fontFamily: "var(--font-inter-var), sans-serif",
+              fontSize: "0.75rem",
+              color: "#2C2418",
+              textAlign: "center",
+              padding: "0.5rem 1rem",
+              cursor: "pointer",
+            }}
+            onClick={() => setPaywallOpen(true)}
+          >
+            {daysRemaining} days of full access remaining — upgrade to keep your signal going →
+          </div>
+        )}
       </div>
 
       <main style={{ maxWidth: "720px", margin: "0 auto", padding: "0 clamp(1rem, 5vw, 3rem) 8rem", touchAction: "pan-y" }}>
