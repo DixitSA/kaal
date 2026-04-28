@@ -3,17 +3,24 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   transpilePackages: ["astronomia"],
   outputFileTracingRoot: process.cwd(),
-  webpack: (config) => {
+  webpack: (config, { isServer }) => {
     config.module.exprContextCritical = false;
+    
     // Tell webpack to skip bundling calculateAstronomia.ts
     // It's server-only code that uses Node.js `require()`
-    config.externals = config.externals || [];
-    config.externals.push(({ request }: { request: string }) => {
-      if (request?.includes("calculateAstronomia")) {
-        return `module.exports = {}`;
-      }
-      return undefined;
-    });
+    if (isServer) {
+      config.externals = config.externals || [];
+      config.externals.push((data, callback) => {
+        if (data.request?.includes("calculateAstronomia")) {
+          return callback(null, `module.exports = {}`);
+        }
+        if (data.request?.includes("astronomia")) {
+          return callback(null, `module.exports = {}`);
+        }
+        callback();
+      });
+    }
+    
     return config;
   },
 };
