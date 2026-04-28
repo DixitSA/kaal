@@ -55,70 +55,88 @@ export default function DecisionSection() {
   });
 
   return (
-    <section>
-      {/* Header row: Decision + active category inline */}
+    <section style={{ paddingTop: "24px" }}>
+      {/* Single-row nav: 'decision' label + category tabs on one scrollable rail */}
       <motion.div
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: "-60px" }}
         variants={childAnim(0)}
-        style={{ display: "flex", alignItems: "baseline", gap: "12px", paddingBottom: "10px", borderBottom: "1px solid rgba(61,52,40,0.12)", marginBottom: "1rem" }}
-      >
-        <p
-          className="tracking-[0.2em]"
-          style={{ color: "#8A7240", fontFamily: "var(--font-inter-var)", fontSize: "14px", fontWeight: 500, textTransform: "lowercase", margin: 0 }}
-        >
-          decision
-        </p>
-        <span style={{
-          fontFamily: "var(--font-inter-var)",
-          fontSize: "12px",
-          textTransform: "lowercase",
-          letterSpacing: "0.06em",
-          color: "#A65D46",
-        }}>
-          {active}
-        </span>
-      </motion.div>
-
-      {/* Category navigation */}
-      <div
+        className="nav-scroll"
         style={{
           display: "flex",
-          justifyContent: "flex-start",
-          gap: "0",
-          marginBottom: "1rem",
-          overflowX: "auto",
-          scrollbarWidth: "none",
-          WebkitOverflowScrolling: "touch",
+          alignItems: "baseline",
+          borderBottom: "1px solid rgba(61,52,40,0.12)",
+          marginBottom: "1.25rem",
         }}
       >
+        {/* Static 'decision' label — not a tab */}
+        <span
+          className="tracking-[0.2em]"
+          style={{
+            fontFamily: "var(--font-inter-var)",
+            fontSize: "14px",
+            fontWeight: 500,
+            textTransform: "lowercase",
+            color: "#8A7240",
+            whiteSpace: "nowrap",
+            padding: "8px 0",
+            marginRight: "24px",
+            marginBottom: "-1px",
+            flexShrink: 0,
+          }}
+        >
+          decision
+        </span>
+
+        {/* Category tabs — button width = text width so the absolute underline is text-wide */}
         {DECISION_CATEGORIES.map((category) => (
           <button
             key={category}
             onClick={() => setActive(category)}
             style={{
-              fontFamily: "var(--font-inter-var)",
-              fontSize: "11px",
-              color: "#3D3428",
-              opacity: active === category ? 0.9 : 0.6,
-              textTransform: "lowercase",
-              letterSpacing: "0.02em",
-              fontWeight: 400,
+              position: "relative",
               background: "none",
               border: "none",
-              borderBottom: active === category ? "2px solid #A65D46" : "2px solid transparent",
               padding: "8px 0",
-              paddingRight: "20px",
+              marginRight: "20px",
+              marginBottom: "-1px",
               cursor: "pointer",
               whiteSpace: "nowrap",
-              transition: "opacity 0.15s ease, border-color 0.15s ease",
+              flexShrink: 0,
             }}
           >
-            {category}
+            <span style={{
+              fontFamily: "var(--font-inter-var)",
+              fontSize: "11px",
+              color: active === category ? "#A65D46" : "#3D3428",
+              opacity: active === category ? 1 : 0.4,
+              textTransform: "lowercase",
+              letterSpacing: "0.04em",
+              fontWeight: 400,
+              display: "block",
+              transition: "color 0.15s ease, opacity 0.15s ease",
+            }}>
+              {category}
+            </span>
+            {active === category && (
+              <motion.span
+                layoutId="decision-underline"
+                style={{
+                  position: "absolute",
+                  bottom: "-1px",
+                  left: 0,
+                  right: 0,
+                  height: "2px",
+                  backgroundColor: "#A65D46",
+                  borderRadius: "1px",
+                }}
+                transition={{ type: "spring", stiffness: 380, damping: 30 }}
+              />
+            )}
           </button>
         ))}
-      </div>
+      </motion.div>
 
       {/* Decision result panel */}
       <div
