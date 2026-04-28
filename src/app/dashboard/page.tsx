@@ -51,7 +51,7 @@ const FOOTER_LINKS = [
 function DashboardContent() {
   const router = useRouter();
   const { userData, computedData, isLoading, isFreeTrialExpired, daysOnFree } = useUser();
-  const { isProUser } = useSubscription();
+  const { isProUser, daysRemaining } = useSubscription();
   const [contemplation, setContemplation] = useState<Contemplation | null>(null);
   const [clientDate, setClientDate] = useState("");
   const [hasMounted, setHasMounted] = useState(false);

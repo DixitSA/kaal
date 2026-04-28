@@ -1,5 +1,3 @@
-import { createRequire } from "node:module";
-
 import { DEFAULT_AYANAMSHA, J2000_JULIAN_DAY } from "@/lib/astro/constants";
 import { buildChartPrimitives } from "@/lib/astro/calculateChart";
 import {
@@ -21,7 +19,14 @@ import type {
 } from "@/lib/types/astrology";
 import { hasExactBirthTime } from "@/lib/types/astrology";
 
-const require = createRequire(import.meta.url);
+// Webpack bundler detection — short-circuit if not running in Node
+const IS_NODE = typeof process !== "undefined" && process.release?.name === "node";
+
+function getRequire() {
+  if (!IS_NODE) return null;
+  try { return (0, eval)("require"); }
+  catch { return null; }
+}
 
 type ProviderEngine = "swisseph" | "astronomia" | "approximation-fallback";
 

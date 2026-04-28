@@ -5,21 +5,45 @@
  *
  * Used by adapter.ts when astronomia is installed (pure-JS, no native build).
  * Falls back to approximation engine when the import fails.
+ *
+ * NOTE: This file must never be bundled for the client. All `astronomia` imports
+ * are hidden behind `loadAstronomia()` which short-circuits during Next.js build.
  */
 
-import { createRequire } from "node:module";
 import { J2000_JULIAN_DAY } from "@/lib/astro/constants";
 import { normalizeLongitude } from "@/lib/astro/calculateNakshatra";
 import type { PlanetKey } from "@/lib/types/astrology";
 
-const _require = createRequire(import.meta.url);
-
-// ── Lazy-loaded astronomia modules ────────────────────────────────────────────
+// ── Lazy-loaded astronomia modules ────────────────────────────────────
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
+
+// Webpack bundler detection — short-circuit if not running in Node
+const IS_NODE = typeof process !== "undefined" && process.release?.name === "node";
+
 function loadAstronomia(): any | null {
-  try { return _require("astronomia"); }
-  catch { return null; }
+  if (!IS_NODE) return null;
+  try {
+    // webpack ignores dynamic require inside eval-wrapped indirect call
+    const r = (0, eval)("require");
+    return r("astronomia");
+  } catch { return null; }
+}
+
+function loadVsop(planet: string): any | null {
+  if (!IS_NODE) return null;
+  try {
+    const r = (0, eval)("require");
+    const mod = r(`astronomia/data/vsop87B${planet}`);
+    return (mod as any).default ?? mod;
+  } catch { return null; }
+}
+
+function loadVsop(planet: string): any | null {
+  try {
+    const r = eval('require');
+    return (r(`astronomia/data/vsop87B${planet}`) as any).default ?? r(`astronomia/data/vsop87B${planet}`);
+  } catch { return null; }
 }
 
 function loadVsop(planet: string): any | null {

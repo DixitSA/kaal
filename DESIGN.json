@@ -1,0 +1,176 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-04-28T12:00:00Z",
+  "title": "Design System: Kaal",
+  "extensions": {
+    "colorMeta": {
+      "parchment-cream": {
+        "role": "neutral",
+        "displayName": "Parchment Cream",
+        "canonical": "oklch(95% 0.015 75)",
+        "tonalRamp": ["oklch(25% 0.015 75)", "oklch(40% 0.015 75)", "oklch(55% 0.015 75)", "oklch(70% 0.015 75)", "oklch(85% 0.015 75)", "oklch(92% 0.015 75)", "oklch(95% 0.015 75)", "oklch(98% 0.015 75)"]
+      },
+      "charcoal-ink": {
+        "role": "neutral",
+        "displayName": "Charcoal Ink",
+        "canonical": "oklch(18% 0.02 75)",
+        "tonalRamp": ["oklch(10% 0.02 75)", "oklch(14% 0.02 75)", "oklch(18% 0.02 75)", "oklch(22% 0.02 75)", "oklch(26% 0.02 75)", "oklch(30% 0.02 75)", "oklch(35% 0.02 75)", "oklch(40% 0.02 75)"]
+      },
+      "terracotta-clay": {
+        "role": "primary",
+        "displayName": "Terracotta Clay",
+        "canonical": "oklch(45% 0.12 45)",
+        "tonalRamp": ["oklch(25% 0.12 45)", "oklch(32% 0.12 45)", "oklch(39% 0.12 45)", "oklch(45% 0.12 45)", "oklch(55% 0.12 45)", "oklch(65% 0.12 45)", "oklch(75% 0.12 45)", "oklch(85% 0.12 45)"]
+      },
+      "terracotta-text": {
+        "role": "primary",
+        "displayName": "Terracotta Text",
+        "canonical": "oklch(38% 0.12 45)",
+        "tonalRamp": ["oklch(25% 0.12 45)", "oklch(30% 0.12 45)", "oklch(34% 0.12 45)", "oklch(38% 0.12 45)", "oklch(45% 0.12 45)", "oklch(55% 0.12 45)", "oklch(65% 0.12 45)", "oklch(75% 0.12 45)"]
+      },
+      "brass-gold": {
+        "role": "secondary",
+        "displayName": "Brass Gold",
+        "canonical": "oklch(50% 0.08 95)",
+        "tonalRamp": ["oklch(30% 0.08 95)", "oklch(38% 0.08 95)", "oklch(44% 0.08 95)", "oklch(50% 0.08 95)", "oklch(58% 0.08 95)", "oklch(66% 0.08 95)", "oklch(74% 0.08 95)", "oklch(82% 0.08 95)"]
+      },
+      "muted-sage": {
+        "role": "secondary",
+        "displayName": "Muted Sage",
+        "canonical": "oklch(55% 0.06 155)",
+        "tonalRamp": ["oklch(35% 0.06 155)", "oklch(42% 0.06 155)", "oklch(48% 0.06 155)", "oklch(55% 0.06 155)", "oklch(62% 0.06 155)", "oklch(70% 0.06 155)", "oklch(78% 0.06 155)", "oklch(86% 0.06 155)"]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Hero headlines, section headers (Today, Phase, Decision). Playfair Display only."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "All body text, guidance content, descriptions. Inter for maximum readability."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Form labels, nav items, focus areas, micro-copy. Quattrocento Sans or Inter."
+      }
+    },
+    "shadows": [
+      {
+        "name": "ambient-low",
+        "value": "0 2px 8px rgba(44,36,24,0.08)",
+        "purpose": "Button hover, interactive elements lifting."
+      },
+      {
+        "name": "modal-overlay",
+        "value": "0 0 0 9999px rgba(44,36,24,0.6)",
+        "purpose": "Paywall modal backdrop — warm charcoal, not cold black."
+      },
+      {
+        "name": "focus-glow",
+        "value": "0 2px 0 #B5563E",
+        "purpose": "Ceremonial input underline — animated width expansion on focus."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-standard",
+        "value": "cubic-bezier(0.4, 0, 0.2, 1)",
+        "purpose": "Default easing for state transitions, underline animation."
+      },
+      {
+        "name": "ease-out-quart",
+        "value": "cubic-bezier(0.22, 1, 0.36, 1)",
+        "purpose": "Motion components entrance, translateY animations."
+      }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "md", "value": "768px" },
+      { "name": "lg", "value": "1024px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "CTA buttons for upgrade, submit, sign-up. Terracotta clay with cream text.",
+      "html": "<button class=\"ds-btn-primary\">Upgrade to Pro →</button>",
+      "css": ".ds-btn-primary { background: #C75B3A; color: #F5F0E8; border: none; border-radius: 4px; padding: 12px 24px; font-family: var(--font-inter-var), sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; cursor: pointer; transition: background 0.2s ease, transform 0.2s ease; } .ds-btn-primary:hover { background: #A65D46; transform: translateY(-1px); } .ds-btn-primary:focus-visible { outline: 2px solid rgba(181,86,62,0.65); outline-offset: 3px; border-radius: 2px; }"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Ghost-style buttons with bottom border only. Used for cancel, back, secondary actions.",
+      "html": "<button class=\"ds-btn-secondary\">Clear Session</button>",
+      "css": ".ds-btn-secondary { background: transparent; color: #B5563E; border: none; border-bottom: 1px solid #B5563E; border-radius: 4px; padding: 12px 24px; font-family: var(--font-inter-var), sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; cursor: pointer; transition: opacity 0.2s ease; } .ds-btn-secondary:hover { opacity: 0.75; }"
+    },
+    {
+      "name": "Ceremonial Input",
+      "kind": "input",
+      "refersTo": "input-underline",
+      "description": "Form inputs with animated bottom underline. No visible border at rest.",
+      "html": "<div class=\"ds-input-wrapper\"><input class=\"ds-input\" type=\"text\" placeholder=\"your@email.com\" /><div class=\"ds-input-underline\"></div></div>",
+      "css": ".ds-input-wrapper { position: relative; display: block; width: 100%; } .ds-input { background: transparent; border: none; border-bottom: 1px solid rgba(0,0,0,0.15); outline: none; padding: 0.5rem 0; font-family: var(--font-inter-var), sans-serif; font-size: 14px; color: #2C2418; text-align: center; letter-spacing: 0.04em; } .ds-input::placeholder { font-weight: 300; text-transform: lowercase; color: rgba(44,36,24,0.5); letter-spacing: 0.04em; } .ds-input-underline { position: absolute; bottom: 0; left: 50%; width: 0; height: 2px; background-color: #B5563E; transition: width 0.3s cubic-bezier(0.4,0,0.2,1), left 0.3s cubic-bezier(0.4,0,0.2,1); pointer-events: none; } .ds-input-wrapper:focus-within .ds-input-underline { width: 100%; left: 0; }"
+    },
+    {
+      "name": "Navigation Link",
+      "kind": "nav",
+      "refersTo": "nav-link",
+      "description": "Header and footer navigation links. Uppercase, spaced, Playfair Display.",
+      "html": "<a class=\"ds-nav-link\" href=\"#today\">Today</a>",
+      "css": ".ds-nav-link { font-family: var(--font-playfair-display), serif; font-size: clamp(10px, 2vw, 12px); color: #7A7469; text-transform: uppercase; letter-spacing: 0.08em; text-decoration: none; white-space: nowrap; transition: color 0.2s ease; padding: 8px 12px; min-height: 44px; display: inline-flex; align-items: center; } .ds-nav-link:hover { color: #2C2418; } .ds-nav-link:focus-visible { outline: 2px solid rgba(181,86,62,0.65); outline-offset: 3px; border-radius: 2px; }"
+    },
+    {
+      "name": "Insight Card",
+      "kind": "custom",
+      "refersTo": "insight-card",
+      "description": "Transparent background content card for daily signals. No container, just content with label.",
+      "html": "<div class=\"ds-insight-card\"><span class=\"ds-insight-label\">Focus Area: Decision</span><p class=\"ds-insight-content\">Your signal tone today encourages bold action in career matters.</p></div>",
+      "css": ".ds-insight-card { transition: transform 0.1s ease; } .ds-insight-card:active { transform: scale(0.98); } @media (prefers-reduced-motion: reduce) { .ds-insight-card:active { transform: none; } } .ds-insight-label { font-family: var(--font-quattrocento-sans), var(--font-inter-var), sans-serif; font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: #5E7A5E; margin: 0 0 0.75rem; display: block; } .ds-insight-label.negative { color: #A04040; } .ds-insight-content { font-family: var(--font-inter-var), sans-serif; font-size: clamp(0.875rem, 1.5vw, 1rem); color: #2C2418; line-height: 1.7; letter-spacing: 0.04em; margin: 0; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Editorial Sanctuary",
+    "overview": "Kaal is a high-end spiritual magazine brought to life as a Vedic timing app. Think Monocle meets ancient wisdom — tactile paper textures, editorial grids, sophisticated serif typography, and earthy luxury. The interface embodies the calm, intentional timing it teaches, with authoritative warmth like a seasoned Vedic counselor.\n\nThis system explicitly rejects new-age clichés (bright purple, neon gradients, starfield backgrounds, crystal clipart) and corporate SaaS sterility (corporate blue, card-heavy dashboards, generic templates). Instead, it dwells in the refined space between — luxurious but grounded, mystical but practical, ancient but contemporary.",
+    "keyCharacteristics": [
+      "Earthy palette rooted in parchment, terracotta, and sage",
+      "Editorial typography with Playfair Display headlines and Inter body",
+      "Mostly flat surfaces with subtle shadows for interactive states",
+      "Ceremonial input underlines instead of bordered fields",
+      "No cards as default — content flows editorial-style",
+      "Uppercase micro-copy in spaced Quattrocento Sans for ritual labels"
+    ],
+    "rules": [
+      { "name": "The One Voice Rule", "body": "Terracotta Clay is used on ≤15% of any given screen. Its rarity creates authority — when it appears, it means something.", "section": "colors" },
+      { "name": "The Warm Tint Rule", "body": "No #000 or #fff anywhere. Every neutral is tinted toward the terracotta-brass hue family (chroma 0.005–0.01). Pure black or white feels clinical and breaks the editorial sanctuary.", "section": "colors" },
+      { "name": "The Lowercase Body Rule", "body": "All body text, guidance, and descriptions are sentence-case or lowercase. Only labels, nav, and micro-copy are uppercase. The contrast creates rhythm — quiet content surrounded by intentional structure.", "section": "typography" },
+      { "name": "The No-Em-Dash Rule", "body": "Use commas, colons, semicolons, periods, or parentheses. Em dashes (—) are banned — they're the mark of AI-generated content and break the editorial sanctuary's human voice.", "section": "typography" },
+      { "name": "The Flat-By-Default Rule", "body": "All surfaces are flat until proven otherwise. Shadows appear only as a response to state (hover, focus, modal overlay). A resting card has no shadow.", "section": "elevation" },
+      { "name": "The Border-Not-Shadow Rule", "body": "Depth and separation come from 1px borders at 8–12% opacity (rgba(122,116,105,0.08–0.12)), not from box-shadows. The editorial sanctuary uses typography and borders, not skeuomorphic depth.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do use Parchment Cream (#F5F0E8) as the only background — it's warmer than white and sets the editorial sanctuary tone",
+      "Do keep Terracotta Clay usage under 15% of screen real estate — its rarity creates authority",
+      "Do write body text in sentence-case or lowercase — only labels and nav are uppercase",
+      "Do use the ceremonial input underline animation (0.3s cubic-bezier) for all form fields",
+      "Do separate sections with 1px borders at 8–12% opacity, not shadows or spacing alone",
+      "Do use Playfair Display for all headlines and section headers — the editorial voice depends on it",
+      "Do respect prefers-reduced-motion — disable all animations and transitions",
+      "Do ensure 4.5:1 minimum contrast for normal text, 3:1 for large text (WCAG 2.1 AA)"
+    ],
+    "donts": [
+      "Don't use #000 (pure black) or #fff (pure white) anywhere — every neutral must be tinted toward the terracotta-brass hue family",
+      "Don't use side-stripe borders (border-left or border-right greater than 1px) as colored accents — use full borders, background tints, or leading numbers/icons",
+      "Don't use gradient text (background-clip: text with gradients) — use a single solid color, emphasize via weight or size",
+      "Don't use glassmorphism as default — blurred backgrounds are decorative, not functional. Use once, purposefully, or not at all",
+      "Don't use em dashes (—) in any copy — use commas, colons, semicolons, periods, or parentheses",
+      "Don't create identical card grids (same-sized cards with icon + heading + text, repeated) — Kaal is editorial, not a dashboard",
+      "Don't use modal as first thought — exhaust inline/progressive alternatives first (the blurred section overlay with upgrade button is the right pattern)",
+      "Don't use new-age clichés: bright purple, neon gradients, starfield backgrounds, crystal clipart, zodiac stock photography",
+      "Don't use corporate SaaS patterns: corporate blue, stock photos, card-heavy dashboards, generic templates, sterile efficiency"
+    ]
+  }
+}
