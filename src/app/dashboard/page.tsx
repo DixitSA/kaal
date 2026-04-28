@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useEffect, useState, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useUser } from "@/context/UserContext";
 import { useSubscription } from "@/hooks/useSubscription";
@@ -17,7 +17,7 @@ import PaywallModal from "@/components/ui/PaywallModal";
 
 const CONTEMPLATIONS = [
   { quote: "The stars impel, they do not compel.", source: "B. V. Raman" },
-  { quote: " Wisdom begins in wonder.", source: "Plato" },
+  { quote: "Wisdom begins in wonder.", source: "Plato" },
   { quote: "The universe is not only stranger than we imagine, it is stranger than we can imagine.", source: "J. B. S. Haldane" },
   { quote: "As above, so below.", source: "Hermes Trismegistus" },
   { quote: "Time is the wisest counselor.", source: "Pythagoras" },
@@ -43,13 +43,23 @@ const FOOTER_LINKS = [
   { label: "Terms", href: "/terms" },
 ] as const;
 
-export default function Dashboard() {
+function DashboardContent() {
   const router = useRouter();
   const { userData, computedData, isLoading, isFreeTrialExpired, daysOnFree } = useUser();
   const { isProUser, daysRemaining, handleUpgrade } = useSubscription();
   const [contemplation] = useState(getContemplation);
   const [paywallOpen, setPaywallOpen] = useState(false);
   const [lockedSection, setLockedSection] = useState<"today" | "decision" | null>(null);
+  const [showUpgradeSuccess, setShowUpgradeSuccess] = useState(false);
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    if (searchParams.get("upgraded") === "true") {
+      setShowUpgradeSuccess(true);
+      router.replace("/dashboard");
+      setTimeout(() => setShowUpgradeSuccess(false), 4000);
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     if (isLoading) return;
@@ -65,8 +75,24 @@ export default function Dashboard() {
 
   return (
     <div style={{ minHeight: "100dvh" }} className="relative">
+      {/* Upgrade success banner */}
+      {showUpgradeSuccess && (
+        <div
+          style={{
+            backgroundColor: "rgba(120,140,120,0.1)",
+            fontFamily: "var(--font-inter-var), sans-serif",
+            fontSize: "0.75rem",
+            color: "#2C2418",
+            textAlign: "center",
+            padding: "0.5rem 1rem",
+          }}
+        >
+          welcome to kaal pro. your signal is now unlocked.
+        </div>
+      )}
+
       {/* Trial countdown banner */}
-      {showTrialBanner && (
+      {!showUpgradeSuccess && showTrialBanner && (
         <div
           style={{
             backgroundColor: "rgba(184,168,120,0.1)",
@@ -105,7 +131,8 @@ export default function Dashboard() {
             {NAV_LINKS.map((link) => (
               <a key={link.href} href={link.href} style={{ fontFamily: "var(--font-playfair-display)", fontSize: "clamp(10px, 2vw, 12px)", color: "#7A7469", textTransform: "uppercase", letterSpacing: "0.08em", textDecoration: "none", whiteSpace: "nowrap", transition: "color 0.2s ease" }}
                 onMouseEnter={(e) => e.currentTarget.style.color = "#2C2418"}
-                onMouseLeave={(e) => e.currentTarget.style.color = "#7A7469"}>
+                onMouseLeave={(e) => e.currentTarget.style.color = "#7A7469"}
+              >
                 {link.label}
               </a>
             ))}
@@ -117,7 +144,8 @@ export default function Dashboard() {
           {NAV_LINKS.map((link) => (
             <a key={link.href} href={link.href} style={{ fontFamily: "var(--font-playfair-display)", fontSize: "9px", color: "#7A7469", textTransform: "uppercase", letterSpacing: "0.12em", textDecoration: "none", whiteSpace: "nowrap", transition: "color 0.2s ease", padding: "8px 12px" }}
               onMouseEnter={(e) => e.currentTarget.style.color = "#2C2418"}
-              onMouseLeave={(e) => e.currentTarget.style.color = "#7A7469"}>
+              onMouseLeave={(e) => e.currentTarget.style.color = "#7A7469"}
+            >
               {link.label}
             </a>
           ))}
@@ -210,9 +238,6 @@ export default function Dashboard() {
         <section id="card" style={{ scrollMarginTop: "80px", marginTop: "3rem" }}><PatternSection /></section>
       </main>
 
-      {/* Paywall modal */}
-      <PaywallModal open={paywallOpen || showPaywall} onClose={() => { setPaywallOpen(false); setLockedSection(null); }} />
-
       {/* Footer */}
       <footer style={{ position: "relative", zIndex: 30, padding: "4rem 24px 2rem", textAlign: "center", marginTop: "8rem" }}>
         <div style={{ fontFamily: "var(--font-playfair-display)", fontSize: "0.9rem", fontStyle: "italic", color: "#2C2418", marginBottom: "6px", opacity: 0.7 }}>Kaal</div>
@@ -222,7 +247,8 @@ export default function Dashboard() {
             <span key={link.href} style={{ display: "flex", alignItems: "center" }}>
               <a href={link.href} style={{ fontFamily: "var(--font-inter-var), sans-serif", fontSize: "11px", color: "#9C9488", letterSpacing: "0.07em", textTransform: "uppercase", padding: "16px 14px", minHeight: "44px", display: "inline-flex", alignItems: "center", textDecoration: "none", transition: "color 0.15s ease" }}
                 onMouseEnter={(e) => e.currentTarget.style.color = "#2C2418"}
-                onMouseLeave={(e) => e.currentTarget.style.color = "#9C9488"}>
+                onMouseLeave={(e) => e.currentTarget.style.color = "#9C9488"}
+              >
                 {link.label}
               </a>
               {i < FOOTER_LINKS.length - 1 && <span style={{ color: "rgba(122,116,105,0.3)", fontSize: "11px", userSelect: "none" }}>|</span>}
@@ -230,6 +256,17 @@ export default function Dashboard() {
           ))}
         </nav>
       </footer>
+
+      {/* Paywall modal */}
+      <PaywallModal open={paywallOpen || showPaywall} onClose={() => { setPaywallOpen(false); setLockedSection(null); }} />
     </div>
+  );
+}
+
+export default function Dashboard() {
+  return (
+    <Suspense>
+      <DashboardContent />
+    </Suspense>
   );
 }

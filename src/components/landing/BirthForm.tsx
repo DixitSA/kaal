@@ -144,6 +144,7 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
   const router = useRouter();
   const { setUserData } = useUser();
 
+  const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [dob, setDob] = useState("");
   const [timeOfBirth, setTimeOfBirth] = useState("");
@@ -196,6 +197,7 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
 
   function validate() {
     const e: Record<string, string> = {};
+    if (!email.trim() || !email.includes("@")) e.email = "valid email is required";
     if (!name.trim()) e.name = "name is required";
     if (!dob || dob.length < 10) {
       e.dob = "enter a full date — MM/DD/YYYY";
@@ -216,7 +218,7 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
     return e;
   }
 
-  function handleSubmit(e: FormEvent) {
+  async function handleSubmit(e: FormEvent) {
     e.preventDefault();
     const errs = validate();
     if (Object.keys(errs).length > 0) {
@@ -226,7 +228,22 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
       return;
     }
     setIsSubmitting(true);
-    setUserData({ name, dob: toISODate(dob), timeOfBirth, unknownTime, placeOfBirth, timezone, latitude, longitude });
+    // Create user in DB
+    try {
+      const res = await fetch("/api/user", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, name, dob: toISODate(dob), timeOfBirth, placeOfBirth }),
+      });
+      if (res.ok) {
+        const userData = await res.json();
+        setUserData({ ...userData, name, dob: toISODate(dob), timeOfBirth, unknownTime, placeOfBirth, timezone, latitude, longitude });
+      } else {
+        setUserData({ email, name, dob: toISODate(dob), timeOfBirth, unknownTime, placeOfBirth, timezone, latitude, longitude } as any);
+      }
+    } catch {
+      setUserData({ email, name, dob: toISODate(dob), timeOfBirth, unknownTime, placeOfBirth, timezone, latitude, longitude } as any);
+    }
     router.push("/loading-screen");
   }
 
@@ -295,6 +312,18 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
         gap: "32px",
       }}
     >
+
+      {/* ── Email ── */}
+      <motion.div custom={-1} variants={vars} initial="hidden" animate="visible">
+        <label htmlFor="email" style={labelStyle}>email address</label>
+        <CeremonialInput
+          id="email" type="email" placeholder="Email address" value={email}
+          onChange={(e) => setEmail(e.target.value)} autoComplete="email"
+          style={inputStyle} onFocus={onFocus} onBlur={(e) => onBlur(e, !!errors.email)}
+          ariaInvalid={!!errors.email} ariaDescribedBy={errors.email ? "email-error" : undefined}
+        />
+        {errors.email && <p id="email-error" role="alert" style={errStyle}>{errors.email}</p>}
+      </motion.div>
 
       {/* ── Full Name ── */}
       <motion.div custom={0} variants={vars} initial="hidden" animate="visible">

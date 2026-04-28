@@ -1,0 +1,15 @@
+D:\Vibecoded Projects\Kaal (Claude)\README.md
+D:\Vibecoded Projects\Kaal (Claude)\SPEC.md
+D:\Vibecoded Projects\Kaal (Claude)\ios\App\CapApp-SPM\README.md
+D:\Vibecoded Projects\Kaal (Claude)\kaal\AGENTS.md
+D:\Vibecoded Projects\Kaal (Claude)\kaal\CLAUDE.md
+D:\Vibecoded Projects\Kaal (Claude)\kaal\CLAUDE.md.original.md
+D:\Vibecoded Projects\Kaal (Claude)\kaal\KAAL-CLAUDE-CODE-PROMPT.md
+D:\Vibecoded Projects\Kaal (Claude)\kaal\README.md
+D:\Vibecoded Projects\Kaal (Claude)\kaal\design\stitch\kaal_editorial_desktop_dashboard_refined\code.html
+D:\Vibecoded Projects\Kaal (Claude)\kaal\design\stitch\kaal_loading_screen\code.html
+D:\Vibecoded Projects\Kaal (Claude)\kaal\design\stitch\kaal_minimal_typographic_landing\code.html
+D:\Vibecoded Projects\Kaal (Claude)\kaal\design\stitch\kaal_saffron_parchment\DESIGN.md
+D:\Vibecoded Projects\Kaal (Claude)\kaal-backend\CLAUDE.md
+D:\Vibecoded Projects\Kaal (Claude)\kaal-backend\KAAL-BACKEND-PROMPT.md
+D:\Vibecoded Projects\Kaal (Claude)\kaal-backend\requirements.txt
