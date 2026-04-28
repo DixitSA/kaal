@@ -15,7 +15,12 @@ import SettingsDropdown from "@/components/ui/SettingsDropdown";
 import Footer from "@/components/ui/Footer";
 import PaywallModal from "@/components/ui/PaywallModal";
 
-const CONTEMPLATIONS = [
+interface Contemplation {
+  quote: string;
+  source: string;
+}
+
+const CONTEMPLATIONS: Contemplation[] = [
   { quote: "The stars impel, they do not compel.", source: "B. V. Raman" },
   { quote: "Wisdom begins in wonder.", source: "Plato" },
   { quote: "The universe is not only stranger than we imagine, it is stranger than we can imagine.", source: "J. B. S. Haldane" },
@@ -47,11 +52,19 @@ function DashboardContent() {
   const router = useRouter();
   const { userData, computedData, isLoading, isFreeTrialExpired, daysOnFree } = useUser();
   const { isProUser, daysRemaining, handleUpgrade } = useSubscription();
-  const [contemplation] = useState(getContemplation);
+  const [contemplation, setContemplation] = useState<Contemplation | null>(null);
+  const [clientDate, setClientDate] = useState("");
+  const [hasMounted, setHasMounted] = useState(false);
   const [paywallOpen, setPaywallOpen] = useState(false);
   const [lockedSection, setLockedSection] = useState<"today" | "decision" | null>(null);
   const [showUpgradeSuccess, setShowUpgradeSuccess] = useState(false);
   const searchParams = useSearchParams();
+
+  useEffect(() => {
+    setHasMounted(true);
+    setContemplation(getContemplation());
+    setClientDate(new Date().toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" }));
+  }, []);
 
   useEffect(() => {
     if (searchParams.get("upgraded") === "true") {
@@ -62,14 +75,16 @@ function DashboardContent() {
   }, [searchParams]);
 
   useEffect(() => {
+    if (!hasMounted) return;
     if (isLoading) return;
     if (!userData) { router.replace("/"); return; }
     if (needsDailyRefresh(computedData) || !computedData) { router.replace("/loading-screen"); }
-  }, [computedData, isLoading, router, userData]);
+  }, [hasMounted, computedData, isLoading, router, userData]);
 
-  const showTrialBanner = !isProUser && !isFreeTrialExpired && daysOnFree >= 0;
-  const showPaywall = isFreeTrialExpired && (lockedSection === "today" || lockedSection === "decision");
+  const showTrialBanner = hasMounted && !isProUser && !isFreeTrialExpired && daysOnFree >= 0;
+  const showPaywall = hasMounted && isFreeTrialExpired && (lockedSection === "today" || lockedSection === "decision");
 
+  if (!hasMounted) return <div style={{ minHeight: "100dvh", backgroundColor: "#F5F0E8" }} />;
   if (isLoading) return <div style={{ minHeight: "100dvh", backgroundColor: "#F5F0E8" }} />;
   if (!userData || !computedData) return null;
 
@@ -159,14 +174,16 @@ function DashboardContent() {
         <h1 style={{ position: "absolute", width: "1px", height: "1px", padding: 0, margin: "-1px", overflow: "hidden", clip: "rect(0,0,0,0)", whiteSpace: "nowrap", border: 0 }}>Kaal — your daily vedic report</h1>
 
         <p style={{ fontFamily: "var(--font-inter-var)", fontSize: "13px", color: "#7A7469", textTransform: "lowercase", letterSpacing: "0.2em", marginTop: "1rem", marginBottom: "3rem" }}>
-          {new Date().toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}
+          {hasMounted ? clientDate : ""}
         </p>
 
         {/* Contemplation */}
-        <section style={{ textAlign: "center", padding: "3rem 0 4rem", borderBottom: "1px solid rgba(122,116,105,0.15)", marginBottom: "3rem" }}>
-          <blockquote style={{ fontFamily: "var(--font-playfair-display)", fontSize: "1.5rem", fontStyle: "italic", color: "#2C2418", lineHeight: 1.5, margin: "0 0 1rem" }}>"{contemplation.quote}"</blockquote>
-          <cite style={{ fontFamily: "var(--font-inter-var)", fontSize: "12px", color: "#9C9488", letterSpacing: "0.1em", textTransform: "uppercase" }}>— {contemplation.source}</cite>
-        </section>
+        {contemplation && (
+          <section style={{ textAlign: "center", padding: "3rem 0 4rem", borderBottom: "1px solid rgba(122,116,105,0.15)", marginBottom: "3rem" }}>
+            <blockquote style={{ fontFamily: "var(--font-playfair-display)", fontSize: "1.5rem", fontStyle: "italic", color: "#2C2418", lineHeight: 1.5, margin: "0 0 1rem" }}>"{contemplation.quote}"</blockquote>
+            <cite style={{ fontFamily: "var(--font-inter-var)", fontSize: "12px", color: "#9C9488", letterSpacing: "0.1em", textTransform: "uppercase" }}>— {contemplation.source}</cite>
+          </section>
+        )}
 
         <section id="current-phase" style={{ scrollMarginTop: "80px" }}><PhaseSection /></section>
         <VedicDivider />

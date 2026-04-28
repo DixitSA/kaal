@@ -10,6 +10,12 @@
       "source": "JuliusBrussee/caveman",
       "sourceType": "github",
       "computedHash": "a2960ee3b6622194fecbb350704e211738deffa25f158eeb5738d863f9c83f2b"
+    },
+    "impeccable": {
+      "source": "pbakaus/impeccable",
+      "sourceType": "github",
+      "skillPath": ".agents/skills/impeccable/SKILL.md",
+      "computedHash": "e79e353cebf42112c8a1431be100399219866d62467172b5be232cf8d0ac4091"
     }
   }
 }
