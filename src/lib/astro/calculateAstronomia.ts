@@ -6,8 +6,8 @@
  * Used by adapter.ts when astronomia is installed (pure-JS, no native build).
  * Falls back to approximation engine when the import fails.
  *
- * NOTE: This file must never be bundled for the client. All `astronomia` imports
- * are hidden behind runtime checks so webpack skips them at build time.
+ * NOTE: This file must never be bundled for the client.
+ * All `astronomia` imports are hidden behind runtime checks so webpack skips them at build time.
  */
 
 import { J2000_JULIAN_DAY } from "@/lib/astro/constants";
@@ -21,26 +21,32 @@ import type { PlanetKey } from "@/lib/types/astrology";
 // Webpack bundler detection — short-circuit if not running in Node
 const IS_NODE = typeof process !== "undefined" && process.release?.name === "node";
 
-function getNodeRequire(): (id: string) => any {
-  if (!IS_NODE) return (id: string) => { throw new Error("not node"); };
+function getNodeRequire(): ((id: string) => any) | null {
+  if (!IS_NODE) return null;
   // String concatenation to hide require() from webpack static analysis
   const fn = (0, eval)("req" + "uire");
-  return fn as (id: string) => any;
+  return fn as ((id: string) => any);
 }
 
+/** Load the main astronomia object */
 function loadAstronomia(): any | null {
-  try { return getNodeRequire()("astronomia"); }
+  const r = getNodeRequire();
+  if (!r) return null;
+  try { return r("astronomia"); }
   catch { return null; }
 }
 
-function loadVsopData(planet: string): any | null {
+/** Load a VSOP87B data module for a planet. */
+const loadVsop = (planet: string): any | null => {
+  const r = getNodeRequire();
+  if (!r) return null;
   try {
-    const mod = getNodeRequire()(("astronomia/data/vsop87B" + planet));
+    const mod = r("astronomia/data/vsop87B" + planet);
     return (mod as any).default ?? mod;
   } catch { return null; }
 }
 
-// ── Conversion helpers ────────────────────────────────────────────────────────
+// ── Conversion helpers ────────────────────────────────────────────────
 
 function toRad(deg: number): number { return deg * Math.PI / 180; }
 function toDeg(rad: number): number { return rad * 180 / Math.PI; }
@@ -87,7 +93,7 @@ function toSidereal(tropicalDeg: number, T: number): number {
   return normalizeLongitude(tropicalDeg - lahiriAyanamsha(T));
 }
 
-// ── Core computation ─────────────────────────────────────────────────────────
+// ── Core computation ─────────────────────────────────────────────────────
 
 export interface AstronomiaPositions {
   /** Sidereal ecliptic longitudes in degrees (Lahiri) */
@@ -157,13 +163,13 @@ export function computeAstronomiaPositions(jd: number): AstronomiaPositions {
   }
 
   // Load VSOP87B data
-  const vsopEarth = loadVsopData("earth");
+  const vsopEarth = loadVsop("earth");
   const vsopData = {
-    mercury: loadVsopData("mercury"),
-    venus:   loadVsopData("venus"),
-    mars:    loadVsopData("mars"),
-    jupiter: loadVsopData("jupiter"),
-    saturn:  loadVsopData("saturn"),
+    mercury: loadVsop("mercury"),
+    venus:   loadVsop("venus"),
+    mars:    loadVsop("mars"),
+    jupiter: loadVsop("jupiter"),
+    saturn:  loadVsop("saturn"),
   };
 
   if (!vsopEarth || Object.values(vsopData).some(v => !v)) {
@@ -187,7 +193,7 @@ export function computeAstronomiaPositions(jd: number): AstronomiaPositions {
       } else {
         let diff = after[p] - before[p];
         if (diff > 180)  diff -= 360;
-        if (diff < -180) diff += 360;
+        if (diff < -180) diff +=360;
         speeds[p] = diff; // per full day (2×delta = 1 day)
       }
     }
@@ -206,6 +212,6 @@ export function computeAstronomiaPositions(jd: number): AstronomiaPositions {
 export function isAstronomiaAvailable(): boolean {
   const astro = loadAstronomia();
   if (!astro) return false;
-  const earth = loadVsopData("earth");
+  const earth = loadVsop("earth");
   return earth !== null;
 }
