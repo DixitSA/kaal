@@ -3,6 +3,7 @@ import { Playfair_Display, Inter, Quattrocento_Sans } from "next/font/google";
 import "./globals.css";
 import { UserProvider } from "@/context/UserContext";
 import BackgroundPattern from "@/components/svg/BackgroundPattern";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const playfairDisplay = Playfair_Display({
   variable: "--font-playfair-display",
@@ -53,6 +54,7 @@ export default function RootLayout({
             {children}
           </div>
         </UserProvider>
+        <SpeedInsights />
       </body>
     </html>
   );
