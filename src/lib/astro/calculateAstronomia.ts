@@ -7,7 +7,7 @@
  * Falls back to approximation engine when the import fails.
  *
  * NOTE: This file must never be bundled for the client. All `astronomia` imports
- * are hidden behind `loadAstronomia()` which short-circuits during Next.js build.
+ * are hidden behind runtime checks so webpack skips them at build time.
  */
 
 import { J2000_JULIAN_DAY } from "@/lib/astro/constants";
@@ -21,34 +21,26 @@ import type { PlanetKey } from "@/lib/types/astrology";
 // Webpack bundler detection — short-circuit if not running in Node
 const IS_NODE = typeof process !== "undefined" && process.release?.name === "node";
 
-function loadAstronomia(): any | null {
+function getNodeRequire(): NodeRequire | null {
   if (!IS_NODE) return null;
-  try {
-    // webpack ignores dynamic require inside eval-wrapped indirect call
-    const r = (0, eval)("require");
-    return r("astronomia");
-  } catch { return null; }
+  try { return eval("require") as NodeRequire; }
+  catch { return null; }
+}
+
+function loadAstronomia(): any | null {
+  const r = getNodeRequire();
+  if (!r) return null;
+  try { return r("astronomia"); }
+  catch { return null; }
 }
 
 function loadVsop(planet: string): any | null {
-  if (!IS_NODE) return null;
+  const r = getNodeRequire();
+  if (!r) return null;
   try {
-    const r = (0, eval)("require");
     const mod = r(`astronomia/data/vsop87B${planet}`);
     return (mod as any).default ?? mod;
   } catch { return null; }
-}
-
-function loadVsop(planet: string): any | null {
-  try {
-    const r = eval('require');
-    return (r(`astronomia/data/vsop87B${planet}`) as any).default ?? r(`astronomia/data/vsop87B${planet}`);
-  } catch { return null; }
-}
-
-function loadVsop(planet: string): any | null {
-  try { return (_require(`astronomia/data/vsop87B${planet}`) as any).default ?? _require(`astronomia/data/vsop87B${planet}`); }
-  catch { return null; }
 }
 
 // ── Conversion helpers ────────────────────────────────────────────────────────
@@ -98,7 +90,7 @@ function toSidereal(tropicalDeg: number, T: number): number {
   return normalizeLongitude(tropicalDeg - lahiriAyanamsha(T));
 }
 
-// ── Core computation ──────────────────────────────────────────────────────────
+// ── Core computation ─────────────────────────────────────────────────────────
 
 export interface AstronomiaPositions {
   /** Sidereal ecliptic longitudes in degrees (Lahiri) */

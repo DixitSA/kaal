@@ -95,11 +95,18 @@ function resolveBirthInput(birth: BirthInput): ResolvedBirthInput {
 }
 
 function tryLoadSwissephRuntime(): MinimalSwissephModule | null {
+  const r = getRequire();
+  if (!r) return null;
   try {
-    const candidate = require(SWISSEPH_MODULE_NAME) as unknown;
+    const candidate = r(SWISSEPH_MODULE_NAME) as unknown;
     if (typeof candidate === "object" && candidate !== null) {
       return candidate as MinimalSwissephModule;
     }
+  } catch {
+    return null;
+  }
+  return null;
+}
   } catch {
     return null;
   }
