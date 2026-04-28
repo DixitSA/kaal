@@ -114,12 +114,6 @@ function tryLoadSwissephRuntime(): MinimalSwissephModule | null {
   }
   return null;
 }
-  } catch {
-    return null;
-  }
-
-  return null;
-}
 
 function getRuntimeStatus(): AdapterRuntimeStatus {
   if (isAstronomiaAvailable()) {
@@ -354,7 +348,9 @@ export interface AstrologyAdapter {
 
 export const astrologyAdapter: AstrologyAdapter = {
   name: "sidereal-astrology-adapter",
-  computeProvider: isAstronomiaAvailable() ? "astronomia" : "approximation-fallback",
+  get computeProvider(): ProviderEngine {
+    return isAstronomiaAvailable() ? "astronomia" : "approximation-fallback";
+  },
   nativeEngineTarget: "swisseph",
   getRuntimeStatus,
   computeSiderealState(birth, ayanamsha = DEFAULT_AYANAMSHA) {
