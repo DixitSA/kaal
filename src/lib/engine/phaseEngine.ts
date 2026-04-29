@@ -54,7 +54,7 @@ export function renderPhaseProfile(
     tags: [
       desc.name,
       `${state.supportBias} mode`,
-      `avoid: ${state.riskBias}`,
+      `avoid: ${desc.avoidTag}`,
     ],
   };
 }
