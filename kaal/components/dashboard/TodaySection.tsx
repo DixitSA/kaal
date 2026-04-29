@@ -11,6 +11,7 @@ export default function TodaySection() {
 
   if (!apiData) return null;
   const { today } = apiData;
+  if (!today) return null;
 
   const childAnim = (delay: number) => ({
     hidden: { opacity: 0, y: shouldReduce ? 0 : 20 },

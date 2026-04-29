@@ -13,7 +13,7 @@ export default function PhaseSection() {
 
   const { phase, intensity, user } = apiData;
 
-  const words = phase.name.split(" ");
+  const words = (phase?.name ?? "").split(" ").filter(Boolean);
 
   const container = {
     hidden: {},
@@ -40,8 +40,8 @@ export default function PhaseSection() {
   }).toLowerCase();
 
   // Intensity dots mapping
-  const dots = [];
-  const level = intensity.level;
+  const dots: boolean[] = [];
+  const level = intensity?.level ?? "low";
   if (level === "low") dots.push(true, false, false);
   else if (level === "medium") dots.push(true, true, false);
   else dots.push(true, true, true);

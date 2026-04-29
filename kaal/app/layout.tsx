@@ -3,6 +3,7 @@ import { Playfair_Display, Inter } from "next/font/google";
 import "./globals.css";
 import { UserProvider } from "@/context/UserContext";
 import BackgroundPattern from "@/components/svg/BackgroundPattern";
+import ErrorBoundary from "@/components/ErrorBoundary";
 import { Analytics } from "@vercel/analytics/next";
 
 const playfairDisplay = Playfair_Display({
@@ -42,11 +43,13 @@ export default function RootLayout({
     >
       <body className="min-h-full relative" style={{ backgroundColor: "#F5F0E8" }}>
         <BackgroundPattern />
-        <UserProvider>
-          <div className="relative z-10">
-            {children}
-          </div>
-        </UserProvider>
+        <ErrorBoundary>
+          <UserProvider>
+            <div className="relative z-10">
+              {children}
+            </div>
+          </UserProvider>
+        </ErrorBoundary>
         <Analytics />
       </body>
     </html>

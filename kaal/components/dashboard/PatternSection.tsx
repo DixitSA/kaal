@@ -58,7 +58,7 @@ export default function PatternSection() {
       </motion.h2>
 
       <motion.div variants={childAnim(0.2)} className="mt-8 space-y-3">
-        {pattern.traits.map((trait, i) => (
+        {(pattern.traits ?? []).map((trait, i) => (
           <motion.p
             key={i}
             initial={{ opacity: 0, y: shouldReduce ? 0 : 12 }}
