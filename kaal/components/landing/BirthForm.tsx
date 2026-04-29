@@ -338,6 +338,7 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
             cursor: (submitting || geoLoading) ? "not-allowed" : "pointer",
             transition: "background-color 0.2s ease",
           }}
+          initial={{ scale: 1, y: 0 }}
           whileHover={shouldReduce || submitting ? {} : { y: -2, boxShadow: "0 6px 20px rgba(181,86,62,0.35)" }}
           whileTap={shouldReduce || submitting ? {} : { scale: 0.98, y: 0 }}
           transition={{ duration: 0.2, ease: "easeOut" }}

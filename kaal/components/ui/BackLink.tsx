@@ -22,6 +22,7 @@ export default function BackLink({ label = "Back" }: BackLinkProps) {
         border: "none",
         cursor: "pointer",
       }}
+      initial={{ x: 0 }}
       whileHover={{ x: -4 }}
       transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
       aria-label="Go back"

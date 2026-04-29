@@ -31,6 +31,7 @@ export default function SettingsDropdown() {
         onClick={() => setOpen((v) => !v)}
         className="p-6 cursor-pointer"
         aria-label="Settings"
+        initial={{ rotate: 0 }}
         whileHover={shouldReduce ? {} : { rotate: 45 }}
         transition={{ duration: 0.3, ease: "easeOut" }}
         style={{ background: "none", border: "none", display: "flex" }}
