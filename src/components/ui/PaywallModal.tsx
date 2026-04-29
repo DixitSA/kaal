@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useSubscription } from "@/hooks/useSubscription";
 
 interface PaywallModalProps {
   open: boolean;
@@ -11,8 +10,8 @@ interface PaywallModalProps {
 }
 
 export default function PaywallModal({ open, onClose, email }: PaywallModalProps) {
-  const { handleUpgrade } = useSubscription();
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   if (!open) return null;
 
@@ -34,8 +33,6 @@ export default function PaywallModal({ open, onClose, email }: PaywallModalProps
       setLoading(false);
     }
   };
-
-  const [error, setError] = useState("");
 
   return (
     <div
