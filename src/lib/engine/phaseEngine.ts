@@ -47,7 +47,7 @@ export function renderPhaseProfile(
     supportAction: desc.opportunity,
     cautionAction: desc.risk,
     confidence:    state.confidence,
-    stateKey:      state.stateKey,
+    stateKey:      desc.name,  // MD×AD combination name, not static mahadasha-level key
     intensity:     state.intensity,
     supportBias:   state.supportBias,
     riskBias:      state.riskBias,
