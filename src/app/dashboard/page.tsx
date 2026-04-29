@@ -90,7 +90,7 @@ function DashboardContent() {
   return (
     <div style={{ minHeight: "100dvh" }} className="relative">
       {/* Sticky header */}
-      <header style={{ position: "sticky", top: 0, zIndex: 100, backgroundColor: "rgba(245,240,232,0.9)", backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)", paddingTop: showTrialBanner ? 0 : "env(safe-area-inset-top)" }}>
+      <header style={{ position: "sticky", top: 0, zIndex: 100, backgroundColor: "rgba(245,240,232,0.95)", paddingTop: showTrialBanner ? 0 : "env(safe-area-inset-top)" }}>
         <style>{`
           .dash-header-bar { display: flex; align-items: center; justify-content: space-between; padding: 1rem clamp(1rem, 5vw, 3rem); position: relative; }
           .dash-nav { position: absolute; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: clamp(0.75rem, 3vw, 2rem); }
@@ -162,7 +162,7 @@ function DashboardContent() {
             }}
             onClick={() => setPaywallOpen(true)}
           >
-            {daysRemaining} days of full access remaining — upgrade to keep your signal going →
+             {daysRemaining} days of full access remaining. upgrade to keep your signal going →
           </div>
         )}
       </div>
@@ -178,7 +178,7 @@ function DashboardContent() {
         {contemplation && (
           <section style={{ textAlign: "center", padding: "3rem 0 4rem", borderBottom: "1px solid rgba(122,116,105,0.15)", marginBottom: "3rem" }}>
             <blockquote style={{ fontFamily: "var(--font-playfair-display)", fontSize: "1.5rem", fontStyle: "italic", color: "#2C2418", lineHeight: 1.5, margin: "0 0 1rem" }}>"{contemplation.quote}"</blockquote>
-            <cite style={{ fontFamily: "var(--font-inter-var)", fontSize: "12px", color: "#9C9488", letterSpacing: "0.1em", textTransform: "uppercase" }}>— {contemplation.source}</cite>
+             <cite style={{ fontFamily: "var(--font-inter-var)", fontSize: "12px", color: "#9C9488", letterSpacing: "0.1em", textTransform: "uppercase" }}>, {contemplation.source}</cite>
           </section>
         )}
 

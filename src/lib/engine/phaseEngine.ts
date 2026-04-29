@@ -52,7 +52,7 @@ export function renderPhaseProfile(
     supportBias:   state.supportBias,
     riskBias:      state.riskBias,
     tags: [
-      state.stateKey.replace(/-/g, " "),
+      desc.name,
       `${state.supportBias} mode`,
       `avoid: ${state.riskBias}`,
     ],

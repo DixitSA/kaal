@@ -212,7 +212,7 @@ export default function DecisionSection({ locked = false, onUpgrade }: DecisionS
                 marginTop: "32px",
                 paddingTop: "6px",
                 paddingBottom: "6px",
-                borderLeft: "2px solid rgba(166, 93, 70, 0.3)",
+                 borderLeft: "1px solid rgba(166, 93, 70, 0.3)",
                 paddingLeft: "16px",
                 textAlign: "left",
               }}

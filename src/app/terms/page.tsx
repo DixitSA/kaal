@@ -49,6 +49,39 @@ export default function TermsPage() {
       <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 16px" }}>
         <main style={{ maxWidth: "720px", margin: "0 auto", paddingBottom: "8rem" }}>
 
+          {/* Table of Contents */}
+          <motion.nav
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: shouldReduce ? 0 : 0.5, ease: EASE }}
+            style={{
+              position: "sticky",
+              top: "80px",
+              marginBottom: "2rem",
+              display: "flex",
+              flexWrap: "wrap",
+              gap: "12px",
+            }}
+          >
+            {SECTIONS.map((s) => (
+              <a key={s.label} href={`#section-${s.label.toLowerCase().replace(/ /g, '-')}`} style={{
+                fontFamily: "var(--font-inter-var), sans-serif",
+                fontSize: "11px",
+                color: "#7A7469",
+                textTransform: "uppercase",
+                letterSpacing: "0.1em",
+                textDecoration: "none",
+                padding: "4px 8px",
+                borderBottom: "1px solid rgba(122,116,105,0.12)",
+                transition: "color 0.15s ease",
+              }}
+                aria-label={`Jump to ${s.label}`}
+              >
+                {s.label}
+              </a>
+            ))}
+          </motion.nav>
+
           {/* Back link */}
           <motion.div
             initial={{ opacity: 0 }}

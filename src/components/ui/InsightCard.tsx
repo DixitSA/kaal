@@ -47,7 +47,7 @@ export default function InsightCard({
         style={{
           flexShrink: 0,
           alignSelf: "stretch",
-          width: "3px",
+          width: "1px",
           backgroundColor: accent,
           transformOrigin: "top",
           borderRadius: "2px",

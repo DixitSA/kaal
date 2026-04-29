@@ -184,7 +184,7 @@ export default function EarlyAccessPage() {
                 opacity: 0.7,
               }}
             >
-              Error joining waitlist — please try again.
+               Error joining waitlist. please try again.
             </p>
           )}
         </form>
@@ -211,7 +211,7 @@ export default function EarlyAccessPage() {
              opacity: 0.45,
            }}
         >
-          v1.0 beta | built in private — 2026
+           v1.0 beta | built in private, 2026
         </p>
       </footer>
     </div>

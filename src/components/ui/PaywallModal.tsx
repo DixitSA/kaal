@@ -17,7 +17,7 @@ export default function PaywallModal({ open, onClose, email }: PaywallModalProps
   if (!open) return null;
 
   const onClickUpgrade = async () => {
-    if (!email) { alert("Please sign in first."); return; }
+    if (!email) { setError("Please sign in first."); return; }
     setLoading(true);
     try {
       const res = await fetch("/api/checkout", {
@@ -27,14 +27,15 @@ export default function PaywallModal({ open, onClose, email }: PaywallModalProps
       });
       const data = await res.json();
       if (data.url) window.location.href = data.url;
-      else { console.error("[PaywallModal] checkout error:", data.error); alert("Unable to start checkout. Please try again."); }
+      else { setError("Unable to start checkout. Please try again."); }
     } catch (err) {
-      console.error("[PaywallModal] checkout error:", err);
-      alert("Unable to start checkout. Please try again.");
+      setError("Unable to start checkout. Please try again.");
     } finally {
       setLoading(false);
     }
   };
+
+  const [error, setError] = useState("");
 
   return (
     <div
@@ -49,59 +50,73 @@ export default function PaywallModal({ open, onClose, email }: PaywallModalProps
       }}
       onClick={onClose}
     >
-      <div
-        style={{
-          backgroundColor: "#F5F0E8",
-          borderRadius: "4px",
-          padding: "2.5rem 2rem",
-          maxWidth: "380px",
-          width: "90%",
-          position: "relative",
-        }}
-        onClick={(e) => e.stopPropagation()}
-      >
-        {/* Close button */}
-        <button
-          onClick={onClose}
-          style={{
-            position: "absolute",
-            top: "12px",
-            right: "12px",
-            background: "none",
-            border: "none",
-            color: "#9C9488",
-            fontSize: "14px",
-            cursor: "pointer",
-            padding: "4px",
-          }}
-          aria-label="Close"
-        >
-          ✕
-        </button>
+       <div
+         style={{
+           backgroundColor: "#F5F0E8",
+           borderRadius: "4px",
+           padding: "2.5rem 2rem",
+           maxWidth: "380px",
+           width: "90%",
+           position: "relative",
+         }}
+         onClick={(e) => e.stopPropagation()}
+       >
+         {/* Close button */}
+         <button
+           onClick={onClose}
+           style={{
+             position: "absolute",
+             top: "12px",
+             right: "12px",
+             background: "none",
+             border: "none",
+             color: "#9C9488",
+             fontSize: "14px",
+             cursor: "pointer",
+             padding: "4px",
+           }}
+           aria-label="Close"
+         >
+           ✕
+         </button>
 
-        <h2
-          style={{
-            fontFamily: "var(--font-playfair-display), serif",
-            fontSize: "1.5rem",
-            color: "#2C2418",
-            margin: "0 0 0.75rem",
-            fontWeight: 600,
-          }}
-        >
-          your signal is ready.
-        </h2>
+         <h2
+           style={{
+             fontFamily: "var(--font-playfair-display), serif",
+             fontSize: "1.5rem",
+             color: "#2C2418",
+             margin: "0 0 0.75rem",
+             fontWeight: 600,
+           }}
+         >
+           your signal is ready.
+         </h2>
 
-        <p
-          style={{
-            fontFamily: "var(--font-inter-var), sans-serif",
-            fontSize: "0.875rem",
-            color: "#7A7469",
-            margin: "0 0 1.75rem",
-            lineHeight: 1.5,
-          }}
-        >
-          unlock daily timing for $6.99/month. cancel anytime.
-        </p>
+         <p
+           style={{
+             fontFamily: "var(--font-inter-var), sans-serif",
+             fontSize: "0.875rem",
+             color: "#7A7469",
+             margin: "0 0 1.75rem",
+             lineHeight: 1.5,
+           }}
+         >
+           unlock daily timing for $6.99/month. cancel anytime.
+         </p>
+
+         {error && (
+           <p
+             style={{
+               fontFamily: "var(--font-inter-var), sans-serif",
+               fontSize: "11px",
+               color: "var(--accent-red)",
+               margin: "0 0 1rem",
+               textAlign: "center",
+             }}
+           >
+             {error}
+           </p>
+         )}
 
         <button
           onClick={onClickUpgrade}
