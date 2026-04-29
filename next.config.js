@@ -8,8 +8,10 @@ const nextConfig = {
       config.externals.push(
         (data, callback) => {
           const request = data.request || "";
-          if (request.toLowerCase().includes("astronomia")) {
-            return callback(null, "var {}");
+          // Only externalize the astronomia npm package itself, not local source files
+          // that happen to have "astronomia" in their path.
+          if (request === "astronomia" || request.startsWith("astronomia/")) {
+            return callback(null, "commonjs " + request);
           }
           callback();
         }
