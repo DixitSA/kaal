@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getUserByEmail } from "@/lib/db";
 import { stripe } from "@/lib/stripe";
 
 export async function POST(req: NextRequest) {
@@ -15,14 +14,22 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Valid email required" }, { status: 400 });
   }
 
-  const user = getUserByEmail(email);
-  if (!user || !user.stripeCustomerId) {
-    return NextResponse.json({ error: "User not found or missing Stripe customer" }, { status: 404 });
-  }
+  const normalizedEmail = email.toLowerCase().trim();
 
   try {
+    // Look up the Stripe customer by email — no local DB dependency
+    const existing = await stripe.customers.list({ email: normalizedEmail, limit: 1 });
+    const customer = existing.data[0];
+
+    if (!customer) {
+      return NextResponse.json(
+        { error: "No Stripe customer found for this email. Subscribe first." },
+        { status: 404 }
+      );
+    }
+
     const session = await stripe.billingPortal.sessions.create({
-      customer: user.stripeCustomerId,
+      customer: customer.id,
       return_url: `${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}/dashboard`,
     });
 

@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getUserByEmail, updateUser } from "@/lib/db";
 import { stripe } from "@/lib/stripe";
 
 export async function POST(req: NextRequest) {
@@ -15,34 +14,23 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Valid email required" }, { status: 400 });
   }
 
-  let user = getUserByEmail(email);
-  if (!user) {
-    return NextResponse.json({ error: "User not found" }, { status: 404 });
-  }
-
-  // Create Stripe customer if missing
-  if (!user.stripeCustomerId) {
-    try {
-      const customer = await stripe.customers.create({
-        email: user.email,
-        name: user.name || undefined,
-      });
-      user = updateUser(user.email, { stripeCustomerId: customer.id })!;
-    } catch (err) {
-      console.error("[checkout] stripe customer create error:", err);
-      return NextResponse.json({ error: "Failed to create Stripe customer" }, { status: 500 });
-    }
-  }
-
   const priceId = process.env.STRIPE_PRO_PRICE_ID;
   if (!priceId) {
     return NextResponse.json({ error: "STRIPE_PRO_PRICE_ID not configured" }, { status: 500 });
   }
 
+  const normalizedEmail = email.toLowerCase().trim();
+
   try {
+    // Look up or create the Stripe customer by email — no local DB dependency
+    const existing = await stripe.customers.list({ email: normalizedEmail, limit: 1 });
+    const customer =
+      existing.data[0] ??
+      (await stripe.customers.create({ email: normalizedEmail }));
+
     const session = await stripe.checkout.sessions.create({
       mode: "subscription",
-      customer: user.stripeCustomerId,
+      customer: customer.id,
       line_items: [{ price: priceId, quantity: 1 }],
       success_url: `${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}/dashboard?upgraded=true`,
       cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}/dashboard`,
