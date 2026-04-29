@@ -58,21 +58,19 @@ export default function TermsPage() {
           >
             <Link
               href="/dashboard"
-              style={{
-                fontFamily: "var(--font-inter-var)",
-                fontSize: "11px",
-                color: "#7A7469",
-                textTransform: "uppercase",
-                letterSpacing: "0.14em",
-                textDecoration: "none",
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "6px",
-                padding: "8px 0",
-                transition: "color 0.15s ease",
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = "#2C2418")}
-              onMouseLeave={(e) => (e.currentTarget.style.color = "#7A7469")}
+               style={{
+                 fontFamily: "var(--font-inter-var)",
+                 fontSize: "11px",
+                 color: "#7A7469",
+                 textTransform: "uppercase",
+                 letterSpacing: "0.14em",
+                 textDecoration: "none",
+                 display: "inline-flex",
+                 alignItems: "center",
+                 gap: "6px",
+                 padding: "8px 0",
+                 transition: "color 0.15s ease",
+               }}
             >
               ← Back to Dashboard
             </Link>

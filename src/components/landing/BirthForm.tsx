@@ -125,7 +125,7 @@ const inputStyle: CSSProperties = {
   textAlign: "left",
 };
 
-const TERRACOTTA = "#A65D46";
+const TERRACOTTA = "var(--accent-terracotta)";
 
 const defaultVariants: Variants = {
   hidden: { opacity: 0, y: 12 },
@@ -251,7 +251,7 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
     e.target.style.borderBottom = `2px solid ${TERRACOTTA}`;
   }
   function onBlur(e: FocusEvent<HTMLInputElement>, hasError: boolean) {
-    e.target.style.borderBottom = hasError ? `1px solid ${TERRACOTTA}` : "1px solid #4A4F46";
+    e.target.style.borderBottom = hasError ? `1px solid ${TERRACOTTA}` : "1px solid var(--text-primary)";
     e.target.style.boxShadow = "none";
   }
 

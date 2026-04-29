@@ -108,8 +108,8 @@ export default function PaywallModal({ open, onClose, email }: PaywallModalProps
           style={{
             width: "100%",
             padding: "14px 24px",
-            backgroundColor: loading ? "#999" : "#C75B3A",
-            color: "#F5F0E8",
+             backgroundColor: loading ? "var(--text-muted)" : "var(--accent-terracotta)",
+             color: "var(--bg-cream)",
             border: "none",
             borderRadius: "4px",
             fontFamily: "var(--font-inter-var), sans-serif",

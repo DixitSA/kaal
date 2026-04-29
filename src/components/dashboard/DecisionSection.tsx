@@ -23,9 +23,9 @@ const actionByOutcome: Record<DecisionOutcome, "ACT" | "WAIT" | "AVOID"> = {
 };
 
 const actionColors: Record<DecisionOutcome, string> = {
-  favorable: "#5E7A5E",
-  neutral: "#A65D46",
-  caution: "#A04040",
+  favorable: "var(--accent-green)",
+  neutral: "var(--accent-terracotta)",
+  caution: "var(--accent-red)",
 };
 
 export default function DecisionSection() {
@@ -109,7 +109,7 @@ export default function DecisionSection() {
             <span style={{
               fontFamily: "var(--font-inter-var)",
               fontSize: "11px",
-              color: active === category ? "#A65D46" : "#3D3428",
+              color: active === category ? "var(--accent-terracotta)" : "#3D3428",
               opacity: active === category ? 1 : 0.4,
               textTransform: "lowercase",
               letterSpacing: "0.04em",
@@ -128,7 +128,7 @@ export default function DecisionSection() {
                   left: 0,
                   right: 0,
                   height: "2px",
-                  backgroundColor: "#A65D46",
+                  backgroundColor: "var(--accent-terracotta)",
                   borderRadius: "1px",
                 }}
                 transition={{ type: "spring", stiffness: 380, damping: 30 }}

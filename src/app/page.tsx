@@ -74,31 +74,31 @@ export default function EarlyAccessPage() {
 
         {/* Headline */}
         <h1
-          style={{
-            fontFamily: "var(--font-playfair-display)",
-            fontStyle: "normal",
-            fontWeight: 600,
-            fontSize: "clamp(1.5rem, 5vw, 2rem)",
-            color: "#2C2C2C",
-            margin: 0,
-            lineHeight: 1.3,
-            letterSpacing: "0.02em",
-          }}
+           style={{
+             fontFamily: "var(--font-playfair-display)",
+             fontStyle: "normal",
+             fontWeight: 600,
+             fontSize: "clamp(1.5rem, 5vw, 2rem)",
+             color: "var(--text-primary)",
+             margin: 0,
+             lineHeight: 1.3,
+             letterSpacing: "0.02em",
+           }}
         >
           vedic timing, simplified.
         </h1>
 
         {/* Subheadline */}
         <p
-          style={{
-            fontFamily: "var(--font-inter-var), sans-serif",
-            fontWeight: 500,
-            fontSize: "10px",
-            color: "#2C2C2C",
-            margin: 0,
-            letterSpacing: "0.22em",
-            textTransform: "uppercase",
-          }}
+           style={{
+             fontFamily: "var(--font-inter-var), sans-serif",
+             fontWeight: 500,
+             fontSize: "10px",
+             color: "var(--text-primary)",
+             margin: 0,
+             letterSpacing: "0.22em",
+             textTransform: "uppercase",
+           }}
         >
           Request Early Access to the Relic
         </p>
@@ -115,32 +115,34 @@ export default function EarlyAccessPage() {
           }}
         >
           <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="your@email.com"
-            disabled={status === "loading" || status === "success"}
-            style={{
-              width: "100%",
-              background: "transparent",
-              border: "none",
-              borderBottom: "1px solid #2C2C2C",
-              outline: "none",
-              padding: "0.5rem 0",
-              fontFamily: "var(--font-inter-var), sans-serif",
-              fontSize: "14px",
-              color: "#2C2C2C",
-              textAlign: "center",
-              letterSpacing: "0.04em",
-            }}
-          />
+             type="email"
+             id="email"
+             value={email}
+             onChange={(e) => setEmail(e.target.value)}
+             placeholder="your@email.com"
+             disabled={status === "loading" || status === "success"}
+             aria-label="Email address"
+             style={{
+               width: "100%",
+               background: "transparent",
+               border: "none",
+                borderBottom: "1px solid var(--text-primary)",
+                outline: "none",
+                padding: "0.5rem 0",
+                fontFamily: "var(--font-inter-var), sans-serif",
+                fontSize: "14px",
+                color: "var(--text-primary)",
+               textAlign: "center",
+               letterSpacing: "0.04em",
+             }}
+           />
 
           {status === "success" ? (
             <p
               style={{
                 fontFamily: "var(--font-inter-var), sans-serif",
                 fontSize: "11px",
-                color: "#BC5434",
+                 color: "var(--accent-terracotta-text)",
                 letterSpacing: "0.14em",
                 textTransform: "uppercase",
                 margin: 0,
@@ -159,7 +161,7 @@ export default function EarlyAccessPage() {
                 fontFamily: "var(--font-inter-var), sans-serif",
                 fontSize: "11px",
                 fontWeight: 500,
-                color: "#BC5434",
+                 color: "var(--accent-terracotta-text)",
                 letterSpacing: "0.18em",
                 textTransform: "uppercase",
                 padding: "0.25rem 0",
@@ -176,7 +178,7 @@ export default function EarlyAccessPage() {
               style={{
                 fontFamily: "var(--font-inter-var), sans-serif",
                 fontSize: "10px",
-                color: "#BC5434",
+                 color: "var(--accent-terracotta-text)",
                 letterSpacing: "0.1em",
                 margin: 0,
                 opacity: 0.7,
@@ -200,14 +202,14 @@ export default function EarlyAccessPage() {
         }}
       >
         <p
-          style={{
-            fontFamily: "var(--font-inter-var), sans-serif",
-            fontSize: "10px",
-            color: "#2C2C2C",
-            letterSpacing: "0.1em",
-            margin: 0,
-            opacity: 0.45,
-          }}
+             style={{
+             fontFamily: "var(--font-inter-var), sans-serif",
+             fontSize: "10px",
+             color: "var(--text-primary)",
+             letterSpacing: "0.1em",
+             margin: 0,
+             opacity: 0.45,
+           }}
         >
           v1.0 beta | built in private — 2026
         </p>

@@ -13,8 +13,8 @@ const SECTIONS = [
     label: "The System",
     title: "Sidereal vs. Tropical",
     body: [
-      "Western astrology uses the tropical zodiac — a fixed grid anchored to the seasons, measured from the spring equinox. Vedic astrology uses the sidereal zodiac, calibrated to the actual positions of constellations in the night sky.",
-      "Over millennia, Earth's axial precession has shifted these two frameworks by approximately 23–24 degrees — a gap called the ayanamsa. Kaal works entirely within the sidereal system, placing you where the stars actually are, not where they were two thousand years ago.",
+       "Western astrology uses the tropical zodiac, a fixed grid anchored to the seasons, measured from the spring equinox. Vedic astrology uses the sidereal zodiac, calibrated to the actual positions of constellations in the night sky.",
+       "Over millennia, Earth's axial precession has shifted these two frameworks by approximately 23–24 degrees, a gap called the ayanamsa. Kaal works entirely within the sidereal system, placing you where the stars actually are, not where they were two thousand years ago.",
     ],
   },
   {
@@ -59,21 +59,19 @@ export default function MethodologyPage() {
           >
             <Link
               href="/dashboard"
-              style={{
-                fontFamily: "var(--font-inter-var)",
-                fontSize: "11px",
-                color: "#7A7469",
-                textTransform: "uppercase",
-                letterSpacing: "0.14em",
-                textDecoration: "none",
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "6px",
-                padding: "8px 0",
-                transition: "color 0.15s ease",
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = "#2C2418")}
-              onMouseLeave={(e) => (e.currentTarget.style.color = "#7A7469")}
+               style={{
+                 fontFamily: "var(--font-inter-var)",
+                 fontSize: "11px",
+                 color: "#7A7469",
+                 textTransform: "uppercase",
+                 letterSpacing: "0.14em",
+                 textDecoration: "none",
+                 display: "inline-flex",
+                 alignItems: "center",
+                 gap: "6px",
+                 padding: "8px 0",
+                 transition: "color 0.15s ease",
+               }}
             >
               ← Back to Dashboard
             </Link>

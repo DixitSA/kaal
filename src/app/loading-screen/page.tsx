@@ -277,19 +277,19 @@ export default function LoadingScreen() {
                     });
                 }, 100);
               }}
-              style={{
-                backgroundColor: "#A65D46",
-                color: "#F5F0E8",
-                border: "none",
-                borderRadius: "2px",
-                minHeight: "44px",
-                padding: "0 24px",
-                cursor: "pointer",
-                fontFamily: "var(--font-inter-var)",
-                textTransform: "uppercase",
-                letterSpacing: "0.12em",
-                fontSize: "11px",
-              }}
+             style={{
+               backgroundColor: "var(--accent-terracotta)",
+               color: "var(--bg-cream)",
+               border: "none",
+               borderRadius: "2px",
+               minHeight: "44px",
+               padding: "0 24px",
+               cursor: "pointer",
+               fontFamily: "var(--font-inter-var)",
+               textTransform: "uppercase",
+               letterSpacing: "0.12em",
+               fontSize: "11px",
+             }}
             >
               Retry
             </button>

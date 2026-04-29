@@ -184,19 +184,19 @@ export default function LandingPage() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: allWords.length * 0.1 + 0.05, duration: 0.7, ease: EASE }}
-          style={{
-            fontFamily: "var(--font-inter-var), sans-serif",
-            fontSize: "11px",
-            fontWeight: 400,
-            color: "#B35C44",
-            textAlign: "center",
-            marginTop: "20px",
-            marginBottom: "1.5rem",
-            position: "relative",
-            zIndex: 10,
-            letterSpacing: "0.1em",
-            textTransform: "uppercase",
-          }}
+           style={{
+             fontFamily: "var(--font-inter-var), sans-serif",
+             fontSize: "11px",
+             fontWeight: 400,
+             color: "var(--accent-red)",
+             textAlign: "center",
+             marginTop: "20px",
+             marginBottom: "1.5rem",
+             position: "relative",
+             zIndex: 10,
+             letterSpacing: "0.1em",
+             textTransform: "uppercase",
+           }}
         >
           Built on Vedic Timing Systems
         </motion.p>
