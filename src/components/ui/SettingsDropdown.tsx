@@ -3,12 +3,10 @@
 import { type SyntheticEvent } from "react";
 import { useRouter } from "next/navigation";
 import { useUser } from "@/context/UserContext";
-import { useSubscription } from "@/hooks/useSubscription";
 
 export default function SettingsDropdown() {
   const router = useRouter();
   const { clearUserData, isProUser } = useUser();
-  const { handleManage } = useSubscription();
 
   function handleClear(e: SyntheticEvent<HTMLSpanElement>) {
     e.stopPropagation();
@@ -18,7 +16,7 @@ export default function SettingsDropdown() {
 
   function handleManageClick(e: SyntheticEvent<HTMLSpanElement>) {
     e.stopPropagation();
-    handleManage();
+    router.push("/pricing");
   }
 
   function setOpaque(e: SyntheticEvent<HTMLSpanElement>) {

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { useSubscription } from "@/hooks/useSubscription";
 
 interface PaywallModalProps {
@@ -10,7 +11,7 @@ interface PaywallModalProps {
 }
 
 export default function PaywallModal({ open, onClose, email }: PaywallModalProps) {
-  const { handleUpgrade, handleManage } = useSubscription();
+  const { handleUpgrade } = useSubscription();
   const [loading, setLoading] = useState(false);
 
   if (!open) return null;
@@ -130,21 +131,19 @@ export default function PaywallModal({ open, onClose, email }: PaywallModalProps
             marginTop: "0.75rem",
           }}
         >
-          <button
-            onClick={handleManage}
+          <Link
+            href="/pricing"
+            onClick={onClose}
             style={{
-              background: "none",
-              border: "none",
               color: "#9C9488",
               fontFamily: "var(--font-inter-var), sans-serif",
               fontSize: "0.75rem",
-              cursor: "pointer",
               textDecoration: "underline",
               padding: "4px",
             }}
           >
             manage subscription
-          </button>
+          </Link>
         </p>
       </div>
     </div>
