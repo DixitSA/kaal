@@ -221,13 +221,13 @@ export default function LoadingScreen() {
             {/* Glow dot on leading edge */}
             {!shouldReduce && (
               <motion.div
+                initial={{ opacity: 0.6 }}
                 animate={{ opacity: [0.6, 1, 0.6] }}
                 transition={{ duration: 0.8, ease: "easeInOut", repeat: Infinity }}
                 style={{
                   position: "absolute",
                   right: "-3px",
-                  top: "50%",
-                  transform: "translateY(-50%)",
+                  top: "calc(50% - 3px)",
                   width: "6px",
                   height: "6px",
                   borderRadius: "50%",

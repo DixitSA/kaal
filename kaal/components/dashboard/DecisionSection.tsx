@@ -96,6 +96,7 @@ export default function DecisionSection() {
         {/* Sliding underline */}
         {!shouldReduce && underline.width > 0 && (
           <motion.div
+            initial={false}
             animate={{ left: underline.left + (underline.width / 2) - 16, width: 32 }}
             transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
             style={{
