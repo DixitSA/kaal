@@ -23,9 +23,13 @@ const IS_NODE = typeof process !== "undefined" && process.release?.name === "nod
 
 function getNodeRequire(): ((id: string) => any) | null {
   if (!IS_NODE) return null;
-  // String concatenation to hide require() from webpack static analysis
-  const fn = (0, eval)("req" + "uire");
-  return fn as ((id: string) => any);
+  try {
+    // String concatenation to hide require() from webpack static analysis
+    const fn = (0, eval)("req" + "uire");
+    return typeof fn === "function" ? fn as ((id: string) => any) : null;
+  } catch {
+    return null;
+  }
 }
 
 /** Load the main astronomia object */

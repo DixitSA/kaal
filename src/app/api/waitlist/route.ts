@@ -2,7 +2,13 @@ import { NextRequest, NextResponse } from "next/server";
 import { LoopsClient } from "loops";
 
 export async function POST(req: NextRequest) {
-  const { email } = await req.json();
+  let parsedBody: Record<string, unknown>;
+  try {
+    parsedBody = await req.json();
+  } catch {
+    return NextResponse.json({ error: "Request body must be valid JSON" }, { status: 400 });
+  }
+  const { email } = parsedBody as { email?: string };
 
   if (!email || typeof email !== "string" || !email.includes("@")) {
     return NextResponse.json({ error: "Invalid email" }, { status: 400 });

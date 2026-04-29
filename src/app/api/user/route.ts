@@ -17,8 +17,13 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-  const body = await req.json();
-  const { email, name, dob, timeOfBirth, placeOfBirth } = body;
+  let body: Record<string, unknown>;
+  try {
+    body = await req.json();
+  } catch {
+    return NextResponse.json({ error: "Request body must be valid JSON" }, { status: 400 });
+  }
+  const { email, name, dob, timeOfBirth, placeOfBirth } = body as { email?: string; name?: string; dob?: string; timeOfBirth?: string; placeOfBirth?: string };
 
   if (!email || typeof email !== "string" || !email.includes("@")) {
     return NextResponse.json({ error: "Valid email required" }, { status: 400 });

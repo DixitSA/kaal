@@ -1,6 +1,6 @@
 import { TODAY_PLACEHOLDER_MODE } from "@/lib/astro/constants";
 import { generateStatelessDailyState } from "@/lib/engine/dailyEngine";
-import { successResponse, validationError } from "@/lib/api/routeHelpers";
+import { successResponse, validationError, errorResponse } from "@/lib/api/routeHelpers";
 import { todayPathParamsSchema } from "@/lib/schemas/input";
 import { todayResponseSchema } from "@/lib/schemas/output";
 import { toUtcMidnightIso } from "@/lib/utils/dates";
@@ -45,8 +45,13 @@ export async function GET(_request: Request, context: TodayRouteContext): Promis
   // This route is intentionally stateless in v1 and normalizes against UTC day boundaries
   // so the placeholder contract remains reproducible across machines. Any future persistence
   // should sit behind a dedicated storage seam rather than changing the contract ad hoc here.
-  return successResponse(todayResponseSchema, {
-    ok: true,
-    data: buildTodayPlaceholderData(userId, new Date())
-  });
+  try {
+    return successResponse(todayResponseSchema, {
+      ok: true,
+      data: buildTodayPlaceholderData(userId, new Date())
+    });
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "today state generation failed";
+    return errorResponse("INTERNAL_ERROR", 500, message);
+  }
 }

@@ -36,7 +36,12 @@ export function successResponse<TSchema extends z.ZodTypeAny>(
   schema: TSchema,
   payload: z.input<TSchema>
 ): Response {
-  return Response.json(schema.parse(payload));
+  try {
+    return Response.json(schema.parse(payload));
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "Response validation failed";
+    return errorResponse("INTERNAL_ERROR", 500, message);
+  }
 }
 
 export async function parseJsonRequest<TSchema extends z.ZodTypeAny>(

@@ -1,6 +1,6 @@
 import { generateIdentityProfile } from "@/lib/engine/identityEngine";
 import { generatePhaseProfile } from "@/lib/engine/phaseEngine";
-import { parseJsonRequest, successResponse } from "@/lib/api/routeHelpers";
+import { parseJsonRequest, successResponse, errorResponse } from "@/lib/api/routeHelpers";
 import { profileGenerateRequestSchema } from "@/lib/schemas/input";
 import { profileResponseSchema } from "@/lib/schemas/output";
 
@@ -13,12 +13,17 @@ export async function POST(request: Request): Promise<Response> {
     return parsedRequest.response;
   }
 
-  return successResponse(profileResponseSchema, {
-    ok: true,
-    data: {
-      contractVersion: "1.0",
-      identity: generateIdentityProfile(parsedRequest.data.chart, parsedRequest.data.seed),
-      phase: generatePhaseProfile(parsedRequest.data.chart)
-    }
-  });
+  try {
+    return successResponse(profileResponseSchema, {
+      ok: true,
+      data: {
+        contractVersion: "1.0",
+        identity: generateIdentityProfile(parsedRequest.data.chart, parsedRequest.data.seed),
+        phase: generatePhaseProfile(parsedRequest.data.chart)
+      }
+    });
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "profile generation failed";
+    return errorResponse("INTERNAL_ERROR", 500, message);
+  }
 }
