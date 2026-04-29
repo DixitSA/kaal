@@ -138,6 +138,7 @@ export default function LandingPage() {
               rotate: { duration: 20, ease: "linear", repeat: Infinity },
               scale: { duration: 4, ease: "easeInOut", repeat: Infinity },
             }}
+            style={{ willChange: "transform" }}
           >
             <YantraMandala size={500} opacity={0.05} />
           </motion.div>

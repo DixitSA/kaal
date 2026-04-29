@@ -93,11 +93,12 @@ export default function LoadingScreen() {
       transition={{ duration: 0.35, ease: "easeIn" }}
     >
       {/* Rotating yantra */}
-      <motion.div
-        className="absolute pointer-events-none"
-        animate={shouldReduce ? {} : { rotate: 360 }}
-        transition={{ duration: 24, ease: "linear", repeat: Infinity }}
-      >
+        <motion.div
+          className="absolute pointer-events-none"
+          animate={shouldReduce ? {} : { rotate: 360 }}
+          transition={{ duration: 24, ease: "linear", repeat: Infinity }}
+          style={{ willChange: "transform" }}
+        >
         <motion.div
           animate={{ opacity: shouldReduce ? 0.12 : yantraOpacity }}
           transition={{ duration: 0.5, ease: "easeOut" }}
