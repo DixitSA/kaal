@@ -114,10 +114,12 @@ export default function LoadingScreen() {
       {/* Yantra with spin + CSS-driven opacity pulse (no React state) */}
       <motion.div
         className="absolute pointer-events-none"
+        initial={{ rotate: 0 }}
         animate={shouldReduce ? {} : { rotate: 360 }}
         transition={{ duration: 20, ease: "linear", repeat: Infinity }}
       >
         <motion.div
+          initial={{ opacity: 0.15 }}
           animate={shouldReduce ? { opacity: 0.15 } : { opacity: [0.15, 0.22, 0.15] }}
           transition={shouldReduce ? {} : { duration: 2, ease: "easeInOut", repeat: Infinity }}
         >
