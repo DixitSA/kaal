@@ -155,18 +155,21 @@ async function requestJson<TResponse>(
       }
     });
 
-    const payload = (await response.json()) as TResponse | ApiErrorPayload;
-
     if (!response.ok) {
-      // FastAPI returns { detail: string }; fallback to { error.message } shape
-      const asDetail = payload as { detail?: string };
-      const asError = payload as ApiErrorPayload;
-      const msg = asDetail.detail ?? asError.error?.message ?? "Request failed";
-      const details = asError.error?.details?.join(" ") ?? "";
-      throw new Error([msg, details].filter(Boolean).join(" "));
+      let msg = `Request failed with status ${response.status}`;
+      try {
+        const errPayload = await response.json() as { detail?: string; error?: { message?: string; details?: string[] } };
+        const asDetail = errPayload.detail;
+        const asMsg = errPayload.error?.message;
+        const asDetails = errPayload.error?.details?.join(" ") ?? "";
+        msg = [asDetail ?? asMsg ?? msg, asDetails].filter(Boolean).join(" ");
+      } catch {
+        // non-JSON error body — keep the status-based message
+      }
+      throw new Error(msg);
     }
 
-    return payload as TResponse;
+    return (await response.json()) as TResponse;
   } catch (err) {
     if (err instanceof Error && err.name === "AbortError") {
       throw new Error("Request timed out — please try again.");

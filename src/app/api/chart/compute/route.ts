@@ -1,5 +1,5 @@
 import { astrologyAdapter } from "@/lib/astro/adapter";
-import { parseJsonRequest, successResponse } from "@/lib/api/routeHelpers";
+import { parseJsonRequest, successResponse, errorResponse } from "@/lib/api/routeHelpers";
 import { chartComputeRequestSchema } from "@/lib/schemas/input";
 import { chartResponseSchema } from "@/lib/schemas/output";
 
@@ -12,16 +12,21 @@ export async function POST(request: Request): Promise<Response> {
     return parsedRequest.response;
   }
 
-  const chart = astrologyAdapter.computeChart(
-    parsedRequest.data.birth,
-    parsedRequest.data.options?.ayanamsha
-  );
+  try {
+    const chart = astrologyAdapter.computeChart(
+      parsedRequest.data.birth,
+      parsedRequest.data.options?.ayanamsha
+    );
 
-  return successResponse(chartResponseSchema, {
-    ok: true,
-    data: {
-      contractVersion: "1.0",
-      chart
-    }
-  });
+    return successResponse(chartResponseSchema, {
+      ok: true,
+      data: {
+        contractVersion: "1.0",
+        chart
+      }
+    });
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "chart computation failed";
+    return errorResponse("INTERNAL_ERROR", 500, message);
+  }
 }
