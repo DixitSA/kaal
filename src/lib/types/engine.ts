@@ -73,7 +73,6 @@ export interface IdentityState {
 export interface PhaseState {
   stateKey: string;  // MD×AD combination name (e.g., "ketu / venus")
   intensity: PhaseIntensity;
-  intensity: PhaseIntensity;
   supportBias: SupportBias;
   riskBias: RiskBias;
   confidence: number;
@@ -116,7 +115,7 @@ export interface PhaseProfile {
   supportAction: string;
   cautionAction: string;
   confidence: number;
-  stateKey: PhaseStateKey;
+  stateKey: string;  // MD×AD combination name (e.g., "ketu / venus")
   intensity: PhaseIntensity;
   supportBias: SupportBias;
   riskBias: RiskBias;

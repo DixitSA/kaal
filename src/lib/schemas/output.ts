@@ -57,7 +57,7 @@ const phaseProfileSchema = z.object({
   supportAction: z.string().min(1),
   cautionAction: z.string().min(1),
   confidence: z.number().min(0).max(1),
-  stateKey: z.enum(PHASE_STATE_KEYS),
+  stateKey: z.string(),  // MD×AD combination name (e.g., "ketu / venus")
   intensity: z.enum(PHASE_INTENSITIES),
   supportBias: z.enum(SUPPORT_BIASES),
   riskBias: z.enum(RISK_BIASES)

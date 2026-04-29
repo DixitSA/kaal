@@ -1,6 +1,6 @@
 import type { PhaseStateKey } from "@/lib/types/engine";
 
-export const PHASE_INSIGHTS: Record<PhaseStateKey, readonly string[]> = {
+export const PHASE_INSIGHTS: Record<string, readonly string[]> = {
 
   "steady-build": [
     "What grows quietly lasts longest. Do not mistake silence for stillness.",
