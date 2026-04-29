@@ -2,24 +2,41 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useUser } from "@/context/UserContext";
 
 export default function UpgradePage() {
-  const { userData } = useUser();
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   async function onUpgrade() {
-    if (!userData?.email) return;
     setLoading(true);
+    setError("");
     try {
+      const storedUser = localStorage.getItem("kaal-user");
+      if (!storedUser) {
+        setError("please sign in first.");
+        setLoading(false);
+        return;
+      }
+      const userData = JSON.parse(storedUser) as { email?: string };
+      if (!userData.email) {
+        setError("please sign in first.");
+        setLoading(false);
+        return;
+      }
       const res = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: userData.email }),
       });
       const data = await res.json();
-      if (data.url) window.location.href = data.url;
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        setError(data.error || "something went wrong. please try again.");
+        setLoading(false);
+      }
     } catch {
+      setError("something went wrong. please try again.");
       setLoading(false);
     }
   }
@@ -43,6 +60,12 @@ export default function UpgradePage() {
         <div style={{ fontFamily: "var(--font-playfair-display), serif", fontSize: "1.25rem", color: "#B4A878", marginBottom: "2rem", fontWeight: 500 }}>
           $6.99 / month
         </div>
+
+        {error && (
+          <p style={{ fontFamily: "var(--font-inter-var), sans-serif", fontSize: "0.75rem", color: "#A04040", marginBottom: "1rem" }}>
+            {error}
+          </p>
+        )}
 
         <button
           onClick={onUpgrade}
