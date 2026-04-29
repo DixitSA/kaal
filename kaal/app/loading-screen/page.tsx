@@ -108,6 +108,7 @@ export default function LoadingScreen() {
     <motion.main
       className="flex items-center justify-center relative"
       style={{ minHeight: "100dvh" }}
+      initial={{ opacity: 1, scale: 1 }}
       animate={exiting && !shouldReduce ? { opacity: 0, scale: 1.02 } : { opacity: 1, scale: 1 }}
       transition={{ duration: 0.35, ease: "easeIn" }}
     >
