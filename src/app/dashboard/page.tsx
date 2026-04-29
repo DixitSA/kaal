@@ -56,7 +56,7 @@ function DashboardContent() {
   const [clientDate, setClientDate] = useState("");
   const [hasMounted, setHasMounted] = useState(false);
   const [paywallOpen, setPaywallOpen] = useState(false);
-  const [lockedSection, setLockedSection] = useState<"today" | "decision" | null>(null);
+  const [lockedSection, setLockedSection] = useState<"decision" | null>(null);
   const [showUpgradeSuccess, setShowUpgradeSuccess] = useState(false);
   const searchParams = useSearchParams();
 
@@ -185,93 +185,14 @@ function DashboardContent() {
         <section id="current-phase" style={{ scrollMarginTop: "80px" }}><PhaseSection /></section>
         <VedicDivider />
         <section id="today" style={{ scrollMarginTop: "80px" }}>
-          {isFreeTrialExpired ? (
-            <div
-              style={{ position: "relative", cursor: "pointer" }}
-              onClick={() => { setLockedSection("today"); setPaywallOpen(true); }}
-            >
-              <div style={{ filter: "blur(4px)", pointerEvents: "none" }}>
-                <TodaySection />
-              </div>
-              <div style={{
-                position: "absolute",
-                inset: 0,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                backgroundColor: "rgba(245,240,232,0.8)",
-              }}>
-                <button
-                  onClick={(e) => { e.stopPropagation(); setLockedSection("today"); setPaywallOpen(true); }}
-                  style={{
-                    padding: "12px 24px",
-                    backgroundColor: "#C75B3A",
-                    color: "#F5F0E8",
-                    border: "none",
-                    borderRadius: "4px",
-                    fontFamily: "var(--font-inter-var), sans-serif",
-                    fontSize: "0.75rem",
-                    fontWeight: 600,
-                    letterSpacing: "0.2em",
-                    textTransform: "uppercase",
-                    cursor: "pointer",
-                    transition: "opacity 0.2s ease",
-                  }}
-                  onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.85")}
-                  onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
-                >
-                  Upgrade to Pro →
-                </button>
-              </div>
-            </div>
-          ) : (
-            <TodaySection />
-          )}
+          <TodaySection />
         </section>
         <VedicDivider />
         <section id="decision" style={{ scrollMarginTop: "80px" }}>
-          {isFreeTrialExpired ? (
-            <div
-              style={{ position: "relative", cursor: "pointer" }}
-              onClick={() => { setLockedSection("decision"); setPaywallOpen(true); }}
-            >
-              <div style={{ filter: "blur(4px)", pointerEvents: "none" }}>
-                <DecisionSection />
-              </div>
-              <div style={{
-                position: "absolute",
-                inset: 0,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                backgroundColor: "rgba(245,240,232,0.8)",
-              }}>
-                <button
-                  onClick={(e) => { e.stopPropagation(); setLockedSection("decision"); setPaywallOpen(true); }}
-                  style={{
-                    padding: "12px 24px",
-                    backgroundColor: "#C75B3A",
-                    color: "#F5F0E8",
-                    border: "none",
-                    borderRadius: "4px",
-                    fontFamily: "var(--font-inter-var), sans-serif",
-                    fontSize: "0.75rem",
-                    fontWeight: 600,
-                    letterSpacing: "0.2em",
-                    textTransform: "uppercase",
-                    cursor: "pointer",
-                    transition: "opacity 0.2s ease",
-                  }}
-                  onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.85")}
-                  onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
-                >
-                  Upgrade to Pro →
-                </button>
-              </div>
-            </div>
-          ) : (
-            <DecisionSection />
-          )}
+          <DecisionSection
+            locked={isFreeTrialExpired}
+            onUpgrade={() => { setLockedSection("decision"); setPaywallOpen(true); }}
+          />
         </section>
         <VedicDivider />
         <section id="card" style={{ scrollMarginTop: "80px", marginTop: "3rem" }}><PatternSection /></section>

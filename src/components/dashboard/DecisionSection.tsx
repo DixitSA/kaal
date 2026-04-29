@@ -28,7 +28,12 @@ const actionColors: Record<DecisionOutcome, string> = {
   caution: "var(--accent-red)",
 };
 
-export default function DecisionSection() {
+interface DecisionSectionProps {
+  locked?: boolean;
+  onUpgrade?: () => void;
+}
+
+export default function DecisionSection({ locked = false, onUpgrade }: DecisionSectionProps) {
   const { computedData } = useUser();
   const [active, setActive] = useState<DecisionCategory>("career");
   const shouldReduce = useReducedMotion();
@@ -138,96 +143,135 @@ export default function DecisionSection() {
         ))}
       </motion.div>
 
-      {/* Decision result panel */}
-      <div
-        id={`decision-panel-${active}`}
-        className="mt-3 text-center"
-        role="tabpanel"
-        aria-live="polite"
-        aria-atomic="true"
-        style={{ minHeight: "160px", position: "relative" }}
-      >
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={active}
-            initial={{ opacity: 0, y: shouldReduce ? 0 : 10 }}
-            animate={{ opacity: 1, y: 0, transition: { duration: 0.3, ease: EASE } }}
-            exit={{ opacity: 0, y: shouldReduce ? 0 : 10, transition: { duration: 0.2, ease: "easeIn" } }}
+      {/* Decision result panel + shadow caveat — blurred when locked */}
+      <div style={{ position: "relative" }}>
+        <div style={{ filter: locked ? "blur(6px)" : "none", pointerEvents: locked ? "none" : "auto", userSelect: locked ? "none" : "auto" }}>
+          <div
+            id={`decision-panel-${active}`}
+            className="mt-3 text-center"
+            role="tabpanel"
+            aria-live="polite"
+            aria-atomic="true"
+            style={{ minHeight: "160px", position: "relative" }}
           >
-            <motion.p
-              className="font-bold"
-              initial={{ scale: shouldReduce ? 1 : 0.95 }}
-              animate={{ scale: 1, transition: { duration: 0.2, ease: EASE } }}
-              style={{
-                fontFamily: "var(--font-playfair-display)",
-                fontStyle: "normal",
-                fontSize: "clamp(2.5rem, 6vw, 3.75rem)",
-                color: actionColors[result.outcome],
-                lineHeight: 1,
-                textAlign: "center",
-              }}
-            >
-              {actionByOutcome[result.outcome]}
-            </motion.p>
-            <p
-              className="mt-1"
-              style={{ color: "#2C2418", opacity: 0.8, fontFamily: "var(--font-inter-var), sans-serif", fontSize: "15px", lineHeight: 1.5, letterSpacing: "0.02em", textTransform: "lowercase", textAlign: "center" }}
-            >
-              {result.guidance}
-            </p>
-{result.rationale
-              .filter((line, i, arr) => {
-                const norm = line.trim().toLowerCase();
-                if (arr.findIndex(l => l.trim().toLowerCase() === norm) !== i) return false;
-                if (norm === result.guidance.trim().toLowerCase()) return false;
-                if (crossSectionContext.some(ctx => tooSimilar(ctx, line))) return false;
-                return true;
-              })
-              .map((line, i) => (
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={active}
+                initial={{ opacity: 0, y: shouldReduce ? 0 : 10 }}
+                animate={{ opacity: 1, y: 0, transition: { duration: 0.3, ease: EASE } }}
+                exit={{ opacity: 0, y: shouldReduce ? 0 : 10, transition: { duration: 0.2, ease: "easeIn" } }}
+              >
+                <motion.p
+                  className="font-bold"
+                  initial={{ scale: shouldReduce ? 1 : 0.95 }}
+                  animate={{ scale: 1, transition: { duration: 0.2, ease: EASE } }}
+                  style={{
+                    fontFamily: "var(--font-playfair-display)",
+                    fontStyle: "normal",
+                    fontSize: "clamp(2.5rem, 6vw, 3.75rem)",
+                    color: actionColors[result.outcome],
+                    lineHeight: 1,
+                    textAlign: "center",
+                  }}
+                >
+                  {actionByOutcome[result.outcome]}
+                </motion.p>
                 <p
-                  key={i}
-                  className="mt-0.5"
+                  className="mt-1"
                   style={{ color: "#2C2418", opacity: 0.8, fontFamily: "var(--font-inter-var), sans-serif", fontSize: "15px", lineHeight: 1.5, letterSpacing: "0.02em", textTransform: "lowercase", textAlign: "center" }}
                 >
-                  {line}
+                  {result.guidance}
                 </p>
-              ))}
-          </motion.div>
-        </AnimatePresence>
-      </div>
+                {result.rationale
+                  .filter((line, i, arr) => {
+                    const norm = line.trim().toLowerCase();
+                    if (arr.findIndex(l => l.trim().toLowerCase() === norm) !== i) return false;
+                    if (norm === result.guidance.trim().toLowerCase()) return false;
+                    if (crossSectionContext.some(ctx => tooSimilar(ctx, line))) return false;
+                    return true;
+                  })
+                  .map((line, i) => (
+                    <p
+                      key={i}
+                      className="mt-0.5"
+                      style={{ color: "#2C2418", opacity: 0.8, fontFamily: "var(--font-inter-var), sans-serif", fontSize: "15px", lineHeight: 1.5, letterSpacing: "0.02em", textTransform: "lowercase", textAlign: "center" }}
+                    >
+                      {line}
+                    </p>
+                  ))}
+              </motion.div>
+            </AnimatePresence>
+          </div>
 
-      {/* Shadow caveat */}
-      {shadowCaveat && (
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            marginTop: "32px",
-            paddingTop: "6px",
-            paddingBottom: "6px",
-            borderLeft: "2px solid rgba(166, 93, 70, 0.3)",
-            paddingLeft: "16px",
-            textAlign: "left",
-          }}
-        >
-          <p
+          {shadowCaveat && (
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                marginTop: "32px",
+                paddingTop: "6px",
+                paddingBottom: "6px",
+                borderLeft: "2px solid rgba(166, 93, 70, 0.3)",
+                paddingLeft: "16px",
+                textAlign: "left",
+              }}
+            >
+              <p
+                style={{
+                  fontFamily: "var(--font-inter-var), sans-serif",
+                  fontStyle: "italic",
+                  fontSize: "13px",
+                  color: "#2C2418",
+                  opacity: 0.7,
+                  textTransform: "lowercase",
+                  letterSpacing: "0.02em",
+                  lineHeight: 1.6,
+                  margin: 0,
+                }}
+              >
+                {DECISION_CAVEATS[active] || result.shadowCaveat}
+              </p>
+            </div>
+          )}
+        </div>
+
+        {/* Upgrade overlay — only over the result panel, header stays visible */}
+        {locked && (
+          <div
             style={{
-              fontFamily: "var(--font-inter-var), sans-serif",
-              fontStyle: "italic",
-              fontSize: "13px",
-              color: "#2C2418",
-              opacity: 0.7,
-              textTransform: "lowercase",
-              letterSpacing: "0.02em",
-              lineHeight: 1.6,
-              margin: 0,
+              position: "absolute",
+              inset: 0,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              backgroundColor: "rgba(245,240,232,0.7)",
             }}
           >
-            {DECISION_CAVEATS[active] || result.shadowCaveat}
-          </p>
-        </div>
-      )}
+            <button
+              onClick={onUpgrade}
+              style={{
+                padding: "12px 24px",
+                backgroundColor: "#C75B3A",
+                color: "#F5F0E8",
+                border: "none",
+                borderRadius: "4px",
+                fontFamily: "var(--font-inter-var), sans-serif",
+                fontSize: "0.75rem",
+                fontWeight: 600,
+                letterSpacing: "0.2em",
+                textTransform: "uppercase",
+                cursor: "pointer",
+                transition: "opacity 0.2s ease",
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.85")}
+              onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
+            >
+              Upgrade to Pro →
+            </button>
+          </div>
+        )}
+      </div>
     </section>
   );
 }
