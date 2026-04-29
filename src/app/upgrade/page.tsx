@@ -2,16 +2,23 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useSubscription } from "@/hooks/useSubscription";
+import { useUser } from "@/context/UserContext";
 
 export default function UpgradePage() {
-  const { handleUpgrade } = useSubscription();
+  const { userData } = useUser();
   const [loading, setLoading] = useState(false);
 
   async function onUpgrade() {
+    if (!userData?.email) return;
     setLoading(true);
     try {
-      await handleUpgrade();
+      const res = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: userData.email }),
+      });
+      const data = await res.json();
+      if (data.url) window.location.href = data.url;
     } catch {
       setLoading(false);
     }
