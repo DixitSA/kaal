@@ -41,6 +41,7 @@ export default function DecisionSection({ locked = false, onUpgrade }: DecisionS
   if (!computedData) return null;
 
   const result = computedData.decisions[active];
+  if (!result) return null;
   const { phase, daily } = computedData;
 
   const shadowCaveat = Object.values(computedData.decisions).find((d) => d.shadowCaveat)?.shadowCaveat;

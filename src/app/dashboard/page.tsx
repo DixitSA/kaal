@@ -225,7 +225,7 @@ function DashboardContent() {
 
 export default function Dashboard() {
   return (
-    <Suspense>
+    <Suspense fallback={<div style={{ minHeight: "100dvh", backgroundColor: "#F5F0E8" }} />}>
       <DashboardContent />
     </Suspense>
   );
