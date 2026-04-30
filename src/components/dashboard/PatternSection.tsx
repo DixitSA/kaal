@@ -286,6 +286,7 @@ export default function PatternSection() {
 
                 {/* Reveal hint — floats at bottom, brightens on hover */}
                 <motion.div
+                  initial={{ y: 0 }}
                   animate={shouldReduce ? undefined : { y: [0, -2, 0] }}
                   transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                   style={{
@@ -407,6 +408,7 @@ export default function PatternSection() {
 
                 {/* Return hint */}
                 <motion.div
+                  initial={{ y: 0 }}
                   animate={shouldReduce ? undefined : { y: [0, -2, 0] }}
                   transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                   style={{

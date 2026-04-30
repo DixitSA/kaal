@@ -53,6 +53,7 @@ export default function EarlyAccessPage() {
       >
         {/* Sigil with breathing pulse + slow rotation */}
         <motion.div
+          initial={{ scale: 1, opacity: 0.88, rotate: 0 }}
           animate={{ scale: [1, 1.04, 1], opacity: [0.88, 1, 0.88], rotate: 360 }}
           transition={{
             scale: { duration: 3, ease: "easeInOut", repeat: Infinity },
