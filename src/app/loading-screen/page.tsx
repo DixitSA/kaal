@@ -95,11 +95,13 @@ export default function LoadingScreen() {
       {/* Rotating yantra */}
         <motion.div
           className="absolute pointer-events-none"
+          initial={{ rotate: 0 }}
           animate={shouldReduce ? {} : { rotate: 360 }}
           transition={{ duration: 24, ease: "linear", repeat: Infinity }}
           style={{ willChange: "transform" }}
         >
         <motion.div
+          initial={{ opacity: 0.12 }}
           animate={{ opacity: shouldReduce ? 0.12 : yantraOpacity }}
           transition={{ duration: 0.5, ease: "easeOut" }}
         >
@@ -169,6 +171,7 @@ export default function LoadingScreen() {
           >
             {/* Animated fill */}
             <motion.div
+              initial={{ scaleX: 0 }}
               animate={{ scaleX: progress }}
               transition={{
                 duration: shouldReduce ? 0 : 1.8,
@@ -186,12 +189,13 @@ export default function LoadingScreen() {
             {/* Glow dot on leading edge */}
             {!shouldReduce && !errorMessage && (
               <motion.div
+                initial={{ left: "0%" }}
                 animate={{ left: `${progress * 100}%` }}
                 transition={{ duration: 1.8, ease: [0.16, 1, 0.3, 1] }}
                 style={{
                   position: "absolute",
-                  top: "50%",
-                  transform: "translate(-50%, -50%)",
+                  top: "calc(50% - 3px)",
+                  marginLeft: "-3px",
                   width: "5px",
                   height: "5px",
                   borderRadius: "50%",
@@ -200,6 +204,7 @@ export default function LoadingScreen() {
                 }}
               >
                 <motion.div
+                  initial={{ opacity: 0.5 }}
                   animate={{ opacity: [0.5, 1, 0.5] }}
                   transition={{ duration: 1.0, ease: "easeInOut", repeat: Infinity }}
                   style={{ width: "100%", height: "100%", borderRadius: "50%", backgroundColor: "#D4714F" }}
