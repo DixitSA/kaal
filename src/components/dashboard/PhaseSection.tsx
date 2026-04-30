@@ -36,6 +36,7 @@ export default function PhaseSection() {
   if (!computedData) return null;
 
   const { phase } = computedData;
+  if (!phase?.label) return null;
   const intensityLevel: IntensityLevel = computedData.intensity?.level ?? "medium";
   const filledDots = INTENSITY_DOTS[intensityLevel];
   const isCritical = intensityLevel === "critical";
