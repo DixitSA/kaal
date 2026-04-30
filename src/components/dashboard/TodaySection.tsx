@@ -30,7 +30,8 @@ export default function TodaySection() {
   if (!computedData) return null;
 
   const { daily } = computedData;
-  const taraBala = computedData.chart.transit.taraBala;
+  const taraBala = computedData.chart?.transit?.taraBala;
+  if (!taraBala) return null;
 
   const childAnim = (delay: number) => ({
     hidden: { opacity: 0, y: shouldReduce ? 0 : 20 },
