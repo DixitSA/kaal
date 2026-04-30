@@ -3,7 +3,7 @@
 import { motion, useReducedMotion } from "framer-motion";
 import { useUser } from "@/context/UserContext";
 import InsightCard from "@/components/ui/InsightCard";
-import type { IntensityLevel } from "@/lib/types/engine";
+import type { IntensityLevel, PhaseStateKey } from "@/lib/types/engine";
 import { PHASE_INSIGHTS } from "@/lib/content/phaseInsights";
 import { deterministicPick } from "@/lib/utils/deterministicPick";
 
@@ -42,8 +42,9 @@ export default function PhaseSection() {
   const isCritical = intensityLevel === "critical";
   const words = phase.label.split(" ");
 
+  const phaseInsightList = PHASE_INSIGHTS[phase.stateKey as PhaseStateKey] ?? PHASE_INSIGHTS["steady-build"];
   const dailyInsight = deterministicPick(
-    PHASE_INSIGHTS[phase.stateKey],
+    phaseInsightList,
     `${getLocalDateKey()}:${phase.stateKey}`
   );
 
