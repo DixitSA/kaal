@@ -193,6 +193,7 @@ export default function PatternSection() {
   if (!computedData) return null;
 
   const { identity, chart } = computedData;
+  if (!identity || !chart) return null;
   const archetypeKey = identity.archetype.toLowerCase();
   const ganaName  = GANA_LABEL[archetypeKey] ?? identity.archetype;
   const nakshatra = chart.moonNakshatra;
