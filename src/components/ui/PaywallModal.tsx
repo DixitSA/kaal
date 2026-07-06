@@ -63,14 +63,18 @@ export default function PaywallModal({ open, onClose, email }: PaywallModalProps
            onClick={onClose}
            style={{
              position: "absolute",
-             top: "12px",
-             right: "12px",
+             top: "2px",
+             right: "2px",
+             width: "44px",
+             height: "44px",
+             display: "flex",
+             alignItems: "center",
+             justifyContent: "center",
              background: "none",
              border: "none",
              color: "var(--text-muted)",
              fontSize: "14px",
              cursor: "pointer",
-             padding: "4px",
            }}
            aria-label="Close"
          >
