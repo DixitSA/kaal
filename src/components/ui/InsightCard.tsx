@@ -6,16 +6,16 @@ const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
 /** Side-bar accent colour */
 const barColor = {
-  positive: "#5E7A5E",
-  negative: "#B5563E",
-  neutral:  "#B5563E",
+  positive: "var(--accent-green)",
+  negative: "var(--accent-terracotta)",
+  neutral:  "var(--accent-terracotta)",
 } as const;
 
 /** Deep-toned body text — darkened ~30% from the bar colour, passes 4.5:1 on cream */
 const bodyColor = {
-  positive: "#2D4A2D",  /* deep forest green  — 7.1:1 on #F5F0E8 */
-  negative: "#6B2A1A",  /* deep terracotta red — 7.4:1 on #F5F0E8 */
-  neutral:  "#6B2A1A",
+  positive: "var(--accent-green-deep)",  /* deep forest green  — 7.1:1 on #F5F0E8 */
+  negative: "var(--accent-terracotta-deep)",  /* deep terracotta red — 7.4:1 on #F5F0E8 */
+  neutral:  "var(--accent-terracotta-deep)",
 } as const;
 
 interface InsightCardProps {

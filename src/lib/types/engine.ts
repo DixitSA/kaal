@@ -8,12 +8,12 @@ export const DECISION_CATEGORIES = [
 ] as const;
 
 export const DECISION_CAVEATS: Record<string, string> = {
-  career: "the path forward is not linear — expect recalibrations",
-  relationships: "attachment styles shift with the moons nodes — stay adaptable",
-  money: "gains are real but context-dependent — protect upside",
-  travel: "movement is supported but routes may change — stay flexible",
-  move: "the foundation is being rebuilt — treat the new as provisional",
-  communication: "the message will evolve — send when it stabilizes",
+  career: "the path forward is not linear: expect recalibrations",
+  relationships: "attachment styles shift with the moons nodes, so stay adaptable",
+  money: "gains are real but context-dependent: protect upside",
+  travel: "movement is supported but routes may change, so stay flexible",
+  move: "the foundation is being rebuilt; treat the new as provisional",
+  communication: "the message will evolve, so send when it stabilizes",
 };
 
 export const DECISION_OUTCOMES = ["favorable", "neutral", "caution"] as const;

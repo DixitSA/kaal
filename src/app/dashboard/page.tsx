@@ -22,12 +22,12 @@ interface Contemplation {
 
 const CONTEMPLATIONS: Contemplation[] = [
   { quote: "The stars impel, they do not compel.", source: "B. V. Raman" },
-  { quote: "Wisdom begins in wonder.", source: "Plato" },
-  { quote: "The universe is not only stranger than we imagine, it is stranger than we can imagine.", source: "J. B. S. Haldane" },
-  { quote: "As above, so below.", source: "Hermes Trismegistus" },
-  { quote: "Time is the wisest counselor.", source: "Pythagoras" },
-  { quote: "Nature does not hurry, yet everything is accomplished.", source: "Lao Tzu" },
-  { quote: "In the middle of difficulty lies opportunity.", source: "Einstein" },
+  { quote: "You have a right to your actions, never to the fruits of those actions.", source: "Bhagavad Gita, 2.47" },
+  { quote: "Yoga is the stilling of the fluctuations of the mind.", source: "Patanjali, Yoga Sutras 1.2" },
+  { quote: "Arise. Awake. Stop not until the goal is reached.", source: "Katha Upanishad" },
+  { quote: "Pleasure and pain, heat and cold, come and go. They do not last. Endure them.", source: "Bhagavad Gita, 2.14" },
+  { quote: "As a lamp sheltered from wind does not flicker, so is the mind that has learned stillness.", source: "Bhagavad Gita, 6.19" },
+  { quote: "All this, whatever moves in this moving world, is enveloped by the Lord.", source: "Isha Upanishad, verse 1" },
 ];
 
 const NAV_LINKS = [
@@ -98,8 +98,8 @@ function DashboardContent() {
 
   const showTrialBanner = hasMounted && !isProUser && !isFreeTrialExpired && daysOnFree >= 0;
 
-  if (!hasMounted) return <div style={{ minHeight: "100dvh", backgroundColor: "#F5F0E8" }} />;
-  if (isLoading) return <div style={{ minHeight: "100dvh", backgroundColor: "#F5F0E8" }} />;
+  if (!hasMounted) return <div style={{ minHeight: "100dvh", backgroundColor: "var(--bg-cream)" }} />;
+  if (isLoading) return <div style={{ minHeight: "100dvh", backgroundColor: "var(--bg-cream)" }} />;
   if (!userData || !computedData) return null;
 
   return (
@@ -154,12 +154,12 @@ function DashboardContent() {
               backgroundColor: "rgba(120,140,120,0.1)",
               fontFamily: "var(--font-inter-var), sans-serif",
               fontSize: "0.75rem",
-              color: "#2C2418",
+              color: "var(--text-primary)",
               textAlign: "center",
               padding: "0.5rem 1rem",
             }}
           >
-            welcome to kaal pro. your signal is now unlocked.
+            welcome to kaal pro. your signal keeps going.
           </div>
         )}
 
@@ -170,7 +170,7 @@ function DashboardContent() {
               backgroundColor: "rgba(184,168,120,0.1)",
               fontFamily: "var(--font-inter-var), sans-serif",
               fontSize: "0.75rem",
-              color: "#2C2418",
+              color: "var(--text-primary)",
               textAlign: "center",
               padding: "0.5rem 1rem",
               cursor: "pointer",
@@ -183,17 +183,17 @@ function DashboardContent() {
       </div>
 
       <main style={{ maxWidth: "720px", margin: "0 auto", padding: "0 clamp(1rem, 5vw, 3rem) 8rem", touchAction: "pan-y" }}>
-        <h1 style={{ position: "absolute", width: "1px", height: "1px", padding: 0, margin: "-1px", overflow: "hidden", clip: "rect(0,0,0,0)", whiteSpace: "nowrap", border: 0 }}>Kaal — your daily vedic report</h1>
+        <h1 style={{ position: "absolute", width: "1px", height: "1px", padding: 0, margin: "-1px", overflow: "hidden", clip: "rect(0,0,0,0)", whiteSpace: "nowrap", border: 0 }}>Kaal: your daily vedic report</h1>
 
-        <p style={{ fontFamily: "var(--font-inter-var)", fontSize: "13px", color: "#7A7469", textTransform: "lowercase", letterSpacing: "0.2em", marginTop: "1rem", marginBottom: "3rem" }}>
+        <p style={{ fontFamily: "var(--font-inter-var)", fontSize: "13px", color: "var(--text-secondary)", textTransform: "lowercase", letterSpacing: "0.2em", marginTop: "1rem", marginBottom: "3rem" }}>
           {hasMounted ? clientDate : ""}
         </p>
 
         {/* Contemplation */}
         {contemplation && (
           <section style={{ textAlign: "center", padding: "3rem 0 4rem", borderBottom: "1px solid rgba(122,116,105,0.15)", marginBottom: "3rem" }}>
-            <blockquote style={{ fontFamily: "var(--font-playfair-display)", fontSize: "1.5rem", fontStyle: "italic", color: "#2C2418", lineHeight: 1.5, margin: "0 0 1rem" }}>"{contemplation.quote}"</blockquote>
-             <cite style={{ fontFamily: "var(--font-inter-var)", fontSize: "12px", color: "#9C9488", letterSpacing: "0.1em", textTransform: "uppercase" }}>, {contemplation.source}</cite>
+            <blockquote style={{ fontFamily: "var(--font-playfair-display)", fontSize: "1.5rem", fontStyle: "italic", color: "var(--text-primary)", lineHeight: 1.5, margin: "0 0 1rem" }}>"{contemplation.quote}"</blockquote>
+             <cite style={{ fontFamily: "var(--font-inter-var)", fontSize: "12px", color: "var(--text-muted)", letterSpacing: "0.1em", textTransform: "uppercase", fontStyle: "normal" }}>{contemplation.source}</cite>
           </section>
         )}
 
@@ -215,14 +215,14 @@ function DashboardContent() {
 
       {/* Footer */}
       <footer style={{ position: "relative", zIndex: 30, padding: "4rem 24px 2rem", textAlign: "center", marginTop: "8rem" }}>
-        <div style={{ fontFamily: "var(--font-playfair-display)", fontSize: "0.9rem", fontStyle: "italic", color: "#2C2418", marginBottom: "6px", opacity: 0.7 }}>Kaal</div>
-        <p style={{ fontFamily: "var(--font-inter-var), sans-serif", fontStyle: "italic", fontSize: "11px", color: "#9C9488", letterSpacing: "0.04em", margin: "0 0 1.5rem" }}>built on vedic timing systems. © 2026 Kaal Astrology</p>
+        <div style={{ fontFamily: "var(--font-playfair-display)", fontSize: "0.9rem", fontStyle: "italic", color: "var(--text-primary)", marginBottom: "6px", opacity: 0.7 }}>Kaal</div>
+        <p style={{ fontFamily: "var(--font-inter-var), sans-serif", fontStyle: "italic", fontSize: "11px", color: "var(--text-muted)", letterSpacing: "0.04em", margin: "0 0 1.5rem" }}>built on vedic timing systems. © 2026 Kaal</p>
         <nav style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "0" }}>
           {FOOTER_LINKS.map((link, i) => (
             <span key={link.href} style={{ display: "flex", alignItems: "center" }}>
-              <a href={link.href} style={{ fontFamily: "var(--font-inter-var), sans-serif", fontSize: "11px", color: "#9C9488", letterSpacing: "0.07em", textTransform: "uppercase", padding: "16px 14px", minHeight: "44px", display: "inline-flex", alignItems: "center", textDecoration: "none", transition: "color 0.15s ease" }}
-                onMouseEnter={(e) => e.currentTarget.style.color = "#2C2418"}
-                onMouseLeave={(e) => e.currentTarget.style.color = "#9C9488"}
+              <a href={link.href} style={{ fontFamily: "var(--font-inter-var), sans-serif", fontSize: "11px", color: "var(--text-muted)", letterSpacing: "0.07em", textTransform: "uppercase", padding: "16px 14px", minHeight: "44px", display: "inline-flex", alignItems: "center", textDecoration: "none", transition: "color 0.15s ease" }}
+                onMouseEnter={(e) => e.currentTarget.style.color = "var(--text-primary)"}
+                onMouseLeave={(e) => e.currentTarget.style.color = "var(--text-muted)"}
               >
                 {link.label}
               </a>
@@ -240,7 +240,7 @@ function DashboardContent() {
 
 export default function Dashboard() {
   return (
-    <Suspense fallback={<div style={{ minHeight: "100dvh", backgroundColor: "#F5F0E8" }} />}>
+    <Suspense fallback={<div style={{ minHeight: "100dvh", backgroundColor: "var(--bg-cream)" }} />}>
       <DashboardContent />
     </Suspense>
   );

@@ -172,7 +172,7 @@ async function requestJson<TResponse>(
     return (await response.json()) as TResponse;
   } catch (err) {
     if (err instanceof Error && err.name === "AbortError") {
-      throw new Error("Request timed out — please try again.");
+      throw new Error("Request timed out. Please try again.");
     }
     throw err;
   } finally {

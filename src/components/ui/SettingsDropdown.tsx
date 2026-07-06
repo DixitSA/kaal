@@ -37,7 +37,7 @@ export default function SettingsDropdown() {
           style={{
             fontFamily: "var(--font-playfair-display)",
             fontSize: "11px",
-            color: "#7A7469",
+            color: "var(--text-secondary)",
             textTransform: "uppercase",
             letterSpacing: "0.1em",
             opacity: 0.6,
@@ -61,7 +61,7 @@ export default function SettingsDropdown() {
         style={{
           fontFamily: "var(--font-playfair-display)",
           fontSize: "11px",
-          color: "#7A7469",
+          color: "var(--text-secondary)",
           textTransform: "uppercase",
           letterSpacing: "0.1em",
           opacity: 0.6,

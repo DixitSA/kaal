@@ -11,7 +11,7 @@ export default function YantraMandala({
 }: YantraMandalaProps) {
   const cx = size / 2;
   const cy = size / 2;
-  const color = "#C4A96A";
+  const color = "var(--accent-decorative-gold)";
 
   const petals = Array.from({ length: 8 }, (_, i) => {
     const angle = (i * Math.PI * 2) / 8;

@@ -17,8 +17,23 @@
   --accent-terracotta: #B5563E;
   --accent-terracotta-text: #8B3620; /* 5.6:1 on cream — safe for small labels */
   --accent-gold: #786030;            /* 4.7:1 on cream — passes AA */
+  --accent-gold-text: #8A7240;       /* lighter gold used for section labels (current phase, today, decision) */
   --accent-green: #5E7A5E;
   --accent-red: #A04040;             /* 5.2:1 on cream — passes AA */
+  --text-secondary: #7A7469;          /* warm-grey; nav links, secondary body text */
+  --olive-dark: #4A4F46;              /* muted green-grey used in SVG accents and body copy */
+  --accent-terracotta-deep: #6B2A1A;  /* darkened terracotta for InsightCard body text — 7.4:1 on cream */
+  --accent-burgundy: #A34851;         /* decorative aged burgundy, PatternSection corner glyphs only */
+  --text-tertiary: #3D3428;           /* dim/inactive state text (e.g. inactive decision tabs) */
+  --accent-glow: #D4714F;             /* bright terracotta glow accent, loading-screen progress dot only */
+  --accent-terracotta-hover: #A65D46; /* button hover state */
+  --accent-terracotta-btn: #C75B3A;   /* primary button fill */
+  --accent-faded-gold: #B4A878;       /* price display, upgrade page */
+  --accent-decorative-gold: #C4A96A;  /* decorative SVG stroke (paisley, lotus, watermarks) */
+  --accent-terracotta-shadow: #7A2010; /* "shadow" label on the pattern card */
+  --accent-green-deep: #2D4A2D;       /* darkened green for InsightCard positive text */
+  --text-tagline: #5C574F;            /* muted italic taglines on legal/methodology pages */
+  --text-helper: #6B6560;             /* form helper text */
 
   /* Footer — unified across all pages */
   --kaal-footer-text: #8C867A;       /* warm taupe; lighter than charcoal, darker than --text-muted */
@@ -376,6 +391,41 @@ a {
 /* ─── Pattern card transparent background ─────────── */
 .pattern-card-flip {
   background-color: transparent !important;
+}
+
+/* ─── Label scale — the only three label treatments in the app ─────────── */
+/* label-ritual: form labels, ritual micro-copy (DESIGN.md label spec) */
+.label-ritual {
+  font-family: var(--font-quattrocento-sans), var(--font-inter-var), sans-serif;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* label-section: dashboard section labels ("current phase", "today", "decision") */
+.label-section {
+  font-family: var(--font-inter-var), sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: lowercase;
+}
+
+/* label-cta: buttons only */
+.label-cta {
+  font-family: var(--font-inter-var), sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+/* italic-quote: the phase/pattern italic tagline treatment, used once per section */
+.italic-quote {
+  font-family: var(--font-quattrocento-sans), var(--font-inter-var), sans-serif;
+  font-style: italic;
+  opacity: 0.75;
 }
 
 /* ═══════════════════════════════════════════════════════════

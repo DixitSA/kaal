@@ -27,13 +27,29 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
-  themeColor: "#F5F0E8",
+  themeColor: "var(--bg-cream)",
   viewportFit: "cover",
 };
 
 export const metadata: Metadata = {
-  title: "Kaal",
-  description: "Know what's happening. Know what to do.",
+  metadataBase: new URL("https://www.getkaal.com"),
+  title: {
+    default: "Kaal",
+    template: "%s · Kaal",
+  },
+  description: "Vedic timing, read daily. Know what's happening. Know what to do.",
+  openGraph: {
+    title: "Kaal",
+    description: "Vedic timing, read daily. Know what's happening. Know what to do.",
+    url: "https://www.getkaal.com",
+    siteName: "Kaal",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Kaal",
+    description: "Vedic timing, read daily. Know what's happening. Know what to do.",
+  },
 };
 
 export default function RootLayout({
@@ -46,7 +62,7 @@ export default function RootLayout({
       lang="en"
       className={`${playfairDisplay.variable} ${inter.variable} ${quattrocentoSans.variable} h-full antialiased`}
     >
-      <body className="min-h-full relative" style={{ backgroundColor: "#F5F0E8" }}>
+      <body className="min-h-full relative" style={{ backgroundColor: "var(--bg-cream)" }}>
         <BackgroundPattern />
         <UserProvider>
           <div className="relative z-10">

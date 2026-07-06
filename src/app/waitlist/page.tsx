@@ -30,7 +30,7 @@ export default function EarlyAccessPage() {
     <div
       style={{
         minHeight: "100dvh",
-        backgroundColor: "#F5F2E9",
+        backgroundColor: "var(--bg-cream)",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
@@ -212,7 +212,7 @@ export default function EarlyAccessPage() {
              opacity: 0.45,
            }}
         >
-           v1.0 beta | built in private, 2026
+           Kaal · © 2026
         </p>
       </footer>
     </div>

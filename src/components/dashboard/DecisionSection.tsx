@@ -5,6 +5,7 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 
 import { useUser } from "@/context/UserContext";
 import { DECISION_CATEGORIES, DECISION_CAVEATS, type DecisionCategory, type DecisionOutcome } from "@/lib/types/engine";
+import SectionLabel from "@/components/ui/SectionLabel";
 
 /** Returns true when two strings share ≥4 meaningful words (cross-section dedup). */
 function tooSimilar(a: string, b: string): boolean {
@@ -76,24 +77,13 @@ export default function DecisionSection({ locked = false, onUpgrade }: DecisionS
           marginBottom: "1.25rem",
         }}
       >
-        {/* Static 'decision' label — not a tab */}
-        <span
-          className="tracking-[0.2em]"
-          style={{
-            fontFamily: "var(--font-inter-var)",
-            fontSize: "14px",
-            fontWeight: 500,
-            textTransform: "lowercase",
-            color: "#8A7240",
-            whiteSpace: "nowrap",
-            padding: "8px 0",
-            marginRight: "24px",
-            marginBottom: "-1px",
-            flexShrink: 0,
-          }}
+        {/* Static 'decision' label, not a tab */}
+        <SectionLabel
+          as="span"
+          style={{ padding: "8px 0", marginRight: "24px", marginBottom: "-1px", flexShrink: 0 }}
         >
           decision
-        </span>
+        </SectionLabel>
 
         {/* Category tabs — button width = text width so the absolute underline is text-wide */}
         {DECISION_CATEGORIES.map((category) => (
@@ -115,7 +105,7 @@ export default function DecisionSection({ locked = false, onUpgrade }: DecisionS
             <span style={{
               fontFamily: "var(--font-inter-var)",
               fontSize: "11px",
-              color: active === category ? "var(--accent-terracotta)" : "#3D3428",
+              color: active === category ? "var(--accent-terracotta)" : "var(--text-tertiary)",
               opacity: active === category ? 1 : 0.4,
               textTransform: "lowercase",
               letterSpacing: "0.04em",
@@ -179,7 +169,7 @@ export default function DecisionSection({ locked = false, onUpgrade }: DecisionS
                 </motion.p>
                 <p
                   className="mt-1"
-                  style={{ color: "#2C2418", opacity: 0.8, fontFamily: "var(--font-inter-var), sans-serif", fontSize: "15px", lineHeight: 1.5, letterSpacing: "0.02em", textTransform: "lowercase", textAlign: "center" }}
+                  style={{ color: "var(--text-primary)", opacity: 0.8, fontFamily: "var(--font-inter-var), sans-serif", fontSize: "15px", lineHeight: 1.5, letterSpacing: "0.02em", textTransform: "lowercase", textAlign: "center" }}
                 >
                   {result.guidance}
                 </p>
@@ -195,7 +185,7 @@ export default function DecisionSection({ locked = false, onUpgrade }: DecisionS
                     <p
                       key={i}
                       className="mt-0.5"
-                      style={{ color: "#2C2418", opacity: 0.8, fontFamily: "var(--font-inter-var), sans-serif", fontSize: "15px", lineHeight: 1.5, letterSpacing: "0.02em", textTransform: "lowercase", textAlign: "center" }}
+                      style={{ color: "var(--text-primary)", opacity: 0.8, fontFamily: "var(--font-inter-var), sans-serif", fontSize: "15px", lineHeight: 1.5, letterSpacing: "0.02em", textTransform: "lowercase", textAlign: "center" }}
                     >
                       {line}
                     </p>
@@ -223,7 +213,7 @@ export default function DecisionSection({ locked = false, onUpgrade }: DecisionS
                   fontFamily: "var(--font-inter-var), sans-serif",
                   fontStyle: "italic",
                   fontSize: "13px",
-                  color: "#2C2418",
+                  color: "var(--text-primary)",
                   opacity: 0.7,
                   textTransform: "lowercase",
                   letterSpacing: "0.02em",
@@ -253,8 +243,8 @@ export default function DecisionSection({ locked = false, onUpgrade }: DecisionS
               onClick={onUpgrade}
               style={{
                 padding: "12px 24px",
-                backgroundColor: "#C75B3A",
-                color: "#F5F0E8",
+                backgroundColor: "var(--accent-terracotta-btn)",
+                color: "var(--bg-cream)",
                 border: "none",
                 borderRadius: "4px",
                 fontFamily: "var(--font-inter-var), sans-serif",

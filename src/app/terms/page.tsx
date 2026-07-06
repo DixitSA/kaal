@@ -12,16 +12,16 @@ const SECTIONS = [
     label: "Nature of Service",
     title: "Timing Data for Self-Reflection",
     body: [
-      "Kaal provides Vedic timing intelligence — planetary positions, Panchang cycles, nakshatra readings, and phase patterns — for the purposes of self-reflection and personal education. This is not a substitute for professional medical, legal, financial, or psychological advice.",
+      "Kaal provides Vedic timing intelligence (planetary positions, Panchang cycles, nakshatra readings, and phase patterns) for the purposes of self-reflection and personal education. This is not a substitute for professional medical, legal, financial, or psychological advice.",
       "The outputs of Kaal are interpretive, not prescriptive. Nothing presented within the app should be relied upon as a basis for clinical, legal, or investment decisions. If you are facing a matter requiring professional judgement, please consult a qualified practitioner.",
     ],
   },
   {
-    label: "Local Operation",
-    title: "Your Device, Your Responsibility",
+    label: "Accounts & Billing",
+    title: "Your Profile, Your Subscription",
     body: [
-      "Because Kaal operates entirely on your device — computing all astrology locally, storing any saved data in your browser — the security of that data is governed by the security of your device and browser environment.",
-      "We cannot recover lost local data, reset a corrupted profile, or access your birth details remotely. We encourage you to keep your device and browser updated, and to manage local storage with the same care you would apply to any personal data stored locally.",
+      "Creating a profile stores your birth details and email address on our servers, as described in the Privacy policy. A copy is also cached in your browser for fast loading; the clear session control removes that local copy but not the server record. To delete your server data, contact support@getkaal.com.",
+      "Kaal Pro is billed monthly through Stripe and can be cancelled at any time from the billing portal. Cancellation stops future charges, and access continues until the end of the period already paid.",
     ],
   },
   {
@@ -29,7 +29,7 @@ const SECTIONS = [
     title: "Brand, Design & Algorithms",
     body: [
       "The Kaal name, visual identity, interface design, and the proprietary interpretation layer that translates Vedic timing data into actionable phase guidance are the exclusive intellectual property of Kaal Astrology.",
-      "The underlying astronomical mathematics — planetary ephemeris data, ayanamsa conversion, Panchang computation — draws on open scientific foundations. The synthesis, weighting, and editorial model that produces Kaal's phase framework is original and proprietary.",
+      "The underlying astronomical mathematics (planetary ephemeris data, ayanamsa conversion, Panchang computation) draws on open scientific foundations. The synthesis, weighting, and editorial model that produces Kaal's phase framework is original and proprietary.",
     ],
   },
 ] as const;
@@ -45,7 +45,7 @@ export default function TermsPage() {
   const shouldReduce = useReducedMotion();
 
   return (
-    <div style={{ minHeight: "100dvh", backgroundColor: "#F5F0E8" }}>
+    <div style={{ minHeight: "100dvh", backgroundColor: "var(--bg-cream)" }}>
       <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 16px" }}>
         <main style={{ maxWidth: "720px", margin: "0 auto", paddingBottom: "8rem" }}>
 
@@ -61,7 +61,7 @@ export default function TermsPage() {
                style={{
                  fontFamily: "var(--font-inter-var)",
                  fontSize: "11px",
-                 color: "#7A7469",
+                 color: "var(--text-secondary)",
                  textTransform: "uppercase",
                  letterSpacing: "0.14em",
                  textDecoration: "none",
@@ -86,7 +86,7 @@ export default function TermsPage() {
             <p style={{
               fontFamily: "var(--font-inter-var)",
               fontSize: "11px",
-              color: "#786030",
+              color: "var(--accent-gold)",
               textTransform: "uppercase",
               letterSpacing: "0.25em",
               margin: "0 0 1.25rem",
@@ -97,7 +97,7 @@ export default function TermsPage() {
               fontFamily: "var(--font-playfair-display)",
               fontSize: "clamp(2.25rem, 7vw, 3.75rem)",
               fontWeight: 700,
-              color: "#2C2418",
+              color: "var(--text-primary)",
               letterSpacing: "0.12em",
               textTransform: "uppercase",
               lineHeight: 1.1,
@@ -109,12 +109,12 @@ export default function TermsPage() {
               fontFamily: "var(--font-quattrocento-sans), var(--font-inter-var), sans-serif",
               fontSize: "1rem",
               fontStyle: "italic",
-              color: "#5C574F",
+              color: "var(--text-tagline)",
               letterSpacing: "0.02em",
               lineHeight: 1.6,
               margin: 0,
             }}>
-              Guidelines for the journey.
+              What Kaal is, and is not.
             </p>
           </motion.div>
 
@@ -133,7 +133,7 @@ export default function TermsPage() {
                   style={{
                     fontFamily: "var(--font-inter-var)",
                     fontSize: "11px",
-                    color: "#786030",
+                    color: "var(--accent-gold)",
                     textTransform: "uppercase",
                     letterSpacing: "0.2em",
                     margin: "0 0 10px",
@@ -151,7 +151,7 @@ export default function TermsPage() {
                     fontFamily: "var(--font-playfair-display)",
                     fontSize: "clamp(1.4rem, 4vw, 1.875rem)",
                     fontWeight: 700,
-                    color: "#2C2418",
+                    color: "var(--text-primary)",
                     lineHeight: 1.2,
                     margin: "1rem 0 1.25rem",
                   }}
@@ -167,7 +167,7 @@ export default function TermsPage() {
                     style={{
                       fontFamily: "var(--font-quattrocento-sans), var(--font-inter-var), sans-serif",
                       fontSize: "1.05rem",
-                      color: "#4A4F46",
+                      color: "var(--olive-dark)",
                       lineHeight: 1.8,
                       letterSpacing: "0.015em",
                       margin: i === 0 ? 0 : "1.25rem 0 0",
@@ -198,7 +198,7 @@ export default function TermsPage() {
               lineHeight: 1.8,
             }}
           >
-            Effective 1 January 2026 · Kaal Astrology
+            Effective 5 July 2026 · Kaal Astrology
           </motion.p>
 
         </main>

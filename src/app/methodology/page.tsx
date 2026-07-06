@@ -21,7 +21,7 @@ const SECTIONS = [
     label: "The Calculations",
     title: "Ayanamsa & Panchang",
     body: [
-      "Kaal uses the Lahiri ayanamsa — the standard adopted by the Indian government for its national ephemeris — to convert tropical planetary positions to sidereal coordinates.",
+      "Kaal uses the Lahiri ayanamsa (the standard adopted by the Indian government for its national ephemeris) to convert tropical planetary positions to sidereal coordinates.",
       "Each day is evaluated against the Panchang: the five limbs of Vedic timekeeping. Tithi (lunar day), Vara (weekday), Nakshatra (lunar mansion), Yoga (sun-moon combination), and Karana (half-day arc). These five elements combine to produce the energetic signature of any given moment.",
     ],
   },
@@ -29,8 +29,8 @@ const SECTIONS = [
     label: "The Interpretation",
     title: "From Data to Pattern",
     body: [
-      "Raw planetary positions are not inherently meaningful — interpretation requires a model. Kaal's engine maps the five Panchang elements, the ruling nakshatra, and current dasha cycles into a coherent phase framework.",
-      "Each phase carries a dominant quality: expansion, consolidation, dissolution, or renewal. Kaal reads these qualities as operational guidance — not prediction, but orientation. The result is a daily signal that tells you not what will happen, but what kind of time you are in.",
+      "Raw planetary positions are not inherently meaningful. Interpretation requires a model. Kaal's engine maps the five Panchang elements, the ruling nakshatra, and current dasha cycles into a coherent phase framework.",
+      "Each phase carries a dominant quality: expansion, consolidation, dissolution, or renewal. Kaal reads these qualities as operational guidance: not prediction, but orientation. The result is a daily signal that tells you not what will happen, but what kind of time you are in.",
     ],
   },
 ] as const;
@@ -46,7 +46,7 @@ export default function MethodologyPage() {
   const shouldReduce = useReducedMotion();
 
   return (
-    <div style={{ minHeight: "100dvh", backgroundColor: "#F5F0E8" }}>
+    <div style={{ minHeight: "100dvh", backgroundColor: "var(--bg-cream)" }}>
       <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 16px" }}>
         <main style={{ maxWidth: "720px", margin: "0 auto", paddingBottom: "8rem" }}>
 
@@ -62,7 +62,7 @@ export default function MethodologyPage() {
                style={{
                  fontFamily: "var(--font-inter-var)",
                  fontSize: "11px",
-                 color: "#7A7469",
+                 color: "var(--text-secondary)",
                  textTransform: "uppercase",
                  letterSpacing: "0.14em",
                  textDecoration: "none",
@@ -87,7 +87,7 @@ export default function MethodologyPage() {
             <p style={{
               fontFamily: "var(--font-inter-var)",
               fontSize: "11px",
-              color: "#786030",
+              color: "var(--accent-gold)",
               textTransform: "uppercase",
               letterSpacing: "0.25em",
               margin: "0 0 1.25rem",
@@ -98,7 +98,7 @@ export default function MethodologyPage() {
               fontFamily: "var(--font-playfair-display)",
               fontSize: "clamp(2.25rem, 7vw, 3.75rem)",
               fontWeight: 700,
-              color: "#2C2418",
+              color: "var(--text-primary)",
               letterSpacing: "0.12em",
               textTransform: "uppercase",
               lineHeight: 1.1,
@@ -110,7 +110,7 @@ export default function MethodologyPage() {
               fontFamily: "var(--font-quattrocento-sans), var(--font-inter-var), sans-serif",
               fontSize: "1rem",
               fontStyle: "italic",
-              color: "#5C574F",
+              color: "var(--text-tagline)",
               letterSpacing: "0.02em",
               lineHeight: 1.6,
               margin: 0,
@@ -134,7 +134,7 @@ export default function MethodologyPage() {
                   style={{
                     fontFamily: "var(--font-inter-var)",
                     fontSize: "11px",
-                    color: "#786030",
+                    color: "var(--accent-gold)",
                     textTransform: "uppercase",
                     letterSpacing: "0.2em",
                     margin: "0 0 10px",
@@ -152,7 +152,7 @@ export default function MethodologyPage() {
                     fontFamily: "var(--font-playfair-display)",
                     fontSize: "clamp(1.4rem, 4vw, 1.875rem)",
                     fontWeight: 700,
-                    color: "#2C2418",
+                    color: "var(--text-primary)",
                     lineHeight: 1.2,
                     margin: "1rem 0 1.25rem",
                   }}
@@ -168,7 +168,7 @@ export default function MethodologyPage() {
                     style={{
                       fontFamily: "var(--font-quattrocento-sans), var(--font-inter-var), sans-serif",
                       fontSize: "1.05rem",
-                      color: "#4A4F46",
+                      color: "var(--olive-dark)",
                       lineHeight: 1.8,
                       letterSpacing: "0.015em",
                       margin: i === 0 ? 0 : "1.25rem 0 0",

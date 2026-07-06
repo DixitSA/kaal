@@ -5,7 +5,7 @@ interface SigilProps {
 }
 
 export default function Sigil({ type }: SigilProps) {
-  const strokeColor = "#4A4F46";
+  const strokeColor = "var(--olive-dark)";
   const strokeWidth = 1;
 
   switch (type) {

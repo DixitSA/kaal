@@ -42,14 +42,14 @@ function CornerGlyph({ style }: { style: React.CSSProperties }) {
       style={{ position: "absolute", pointerEvents: "none", ...style }}
     >
       <path d={`M${s - 2} 2 A${s - 4} ${s - 4} 0 0 0 2 ${s - 2}`}
-        fill="none" stroke="#A34851" strokeWidth="0.55" strokeLinecap="round" opacity="0.55" />
+        fill="none" stroke="var(--accent-burgundy)" strokeWidth="0.55" strokeLinecap="round" opacity="0.55" />
       <path d={`M${s - 9} 2 A${s - 11} ${s - 11} 0 0 0 2 ${s - 9}`}
-        fill="none" stroke="#A34851" strokeWidth="0.45" strokeLinecap="round" opacity="0.45" />
+        fill="none" stroke="var(--accent-burgundy)" strokeWidth="0.45" strokeLinecap="round" opacity="0.45" />
       <path d={`M${s - 17} 2 A${s - 19} ${s - 19} 0 0 0 2 ${s - 17}`}
-        fill="none" stroke="#A34851" strokeWidth="0.38" strokeLinecap="round" opacity="0.35" />
-      <circle cx="3.5" cy="3.5" r="1.3" fill="#A34851" opacity="0.5" />
-      <circle cx={s / 2 - 1} cy="2.2" r="0.75" fill="#A34851" opacity="0.32" />
-      <circle cx="2.2" cy={s / 2 - 1} r="0.75" fill="#A34851" opacity="0.32" />
+        fill="none" stroke="var(--accent-burgundy)" strokeWidth="0.38" strokeLinecap="round" opacity="0.35" />
+      <circle cx="3.5" cy="3.5" r="1.3" fill="var(--accent-burgundy)" opacity="0.5" />
+      <circle cx={s / 2 - 1} cy="2.2" r="0.75" fill="var(--accent-burgundy)" opacity="0.32" />
+      <circle cx="2.2" cy={s / 2 - 1} r="0.75" fill="var(--accent-burgundy)" opacity="0.32" />
     </svg>
   );
 }
@@ -63,8 +63,8 @@ function JaaliStrip({ id }: { id: string }) {
     >
       <defs>
         <pattern id={id} x="0" y="0" width="10" height="10" patternUnits="userSpaceOnUse">
-          <path d="M5 0 L10 5 L5 10 L0 5 Z" fill="none" stroke="#2C2418" strokeWidth="0.4" />
-          <circle cx="5" cy="5" r="0.6" fill="#2C2418" opacity="0.5" />
+          <path d="M5 0 L10 5 L5 10 L0 5 Z" fill="none" stroke="var(--text-primary)" strokeWidth="0.4" />
+          <circle cx="5" cy="5" r="0.6" fill="var(--text-primary)" opacity="0.5" />
         </pattern>
       </defs>
       <rect width="100%" height="100%" fill={`url(#${id})`} />
@@ -76,8 +76,8 @@ function SealGlyph() {
   const cx = 30, cy = 30, r = 22, inner = 13, petals = 8;
   return (
     <svg width={60} height={60} viewBox="0 0 60 60" aria-hidden="true">
-      <circle cx={cx} cy={cy} r={r} fill="none" stroke="#7A7469" strokeWidth="0.5" opacity="0.45" />
-      <circle cx={cx} cy={cy} r={inner} fill="none" stroke="#7A7469" strokeWidth="0.4" opacity="0.38" />
+      <circle cx={cx} cy={cy} r={r} fill="none" stroke="var(--text-secondary)" strokeWidth="0.5" opacity="0.45" />
+      <circle cx={cx} cy={cy} r={inner} fill="none" stroke="var(--text-secondary)" strokeWidth="0.4" opacity="0.38" />
       {Array.from({ length: petals }, (_, i) => {
         const a = (i * Math.PI * 2) / petals;
         const a2 = a + Math.PI / petals;
@@ -85,15 +85,15 @@ function SealGlyph() {
         return (
           <path key={i}
             d={`M ${cx} ${cy} Q ${cx + pr * Math.cos(a)} ${cy + pr * Math.sin(a)} ${cx + pr * Math.cos(a2)} ${cy + pr * Math.sin(a2)}`}
-            fill="none" stroke="#7A7469" strokeWidth="0.5" opacity="0.38"
+            fill="none" stroke="var(--text-secondary)" strokeWidth="0.5" opacity="0.38"
           />
         );
       })}
       {Array.from({ length: 8 }, (_, i) => {
         const a = (i * Math.PI * 2) / 8 + Math.PI / 8;
-        return <circle key={i} cx={cx + inner * Math.cos(a)} cy={cy + inner * Math.sin(a)} r="1" fill="#7A7469" opacity="0.28" />;
+        return <circle key={i} cx={cx + inner * Math.cos(a)} cy={cy + inner * Math.sin(a)} r="1" fill="var(--text-secondary)" opacity="0.28" />;
       })}
-      <circle cx={cx} cy={cy} r="2.5" fill="#7A7469" opacity="0.18" />
+      <circle cx={cx} cy={cy} r="2.5" fill="var(--text-secondary)" opacity="0.18" />
     </svg>
   );
 }
@@ -123,7 +123,7 @@ const MARGINALIA: React.CSSProperties = {
   fontSize: "0.65rem",
   textTransform: "uppercase",
   letterSpacing: "0.26em",
-  color: "#7A7469",
+  color: "var(--text-secondary)",
   opacity: 0.2,
   whiteSpace: "nowrap",
 };
@@ -160,7 +160,7 @@ export default function PatternSection() {
     setSharing(true);
     try {
       const dataUrl = await toPng(cardRef.current, {
-        backgroundColor: "#F5F0E8",
+        backgroundColor: "var(--bg-cream)",
         pixelRatio: window.devicePixelRatio || 2,
         cacheBust: true,
       });
@@ -299,7 +299,7 @@ export default function PatternSection() {
                     fontSize: "10px",
                     textTransform: "lowercase",
                     letterSpacing: "0.2em",
-                    color: "#2C2418",
+                    color: "var(--text-primary)",
                   }}
                 >
                   ✧ reveal insight
@@ -311,7 +311,7 @@ export default function PatternSection() {
                     fontFamily: "var(--font-playfair-display), Georgia, serif",
                     fontSize: "clamp(1rem, 2.8vw, 1.75rem)",
                     letterSpacing: "0.5em",
-                    color: "#7A7469",
+                    color: "var(--text-secondary)",
                     opacity: 0.52,
                   }}>
                     {ganaName.toUpperCase()}
@@ -349,18 +349,18 @@ export default function PatternSection() {
                   <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", paddingTop: "clamp(2rem, 6vw, 3rem)", paddingBottom: "2.5rem", overflow: "hidden" }}>
                     {/* Content Protection Wrapper (px-6) */}
                     <div style={{ width: "100%", padding: "0 1.5rem", display: "flex", flexDirection: "column", alignItems: "center" }}>
-                      <p style={{ fontFamily: "var(--font-inter-var)", fontSize: "8px", textTransform: "uppercase", letterSpacing: "0.3em", color: "#8A7240", margin: 0, opacity: 0.8, fontWeight: 300 }}>
+                      <p style={{ fontFamily: "var(--font-inter-var)", fontSize: "8px", textTransform: "uppercase", letterSpacing: "0.3em", color: "var(--accent-gold-text)", margin: 0, opacity: 0.8, fontWeight: 300 }}>
                         your patterns
                       </p>
-                      <p style={{ fontFamily: "var(--font-playfair-display), Georgia, serif", fontStyle: "italic", fontSize: "clamp(0.65rem, 1.3vw, 0.75rem)", color: "#7A7469", margin: "6px 0 0", opacity: 0.6, letterSpacing: "0.06em", fontWeight: 300 }}>
+                      <p style={{ fontFamily: "var(--font-playfair-display), Georgia, serif", fontStyle: "italic", fontSize: "clamp(0.65rem, 1.3vw, 0.75rem)", color: "var(--text-secondary)", margin: "6px 0 0", opacity: 0.6, letterSpacing: "0.06em", fontWeight: 300 }}>
                         {nakshatra} · pada {padaRoman}
                       </p>
-                      <p style={{ fontFamily: "var(--font-playfair-display)", fontStyle: "italic", fontWeight: 700, fontSize: "clamp(0.9rem, 2vw, 1.25rem)", color: "#2C2418", lineHeight: 1.25, margin: "clamp(0.75rem, 2vw, 1.5rem) 0", maxWidth: "26ch" }}>
+                      <p style={{ fontFamily: "var(--font-playfair-display)", fontStyle: "italic", fontWeight: 700, fontSize: "clamp(0.9rem, 2vw, 1.25rem)", color: "var(--text-primary)", lineHeight: 1.25, margin: "clamp(0.75rem, 2vw, 1.5rem) 0", maxWidth: "26ch" }}>
                         {identity.core}
                       </p>
                       <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "4px" }}>
                         {traits.map((trait, i) => (
-                          <p key={i} style={{ fontFamily: "var(--font-playfair-display), Georgia, serif", fontSize: "clamp(0.78rem, 1.5vw, 0.95rem)", lineHeight: 1.45, letterSpacing: "0.02em", color: "#2C2418", margin: 0, opacity: 0.84, fontWeight: 300 }}>
+                          <p key={i} style={{ fontFamily: "var(--font-playfair-display), Georgia, serif", fontSize: "clamp(0.78rem, 1.5vw, 0.95rem)", lineHeight: 1.45, letterSpacing: "0.02em", color: "var(--text-primary)", margin: 0, opacity: 0.84, fontWeight: 300 }}>
                             {trait.toLowerCase()}
                           </p>
                         ))}
@@ -399,10 +399,10 @@ export default function PatternSection() {
                   position: "relative", zIndex: 1,
                   boxSizing: "border-box",
                 }}>
-                  <span style={{ fontFamily: "var(--font-inter-var), sans-serif", fontStyle: "italic", fontWeight: 300, fontSize: "0.85rem", letterSpacing: "0.12em", color: "#7A2010", opacity: 0.85, textTransform: "lowercase" }}>
+                  <span style={{ fontFamily: "var(--font-inter-var), sans-serif", fontStyle: "italic", fontWeight: 300, fontSize: "0.85rem", letterSpacing: "0.12em", color: "var(--accent-terracotta-shadow)", opacity: 0.85, textTransform: "lowercase" }}>
                     shadow
                   </span>
-                  <p style={{ fontFamily: "var(--font-playfair-display), Georgia, serif", fontStyle: "italic", fontSize: "clamp(0.7rem, 1.4vw, 0.82rem)", lineHeight: 1.5, letterSpacing: "0.02em", color: "#2C2418", opacity: 0.6, margin: 0, maxWidth: "30ch", fontWeight: 300 }}>
+                  <p style={{ fontFamily: "var(--font-playfair-display), Georgia, serif", fontStyle: "italic", fontSize: "clamp(0.7rem, 1.4vw, 0.82rem)", lineHeight: 1.5, letterSpacing: "0.02em", color: "var(--text-primary)", opacity: 0.6, margin: 0, maxWidth: "30ch", fontWeight: 300 }}>
                     {identity.challengeLine}
                   </p>
                 </div>
@@ -421,7 +421,7 @@ export default function PatternSection() {
                     fontSize: "10px",
                     textTransform: "lowercase",
                     letterSpacing: "0.2em",
-                    color: "#2C2418",
+                    color: "var(--text-primary)",
                   }}
                 >
                   ✧ return
@@ -442,7 +442,7 @@ export default function PatternSection() {
             border: "none",
             fontFamily: "var(--font-playfair-display)",
             fontSize: "11px",
-            color: "#7A7469",
+            color: "var(--text-secondary)",
             textTransform: "uppercase",
             letterSpacing: "0.1em",
             opacity: 0.6,
@@ -463,7 +463,7 @@ export default function PatternSection() {
             border: "none",
             fontFamily: "var(--font-playfair-display)",
             fontSize: "11px",
-            color: "#7A7469",
+            color: "var(--text-secondary)",
             textTransform: "uppercase",
             letterSpacing: "0.1em",
             opacity: sharing ? 0.4 : 0.6,

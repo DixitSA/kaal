@@ -11,7 +11,7 @@ export default function DecorativeDivider({
   className = "",
   style,
 }: DecorativeDividerProps) {
-  const color = "#C4A96A";
+  const color = "var(--accent-decorative-gold)";
   const height = 20;
   const buds = 5;
   const spacing = width / (buds + 1);

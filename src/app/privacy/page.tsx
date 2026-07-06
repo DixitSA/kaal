@@ -9,27 +9,27 @@ const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
 const SECTIONS = [
   {
-    label: "Local Computation",
-    title: "Your Birth Details Stay on Your Device",
+    label: "What We Collect",
+    title: "Your Birth Details, Held Carefully",
     body: [
-       "Every astrological calculation Kaal performs, planetary positions, nakshatra placement, dasha cycles, Panchang elements, is computed entirely within your browser. Your birth data never leaves your device.",
-       "We do not operate a server that receives, processes, or stores your date, time, or place of birth. There is no account, no upload, no transmission. The calculation engine runs locally in JavaScript the moment you enter your details.",
+      "To compute your chart, Kaal needs your date, time, and place of birth. When you create your profile, these details are sent to our server and stored in a secure database, together with your email address. They are used for one purpose: calculating your chart and keeping your profile available to you.",
+      "Your chart is computed on our server from planetary ephemeris data. A copy of your profile and computed snapshot is also cached in your browser's local storage, so the dashboard loads instantly on return visits.",
     ],
   },
   {
-    label: "No Tracking",
-    title: "No Third-Party Eyes",
+    label: "Third Parties",
+    title: "Who Else Touches Your Data",
     body: [
-      "Kaal does not embed advertising trackers, analytics pixels, or data broker scripts. We do not use Google Analytics, Meta Pixel, or any equivalent third-party surveillance tool.",
-      "We do not sell, share, or license your data to advertisers or data brokers — because we do not collect it in the first place. Your patterns of use are yours alone.",
+      "Payments are handled by Stripe. When you start a trial or subscribe, your email address is shared with Stripe to create and manage your billing account. Card details go directly to Stripe; we never see or store them.",
+      "When you type a place of birth, the text you enter is sent to the Open-Meteo geocoding service to find coordinates and a timezone. If you join the waitlist, your email is stored with Loops, our email provider. That is the complete list. We do not run advertising trackers, analytics pixels, or data broker scripts, and we do not sell, share, or license your data to anyone.",
     ],
   },
   {
-    label: "Data Storage",
-    title: "Browser Storage Only",
+    label: "Control & Deletion",
+    title: "Your Data, On Request",
     body: [
-      "If you save charts, patterns, or your birth profile for repeat visits, that data is written exclusively to your browser's local storage or IndexedDB. It lives on your device, in your browser, under your control.",
-      "Clearing your browser data or using a different device starts fresh. There is no cloud backup or synchronisation, by design.",
+      "You can clear the local copy of your profile at any time using the clear session control in the dashboard, or by clearing your browser storage.",
+      "To delete your account data from our server, email support@getkaal.com from the address you signed up with. We will remove your records, including your Stripe customer profile, within 30 days.",
     ],
   },
 ] as const;
@@ -45,7 +45,7 @@ export default function PrivacyPage() {
   const shouldReduce = useReducedMotion();
 
   return (
-    <div style={{ minHeight: "100dvh", backgroundColor: "#F5F0E8" }}>
+    <div style={{ minHeight: "100dvh", backgroundColor: "var(--bg-cream)" }}>
       <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 16px" }}>
         <main style={{ maxWidth: "720px", margin: "0 auto", paddingBottom: "8rem" }}>
 
@@ -61,7 +61,7 @@ export default function PrivacyPage() {
                style={{
                  fontFamily: "var(--font-inter-var)",
                  fontSize: "11px",
-                 color: "#7A7469",
+                 color: "var(--text-secondary)",
                  textTransform: "uppercase",
                  letterSpacing: "0.14em",
                  textDecoration: "none",
@@ -86,7 +86,7 @@ export default function PrivacyPage() {
             <p style={{
               fontFamily: "var(--font-inter-var)",
               fontSize: "11px",
-              color: "#786030",
+              color: "var(--accent-gold)",
               textTransform: "uppercase",
               letterSpacing: "0.25em",
               margin: "0 0 1.25rem",
@@ -97,7 +97,7 @@ export default function PrivacyPage() {
               fontFamily: "var(--font-playfair-display)",
               fontSize: "clamp(2.25rem, 7vw, 3.75rem)",
               fontWeight: 700,
-              color: "#2C2418",
+              color: "var(--text-primary)",
               letterSpacing: "0.12em",
               textTransform: "uppercase",
               lineHeight: 1.1,
@@ -109,7 +109,7 @@ export default function PrivacyPage() {
               fontFamily: "var(--font-quattrocento-sans), var(--font-inter-var), sans-serif",
               fontSize: "1rem",
               fontStyle: "italic",
-              color: "#5C574F",
+              color: "var(--text-tagline)",
               letterSpacing: "0.02em",
               lineHeight: 1.6,
               margin: 0,
@@ -133,7 +133,7 @@ export default function PrivacyPage() {
                   style={{
                     fontFamily: "var(--font-inter-var)",
                     fontSize: "11px",
-                    color: "#786030",
+                    color: "var(--accent-gold)",
                     textTransform: "uppercase",
                     letterSpacing: "0.2em",
                     margin: "0 0 10px",
@@ -151,7 +151,7 @@ export default function PrivacyPage() {
                     fontFamily: "var(--font-playfair-display)",
                     fontSize: "clamp(1.4rem, 4vw, 1.875rem)",
                     fontWeight: 700,
-                    color: "#2C2418",
+                    color: "var(--text-primary)",
                     lineHeight: 1.2,
                     margin: "1rem 0 1.25rem",
                   }}
@@ -167,7 +167,7 @@ export default function PrivacyPage() {
                     style={{
                       fontFamily: "var(--font-quattrocento-sans), var(--font-inter-var), sans-serif",
                       fontSize: "1.05rem",
-                      color: "#4A4F46",
+                      color: "var(--olive-dark)",
                       lineHeight: 1.8,
                       letterSpacing: "0.015em",
                       margin: i === 0 ? 0 : "1.25rem 0 0",

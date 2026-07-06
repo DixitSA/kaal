@@ -82,12 +82,12 @@ export default function LoadingScreen() {
     return () => { cancelled = true; };
   }, [isLoading, router, setComputedData, shouldReduce, userData]);
 
-  if (isLoading) return <div style={{ minHeight: "100dvh", backgroundColor: "#F5F0E8" }} />;
+  if (isLoading) return <div style={{ minHeight: "100dvh", backgroundColor: "var(--bg-cream)" }} />;
 
   return (
     <motion.main
       className="flex items-center justify-center relative"
-      style={{ minHeight: "100dvh", backgroundColor: "#F5F0E8" }}
+      style={{ minHeight: "100dvh", backgroundColor: "var(--bg-cream)" }}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.35, ease: "easeIn" }}
@@ -121,7 +121,7 @@ export default function LoadingScreen() {
           style={{
             fontFamily: "var(--font-playfair-display)",
             fontSize: "clamp(1.75rem, 5vw, 2.25rem)",
-            color: "#2C2418",
+            color: "var(--text-primary)",
             margin: 0,
           }}
         >
@@ -151,7 +151,7 @@ export default function LoadingScreen() {
                   fontFamily: "var(--font-playfair-display)",
                   fontSize: "clamp(13px, 3.5vw, 15px)",
                   letterSpacing: "0.04em",
-                  color: errorMessage ? "#A04040" : "#2C2418",
+                  color: errorMessage ? "var(--accent-red)" : "var(--text-primary)",
                 }}
               >
                 {errorMessage ? "Error" : PHASE_LABELS[phase]}
@@ -180,7 +180,7 @@ export default function LoadingScreen() {
               style={{
                 position: "absolute",
                 inset: 0,
-                backgroundColor: errorMessage ? "#A04040" : "#B5563E",
+                backgroundColor: errorMessage ? "var(--accent-red)" : "var(--accent-terracotta)",
                 transformOrigin: "left center",
                 borderRadius: "1px",
               }}
@@ -199,7 +199,7 @@ export default function LoadingScreen() {
                   width: "5px",
                   height: "5px",
                   borderRadius: "50%",
-                  backgroundColor: "#D4714F",
+                  backgroundColor: "var(--accent-glow)",
                   boxShadow: "0 0 7px 2px rgba(212,113,79,0.6)",
                 }}
               >
@@ -207,7 +207,7 @@ export default function LoadingScreen() {
                   initial={{ opacity: 0.5 }}
                   animate={{ opacity: [0.5, 1, 0.5] }}
                   transition={{ duration: 1.0, ease: "easeInOut", repeat: Infinity }}
-                  style={{ width: "100%", height: "100%", borderRadius: "50%", backgroundColor: "#D4714F" }}
+                  style={{ width: "100%", height: "100%", borderRadius: "50%", backgroundColor: "var(--accent-glow)" }}
                 />
               </motion.div>
             )}
@@ -245,7 +245,7 @@ export default function LoadingScreen() {
                   fontFamily: "var(--font-inter-var)",
                   fontSize: "14px",
                   letterSpacing: "0.03em",
-                  color: errorMessage ? "#A04040" : "#7A7469",
+                  color: errorMessage ? "var(--accent-red)" : "var(--text-secondary)",
                 }}
               >
                 {errorMessage ?? statusMessage}
@@ -307,7 +307,7 @@ export default function LoadingScreen() {
               }}
               style={{
                 backgroundColor: "transparent",
-                color: "#A65D46",
+                color: "var(--accent-terracotta-hover)",
                 border: "none",
                 padding: "8px 16px",
                 cursor: "pointer",

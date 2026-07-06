@@ -26,7 +26,7 @@ export const NAKSHATRA_PROFILES: NakshatraProfile[] = [
     dashaLord: "ketu",
     headline: "you act fast because you see the opening before others do",
     traits: [
-      "you move when the signal is still forming — and you are usually right",
+      "you move when the signal is still forming, and you are usually right",
       "you recover quickly because dwelling is not in your vocabulary",
       "you trust instinct over analysis and that is rarely the wrong call"
     ],
@@ -53,7 +53,7 @@ export const NAKSHATRA_PROFILES: NakshatraProfile[] = [
     headline: "you separate signal from noise with surgical clarity",
     traits: [
       "you can spot what is wrong in a situation before anyone articulates it",
-      "you do not soften the truth out of comfort — but you know when to hold it",
+      "you do not soften the truth out of comfort, but you know when to hold it",
       "your standards are not harsh, they are precise"
     ],
     shadow: "your precision can become cruelty when you are tired"
@@ -169,7 +169,7 @@ export const NAKSHATRA_PROFILES: NakshatraProfile[] = [
     dashaLord: "sun",
     headline: "you build durable structures of generosity and exchange",
     traits: [
-      "you give in ways that create lasting obligation — and you know it",
+      "you give in ways that create lasting obligation, and you know it",
       "you support people through systems, not sentiment",
       "you build things meant to outlast your direct involvement"
     ],
@@ -197,7 +197,7 @@ export const NAKSHATRA_PROFILES: NakshatraProfile[] = [
     traits: [
       "you see structure and aesthetics as the same problem",
       "you produce work that holds up on close inspection",
-      "you bring craft to everything you make — including relationships"
+      "you bring craft to everything you make, including relationships"
     ],
     shadow: "you polish the surface long past when the foundation needed attention"
   },
@@ -222,7 +222,7 @@ export const NAKSHATRA_PROFILES: NakshatraProfile[] = [
     headline: "you reach the target others gave up on",
     traits: [
       "you sustain focus across long timelines without losing the thread",
-      "you bring intensity to what you commit to — and you commit fully",
+      "you bring intensity to what you commit to, and you commit fully",
       "you recognize the moment of arrival that others miss"
     ],
     shadow: "the goal becomes the substitute for the life"
@@ -453,7 +453,7 @@ export function getNakshatraProfile(
   const profile = NAKSHATRA_PROFILES[nakshatraNumber - 1];
   const navamsaSign = getNavamsaSign(nakshatraNumber, pada);
   const padaModifier = getPadaModifierText(nakshatraNumber, pada);
-  const trait3Modified = `${profile.traits[2]} — pada ${pada} (${navamsaSign} navamsa) ${padaModifier}`;
+  const trait3Modified = `${profile.traits[2]} (pada ${pada}, ${navamsaSign} navamsa): ${padaModifier}`;
 
   return {
     ...profile,

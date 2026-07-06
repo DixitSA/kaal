@@ -20,14 +20,14 @@ function DobWatermark() {
   const radii = [0.92, 0.74, 0.56, 0.38, 0.18];
   return (
     <svg width={r * 2} height={r * 2} viewBox={`0 0 ${r * 2} ${r * 2}`} aria-hidden="true" style={{ display: "block" }}>
-      {radii.map((ratio, i) => <circle key={i} cx={cx} cy={cy} r={r * ratio} fill="none" stroke="#C4A96A" strokeWidth="0.3" />)}
+      {radii.map((ratio, i) => <circle key={i} cx={cx} cy={cy} r={r * ratio} fill="none" stroke="var(--accent-decorative-gold)" strokeWidth="0.3" />)}
       {Array.from({ length: 12 }, (_, i) => {
         const a = (i * Math.PI * 2) / 12;
-        return <line key={i} x1={cx + r * 0.18 * Math.cos(a)} y1={cy + r * 0.18 * Math.sin(a)} x2={cx + r * 0.92 * Math.cos(a)} y2={cy + r * 0.92 * Math.sin(a)} stroke="#C4A96A" strokeWidth="0.3" />;
+        return <line key={i} x1={cx + r * 0.18 * Math.cos(a)} y1={cy + r * 0.18 * Math.sin(a)} x2={cx + r * 0.92 * Math.cos(a)} y2={cy + r * 0.92 * Math.sin(a)} stroke="var(--accent-decorative-gold)" strokeWidth="0.3" />;
       })}
       {Array.from({ length: 24 }, (_, i) => {
         const a = (i * Math.PI * 2) / 24 + Math.PI / 24;
-        return <circle key={i} cx={cx + r * 0.64 * Math.cos(a)} cy={cy + r * 0.64 * Math.sin(a)} r={0.8} fill="#C4A96A" />;
+        return <circle key={i} cx={cx + r * 0.64 * Math.cos(a)} cy={cy + r * 0.64 * Math.sin(a)} r={0.8} fill="var(--accent-decorative-gold)" />;
       })}
     </svg>
   );
@@ -66,7 +66,7 @@ function LocationPinIcon() {
 function EditorialArrow({ hover, reduced }: { hover: boolean; reduced: boolean }) {
   return (
     <svg width="28" height="10" viewBox="0 0 28 10" fill="none" aria-hidden="true"
-      style={{ flexShrink: 0, transform: hover && !reduced ? "translateX(4px)" : "translateX(0)", transition: "transform 0.22s ease", color: "#F5F0E8" }}>
+      style={{ flexShrink: 0, transform: hover && !reduced ? "translateX(4px)" : "translateX(0)", transition: "transform 0.22s ease", color: "var(--bg-cream)" }}>
       <path d="M0 5 H22 M18 1.5 L24.5 5 L18 8.5" stroke="currentColor" strokeWidth="0.5" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
@@ -100,7 +100,7 @@ const labelStyle: CSSProperties = {
   fontSize: "10px",
   textTransform: "uppercase",
   letterSpacing: "0.15em",
-  color: "#4A4F46",
+  color: "var(--olive-dark)",
   opacity: 0.7,
   display: "block",
   marginBottom: "10px",
@@ -116,7 +116,7 @@ const inputStyle: CSSProperties = {
   outline: "none",
   fontFamily: "var(--font-inter-var), sans-serif",
   fontSize: "15px",
-  color: "#2C2418",
+  color: "var(--text-primary)",
   padding: 0,
   paddingBottom: "8px",
   minHeight: "36px",
@@ -200,7 +200,7 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
     if (!email.trim() || !email.includes("@")) e.email = "valid email is required";
     if (!name.trim()) e.name = "name is required";
     if (!dob || dob.length < 10) {
-      e.dob = "enter a full date — MM/DD/YYYY";
+      e.dob = "enter a full date (MM/DD/YYYY)";
     } else {
       const d = new Date(toISODate(dob));
       if (isNaN(d.getTime())) e.dob = "not a real calendar date";
@@ -423,7 +423,7 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
                     width: "40px",
                     height: "36px",
                     backgroundColor: timePeriod === p ? TERRACOTTA : "transparent",
-                    color: timePeriod === p ? "#F5F0E8" : "#4A4F46",
+                    color: timePeriod === p ? "var(--bg-cream)" : "var(--olive-dark)",
                     fontFamily: "var(--font-inter-var), sans-serif",
                     fontSize: "10px",
                     fontWeight: 600,
@@ -439,12 +439,12 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
               ))}
             </div>
             {/* "I don't know" inline toggle */}
-            <label htmlFor="unknownTime" style={{ display: "flex", alignItems: "center", gap: "4px", marginLeft: "12px", cursor: "pointer", flexShrink: 0, whiteSpace: "nowrap", fontFamily: "var(--font-inter-var), sans-serif", fontSize: "10px", fontWeight: 500, letterSpacing: "0.12em", textTransform: "uppercase", color: "#4A4F46", borderBottom: `1px solid ${TERRACOTTA}66`, paddingBottom: "2px" }}>
+            <label htmlFor="unknownTime" style={{ display: "flex", alignItems: "center", gap: "4px", marginLeft: "12px", cursor: "pointer", flexShrink: 0, whiteSpace: "nowrap", fontFamily: "var(--font-inter-var), sans-serif", fontSize: "10px", fontWeight: 500, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--olive-dark)", borderBottom: `1px solid ${TERRACOTTA}66`, paddingBottom: "2px" }}>
               <span style={{ position: "relative", width: "12px", height: "12px", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
                 <input id="unknownTime" type="checkbox" checked={unknownTime} onChange={(e) => { setUnknownTime(e.target.checked); if (e.target.checked) setTimeOfBirth(""); }}
                   style={{ position: "absolute", inset: 0, margin: 0, opacity: 0, width: "100%", height: "100%", cursor: "pointer" }} />
                 <span aria-hidden="true" style={{ position: "absolute", width: "12px", height: "12px", borderRadius: "50%", border: `1.5px solid ${TERRACOTTA}`, backgroundColor: unknownTime ? TERRACOTTA : "transparent", transition: "background-color 0.18s ease, border-color 0.18s ease", display: "flex", alignItems: "center", justifyContent: "center", pointerEvents: "none" }}>
-                  {unknownTime && <span style={{ width: "4px", height: "4px", borderRadius: "50%", backgroundColor: "#F5F0E8", display: "block" }} />}
+                  {unknownTime && <span style={{ width: "4px", height: "4px", borderRadius: "50%", backgroundColor: "var(--bg-cream)", display: "block" }} />}
                 </span>
               </span>
               i don&apos;t know
@@ -477,8 +477,8 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
             {lookupResults.map((result) => (
               <button key={result.id} type="button" role="option" onClick={() => applyLookupResult(result)}
                 style={{ background: "none", border: "none", borderBottom: "1px solid rgba(122,116,105,0.06)", padding: "9px 12px", textAlign: "left", cursor: "pointer", minHeight: "44px", width: "100%", display: "block" }}>
-                <span style={{ display: "block", color: "#2C2418", fontFamily: "var(--font-quattrocento-sans), var(--font-inter-var), sans-serif", fontSize: "13px" }}>{result.displayName}</span>
-                <span style={{ display: "block", marginTop: "2px", color: "#9C9488", fontFamily: "var(--font-inter-var)", fontSize: "10px", letterSpacing: "0.04em" }}>{result.timezone} · {result.latitude.toFixed(4)}, {result.longitude.toFixed(4)}</span>
+                <span style={{ display: "block", color: "var(--text-primary)", fontFamily: "var(--font-quattrocento-sans), var(--font-inter-var), sans-serif", fontSize: "13px" }}>{result.displayName}</span>
+                <span style={{ display: "block", marginTop: "2px", color: "var(--text-muted)", fontFamily: "var(--font-inter-var)", fontSize: "10px", letterSpacing: "0.04em" }}>{result.timezone} · {result.latitude.toFixed(4)}, {result.longitude.toFixed(4)}</span>
               </button>
             ))}
           </div>
@@ -488,7 +488,7 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
       {/* ── Advanced Birth Details ── */}
       <motion.div custom={3} variants={vars} initial="hidden" animate="visible">
         <button type="button" onClick={() => setShowAdvanced((v) => !v)}
-          style={{ background: "none", border: "none", cursor: "pointer", fontFamily: "var(--font-inter-var)", fontSize: "10px", letterSpacing: "1px", textTransform: "uppercase", color: "#7A7469", padding: "2px 0", display: "flex", alignItems: "center", gap: "7px" }}>
+          style={{ background: "none", border: "none", cursor: "pointer", fontFamily: "var(--font-inter-var)", fontSize: "10px", letterSpacing: "1px", textTransform: "uppercase", color: "var(--text-secondary)", padding: "2px 0", display: "flex", alignItems: "center", gap: "7px" }}>
           <span style={{ display: "inline-block", fontSize: "11px", transition: "transform 0.2s ease", transform: showAdvanced ? "rotate(90deg)" : "rotate(0deg)" }}>›</span>
           advanced birth details
         </button>
@@ -518,7 +518,7 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
                 {errors.longitude && <p id="longitude-error" role="alert" style={errStyle}>{errors.longitude}</p>}
               </div>
             </div>
-            <p style={{ color: "#6B6560", fontSize: "11px", fontFamily: "var(--font-inter-var)", lineHeight: 1.7, letterSpacing: "0.03em" }}>
+            <p style={{ color: "var(--text-helper)", fontSize: "11px", fontFamily: "var(--font-inter-var)", lineHeight: 1.7, letterSpacing: "0.03em" }}>
               place lookup fills these automatically. adjust only if the match is wrong.
             </p>
           </div>
@@ -537,7 +537,7 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
             padding: "14px 48px",
             minHeight: "44px",
             backgroundColor: TERRACOTTA,
-            color: "#F5F0E8",
+            color: "var(--bg-cream)",
             fontFamily: "var(--font-playfair-display), sans-serif",
             fontWeight: 400,
             fontSize: "0.95rem",

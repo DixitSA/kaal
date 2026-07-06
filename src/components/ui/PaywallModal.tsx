@@ -49,7 +49,7 @@ export default function PaywallModal({ open, onClose, email }: PaywallModalProps
     >
        <div
          style={{
-           backgroundColor: "#F5F0E8",
+           backgroundColor: "var(--bg-cream)",
            borderRadius: "4px",
            padding: "2.5rem 2rem",
            maxWidth: "380px",
@@ -67,7 +67,7 @@ export default function PaywallModal({ open, onClose, email }: PaywallModalProps
              right: "12px",
              background: "none",
              border: "none",
-             color: "#9C9488",
+             color: "var(--text-muted)",
              fontSize: "14px",
              cursor: "pointer",
              padding: "4px",
@@ -81,7 +81,7 @@ export default function PaywallModal({ open, onClose, email }: PaywallModalProps
            style={{
              fontFamily: "var(--font-playfair-display), serif",
              fontSize: "1.5rem",
-             color: "#2C2418",
+             color: "var(--text-primary)",
              margin: "0 0 0.75rem",
              fontWeight: 600,
            }}
@@ -93,12 +93,12 @@ export default function PaywallModal({ open, onClose, email }: PaywallModalProps
            style={{
              fontFamily: "var(--font-inter-var), sans-serif",
              fontSize: "0.875rem",
-             color: "#7A7469",
+             color: "var(--text-secondary)",
              margin: "0 0 1.75rem",
              lineHeight: 1.5,
            }}
          >
-           unlock daily timing for $6.99/month. cancel anytime.
+           keep your signal going for $6.99/month. cancel anytime.
          </p>
 
          {error && (
@@ -134,7 +134,7 @@ export default function PaywallModal({ open, onClose, email }: PaywallModalProps
             transition: "opacity 0.2s ease",
           }}
         >
-          {loading ? "redirecting..." : "unlock kaal →"}
+          {loading ? "redirecting..." : "continue →"}
         </button>
 
         <p
@@ -147,7 +147,7 @@ export default function PaywallModal({ open, onClose, email }: PaywallModalProps
             href="/pricing"
             onClick={onClose}
             style={{
-              color: "#9C9488",
+              color: "var(--text-muted)",
               fontFamily: "var(--font-inter-var), sans-serif",
               fontSize: "0.75rem",
               textDecoration: "underline",

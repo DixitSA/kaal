@@ -23,7 +23,7 @@ export default function Footer() {
         fontFamily: "var(--font-playfair-display)",
         fontSize: "0.9rem",
         fontStyle: "italic",
-        color: "#2C2418",
+        color: "var(--text-primary)",
         marginBottom: "6px",
         opacity: 0.7,
       }}>
@@ -33,11 +33,11 @@ export default function Footer() {
         fontFamily: "var(--font-inter-var), sans-serif",
         fontStyle: "italic",
         fontSize: "11px",
-        color: "#9C9488",
+        color: "var(--text-muted)",
         letterSpacing: "0.04em",
         margin: "0 0 1.5rem",
       }}>
-        built on vedic timing systems. © 2026 Kaal Astrology
+        built on vedic timing systems. © 2026 Kaal
       </p>
       <nav
         aria-label="Site navigation"
@@ -61,7 +61,7 @@ export default function Footer() {
                 textDecoration: "none",
                 transition: "color 0.15s ease",
               }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = "#2C2418")}
+              onMouseEnter={(e) => (e.currentTarget.style.color = "var(--text-primary)")}
               onMouseLeave={(e) => (e.currentTarget.style.color = "var(--kaal-footer-text)")}
             >
               {link.label}
