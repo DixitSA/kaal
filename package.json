@@ -10,7 +10,8 @@
     "test": "vitest",
     "test:run": "vitest run",
     "build:app": "next build && npx cap sync ios",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "lint": "eslint ."
   },
   "dependencies": {
     "@capacitor/cli": "^8.3.1",
@@ -39,6 +40,9 @@
     "@types/react-dom": "^19.0.4",
     "@types/stripe": "^8.0.416",
     "@vitest/coverage-v8": "^2.1.8",
+    "eslint": "^9.39.4",
+    "eslint-config-next": "^15.5.20",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
     "prisma": "^5.22.0",
     "typescript": "^5.8.2",
     "vitest": "^2.1.8"
