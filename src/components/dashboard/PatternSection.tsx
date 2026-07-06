@@ -210,6 +210,7 @@ export default function PatternSection() {
 
   return (
     <motion.section initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-60px" }}>
+      <h2 style={{ position: "absolute", width: "1px", height: "1px", padding: 0, margin: "-1px", overflow: "hidden", clip: "rect(0,0,0,0)", whiteSpace: "nowrap", border: 0 }}>Card</h2>
 
       {/* Flip card — full container width, landscape */}
       <motion.div variants={childAnim(0)}>
