@@ -122,7 +122,7 @@ function DashboardContent() {
             <span style={{ fontFamily: "var(--font-playfair-display)", fontSize: "1.1rem", fontWeight: 600, color: "var(--text-primary)" }}>Kaal</span>
           </Link>
           {/* Desktop nav — absolutely centered */}
-          <nav className="dash-nav" aria-label="Page sections" aria-hidden="true">
+          <nav className="dash-nav" aria-label="Page sections">
            {NAV_LINKS.map((link) => (
             <a key={link.href} href={link.href} style={{ fontFamily: "var(--font-playfair-display)", fontSize: "clamp(10px, 2vw, 12px)", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.08em", textDecoration: "none", whiteSpace: "nowrap", transition: "color 0.2s ease" }}
               aria-label={link.label}
@@ -134,7 +134,7 @@ function DashboardContent() {
           <SettingsDropdown />
         </div>
          {/* Row 2: Mobile nav — second row below logo/settings */}
-          <nav className="dash-nav-mobile" aria-label="Page sections" aria-hidden="true">
+          <nav className="dash-nav-mobile" aria-label="Page sections">
           {NAV_LINKS.map((link) => (
             <a key={link.href} href={link.href} style={{ fontFamily: "var(--font-playfair-display)", fontSize: "9px", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.12em", textDecoration: "none", whiteSpace: "nowrap", transition: "color 0.2s ease", padding: "8px 12px" }}
               aria-label={link.label}
