@@ -18,3 +18,6 @@ dist/
 .graphify_detect.json
 graphify-out/
 cost_tracker.py
+
+.vercel
+.data/

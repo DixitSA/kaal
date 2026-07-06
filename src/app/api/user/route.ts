@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getUserByEmail, createUser } from "@/lib/db";
 import { stripe } from "@/lib/stripe";
+import { SESSION_COOKIE, signSession, sessionMatchesEmail } from "@/lib/session";
 
 export async function GET(req: NextRequest) {
   const email = req.nextUrl.searchParams.get("email");
@@ -8,7 +9,12 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Email query param required" }, { status: 400 });
   }
 
-  const user = getUserByEmail(email);
+  const sessionCookie = req.cookies.get(SESSION_COOKIE)?.value;
+  if (!sessionMatchesEmail(sessionCookie, email)) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const user = await getUserByEmail(email);
   if (!user) {
     return NextResponse.json({ error: "User not found" }, { status: 404 });
   }
@@ -23,16 +29,29 @@ export async function POST(req: NextRequest) {
   } catch {
     return NextResponse.json({ error: "Request body must be valid JSON" }, { status: 400 });
   }
-  const { email, name, dob, timeOfBirth, placeOfBirth } = body as { email?: string; name?: string; dob?: string; timeOfBirth?: string; placeOfBirth?: string };
+  const { email, name, dob, timeOfBirth, unknownTime, placeOfBirth, latitude, longitude, timezone } = body as {
+    email?: string;
+    name?: string;
+    dob?: string;
+    timeOfBirth?: string;
+    unknownTime?: boolean;
+    placeOfBirth?: string;
+    latitude?: number | string;
+    longitude?: number | string;
+    timezone?: string;
+  };
 
   if (!email || typeof email !== "string" || !email.includes("@")) {
     return NextResponse.json({ error: "Valid email required" }, { status: 400 });
   }
 
-  let user = getUserByEmail(email);
+  let user = await getUserByEmail(email);
   if (user) {
     return NextResponse.json({ error: "User already exists" }, { status: 409 });
   }
+
+  const parsedLat = latitude !== undefined ? Number(latitude) : undefined;
+  const parsedLng = longitude !== undefined ? Number(longitude) : undefined;
 
   try {
     const customer = await stripe.customers.create({
@@ -40,16 +59,28 @@ export async function POST(req: NextRequest) {
       name: name || undefined,
     });
 
-    user = createUser({
+    user = await createUser({
       email,
       name,
       dob,
       timeOfBirth,
+      unknownTime,
       placeOfBirth,
+      latitude: Number.isFinite(parsedLat) ? parsedLat : undefined,
+      longitude: Number.isFinite(parsedLng) ? parsedLng : undefined,
+      timezone,
       stripeCustomerId: customer.id,
     });
 
-    return NextResponse.json(user);
+    const response = NextResponse.json(user);
+    response.cookies.set(SESSION_COOKIE, signSession(email), {
+      httpOnly: true,
+      secure: true,
+      sameSite: "lax",
+      path: "/",
+      maxAge: 60 * 60 * 24 * 365,
+    });
+    return response;
   } catch (err) {
     console.error("[user] POST error:", err);
     return NextResponse.json({ error: "Failed to create user" }, { status: 500 });

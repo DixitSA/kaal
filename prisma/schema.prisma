@@ -11,6 +11,13 @@ model User {
   id                 String   @id @default(cuid())
   email              String   @unique
   name               String?
+  dob                String?
+  timeOfBirth        String?
+  unknownTime        Boolean  @default(false)
+  placeOfBirth       String?
+  latitude           Float?
+  longitude          Float?
+  timezone           String?
   stripeCustomerId   String?  @unique
   subscriptionId     String?  @unique
   subscriptionStatus String   @default("free")

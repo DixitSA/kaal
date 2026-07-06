@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, Suspense } from "react";
+import { useEffect, useRef, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useUser } from "@/context/UserContext";
@@ -50,7 +50,7 @@ const FOOTER_LINKS = [
 
 function DashboardContent() {
   const router = useRouter();
-  const { userData, computedData, isLoading, isFreeTrialExpired, daysOnFree } = useUser();
+  const { userData, computedData, isLoading, isFreeTrialExpired, daysOnFree, patchUserData } = useUser();
   const { isProUser, daysRemaining } = useSubscription();
   const [contemplation, setContemplation] = useState<Contemplation | null>(null);
   const [clientDate, setClientDate] = useState("");
@@ -59,6 +59,7 @@ function DashboardContent() {
   const [lockedSection, setLockedSection] = useState<"decision" | null>(null);
   const [showUpgradeSuccess, setShowUpgradeSuccess] = useState(false);
   const searchParams = useSearchParams();
+  const pendingUpgradeRefreshRef = useRef(false);
 
   useEffect(() => {
     setHasMounted(true);
@@ -68,11 +69,25 @@ function DashboardContent() {
 
   useEffect(() => {
     if (searchParams.get("upgraded") === "true") {
+      pendingUpgradeRefreshRef.current = true;
       setShowUpgradeSuccess(true);
       router.replace("/dashboard");
       setTimeout(() => setShowUpgradeSuccess(false), 4000);
     }
-  }, [searchParams]);
+  }, [searchParams, router]);
+
+  useEffect(() => {
+    if (!pendingUpgradeRefreshRef.current) return;
+    if (isLoading || !userData?.email) return;
+    pendingUpgradeRefreshRef.current = false;
+
+    fetch(`/api/user?email=${encodeURIComponent(userData.email)}`)
+      .then((res) => (res.ok ? res.json() : null))
+      .then((freshUser) => {
+        if (freshUser) patchUserData(freshUser);
+      })
+      .catch((err) => console.error("[dashboard] failed to refresh subscription status:", err));
+  }, [isLoading, userData, patchUserData]);
 
   useEffect(() => {
     if (!hasMounted) return;

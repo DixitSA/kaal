@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe";
+import { SESSION_COOKIE, signSession } from "@/lib/session";
 
 export async function POST(req: NextRequest) {
   let body: Record<string, unknown>;
@@ -36,7 +37,15 @@ export async function POST(req: NextRequest) {
       cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}/dashboard`,
     });
 
-    return NextResponse.json({ url: session.url });
+    const response = NextResponse.json({ url: session.url });
+    response.cookies.set(SESSION_COOKIE, signSession(normalizedEmail), {
+      httpOnly: true,
+      secure: true,
+      sameSite: "lax",
+      path: "/",
+      maxAge: 60 * 60 * 24 * 365,
+    });
+    return response;
   } catch (err) {
     console.error("[checkout] error:", err);
     return NextResponse.json({ error: "Failed to create checkout session" }, { status: 500 });

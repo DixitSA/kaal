@@ -229,20 +229,22 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
     }
     setIsSubmitting(true);
     // Create user in DB
+    const clientCollectedData = { email, name, dob: toISODate(dob), timeOfBirth, unknownTime, placeOfBirth, timezone, latitude, longitude } as any;
     try {
       const res = await fetch("/api/user", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, name, dob: toISODate(dob), timeOfBirth, placeOfBirth }),
+        body: JSON.stringify({ email, name, dob: toISODate(dob), timeOfBirth, unknownTime, placeOfBirth, latitude, longitude, timezone }),
       });
       if (res.ok) {
         const userFromDb = await res.json();
-        setUserData(userFromDb);
+        // Merge: never let a DB round-trip silently drop fields the form already collected.
+        setUserData({ ...clientCollectedData, ...userFromDb });
       } else {
-        setUserData({ email, name, dob: toISODate(dob), timeOfBirth, unknownTime, placeOfBirth, timezone, latitude, longitude } as any);
+        setUserData(clientCollectedData);
       }
     } catch {
-      setUserData({ email, name, dob: toISODate(dob), timeOfBirth, unknownTime, placeOfBirth, timezone, latitude, longitude } as any);
+      setUserData(clientCollectedData);
     }
     router.push("/loading-screen");
   }

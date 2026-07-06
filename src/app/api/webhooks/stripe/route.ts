@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe";
-import { getUserByEmail, updateUser } from "@/lib/db";
+import { updateUser } from "@/lib/db";
 
 export async function POST(req: NextRequest) {
   const body = await req.text();
@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
           const customer = await stripe.customers.retrieve(session.customer as string);
           if (customer.deleted) break;
           if (customer.email) {
-            updateUser(customer.email, {
+            await updateUser(customer.email, {
               subscriptionStatus: "pro",
               subscriptionId: session.subscription as string,
             });
@@ -54,7 +54,7 @@ export async function POST(req: NextRequest) {
         const customer = await stripe.customers.retrieve(subscription.customer as string);
         if (customer.deleted) break;
         if (customer.email) {
-          updateUser(customer.email, {
+          await updateUser(customer.email, {
             subscriptionStatus: statusMap[subscription.status] || "free",
             subscriptionId: subscription.id,
           });
@@ -71,7 +71,7 @@ export async function POST(req: NextRequest) {
         const customer = await stripe.customers.retrieve(subscription.customer as string);
         if (customer.deleted) break;
         if (customer.email) {
-          updateUser(customer.email, {
+          await updateUser(customer.email, {
             subscriptionStatus: "free",
             subscriptionId: undefined,
           });

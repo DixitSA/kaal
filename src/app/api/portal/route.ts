@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe";
+import { SESSION_COOKIE, sessionMatchesEmail } from "@/lib/session";
 
 export async function POST(req: NextRequest) {
   let body: Record<string, unknown>;
@@ -15,6 +16,11 @@ export async function POST(req: NextRequest) {
   }
 
   const normalizedEmail = email.toLowerCase().trim();
+
+  const sessionCookie = req.cookies.get(SESSION_COOKIE)?.value;
+  if (!sessionMatchesEmail(sessionCookie, normalizedEmail)) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
 
   try {
     // Look up the Stripe customer by email — no local DB dependency

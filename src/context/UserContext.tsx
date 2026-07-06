@@ -14,6 +14,7 @@ interface UserContextType {
   userData: UserData | null;
   computedData: KaalSnapshot | null;
   setUserData: (data: UserData | KaalIntake) => void;
+  patchUserData: (patch: Partial<UserData>) => void;
   setComputedData: (data: KaalSnapshot) => void;
   clearUserData: () => void;
   isLoading: boolean;
@@ -74,6 +75,15 @@ export function UserProvider({ children }: { children: ReactNode }) {
     localStorage.removeItem(SNAPSHOT_STORAGE_KEY);
   }
 
+  function patchUserData(patch: Partial<UserData>) {
+    setUserDataState((prev) => {
+      if (!prev) return prev;
+      const updated = { ...prev, ...patch };
+      localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(updated));
+      return updated;
+    });
+  }
+
   function setComputedData(data: KaalSnapshot) {
     setComputedDataState(data);
     localStorage.setItem(SNAPSHOT_STORAGE_KEY, JSON.stringify(data));
@@ -93,6 +103,7 @@ export function UserProvider({ children }: { children: ReactNode }) {
         userData,
         computedData,
         setUserData,
+        patchUserData,
         setComputedData,
         clearUserData,
         isLoading,
