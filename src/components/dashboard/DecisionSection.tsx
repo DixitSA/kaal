@@ -63,6 +63,7 @@ export default function DecisionSection({ locked = false, onUpgrade }: DecisionS
 
   return (
     <section style={{ paddingTop: "24px" }}>
+      <h2 style={{ position: "absolute", width: "1px", height: "1px", padding: 0, margin: "-1px", overflow: "hidden", clip: "rect(0,0,0,0)", whiteSpace: "nowrap", border: 0 }}>Decision</h2>
       {/* Single-row nav: 'decision' label + category tabs on one scrollable rail */}
       <motion.div
         initial="hidden"
@@ -94,8 +95,8 @@ export default function DecisionSection({ locked = false, onUpgrade }: DecisionS
               position: "relative",
               background: "none",
               border: "none",
-              padding: "8px 0",
-              marginRight: "20px",
+              padding: "8px 12px",
+              marginRight: "8px",
               marginBottom: "-1px",
               cursor: "pointer",
               whiteSpace: "nowrap",
@@ -105,8 +106,8 @@ export default function DecisionSection({ locked = false, onUpgrade }: DecisionS
             <span style={{
               fontFamily: "var(--font-inter-var)",
               fontSize: "11px",
-              color: active === category ? "var(--accent-terracotta)" : "var(--text-tertiary)",
-              opacity: active === category ? 1 : 0.4,
+              color: active === category ? "var(--accent-terracotta)" : "var(--text-secondary)",
+              opacity: 1,
               textTransform: "lowercase",
               letterSpacing: "0.04em",
               fontWeight: 400,
