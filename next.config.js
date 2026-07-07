@@ -1,5 +1,12 @@
 const nextConfig = {
   outputFileTracingRoot: process.cwd(),
+  // ESLint was just added to this project (previously had no lint config at all).
+  // The existing codebase has real pre-existing lint findings that would otherwise
+  // fail every production build. Run `npm run lint` explicitly to see them; don't
+  // let a first-ever lint pass block deploys until they're triaged and fixed.
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
   webpack: (config, { isServer }) => {
     config.module.exprContextCritical = false;
     
