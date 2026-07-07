@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type CSSProperties, type FocusEvent, type FormEvent } from "react";
+import { useEffect, useState, type CSSProperties, type FocusEvent, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { motion, Variants } from "framer-motion";
 import { useUser } from "@/context/UserContext";
@@ -71,6 +71,24 @@ export default function LoginForm({ fieldVariants = defaultVariants, shouldReduc
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [linkSent, setLinkSent] = useState(false);
+  const [isResending, setIsResending] = useState(false);
+  const [resendCooldown, setResendCooldown] = useState(0);
+
+  useEffect(() => {
+    if (resendCooldown <= 0) return;
+    const timer = window.setInterval(() => {
+      setResendCooldown((s) => Math.max(0, s - 1));
+    }, 1000);
+    return () => window.clearInterval(timer);
+  }, [resendCooldown]);
+
+  async function requestMagicLink(targetEmail: string) {
+    await fetch("/api/auth/request-link", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: targetEmail }),
+    });
+  }
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
@@ -91,12 +109,9 @@ export default function LoginForm({ fieldVariants = defaultVariants, shouldReduc
       if (res.status === 401) {
         // This browser doesn't hold a valid session for that email — send a
         // magic link so they can log in from here instead of a dead end.
-        await fetch("/api/auth/request-link", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email: email.trim() }),
-        });
+        await requestMagicLink(email.trim());
         setLinkSent(true);
+        setResendCooldown(30);
       } else if (res.status === 404) {
         setError("no reading found for that email. create one below.");
       } else {
@@ -109,18 +124,59 @@ export default function LoginForm({ fieldVariants = defaultVariants, shouldReduc
     }
   }
 
+  async function handleResend() {
+    if (isResending || resendCooldown > 0) return;
+    setIsResending(true);
+    try {
+      await requestMagicLink(email.trim());
+      setResendCooldown(30);
+    } finally {
+      setIsResending(false);
+    }
+  }
+
   const vars = shouldReduce ? reducedVariants : fieldVariants;
   const errStyle: CSSProperties = { color: TERRACOTTA, fontSize: "10px", marginTop: "4px", fontFamily: "var(--font-inter-var)", letterSpacing: "0.02em", lineHeight: 1.6 };
 
   if (linkSent) {
+    const resendLabel = isResending
+      ? "sending…"
+      : resendCooldown > 0
+        ? `resend link (${resendCooldown}s)`
+        : "resend link";
+
     return (
       <div className="birth-form-card landing-form" style={{ width: "100%", maxWidth: "500px", margin: "0 auto", textAlign: "center" }}>
         <p style={{ fontFamily: "var(--font-playfair-display), serif", fontSize: "1.25rem", color: "var(--text-primary)", marginBottom: "12px" }}>
           check your email
         </p>
-        <p style={{ fontFamily: "var(--font-inter-var), sans-serif", fontSize: "13px", color: "var(--text-secondary)", lineHeight: 1.7 }}>
+        <p style={{ fontFamily: "var(--font-inter-var), sans-serif", fontSize: "13px", color: "var(--text-secondary)", lineHeight: 1.7, marginBottom: "20px" }}>
           we sent a sign-in link to {email}. open it on this device to log in.
         </p>
+        <button
+          type="button"
+          onClick={handleResend}
+          disabled={isResending || resendCooldown > 0}
+          style={{
+            background: "none",
+            border: "none",
+            fontFamily: "var(--font-inter-var)",
+            fontSize: "11px",
+            color: resendCooldown > 0 || isResending ? "var(--text-muted)" : "var(--text-secondary)",
+            textTransform: "uppercase",
+            letterSpacing: "0.14em",
+            textDecoration: "none",
+            borderBottom: resendCooldown > 0 || isResending ? "1px solid transparent" : "1px solid rgba(122,116,105,0.3)",
+            paddingBottom: "3px",
+            cursor: isResending || resendCooldown > 0 ? "default" : "pointer",
+            minHeight: "44px",
+            transition: "color 0.15s ease",
+          }}
+          onMouseEnter={(e) => { if (!isResending && resendCooldown === 0) e.currentTarget.style.color = "var(--text-primary)"; }}
+          onMouseLeave={(e) => { if (!isResending && resendCooldown === 0) e.currentTarget.style.color = "var(--text-secondary)"; }}
+        >
+          {resendLabel}
+        </button>
       </div>
     );
   }
