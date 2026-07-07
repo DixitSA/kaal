@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getUserByEmail, createUser } from "@/lib/db";
+import { getUserByEmail, createUser, updateUser } from "@/lib/db";
 import { stripe } from "@/lib/stripe";
 import { SESSION_COOKIE, signSession, sessionMatchesEmail } from "@/lib/session";
 
@@ -45,13 +45,41 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Valid email required" }, { status: 400 });
   }
 
-  let user = await getUserByEmail(email);
-  if (user) {
-    return NextResponse.json({ error: "User already exists" }, { status: 409 });
-  }
-
   const parsedLat = latitude !== undefined ? Number(latitude) : undefined;
   const parsedLng = longitude !== undefined ? Number(longitude) : undefined;
+
+  let user = await getUserByEmail(email);
+  if (user) {
+    // Same-device resume: if this browser already holds a valid session for this
+    // email (set on original signup/checkout), refresh their intake fields and let
+    // them back in without losing their subscription. A bare email with no matching
+    // cookie is not proof of ownership, so that case is left as a 409 (unchanged).
+    const sessionCookie = req.cookies.get(SESSION_COOKIE)?.value;
+    if (!sessionMatchesEmail(sessionCookie, email)) {
+      return NextResponse.json({ error: "User already exists" }, { status: 409 });
+    }
+
+    user = await updateUser(email, {
+      name,
+      dob,
+      timeOfBirth,
+      unknownTime,
+      placeOfBirth,
+      latitude: Number.isFinite(parsedLat) ? parsedLat : undefined,
+      longitude: Number.isFinite(parsedLng) ? parsedLng : undefined,
+      timezone,
+    });
+
+    const response = NextResponse.json(user);
+    response.cookies.set(SESSION_COOKIE, signSession(email), {
+      httpOnly: true,
+      secure: true,
+      sameSite: "lax",
+      path: "/",
+      maxAge: 60 * 60 * 24 * 365,
+    });
+    return response;
+  }
 
   try {
     const customer = await stripe.customers.create({
