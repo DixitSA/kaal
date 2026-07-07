@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe";
 import { SESSION_COOKIE, sessionMatchesEmail } from "@/lib/session";
+import { getUserByEmail } from "@/lib/db";
+import { mutationLimiter, checkRateLimit, clientIp } from "@/lib/rateLimit";
 
 export async function POST(req: NextRequest) {
   let body: Record<string, unknown>;
@@ -17,25 +19,27 @@ export async function POST(req: NextRequest) {
 
   const normalizedEmail = email.toLowerCase().trim();
 
+  const allowed = await checkRateLimit(mutationLimiter, `portal:${clientIp(req)}`);
+  if (!allowed) {
+    return NextResponse.json({ error: "Too many requests. Please try again later." }, { status: 429 });
+  }
+
   const sessionCookie = req.cookies.get(SESSION_COOKIE)?.value;
   if (!sessionMatchesEmail(sessionCookie, normalizedEmail)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+  const user = await getUserByEmail(normalizedEmail);
+  if (!user?.stripeCustomerId) {
+    return NextResponse.json(
+      { error: "No Stripe customer found for this email. Subscribe first." },
+      { status: 404 }
+    );
+  }
+
   try {
-    // Look up the Stripe customer by email — no local DB dependency
-    const existing = await stripe.customers.list({ email: normalizedEmail, limit: 1 });
-    const customer = existing.data[0];
-
-    if (!customer) {
-      return NextResponse.json(
-        { error: "No Stripe customer found for this email. Subscribe first." },
-        { status: 404 }
-      );
-    }
-
     const session = await stripe.billingPortal.sessions.create({
-      customer: customer.id,
+      customer: user.stripeCustomerId,
       return_url: `${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}/dashboard`,
     });
 

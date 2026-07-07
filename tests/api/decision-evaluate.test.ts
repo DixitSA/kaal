@@ -1,4 +1,22 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
+
+vi.mock("@/lib/session", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("@/lib/session")>();
+  return { ...actual, verifySession: () => "demo@example.com" };
+});
+
+vi.mock("@/lib/db", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("@/lib/db")>();
+  return {
+    ...actual,
+    getUserByEmail: async () =>
+      ({
+        id: "demo-user",
+        subscriptionStatus: "pro",
+        trialStartDate: new Date()
+      }) as Awaited<ReturnType<typeof actual.getUserByEmail>>
+  };
+});
 
 import { POST as evaluateDecision } from "@/app/api/decision/evaluate/route";
 import { astrologyAdapter } from "@/lib/astro/adapter";

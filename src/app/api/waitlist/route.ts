@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { LoopsClient } from "loops";
+import { mutationLimiter, checkRateLimit, clientIp } from "@/lib/rateLimit";
 
 export async function POST(req: NextRequest) {
   let parsedBody: Record<string, unknown>;
@@ -12,6 +13,11 @@ export async function POST(req: NextRequest) {
 
   if (!email || typeof email !== "string" || !email.includes("@")) {
     return NextResponse.json({ error: "Invalid email" }, { status: 400 });
+  }
+
+  const allowed = await checkRateLimit(mutationLimiter, `waitlist:${clientIp(req)}`);
+  if (!allowed) {
+    return NextResponse.json({ error: "Too many requests. Please try again later." }, { status: 429 });
   }
 
   const trimmed = email.trim().toLowerCase();

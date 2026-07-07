@@ -3,8 +3,14 @@ import { generatePhaseProfile } from "@/lib/engine/phaseEngine";
 import { parseJsonRequest, successResponse, errorResponse } from "@/lib/api/routeHelpers";
 import { profileGenerateRequestSchema } from "@/lib/schemas/input";
 import { profileResponseSchema } from "@/lib/schemas/output";
+import { computeLimiter, checkRateLimit, clientIp } from "@/lib/rateLimit";
 
 export async function POST(request: Request): Promise<Response> {
+  const allowed = await checkRateLimit(computeLimiter, `profile-generate:${clientIp(request)}`);
+  if (!allowed) {
+    return errorResponse("RATE_LIMITED", 429, "Too many requests. Please try again later.");
+  }
+
   const parsedRequest = await parseJsonRequest(request, profileGenerateRequestSchema, {
     invalidJsonDetail: "The profile route accepts a JSON object.",
     validationMessage: "Profile input did not match the shared profile request schema."

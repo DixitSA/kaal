@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe";
-import { updateUser } from "@/lib/db";
+import { updateUserByStripeCustomerId } from "@/lib/db";
 
 export async function POST(req: NextRequest) {
   const body = await req.text();
@@ -18,70 +18,55 @@ export async function POST(req: NextRequest) {
   try {
     const event = stripe.webhooks.constructEvent(body, signature, webhookSecret);
 
-  switch (event.type) {
-    case "checkout.session.completed": {
-      const session = event.data.object as { customer?: string; subscription?: string };
-      if (session.customer && session.subscription) {
-        try {
-          const customer = await stripe.customers.retrieve(session.customer as string);
-          if (customer.deleted) break;
-          if (customer.email) {
-            await updateUser(customer.email, {
-              subscriptionStatus: "pro",
-              subscriptionId: session.subscription as string,
-            });
+    switch (event.type) {
+      case "checkout.session.completed": {
+        const session = event.data.object as { customer?: string; subscription?: string };
+        if (session.customer && session.subscription) {
+          const updated = await updateUserByStripeCustomerId(session.customer, {
+            subscriptionStatus: "pro",
+            subscriptionId: session.subscription,
+          });
+          if (!updated) {
+            console.error("[webhook] checkout.session.completed: no local user for customer", session.customer);
           }
-        } catch (err) {
-          console.error("[webhook] customer.retrieve failed:", err);
         }
+        break;
       }
-      break;
-    }
 
-    case "customer.subscription.updated": {
-      const subscription = event.data.object as {
-        customer: string;
-        status: string;
-        id: string;
-      };
-      const statusMap: Record<string, "free" | "pro"> = {
-        active: "pro",
-        past_due: "pro",
-        canceled: "free",
-        unpaid: "free",
-      };
-      try {
-        const customer = await stripe.customers.retrieve(subscription.customer as string);
-        if (customer.deleted) break;
-        if (customer.email) {
-          await updateUser(customer.email, {
-            subscriptionStatus: statusMap[subscription.status] || "free",
-            subscriptionId: subscription.id,
-          });
+      case "customer.subscription.updated": {
+        const subscription = event.data.object as {
+          customer: string;
+          status: string;
+          id: string;
+        };
+        const statusMap: Record<string, "free" | "pro"> = {
+          active: "pro",
+          past_due: "pro",
+          canceled: "free",
+          unpaid: "free",
+        };
+        const updated = await updateUserByStripeCustomerId(subscription.customer, {
+          subscriptionStatus: statusMap[subscription.status] || "free",
+          subscriptionId: subscription.id,
+        });
+        if (!updated) {
+          console.error("[webhook] customer.subscription.updated: no local user for customer", subscription.customer);
         }
-      } catch (err) {
-        console.error("[webhook] customer.retrieve failed:", err);
+        break;
       }
-      break;
-    }
 
-    case "customer.subscription.deleted": {
-      const subscription = event.data.object as { customer: string; id: string };
-      try {
-        const customer = await stripe.customers.retrieve(subscription.customer as string);
-        if (customer.deleted) break;
-        if (customer.email) {
-          await updateUser(customer.email, {
-            subscriptionStatus: "free",
-            subscriptionId: undefined,
-          });
+      case "customer.subscription.deleted": {
+        const subscription = event.data.object as { customer: string; id: string };
+        const updated = await updateUserByStripeCustomerId(subscription.customer, {
+          subscriptionStatus: "free",
+          subscriptionId: undefined,
+        });
+        if (!updated) {
+          console.error("[webhook] customer.subscription.deleted: no local user for customer", subscription.customer);
         }
-      } catch (err) {
-        console.error("[webhook] customer.retrieve failed:", err);
+        break;
       }
-      break;
     }
-  }
 
     return NextResponse.json({ received: true });
   } catch (err) {

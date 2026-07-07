@@ -73,3 +73,23 @@ export async function updateUser(
     return undefined;
   }
 }
+
+export async function getUserByStripeCustomerId(stripeCustomerId: string): Promise<User | undefined> {
+  const user = await prisma.user.findUnique({ where: { stripeCustomerId } });
+  return (user as User) ?? undefined;
+}
+
+export async function updateUserByStripeCustomerId(
+  stripeCustomerId: string,
+  updates: Partial<User>
+): Promise<User | undefined> {
+  try {
+    const user = await prisma.user.update({
+      where: { stripeCustomerId },
+      data: updates,
+    });
+    return user as User;
+  } catch {
+    return undefined;
+  }
+}

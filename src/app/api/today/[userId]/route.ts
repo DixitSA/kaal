@@ -1,9 +1,11 @@
 import { TODAY_PLACEHOLDER_MODE } from "@/lib/astro/constants";
 import { generateStatelessDailyState } from "@/lib/engine/dailyEngine";
-import { successResponse, validationError, errorResponse } from "@/lib/api/routeHelpers";
+import { successResponse, validationError, errorResponse, unauthorizedResponse } from "@/lib/api/routeHelpers";
 import { todayPathParamsSchema } from "@/lib/schemas/input";
 import { todayResponseSchema } from "@/lib/schemas/output";
 import { toUtcMidnightIso } from "@/lib/utils/dates";
+import { SESSION_COOKIE, verifySession } from "@/lib/session";
+import { getUserByEmail } from "@/lib/db";
 
 type TodayRouteContext = {
   params: Promise<{ userId: string }>;
@@ -31,7 +33,7 @@ function buildTodayPlaceholderData(userId: string, now: Date): {
   };
 }
 
-export async function GET(_request: Request, context: TodayRouteContext): Promise<Response> {
+export async function GET(request: Request, context: TodayRouteContext): Promise<Response> {
   const parsedParams = todayPathParamsSchema.safeParse(await context.params);
   if (!parsedParams.success) {
     return validationError(
@@ -41,6 +43,25 @@ export async function GET(_request: Request, context: TodayRouteContext): Promis
   }
 
   const { userId } = parsedParams.data;
+
+  // Stateless today, but this path takes an arbitrary userId — guard ownership
+  // now so this can't become an IDOR the moment real per-user data lands here.
+  const cookieHeader = request.headers.get("cookie") ?? "";
+  const sessionCookie = cookieHeader
+    .split(";")
+    .map((part) => part.trim())
+    .find((part) => part.startsWith(`${SESSION_COOKIE}=`))
+    ?.slice(SESSION_COOKIE.length + 1);
+
+  const email = verifySession(sessionCookie);
+  if (!email) {
+    return unauthorizedResponse("Sign in to view today's state.");
+  }
+
+  const user = await getUserByEmail(email);
+  if (!user || user.id !== userId) {
+    return unauthorizedResponse("You don't have access to this user's daily state.");
+  }
 
   // This route is intentionally stateless in v1 and normalizes against UTC day boundaries
   // so the placeholder contract remains reproducible across machines. Any future persistence

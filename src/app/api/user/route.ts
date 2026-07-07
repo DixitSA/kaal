@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getUserByEmail, createUser, updateUser } from "@/lib/db";
 import { stripe } from "@/lib/stripe";
-import { SESSION_COOKIE, signSession, sessionMatchesEmail } from "@/lib/session";
+import { SESSION_COOKIE, sessionMatchesEmail } from "@/lib/session";
+import { mutationLimiter, checkRateLimit, clientIp } from "@/lib/rateLimit";
 
 export async function GET(req: NextRequest) {
   const email = req.nextUrl.searchParams.get("email");
@@ -45,20 +46,28 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Valid email required" }, { status: 400 });
   }
 
+  const allowed = await checkRateLimit(mutationLimiter, `user:${clientIp(req)}`);
+  if (!allowed) {
+    return NextResponse.json({ error: "Too many requests. Please try again later." }, { status: 429 });
+  }
+
+  // A bare email is not proof of ownership. Every path below — creating a brand
+  // new account or updating an existing one — requires a session already minted
+  // by /api/auth/verify (i.e. the caller clicked a magic link sent to this
+  // address). Without that, we never create or mutate a user record.
+  const sessionCookie = req.cookies.get(SESSION_COOKIE)?.value;
+  if (!sessionMatchesEmail(sessionCookie, email)) {
+    return NextResponse.json(
+      { error: "Email not verified for this browser. Request a sign-in link at /api/auth/request-link." },
+      { status: 401 }
+    );
+  }
+
   const parsedLat = latitude !== undefined ? Number(latitude) : undefined;
   const parsedLng = longitude !== undefined ? Number(longitude) : undefined;
 
   let user = await getUserByEmail(email);
   if (user) {
-    // Same-device resume: if this browser already holds a valid session for this
-    // email (set on original signup/checkout), refresh their intake fields and let
-    // them back in without losing their subscription. A bare email with no matching
-    // cookie is not proof of ownership, so that case is left as a 409 (unchanged).
-    const sessionCookie = req.cookies.get(SESSION_COOKIE)?.value;
-    if (!sessionMatchesEmail(sessionCookie, email)) {
-      return NextResponse.json({ error: "User already exists" }, { status: 409 });
-    }
-
     user = await updateUser(email, {
       name,
       dob,
@@ -70,15 +79,7 @@ export async function POST(req: NextRequest) {
       timezone,
     });
 
-    const response = NextResponse.json(user);
-    response.cookies.set(SESSION_COOKIE, signSession(email), {
-      httpOnly: true,
-      secure: true,
-      sameSite: "lax",
-      path: "/",
-      maxAge: 60 * 60 * 24 * 365,
-    });
-    return response;
+    return NextResponse.json(user);
   }
 
   try {
@@ -100,15 +101,7 @@ export async function POST(req: NextRequest) {
       stripeCustomerId: customer.id,
     });
 
-    const response = NextResponse.json(user);
-    response.cookies.set(SESSION_COOKIE, signSession(email), {
-      httpOnly: true,
-      secure: true,
-      sameSite: "lax",
-      path: "/",
-      maxAge: 60 * 60 * 24 * 365,
-    });
-    return response;
+    return NextResponse.json(user);
   } catch (err) {
     console.error("[user] POST error:", err);
     return NextResponse.json({ error: "Failed to create user" }, { status: 500 });

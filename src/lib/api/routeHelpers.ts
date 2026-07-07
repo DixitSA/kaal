@@ -7,7 +7,14 @@ interface JsonRequestMessages {
   validationMessage: string;
 }
 
-type ApiErrorCode = "VALIDATION_ERROR" | "NOT_IMPLEMENTED" | "NOT_FOUND" | "INTERNAL_ERROR";
+type ApiErrorCode =
+  | "VALIDATION_ERROR"
+  | "NOT_IMPLEMENTED"
+  | "NOT_FOUND"
+  | "INTERNAL_ERROR"
+  | "UNAUTHORIZED"
+  | "PAYWALL_REQUIRED"
+  | "RATE_LIMITED";
 
 export function errorResponse(
   code: ApiErrorCode,
@@ -30,6 +37,18 @@ export function errorResponse(
 
 export function validationError(message: string, details?: string[]): Response {
   return errorResponse("VALIDATION_ERROR", 400, message, details);
+}
+
+export function unauthorizedResponse(message = "Authentication required."): Response {
+  return errorResponse("UNAUTHORIZED", 401, message);
+}
+
+export function paywallRequiredResponse(message = "Upgrade required to access this feature."): Response {
+  return errorResponse("PAYWALL_REQUIRED", 402, message);
+}
+
+export function rateLimitedResponse(message = "Too many requests. Please try again later."): Response {
+  return errorResponse("RATE_LIMITED", 429, message);
 }
 
 export function successResponse<TSchema extends z.ZodTypeAny>(

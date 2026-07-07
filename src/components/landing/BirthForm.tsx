@@ -1,9 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type CSSProperties, type FocusEvent, type FormEvent } from "react";
-import { useRouter } from "next/navigation";
 import { motion, Variants } from "framer-motion";
-import { useUser } from "@/context/UserContext";
 import { lookupBirthPlace, type KaalIntake } from "@/lib/client/kaalApp";
 import type { LocationLookupCandidate } from "@/lib/types/api";
 
@@ -141,9 +139,6 @@ const reducedVariants: Variants = {
 };
 
 export default function BirthForm({ fieldVariants = defaultVariants, shouldReduce = false }: BirthFormProps) {
-  const router = useRouter();
-  const { setUserData } = useUser();
-
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [dob, setDob] = useState("");
@@ -161,6 +156,7 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [arrowHover, setArrowHover] = useState(false);
+  const [linkSent, setLinkSent] = useState(false);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
@@ -228,25 +224,36 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
       return;
     }
     setIsSubmitting(true);
-    // Create user in DB
     const clientCollectedData: KaalIntake & { email: string } = { email, name, dob: toISODate(dob), timeOfBirth, unknownTime, placeOfBirth, timezone, latitude, longitude };
     try {
-      const res = await fetch("/api/user", {
+      // We can't create the account yet — the email hasn't been verified. Stash
+      // the intake locally so /auth/complete can finish signup once the user
+      // clicks the link we're about to send them, then request that link.
+      localStorage.setItem("kaal-pending-intake", JSON.stringify(clientCollectedData));
+      await fetch("/api/auth/request-link", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, name, dob: toISODate(dob), timeOfBirth, unknownTime, placeOfBirth, latitude, longitude, timezone }),
+        body: JSON.stringify({ email }),
       });
-      if (res.ok) {
-        const userFromDb = await res.json();
-        // Merge: never let a DB round-trip silently drop fields the form already collected.
-        setUserData({ ...clientCollectedData, ...userFromDb });
-      } else {
-        setUserData(clientCollectedData);
-      }
+      setLinkSent(true);
     } catch {
-      setUserData(clientCollectedData);
+      setErrors({ email: "couldn't send a sign-in link. please try again." });
+    } finally {
+      setIsSubmitting(false);
     }
-    router.push("/loading-screen");
+  }
+
+  if (linkSent) {
+    return (
+      <div className="birth-form-card landing-form" style={{ width: "100%", maxWidth: "500px", margin: "0 auto", textAlign: "center" }}>
+        <p style={{ fontFamily: "var(--font-playfair-display), serif", fontSize: "1.25rem", color: "var(--text-primary)", marginBottom: "12px" }}>
+          check your email
+        </p>
+        <p style={{ fontFamily: "var(--font-inter-var), sans-serif", fontSize: "13px", color: "var(--text-secondary)", lineHeight: 1.7 }}>
+          we sent a sign-in link to {email}. open it on this device to finish your reading.
+        </p>
+      </div>
+    );
   }
 
   function onFocus(e: FocusEvent<HTMLInputElement>) {

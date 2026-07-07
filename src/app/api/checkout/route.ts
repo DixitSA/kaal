@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe";
-import { SESSION_COOKIE, signSession } from "@/lib/session";
+import { SESSION_COOKIE, sessionMatchesEmail } from "@/lib/session";
+import { getUserByEmail } from "@/lib/db";
+import { mutationLimiter, checkRateLimit, clientIp } from "@/lib/rateLimit";
 
 export async function POST(req: NextRequest) {
   let body: Record<string, unknown>;
@@ -15,37 +17,40 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Valid email required" }, { status: 400 });
   }
 
+  const normalizedEmail = email.toLowerCase().trim();
+
+  const allowed = await checkRateLimit(mutationLimiter, `checkout:${clientIp(req)}`);
+  if (!allowed) {
+    return NextResponse.json({ error: "Too many requests. Please try again later." }, { status: 429 });
+  }
+
+  // Checkout must never mint a session itself — it only ever acts on behalf of
+  // whoever already holds a valid session for this email (see /api/auth/verify).
+  const sessionCookie = req.cookies.get(SESSION_COOKIE)?.value;
+  if (!sessionMatchesEmail(sessionCookie, normalizedEmail)) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   const priceId = process.env.STRIPE_PRO_PRICE_ID;
   if (!priceId) {
     return NextResponse.json({ error: "STRIPE_PRO_PRICE_ID not configured" }, { status: 500 });
   }
 
-  const normalizedEmail = email.toLowerCase().trim();
+  const user = await getUserByEmail(normalizedEmail);
+  if (!user?.stripeCustomerId) {
+    return NextResponse.json({ error: "No account found for this email." }, { status: 404 });
+  }
 
   try {
-    // Look up or create the Stripe customer by email — no local DB dependency
-    const existing = await stripe.customers.list({ email: normalizedEmail, limit: 1 });
-    const customer =
-      existing.data[0] ??
-      (await stripe.customers.create({ email: normalizedEmail }));
-
     const session = await stripe.checkout.sessions.create({
       mode: "subscription",
-      customer: customer.id,
+      customer: user.stripeCustomerId,
       line_items: [{ price: priceId, quantity: 1 }],
       success_url: `${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}/dashboard?upgraded=true`,
       cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}/dashboard`,
     });
 
-    const response = NextResponse.json({ url: session.url });
-    response.cookies.set(SESSION_COOKIE, signSession(normalizedEmail), {
-      httpOnly: true,
-      secure: true,
-      sameSite: "lax",
-      path: "/",
-      maxAge: 60 * 60 * 24 * 365,
-    });
-    return response;
+    return NextResponse.json({ url: session.url });
   } catch (err) {
     console.error("[checkout] error:", err);
     return NextResponse.json({ error: "Failed to create checkout session" }, { status: 500 });

@@ -4,12 +4,19 @@
  * This route forwards the request to Python server-side (server-to-server = no CORS).
  */
 
+import { computeLimiter, checkRateLimit, clientIp } from "@/lib/rateLimit";
+
 const PYTHON_API_URL =
   process.env.KAAL_API_URL ?? // server-side env (no NEXT_PUBLIC_ prefix needed)
   process.env.NEXT_PUBLIC_KAAL_API_URL ??
   "http://127.0.0.1:8000";
 
 export async function POST(request: Request): Promise<Response> {
+  const allowed = await checkRateLimit(computeLimiter, `python-profile:${clientIp(request)}`);
+  if (!allowed) {
+    return Response.json({ detail: "Too many requests. Please try again later." }, { status: 429 });
+  }
+
   try {
     const body = await request.json();
 
@@ -23,10 +30,8 @@ export async function POST(request: Request): Promise<Response> {
 
       if (!pythonResponse.ok) {
         const errorDetail = await pythonResponse.text();
-        return Response.json(
-          { detail: `Python backend error: ${errorDetail}` },
-          { status: pythonResponse.status }
-        );
+        console.error("[python/profile] upstream error:", pythonResponse.status, errorDetail);
+        return Response.json({ detail: "Profile service error" }, { status: pythonResponse.status });
       }
 
       const data = await pythonResponse.json();
@@ -38,7 +43,7 @@ export async function POST(request: Request): Promise<Response> {
       throw fetchErr;
     }
   } catch (err) {
-    const message = err instanceof Error ? err.message : "Python backend unreachable";
-    return Response.json({ detail: message }, { status: 502 });
+    console.error("[python/profile] unreachable:", err);
+    return Response.json({ detail: "Profile service unreachable" }, { status: 502 });
   }
 }

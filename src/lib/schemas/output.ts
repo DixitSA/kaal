@@ -25,7 +25,15 @@ const successEnvelopeSchema = <TData extends z.ZodTypeAny>(dataSchema: TData) =>
 export const errorResponseSchema = z.object({
   ok: z.literal(false),
   error: z.object({
-    code: z.enum(["VALIDATION_ERROR", "NOT_IMPLEMENTED", "NOT_FOUND", "INTERNAL_ERROR"]),
+    code: z.enum([
+      "VALIDATION_ERROR",
+      "NOT_IMPLEMENTED",
+      "NOT_FOUND",
+      "INTERNAL_ERROR",
+      "UNAUTHORIZED",
+      "PAYWALL_REQUIRED",
+      "RATE_LIMITED"
+    ]),
     message: z.string().min(1),
     details: z.array(z.string().min(1)).optional()
   })

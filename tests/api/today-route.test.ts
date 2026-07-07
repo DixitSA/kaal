@@ -1,5 +1,18 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
+vi.mock("@/lib/session", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("@/lib/session")>();
+  return { ...actual, verifySession: () => "demo@example.com" };
+});
+
+vi.mock("@/lib/db", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("@/lib/db")>();
+  return {
+    ...actual,
+    getUserByEmail: async () => ({ id: "demo-user" }) as Awaited<ReturnType<typeof actual.getUserByEmail>>
+  };
+});
+
 import { GET as getToday } from "@/app/api/today/[userId]/route";
 import { generateStatelessDailyState } from "@/lib/engine/dailyEngine";
 import { todayResponseSchema } from "@/lib/schemas/output";

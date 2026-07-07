@@ -70,6 +70,7 @@ export default function LoginForm({ fieldVariants = defaultVariants, shouldReduc
   const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
+  const [linkSent, setLinkSent] = useState(false);
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
@@ -88,7 +89,14 @@ export default function LoginForm({ fieldVariants = defaultVariants, shouldReduc
         return;
       }
       if (res.status === 401) {
-        setError("we don't recognize this browser for that email. log in from the device you signed up on, or create a new reading below.");
+        // This browser doesn't hold a valid session for that email — send a
+        // magic link so they can log in from here instead of a dead end.
+        await fetch("/api/auth/request-link", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: email.trim() }),
+        });
+        setLinkSent(true);
       } else if (res.status === 404) {
         setError("no reading found for that email. create one below.");
       } else {
@@ -103,6 +111,19 @@ export default function LoginForm({ fieldVariants = defaultVariants, shouldReduc
 
   const vars = shouldReduce ? reducedVariants : fieldVariants;
   const errStyle: CSSProperties = { color: TERRACOTTA, fontSize: "10px", marginTop: "4px", fontFamily: "var(--font-inter-var)", letterSpacing: "0.02em", lineHeight: 1.6 };
+
+  if (linkSent) {
+    return (
+      <div className="birth-form-card landing-form" style={{ width: "100%", maxWidth: "500px", margin: "0 auto", textAlign: "center" }}>
+        <p style={{ fontFamily: "var(--font-playfair-display), serif", fontSize: "1.25rem", color: "var(--text-primary)", marginBottom: "12px" }}>
+          check your email
+        </p>
+        <p style={{ fontFamily: "var(--font-inter-var), sans-serif", fontSize: "13px", color: "var(--text-secondary)", lineHeight: 1.7 }}>
+          we sent a sign-in link to {email}. open it on this device to log in.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <form
