@@ -93,14 +93,14 @@ export default function LandingPage() {
         {/* ── Hero ── */}
         <section
           className="flex items-start sm:items-center justify-center px-6 sm:px-6 relative"
-          style={{ paddingTop: "clamp(3rem, 8vw, 5rem)", paddingBottom: "clamp(4rem, 10vw, 6rem)" }}
+          style={{ paddingTop: "clamp(3rem, 8vw, 5rem)", paddingBottom: "clamp(2rem, 5vw, 3rem)" }}
         >
           {/* Background mandala */}
           <div aria-hidden="true" style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", pointerEvents: "none", zIndex: 0, width: "200vmax", height: "200vmax", maxWidth: "900px", maxHeight: "900px" }}>
             <YantraMandala size={900} opacity={0.04} />
           </div>
 
-          <div className="w-full flex flex-col items-center" style={{ position: "relative", zIndex: 2, maxWidth: "560px" }}>
+          <div className="w-full flex flex-col items-center" style={{ position: "relative", zIndex: 2, maxWidth: "640px" }}>
             <div className="relative flex flex-col items-center w-full landing-hero-section">
               <motion.div
                 className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
@@ -189,7 +189,7 @@ export default function LandingPage() {
               animate={{ opacity: 1 }}
               transition={{ delay: HEADLINE_DELAY + 0.55, duration: 0.7, ease: EASE }}
               style={{
-                marginTop: "2.75rem",
+                marginTop: "2rem",
                 fontFamily: "var(--font-inter-var)",
                 fontSize: "10px",
                 color: "var(--text-secondary)",
@@ -211,6 +211,7 @@ export default function LandingPage() {
         <MethodologyTeaser />
         <SampleSignal />
         <PricingTeaserSection />
+        <VedicDivider />
         <FaqSection />
 
         {/* ── Sign up / log in ── */}
@@ -260,7 +261,10 @@ export default function LandingPage() {
                       background: "none",
                       border: "none",
                       cursor: "pointer",
-                      padding: "4px 2px 8px",
+                      padding: "12px 4px",
+                      minHeight: "44px",
+                      display: "inline-flex",
+                      alignItems: "center",
                       fontFamily: "var(--font-inter-var), sans-serif",
                       fontSize: "11px",
                       fontWeight: 600,

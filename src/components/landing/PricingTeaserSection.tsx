@@ -20,7 +20,7 @@ export default function PricingTeaserSection() {
       style={{ scrollMarginTop: "96px", maxWidth: "620px", margin: "0 auto", padding: "clamp(4rem, 10vw, 7rem) clamp(1.5rem, 5vw, 2rem)", textAlign: "center" }}
     >
       <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-80px" }} variants={childAnim(0)}>
-        <SectionLabel style={{ fontSize: "11px", marginBottom: "0.9rem", justifyContent: "center", display: "flex" }}>Access</SectionLabel>
+        <SectionLabel style={{ fontSize: "11px", marginBottom: "0.9rem" }}>Access</SectionLabel>
         <h2
           style={{
             fontFamily: "var(--font-playfair-display)",
@@ -31,7 +31,7 @@ export default function PricingTeaserSection() {
             margin: "0 0 1.5rem",
           }}
         >
-          three days free, then $6.99 a month.
+          three days free, then $6.99/month.
         </h2>
         <p
           style={{
@@ -56,7 +56,10 @@ export default function PricingTeaserSection() {
             textDecoration: "none",
             borderBottom: "1px solid rgba(122,116,105,0.3)",
             paddingBottom: "3px",
+            transition: "color 0.15s ease",
           }}
+          onMouseEnter={(e) => { e.currentTarget.style.color = "var(--text-primary)"; }}
+          onMouseLeave={(e) => { e.currentTarget.style.color = "var(--text-secondary)"; }}
         >
           view plan details →
         </Link>

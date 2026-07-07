@@ -25,7 +25,7 @@ export default function LandingHeader() {
         .landing-header-nav { display: flex; align-items: center; gap: clamp(1rem, 3vw, 2rem); }
         @media (max-width: 640px) {
           .landing-header-bar { padding: 0.85rem 1.25rem; }
-          .landing-header-nav a:not(:last-child) { display: none; }
+          .landing-header-nav a:not(:last-child) { display: none !important; }
         }
       `}</style>
       <div className="landing-header-bar">
@@ -56,6 +56,9 @@ export default function LandingHeader() {
                 textDecoration: "none",
                 whiteSpace: "nowrap",
                 transition: "color 0.15s ease",
+                display: "inline-flex",
+                alignItems: "center",
+                minHeight: "44px",
               }}
               onMouseEnter={(e) => { e.currentTarget.style.color = "var(--text-primary)"; }}
               onMouseLeave={(e) => { e.currentTarget.style.color = "var(--text-secondary)"; }}
@@ -76,7 +79,13 @@ export default function LandingHeader() {
               borderBottom: "1px solid var(--accent-terracotta)",
               paddingBottom: "2px",
               whiteSpace: "nowrap",
+              display: "inline-flex",
+              alignItems: "center",
+              minHeight: "44px",
+              transition: "opacity 0.15s ease",
             }}
+            onMouseEnter={(e) => { e.currentTarget.style.opacity = "0.7"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.opacity = "1"; }}
           >
             begin →
           </a>

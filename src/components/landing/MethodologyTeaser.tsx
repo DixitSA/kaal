@@ -83,7 +83,7 @@ export default function MethodologyTeaser() {
               style={{
                 fontFamily: "var(--font-quattrocento-sans), var(--font-inter-var), sans-serif",
                 fontSize: "0.85rem",
-                color: "var(--accent-decorative-gold)",
+                color: "var(--accent-gold)",
                 letterSpacing: "0.08em",
                 paddingTop: "3px",
               }}
@@ -139,7 +139,10 @@ export default function MethodologyTeaser() {
             textDecoration: "none",
             borderBottom: "1px solid rgba(122,116,105,0.3)",
             paddingBottom: "3px",
+            transition: "color 0.15s ease",
           }}
+          onMouseEnter={(e) => { e.currentTarget.style.color = "var(--text-primary)"; }}
+          onMouseLeave={(e) => { e.currentTarget.style.color = "var(--text-secondary)"; }}
         >
           read the full methodology →
         </Link>
