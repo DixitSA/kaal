@@ -4,7 +4,7 @@ import { useEffect, useRef, useState, type CSSProperties, type FocusEvent, type 
 import { useRouter } from "next/navigation";
 import { motion, Variants } from "framer-motion";
 import { useUser } from "@/context/UserContext";
-import { lookupBirthPlace } from "@/lib/client/kaalApp";
+import { lookupBirthPlace, type KaalIntake } from "@/lib/client/kaalApp";
 import type { LocationLookupCandidate } from "@/lib/types/api";
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
@@ -229,7 +229,7 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
     }
     setIsSubmitting(true);
     // Create user in DB
-    const clientCollectedData = { email, name, dob: toISODate(dob), timeOfBirth, unknownTime, placeOfBirth, timezone, latitude, longitude } as any;
+    const clientCollectedData: KaalIntake & { email: string } = { email, name, dob: toISODate(dob), timeOfBirth, unknownTime, placeOfBirth, timezone, latitude, longitude };
     try {
       const res = await fetch("/api/user", {
         method: "POST",
@@ -475,7 +475,7 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
         {lookupResults.length > 0 && (
           <div id="place-results" role="listbox" style={{ marginTop: "6px", borderRadius: "8px", overflow: "hidden", border: "1px solid rgba(122,116,105,0.12)", background: "rgba(255,255,255,0.8)" }}>
             {lookupResults.map((result) => (
-              <button key={result.id} type="button" role="option" onClick={() => applyLookupResult(result)}
+              <button key={result.id} type="button" role="option" aria-selected={false} onClick={() => applyLookupResult(result)}
                 style={{ background: "none", border: "none", borderBottom: "1px solid rgba(122,116,105,0.06)", padding: "9px 12px", textAlign: "left", cursor: "pointer", minHeight: "44px", width: "100%", display: "block" }}>
                 <span style={{ display: "block", color: "var(--text-primary)", fontFamily: "var(--font-quattrocento-sans), var(--font-inter-var), sans-serif", fontSize: "13px" }}>{result.displayName}</span>
                 <span style={{ display: "block", marginTop: "2px", color: "var(--text-muted)", fontFamily: "var(--font-inter-var)", fontSize: "10px", letterSpacing: "0.04em" }}>{result.timezone} · {result.latitude.toFixed(4)}, {result.longitude.toFixed(4)}</span>

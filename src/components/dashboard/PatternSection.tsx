@@ -453,6 +453,8 @@ export default function PatternSection() {
           }}
           onMouseOver={(e) => e.currentTarget.style.opacity = "1"}
           onMouseOut={(e) => e.currentTarget.style.opacity = "0.6"}
+          onFocus={(e) => e.currentTarget.style.opacity = "1"}
+          onBlur={(e) => e.currentTarget.style.opacity = "0.6"}
         >
           {copied ? "Link Copied" : "Copy Link"}
         </button>
@@ -474,6 +476,8 @@ export default function PatternSection() {
           }}
           onMouseOver={(e) => { if (!sharing) e.currentTarget.style.opacity = "1"; }}
           onMouseOut={(e) => { if (!sharing) e.currentTarget.style.opacity = "0.6"; }}
+          onFocus={(e) => { if (!sharing) e.currentTarget.style.opacity = "1"; }}
+          onBlur={(e) => { if (!sharing) e.currentTarget.style.opacity = "0.6"; }}
         >
           {sharing ? "Generating…" : "Share Pattern"}
         </button>

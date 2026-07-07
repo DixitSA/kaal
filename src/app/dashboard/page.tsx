@@ -165,20 +165,24 @@ function DashboardContent() {
 
         {/* Trial countdown banner */}
         {!showUpgradeSuccess && showTrialBanner && (
-          <div
+          <button
+            type="button"
             style={{
+              display: "block",
+              width: "100%",
               backgroundColor: "rgba(184,168,120,0.1)",
               fontFamily: "var(--font-inter-var), sans-serif",
               fontSize: "0.75rem",
               color: "var(--text-primary)",
               textAlign: "center",
               padding: "0.5rem 1rem",
+              border: "none",
               cursor: "pointer",
             }}
             onClick={() => setPaywallOpen(true)}
           >
              {daysRemaining} days of full access remaining. upgrade to keep your signal going →
-          </div>
+          </button>
         )}
       </div>
 
@@ -192,7 +196,7 @@ function DashboardContent() {
         {/* Contemplation */}
         {contemplation && (
           <section style={{ textAlign: "center", padding: "3rem 0 4rem", borderBottom: "1px solid rgba(122,116,105,0.15)", marginBottom: "3rem" }}>
-            <blockquote style={{ fontFamily: "var(--font-playfair-display)", fontSize: "1.5rem", fontStyle: "italic", color: "var(--text-primary)", lineHeight: 1.5, margin: "0 0 1rem" }}>"{contemplation.quote}"</blockquote>
+            <blockquote style={{ fontFamily: "var(--font-playfair-display)", fontSize: "1.5rem", fontStyle: "italic", color: "var(--text-primary)", lineHeight: 1.5, margin: "0 0 1rem" }}>&ldquo;{contemplation.quote}&rdquo;</blockquote>
              <cite style={{ fontFamily: "var(--font-inter-var)", fontSize: "12px", color: "var(--text-muted)", letterSpacing: "0.1em", textTransform: "uppercase", fontStyle: "normal" }}>{contemplation.source}</cite>
           </section>
         )}

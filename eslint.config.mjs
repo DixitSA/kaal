@@ -12,7 +12,22 @@ const compat = new FlatCompat({
 const eslintConfig = [
   ...compat.extends("next/core-web-vitals", "next/typescript", "plugin:jsx-a11y/recommended"),
   {
-    ignores: [".next/**", "node_modules/**", "kaal/**", "kaal-backend/**"],
+    ignores: [
+      ".next/**",
+      "node_modules/**",
+      "kaal/**",
+      "kaal-backend/**",
+      ".agents/**",
+      ".claude/**",
+      ".planning/**",
+      ".vercel/**",
+      ".vscode/**",
+      "next-env.d.ts",
+      "agency-agents-tmp/**",
+      "graphify-out/**",
+      "ios/**",
+      "thoughts/**",
+    ],
   },
 ];
 

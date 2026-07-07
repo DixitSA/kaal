@@ -8,33 +8,36 @@ export default function SettingsDropdown() {
   const router = useRouter();
   const { clearUserData, isProUser } = useUser();
 
-  function handleClear(e: SyntheticEvent<HTMLSpanElement>) {
+  function handleClear(e: SyntheticEvent<HTMLButtonElement>) {
     e.stopPropagation();
     clearUserData();
     router.push("/");
   }
 
-  function handleManageClick(e: SyntheticEvent<HTMLSpanElement>) {
+  function handleManageClick(e: SyntheticEvent<HTMLButtonElement>) {
     e.stopPropagation();
     router.push("/pricing");
   }
 
-  function setOpaque(e: SyntheticEvent<HTMLSpanElement>) {
+  function setOpaque(e: SyntheticEvent<HTMLButtonElement>) {
     e.currentTarget.style.opacity = "1";
   }
 
-  function setFaded(e: SyntheticEvent<HTMLSpanElement>) {
+  function setFaded(e: SyntheticEvent<HTMLButtonElement>) {
     e.currentTarget.style.opacity = "0.6";
   }
 
   return (
     <>
       {isProUser && (
-        <span
+        <button
+          type="button"
           onClick={handleManageClick}
           onMouseOver={setOpaque}
           onMouseOut={setFaded}
           style={{
+            background: "none",
+            border: "none",
             fontFamily: "var(--font-playfair-display)",
             fontSize: "11px",
             color: "var(--text-secondary)",
@@ -52,13 +55,16 @@ export default function SettingsDropdown() {
           onBlur={setFaded}
         >
           Manage subscription
-        </span>
+        </button>
       )}
-      <span
+      <button
+        type="button"
         onClick={handleClear}
         onMouseOver={setOpaque}
         onMouseOut={setFaded}
         style={{
+          background: "none",
+          border: "none",
           fontFamily: "var(--font-playfair-display)",
           fontSize: "11px",
           color: "var(--text-secondary)",
@@ -74,7 +80,7 @@ export default function SettingsDropdown() {
         onBlur={setFaded}
       >
         Clear Session
-      </span>
+      </button>
     </>
   );
 }

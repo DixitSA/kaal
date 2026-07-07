@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 
 interface PaywallModalProps {
@@ -12,6 +12,15 @@ interface PaywallModalProps {
 export default function PaywallModal({ open, onClose, email }: PaywallModalProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    if (!open) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [open, onClose]);
 
   if (!open) return null;
 
@@ -36,6 +45,7 @@ export default function PaywallModal({ open, onClose, email }: PaywallModalProps
 
   return (
     <div
+      role="presentation"
       style={{
         position: "fixed",
         inset: 0,
@@ -48,6 +58,7 @@ export default function PaywallModal({ open, onClose, email }: PaywallModalProps
       onClick={onClose}
     >
        <div
+         role="presentation"
          style={{
            backgroundColor: "var(--bg-cream)",
            borderRadius: "4px",
