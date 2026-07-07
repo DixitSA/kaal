@@ -383,11 +383,6 @@ a {
   left: 0;
 }
 
-/* ─── Ceremonial section styling ─────────────────────── */
-.ceremonial-section {
-  border: "1px solid rgba(122, 116, 105, 0.08)";
-}
-
 /* ─── Pattern card transparent background ─────────── */
 .pattern-card-flip {
   background-color: transparent !important;

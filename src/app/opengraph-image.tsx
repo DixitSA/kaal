@@ -15,14 +15,14 @@ export default async function OpengraphImage() {
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          backgroundColor: "var(--bg-cream)",
+          backgroundColor: "#F5F0E8",
           fontFamily: "Georgia, serif",
         }}
       >
         <div
           style={{
             fontSize: 96,
-            color: "var(--text-primary)",
+            color: "#2C2418",
             letterSpacing: "0.1em",
             fontWeight: 700,
           }}
@@ -33,7 +33,7 @@ export default async function OpengraphImage() {
           style={{
             marginTop: 28,
             fontSize: 30,
-            color: "var(--accent-terracotta)",
+            color: "#B5563E",
             letterSpacing: "0.04em",
           }}
         >
