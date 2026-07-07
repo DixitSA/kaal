@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion, useReducedMotion, Variants } from "framer-motion";
 import { useUser } from "@/context/UserContext";
@@ -8,6 +8,7 @@ import { needsDailyRefresh } from "@/lib/client/kaalApp";
 import YantraMandala from "@/components/svg/YantraMandala";
 import DecorativeDivider from "@/components/svg/DecorativeDivider";
 import BirthForm from "@/components/landing/BirthForm";
+import LoginForm from "@/components/landing/LoginForm";
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
@@ -23,6 +24,7 @@ export default function LandingPage() {
   const router = useRouter();
   const { userData, computedData, isLoading } = useUser();
   const shouldReduce = useReducedMotion();
+  const [mode, setMode] = useState<"signup" | "login">("signup");
 
   useEffect(() => {
     if (isLoading || !userData) return;
@@ -190,7 +192,49 @@ export default function LandingPage() {
 
         {/* Form */}
         <div style={{ width: "100%", maxWidth: "480px" }}>
-          <BirthForm fieldVariants={fieldVariants} shouldReduce={!!shouldReduce} />
+          <div
+            role="tablist"
+            aria-label="Sign up or log in"
+            style={{ display: "flex", justifyContent: "center", gap: "28px", marginBottom: "28px" }}
+          >
+            {(
+              [
+                { key: "signup", label: "new reading" },
+                { key: "login", label: "log in" },
+              ] as const
+            ).map((tab) => (
+              <button
+                key={tab.key}
+                type="button"
+                role="tab"
+                aria-selected={mode === tab.key}
+                onClick={() => setMode(tab.key)}
+                style={{
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                  padding: "4px 2px 8px",
+                  fontFamily: "var(--font-inter-var), sans-serif",
+                  fontSize: "11px",
+                  fontWeight: 600,
+                  letterSpacing: "0.15em",
+                  textTransform: "uppercase",
+                  color: mode === tab.key ? "var(--text-primary)" : "var(--olive-dark)",
+                  opacity: mode === tab.key ? 1 : 0.6,
+                  borderBottom: mode === tab.key ? "2px solid var(--accent-terracotta)" : "2px solid transparent",
+                  transition: "opacity 0.2s ease, color 0.2s ease, border-color 0.2s ease",
+                }}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
+
+          {mode === "signup" ? (
+            <BirthForm fieldVariants={fieldVariants} shouldReduce={!!shouldReduce} />
+          ) : (
+            <LoginForm fieldVariants={fieldVariants} shouldReduce={!!shouldReduce} />
+          )}
         </div>
       </div>
 
