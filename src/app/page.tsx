@@ -86,6 +86,31 @@ export default function LandingPage() {
         </svg>
       </div>
 
+      <a
+        href="#start"
+        style={{
+          position: "relative",
+          zIndex: 2,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          width: "100%",
+          minHeight: "44px",
+          backgroundColor: "rgba(184,168,120,0.14)",
+          fontFamily: "var(--font-inter-var), sans-serif",
+          fontSize: "0.78rem",
+          color: "var(--text-primary)",
+          textAlign: "center",
+          padding: "0.5rem 1rem",
+          textDecoration: "none",
+          transition: "background-color 0.15s ease",
+        }}
+        onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "rgba(184,168,120,0.22)"; }}
+        onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "rgba(184,168,120,0.14)"; }}
+      >
+        free for your first two weeks, no card required <span aria-hidden="true" style={{ marginLeft: "4px" }}>→</span>
+      </a>
+
       <LandingHeader />
 
       <main className="relative" style={{ position: "relative", zIndex: 2 }}>

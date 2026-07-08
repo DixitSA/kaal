@@ -3,6 +3,7 @@
 import { createContext, useContext, useEffect, useState, useMemo, type ReactNode } from "react";
 
 import type { KaalIntake, KaalSnapshot } from "@/lib/client/kaalApp";
+import { FREE_TRIAL_DAYS } from "@/lib/constants";
 
 export interface UserData extends KaalIntake {
   email: string;
@@ -40,7 +41,7 @@ export function UserProvider({ children }: { children: ReactNode }) {
     const now = new Date();
     return Math.floor((now.getTime() - start.getTime()) / 86400000);
   }, [userData?.trialStartDate]);
-  const isFreeTrialExpired = useMemo(() => daysOnFree > 3 && !isProUser, [daysOnFree, isProUser]);
+  const isFreeTrialExpired = useMemo(() => daysOnFree > FREE_TRIAL_DAYS && !isProUser, [daysOnFree, isProUser]);
 
   useEffect(() => {
     try {

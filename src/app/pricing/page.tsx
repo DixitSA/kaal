@@ -129,7 +129,7 @@ export default function PricingPage() {
               lineHeight: 1.5,
               margin: 0,
             }}>
-              three days free, then $6.99/month.
+              free for your first two weeks, then $6.99/month.
             </p>
           </motion.div>
 
@@ -148,7 +148,7 @@ export default function PricingPage() {
               letterSpacing: "0.015em",
               margin: "0 0 3rem",
             }}>
-              Every profile starts with a three-day trial: your Vedic birth chart, current phase reading, and daily signal, no card required. Kaal Pro adds the decision engine across career, money, relationships, and travel, plus unlimited daily access and a fresh chart every day.
+              Every profile starts with a two-week trial: your Vedic birth chart, current phase reading, and daily signal, no card required. Kaal Pro adds the decision engine across career, money, relationships, and travel, plus unlimited daily access and a fresh chart every day.
             </p>
 
             <p style={{

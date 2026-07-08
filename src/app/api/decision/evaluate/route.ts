@@ -5,8 +5,7 @@ import { decisionResponseSchema } from "@/lib/schemas/output";
 import { SESSION_COOKIE, verifySession } from "@/lib/session";
 import { getUserByEmail } from "@/lib/db";
 import { computeLimiter, checkRateLimit, clientIp } from "@/lib/rateLimit";
-
-const FREE_TRIAL_DAYS = 3;
+import { FREE_TRIAL_DAYS } from "@/lib/constants";
 
 function isTrialExpired(trialStartDate: Date, subscriptionStatus: string): boolean {
   if (subscriptionStatus === "pro") return false;

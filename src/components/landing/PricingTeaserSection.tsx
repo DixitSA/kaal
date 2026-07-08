@@ -31,7 +31,7 @@ export default function PricingTeaserSection() {
             margin: "0 0 1.5rem",
           }}
         >
-          three days free, then $6.99/month.
+          free for your first two weeks, then $6.99/month.
         </h2>
         <p
           style={{
