@@ -3,6 +3,7 @@ import { stripe } from "@/lib/stripe";
 import { SESSION_COOKIE, sessionMatchesEmail } from "@/lib/session";
 import { getUserByEmail } from "@/lib/db";
 import { mutationLimiter, checkRateLimit, clientIp } from "@/lib/rateLimit";
+import { FREE_TRIAL_DAYS } from "@/lib/constants";
 
 export async function POST(req: NextRequest) {
   let body: Record<string, unknown>;
@@ -46,6 +47,7 @@ export async function POST(req: NextRequest) {
       mode: "subscription",
       customer: user.stripeCustomerId,
       line_items: [{ price: priceId, quantity: 1 }],
+      subscription_data: { trial_period_days: FREE_TRIAL_DAYS },
       success_url: `${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}/dashboard?upgraded=true`,
       cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}/dashboard`,
     });

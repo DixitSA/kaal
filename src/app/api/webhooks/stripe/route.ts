@@ -41,6 +41,7 @@ export async function POST(req: NextRequest) {
         };
         const statusMap: Record<string, "free" | "pro"> = {
           active: "pro",
+          trialing: "pro",
           past_due: "pro",
           canceled: "free",
           unpaid: "free",
