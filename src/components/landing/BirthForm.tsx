@@ -230,14 +230,18 @@ export default function BirthForm({ fieldVariants = defaultVariants, shouldReduc
       // the intake locally so /auth/complete can finish signup once the user
       // clicks the link we're about to send them, then request that link.
       localStorage.setItem("kaal-pending-intake", JSON.stringify(clientCollectedData));
-      await fetch("/api/auth/request-link", {
+      const res = await fetch("/api/auth/request-link", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
       });
+      if (!res.ok) {
+        const { error } = await res.json().catch(() => ({}));
+        throw new Error(error);
+      }
       setLinkSent(true);
-    } catch {
-      setErrors({ email: "couldn't send a sign-in link. please try again." });
+    } catch (err) {
+      setErrors({ email: (err instanceof Error && err.message ? err.message : "couldn't send a sign-in link. please try again.").toLowerCase() });
     } finally {
       setIsSubmitting(false);
     }

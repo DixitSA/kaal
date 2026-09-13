@@ -83,11 +83,15 @@ export default function LoginForm({ fieldVariants = defaultVariants, shouldReduc
   }, [resendCooldown]);
 
   async function requestMagicLink(targetEmail: string) {
-    await fetch("/api/auth/request-link", {
+    const res = await fetch("/api/auth/request-link", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email: targetEmail }),
     });
+    if (!res.ok) {
+      const { error } = await res.json().catch(() => ({}));
+      throw new Error((error ?? "couldn't send a sign-in link. please try again.").toLowerCase());
+    }
   }
 
   async function handleSubmit(e: FormEvent) {
@@ -117,8 +121,8 @@ export default function LoginForm({ fieldVariants = defaultVariants, shouldReduc
       } else {
         setError("couldn't log you in. please try again.");
       }
-    } catch {
-      setError("couldn't log you in. please try again.");
+    } catch (err) {
+      setError(err instanceof Error && err.message ? err.message : "couldn't log you in. please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -127,9 +131,12 @@ export default function LoginForm({ fieldVariants = defaultVariants, shouldReduc
   async function handleResend() {
     if (isResending || resendCooldown > 0) return;
     setIsResending(true);
+    setError("");
     try {
       await requestMagicLink(email.trim());
       setResendCooldown(30);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "couldn't send a sign-in link. please try again.");
     } finally {
       setIsResending(false);
     }
@@ -177,6 +184,7 @@ export default function LoginForm({ fieldVariants = defaultVariants, shouldReduc
         >
           {resendLabel}
         </button>
+        {error && <p role="alert" style={errStyle}>{error}</p>}
       </div>
     );
   }
