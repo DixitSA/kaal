@@ -30,13 +30,19 @@ export function clientIp(req: NextRequest | Request): string {
 
 /**
  * Returns true if the request is allowed. Fails open (with a warning) when
- * Upstash isn't configured, so local dev without Upstash env vars still works.
+ * Upstash isn't configured or unreachable, so a Redis outage can't take down
+ * sign-in and every other rate-limited route with it.
  */
 export async function checkRateLimit(limiter: Ratelimit | null, key: string): Promise<boolean> {
   if (!limiter) {
     console.warn("[rateLimit] Upstash not configured — skipping rate limit check");
     return true;
   }
-  const { success } = await limiter.limit(key);
-  return success;
+  try {
+    const { success } = await limiter.limit(key);
+    return success;
+  } catch (err) {
+    console.error("[rateLimit] Upstash unreachable — failing open:", err);
+    return true;
+  }
 }
