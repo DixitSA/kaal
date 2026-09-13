@@ -18,14 +18,26 @@ function AuthCompleteContent() {
     if (startedRef.current) return;
     startedRef.current = true;
 
-    const email = searchParams.get("email");
-    if (!email) {
+    const token = searchParams.get("token");
+    if (!token) {
       setError("missing verification details.");
       return;
     }
 
     void (async () => {
       try {
+        const verifyRes = await fetch("/api/auth/verify", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ token }),
+        });
+        const verified = await verifyRes.json().catch(() => ({}));
+        if (!verifyRes.ok) {
+          setError((verified.error ?? "this link is invalid or has expired. please request a new one.").toLowerCase());
+          return;
+        }
+        const email: string = verified.email;
+
         const pendingRaw = localStorage.getItem(PENDING_INTAKE_KEY);
         if (pendingRaw) {
           const pending = JSON.parse(pendingRaw) as KaalIntake & { email: string };

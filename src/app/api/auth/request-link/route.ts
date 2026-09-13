@@ -42,32 +42,28 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || req.nextUrl.origin;
     const magicLink = `${baseUrl}/api/auth/verify?token=${encodeURIComponent(token)}`;
 
     const apiKey = process.env.LOOPS_API_KEY;
     const templateId = process.env.LOOPS_MAGIC_LINK_TEMPLATE_ID;
     if (apiKey && templateId) {
-      const loops = new LoopsClient(apiKey);
-      try {
-        await loops.sendTransactionalEmail({
-          transactionalId: templateId,
-          email: normalizedEmail,
-          dataVariables: { magicLink },
-        });
-      } catch (err) {
-        console.error("[auth/request-link] sendTransactionalEmail failed:", err);
-      }
+      await new LoopsClient(apiKey).sendTransactionalEmail({
+        transactionalId: templateId,
+        email: normalizedEmail,
+        dataVariables: { magicLink },
+      });
+    } else if (process.env.NODE_ENV === "production") {
+      throw new Error("Loops not configured (LOOPS_API_KEY / LOOPS_MAGIC_LINK_TEMPLATE_ID)");
     } else {
       console.warn("[auth/request-link] Loops not configured — magic link not sent:", magicLink);
     }
   } catch (err) {
+    // Safe to surface: this route sends a link to any address, account or not,
+    // so a failure here says nothing about whether the email has an account.
     console.error("[auth/request-link] error:", err);
-    // Fall through to the generic success response below regardless — never
-    // reveal via response shape/timing whether an email has an account.
+    return NextResponse.json({ error: "Couldn't send a sign-in link. Please try again." }, { status: 502 });
   }
 
-  // Always the same response, whether or not the email has an account, to avoid
-  // account enumeration.
   return NextResponse.json({ success: true });
 }
