@@ -305,14 +305,10 @@ the audio as a bonus for the people who turn it on.
 ### Order for Instagram
 
 The 16:9 cut builds slowly, which suits a landing page where the viewer already chose
-to be there. A Reel has about one second before the thumb moves. For Instagram, lead
-with the payoff and explain afterward:
-
-**V3 (the signal, macro) → V1 (the unresolved decision) → V2 (the ritual) → V4 (acting
-on the timing) → V5 (brand close).**
-
-Opening on a macro phone screen and a face reading it is the strongest hook in the set.
-Keep the total under 30 seconds.
+to be there. A Reel has about one second before the thumb moves, so the vertical cut
+leads with the payoff and explains afterward. **Section 8 supersedes this section on
+ordering and timing**: it carries the full retention beat sheet, the extra micro beats
+the Reel needs, and the loop. Generate the clips here, then assemble them per section 8.
 
 ---
 
@@ -385,3 +381,162 @@ Append the same style block from section 1 and the same negative prompt to every
 vertical clip. Add `vertical composition, portrait orientation` to the front of the
 style block, and add `letterboxing, pillarboxing, black bars, horizontal composition`
 to the negative prompt so Flow does not hand you a padded landscape frame.
+
+---
+
+## 8. Product trailer structure and Reel retention
+
+This section turns the clips above into an edit that actually holds attention. It
+supersedes section 7 on ordering and timing.
+
+### The tension, and how this resolves it
+
+Standard Reels advice says cut every one to two seconds, open loud, and never hold a
+frame. Applied literally, that produces exactly the thing `PRODUCT.md` lists as an anti
+reference: frantic, corporate, and at odds with a product whose entire claim is calm,
+intentional timing. A hectic ad for a patience product does not convert, it confuses.
+
+The resolution is that premium brands do not hold attention with cutting speed. They
+hold it with **tactile density and sound**. Macro texture, a thumb on glass, tea hitting
+clay, a pen nib on rough paper: these are ASMR triggers, and they are the highest
+retention tool available that does not break the brand. So this edit keeps the calm
+pacing and buys attention with texture and audio instead of velocity.
+
+Two retention rules we do adopt without compromise, because they cost the brand nothing:
+
+1. **The product appears in the first second.** In the 16:9 cut the app shows up at
+   0:16, which is fatal for a trailer. Here it is frame one.
+2. **The film loops.** Last frame matches first frame, so a replay is seamless. Watch
+   time is measured as a ratio, and a clean loop inflates it more than any hook line.
+
+### Product trailer fundamentals applied
+
+| Principle | How this cut does it |
+|---|---|
+| Show the product doing the thing, early | Real Today section composited into the opening macro shot |
+| One value prop, not a feature list | "know when" is the only claim. Chart math, nakshatras and tara bala stay out |
+| Problem before payoff, but briefly | The unsigned contract lands at 0:03, after the hook, not before it |
+| A hero moment | The Decision tabs: ask a real question, get a real answer |
+| Earn the end card | Wordmark only at the end, never at the head |
+
+### Never put the logo first
+
+A brand card at 0:00 is the single most reliable way to lose a Reel audience. The viewer
+has not been given a reason to care yet, so the logo reads as an ad and the thumb moves.
+Kaal's wordmark appears at 0:19 and not before.
+
+### The beat sheet (23 seconds)
+
+| Time | Shot | On screen text | Retention function |
+|---|---|---|---|
+| 0:00 to 0:02 | V3 macro, thumb swipe on the real Today screen | `some decisions aren't about what` | Hook. Motion and text in frame one |
+| 0:02 to 0:04 | V3 continues, rack up to her eyes | `they're about when` | Open loop. The claim lands, the proof has not |
+| 0:04 to 0:07 | V1 pen hovering over the unsigned contract | `so you sit on it for a week` | Problem. Recognition beat |
+| 0:07 to 0:10 | V2 tea pour, phone turned face up | `kaal reads your chart once` | Pattern interrupt. ASMR pour |
+| 0:10 to 0:13 | Real UI: Today section, signal and focus area | `then tells you what today is carrying` | Product proof |
+| 0:13 to 0:16 | Real UI: Decision tabs switching category | `ask it directly` | Hero moment. Interaction, not narration |
+| 0:16 to 0:19 | V4 overhead, the contract signed in one stroke | `then move` | Payoff. Loop closes on the 0:04 problem |
+| 0:19 to 0:23 | V5 brand close, phone face down | `Kaal` then `know what's happening. know what to do.` | End card and visual loop back to frame one |
+
+### Where the retention dips, and what sits there
+
+Reels lose people at predictable moments. Each one gets a new visual or sonic event:
+
+- **0:02** the first scroll decision. The rack focus to her eyes fires here, plus the
+  caption's second half. Never hold a static frame across this mark.
+- **0:07** the post hook slump. The tea pour is the loudest, most tactile sound in the
+  film and it lands exactly here.
+- **0:13** the mid film drift. The Decision tab switch is the only moment of visible
+  interface motion, so it carries this beat.
+- **0:19** the exit. The signed page and the end card arrive together, and the frame
+  match to 0:00 invites the replay.
+
+### The loop
+
+End V5 on the phone lying face down on the wood in soft light. Open V3 on two hands
+lifting a phone into the same light, matched in white balance and position. Cut them
+together and the film reads as continuous on replay. Test it by watching three times in
+a row: if you cannot find the seam, it is right.
+
+### Captions
+
+- Burned in, not auto generated. Instagram's auto captions will break the typography.
+- Two to four words per card, swapped on the beat, never a paragraph.
+- Positioned in the middle band (y 250 to y 1500), never the bottom where the real
+  caption and audio ticker sit.
+- Playfair Display for the display lines, Inter for the body lines, lowercase, no em
+  dashes, per `DESIGN.md`.
+- Hold each card for a minimum of 0.8 seconds, or it cannot be read.
+
+### Sound design is the retention engine
+
+Build the mix in this order, and keep it quiet enough to feel expensive:
+
+1. **Tactile layer, loud and close.** Thumb on glass at 0:00, tea into clay at 0:07, pen
+   nib on paper at 0:16. These are the hooks. Mix them forward, almost uncomfortably
+   present.
+2. **Room tone bed.** Continuous, the same room across every cut, so the film feels like
+   one morning rather than eight generations.
+3. **Music last and lowest.** A single sustained string or a tanpura like drone, no
+   percussion, no build, no riser. If the music is noticeable, it is too loud.
+
+The tactile layer is doing the work that fast cutting does in a conventional Reel. Do
+not bury it under music.
+
+### The first frame is a thumbnail
+
+Whatever frame the Reel opens on is what appears in the grid and in feed previews. Open
+on the phone already in hand with the warm cream screen visible and her hands in frame:
+legible at a glance, warm against a feed of white and blue, and it poses a question. Do
+not open on black, on a fade in, or on an empty room.
+
+### Hook line alternatives
+
+Test these against the default. Same footage, swap the 0:00 caption only:
+
+- `some decisions aren't about what. they're about when.` (default, claim led)
+- `i stopped guessing when to make big decisions.` (first person, highest reach)
+- `your chart already knows what today is carrying.` (curiosity led)
+- `the contract sat unsigned for nine days.` (story led, pairs with V1)
+
+Run one per week against the same edit and keep the winner. Hook swaps move retention
+far more than any other variable in this list.
+
+### Extra micro beats to generate
+
+The beat sheet needs three inserts that are not in section 7. Generate these at 9:16
+with the same style and negative blocks:
+
+**M1, the loop opener (2 seconds, precedes V3)**
+
+> Two hands lift a phone upright into warm morning window light in a tall vertical
+> frame, the screen a soft parchment cream rectangle, the motion settling as the phone
+> reaches eye level. Camera: vertical portrait composition, macro 85mm, locked off, the
+> phone rising into a static frame. Audio: fabric movement and a quiet breath.
+
+**M2, the recognition insert (1.5 seconds, sits at 0:02)**
+
+> Extreme close up of a woman's eyes in warm morning light in a tall vertical frame,
+> catching the soft cream glow of a screen below. Her gaze settles, narrows very
+> slightly, and she gives a single small nod. Camera: vertical portrait composition,
+> macro 100mm, static, very shallow depth of field. Audio: one quiet breath, room tone.
+
+**M3, the loop closer (2 seconds, ends V5)**
+
+> A phone lies face down on worn wood in soft afternoon light in a tall vertical frame,
+> beside a clay cup. The light shifts almost imperceptibly across the surface. Camera:
+> vertical portrait composition, locked off, completely static, no movement in frame.
+> Audio: room tone fading to near silence.
+
+Match M3's light and framing to M1 so the loop is invisible.
+
+### The seven second cut
+
+For paid placement and for feeds that punish anything long, there is a shorter edit made
+entirely from footage above:
+
+`M1 and V3 macro with the hook caption (0 to 3) → Decision tab switch, real UI (3 to 5)
+→ wordmark over V5 (5 to 7).`
+
+Hook, product, name. Completion rate on a seven second Reel runs far higher than on a
+twenty three second one, and completion is what the ranking actually rewards.
