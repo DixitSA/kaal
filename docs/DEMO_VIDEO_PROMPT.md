@@ -1,542 +1,384 @@
 # Kaal Demo Video: Google Flow Prompt Pack
 
-A shot-by-shot prompt pack for producing a 40 second Kaal demo film in Google Flow
-(Veo). Everything here is derived from `PRODUCT.md` and `DESIGN.md`, so the film
-matches the Editorial Sanctuary language the product already speaks.
+Prompts and edit plan for the Kaal trailer (16:9, site hero and YouTube) and Instagram
+Reels (9:16), written for **Google Flow on Gemini Omni 1.1 Flash** as of September 2026.
+Creative direction is derived from `PRODUCT.md` and `DESIGN.md` (Editorial Sanctuary:
+parchment cream, terracotta, brass, sage; Playfair Display and Inter; no purple, no
+starfields, no crystals; lowercase body copy, no em dashes).
 
-Section 2 is the 16:9 cut for the site hero and YouTube. Section 7 is the vertical
-9:16 cut for Instagram Reels, recomposed rather than cropped.
-
----
-
-## 0. How to use this in Flow
-
-Flow generates in roughly 8 second clips, so the film is written as five clips plus
-an optional sixth. Work in this order:
-
-1. Create a new project, set **Model: Veo (latest quality)**, **Aspect 16:9**,
-   **Outputs per prompt: 2 to 4**.
-2. Upload the style ingredients listed in section 1 under **Ingredients to Video**,
-   so every clip inherits the same palette and grain.
-3. Generate clips 1 to 5 as separate scenes, then order them in the Scenebuilder.
-4. Where two clips must feel continuous, use **Frames to Video**: take the last
-   frame of the previous clip as the start frame of the next.
-5. Export, then composite the real product screens and typography in your editor
-   (see section 4). Do not ask Veo to render Kaal's interface copy.
-
-### The one rule that saves the most reroll credits
-
-Generative video cannot render legible product UI or typography reliably. Every
-prompt below deliberately keeps screens **out of focus, off angle, glare washed, or
-cropped**, so the app reads as present without Veo trying to spell it. The real
-dashboard goes in during the edit as a screen recording, tracked into the device.
+Sections 1 to 3 are the rules. Sections 4 to 7 are the prompts. Section 9 is the path to
+automating all of it.
 
 ---
 
-## 1. Style ingredients (upload these first)
+## 1. Flow setup
 
-Generate or shoot three reference stills and add them as ingredients:
+| Setting | Use | Why |
+|---|---|---|
+| Model | **Gemini Omni 1.1 Flash** | Better character consistency, readable text, conversational edits, start and end frames. Keep Veo 3.1 as a fallback if a shot's physics look wrong |
+| Aspect | 16:9 for the trailer, **9:16 native** for Reels | Omni generates vertical natively. Never crop 16:9 to 9:16 |
+| Duration | 3 to 10 s per generation | Omni's limit. Extend up to 40 s total when a take is right but short |
+| Resolution | **Draft at 360p**, download finals at 1080p (4K for the site hero) | 360p drafts cost fewer credits. Only upscale the take you keep |
+| Outputs | 2 per prompt while drafting, 4 for hand-heavy shots | Hands on a pen and a phone are the most likely failures |
 
-| Ingredient | What it anchors |
-|---|---|
-| Palette card | Parchment cream `#F5F0E8`, charcoal ink `#2C2418`, terracotta `#B5563E`, brass gold `#786030`, muted sage `#5E7A5E` |
-| Texture plate | Uncoated paper grain, letterpress tooth, a faint yantra line drawing at 5 percent opacity |
-| Set still | A warm room at dawn: linen, unglazed ceramic, brass, aged paper, one clay cup |
+Check the credit cost shown in the prompt box before each run. Prices and defaults change.
 
-### Reusable style block
-
-Paste this at the end of every clip prompt:
-
-> Shot on 35mm film, anamorphic, shallow depth of field, soft directional dawn light
-> from a single window, warm earthy palette of parchment cream, charcoal brown,
-> terracotta clay, brass and sage. Editorial magazine photography, tactile paper and
-> linen textures, muted contrast, fine natural grain, no color pop. Calm unhurried
-> pacing. Handheld micro movement only.
-
-### Negative prompt (paste into the negative field every time)
-
-> text, on-screen text, captions, subtitles, watermarks, logos, user interface,
-> legible screen content, purple, neon, glowing gradients, starfield, galaxy,
-> crystals, zodiac wheels, tarot cards, incense theatrics, stock corporate office,
-> blue corporate palette, glossy plastic, lens flare spam, fast cuts, whip pans,
-> distorted hands, extra fingers, warped jewelry
+**Use the Flow Agent for batch work.** Asking it things costs nothing; only generating
+uses credits. Give it section 2 of this doc as project context, then ask for batches
+("generate V2 and V4 with 2 variations each at 360p, 9:16") and have it name assets by
+clip ID (`V3_take2`).
 
 ---
 
-## 2. The five clips (16:9)
+## 2. How Omni wants to be prompted
 
-Each clip gives you **Prompt**, **Camera**, and **Audio**. In Flow, put the prompt
-body in the main field and keep the camera and audio lines inside the same prompt
-text (Veo reads them), then append the style block from section 1.
+These rules come from Google's official Omni skill and prompting guide (sources at the
+end). They replace the Veo-era habits in the first version of this doc.
 
-### Clip 1 — The unresolved decision (0:00 to 0:08)
+**Five parts, in this order:** Goal, Input role, Scene, Motion, Constraints.
 
-**Prompt**
-
-> A woman in her early thirties sits at a worn wooden desk in a dim apartment before
-> sunrise, wearing a soft oatmeal sweater. A contract and a pen rest under her hand.
-> She hovers the pen above the signature line, hesitates, and sets it down without
-> signing. She exhales and looks toward the window, where first light is just
-> reaching the sill. The room is quiet and still. Her face is thoughtful, not
-> distressed.
-
-**Camera:** Slow push in from a medium wide to a medium, eye level, 40mm, subject
-slightly off center with negative space to her right.
-
-**Audio:** Room tone, a distant early morning street, the small click of a pen set
-down on wood. No music, no dialogue.
-
----
-
-### Clip 2 — The ritual (0:08 to 0:16)
-
-**Prompt**
-
-> Morning has arrived. The same woman pours tea into an unglazed clay cup beside the
-> window, then picks up a phone from the table and turns it face up in her palm. The
-> phone screen glows a warm cream color, held at a low angle so the screen is a soft
-> bright rectangle rather than readable content. She settles into a chair with the
-> cup in one hand and the phone in the other, shoulders dropping as she reads. Steam
-> drifts across the frame. Dust floats in the window light.
-
-**Camera:** Static locked off wide, then a gentle handheld drift into a two thirds
-profile. Screen stays at a raking angle to the lens.
-
-**Audio:** Tea pouring, ceramic on wood, a single distant bird. No music.
-
-> Continuity note: use the last frame of Clip 1 as the start frame here so the room
-> and wardrobe match.
+1. **Say single shot, or you get several.** By default Omni cuts between shots and builds
+   its own mini narrative. For a single take write `Single continuous shot, no scene cuts.`
+   To get a planned sequence of shots, use timecodes (rule 3).
+2. **Flow has no negative prompt box.** Describe the look you want positively, then add a
+   short `Constraints` line with simple exclusions such as `No dialogue. No music.`
+   Long "no purple, no neon, no starfield…" lists pull those exact things into the frame.
+   If a take drifts, fix it with an edit (section 8), not a longer list.
+3. **Timecodes control the beats.** `[0-3s] … [3-6s] … [6-10s] …` sets exactly what
+   happens when, including cuts. This is how a whole Reel sequence can come out of one
+   generation with the same woman, room and light.
+4. **Always describe the audio.** Omni generates sound by default and may add music. Name
+   the sounds you want, and write `No music` when the score is added in the edit.
+5. **Don't over-explain.** Omni already knows what dawn light, linen and a clay cup look
+   like. Spend words on camera, action and timing, not adjectives like "serene" or
+   "sacred".
+6. **Text now renders correctly.** Put exact words in quotes. We still typeset Kaal's
+   captions and wordmark in the edit because Omni can't guarantee Playfair Display. Use
+   Omni text only for text that belongs in the scene, like a contract heading.
+7. **Say what each reference is for.** "Use the character reference for her face, hair and
+   sweater. Use the style reference for palette and grain only, not as a first frame."
 
 ---
 
-### Clip 3 — The signal, macro (0:16 to 0:24)
+## 3. Build the references first
 
-**Prompt**
+Make these once in Flow (Nano Banana Pro images) or photograph them, then attach them to
+every clip. They replace the old approach of chaining one clip's last frame into the next.
 
-> Extreme close up of the phone held in two hands. The screen is a warm parchment
-> cream field with a thin terracotta rule across it and a single small block of dark
-> text, deliberately out of focus and unreadable, drifting in and out of the focal
-> plane. Her thumb scrolls once, slowly and deliberately. The reflection of the
-> window curves across the glass. Cut to her eyes as they settle and narrow slightly
-> with recognition, then a small nod.
+| Ref | Make it like this | Attach to |
+|---|---|---|
+| **CHAR** | Front and three-quarter views of the woman on a plain warm-grey background: early thirties, dark hair loosely tied, soft oatmeal knit sweater, no jewellery. Same image every time | Every clip with her in it |
+| **STYLE** | One still: a warm room at dawn, linen, unglazed clay cup, brass object, aged paper, single window light, fine film grain, parchment cream, charcoal brown, terracotta, sage | Every clip |
+| **UI** | Real 1080×1920 screenshot of the Kaal Today section (and one of the Decision tabs) | Phone macro shots, as a test (section 6) |
+| **LOOP** | A still saved from the first frame of Reel part A (section 7) | Last frame of Reel part B |
 
-**Camera:** Macro 100mm, very shallow focus, a single rack focus from the screen to
-her eyes. No cuts inside the shot, let the rack do the work.
+Flow's advice: use plain or segmented backgrounds for character and product references.
+Keep your text consistent with the references. A prompt that contradicts a reference
+loses to it.
 
-**Audio:** A single soft thumb swipe on glass, breath, room tone. No UI beeps.
+**Look line.** Put this at the end of every prompt instead of the old long style block:
 
-> This is the clip you will overlay the real Today section on. Keep the screen
-> largely flat and evenly lit so the tracked composite sits cleanly.
-
----
-
-### Clip 4 — Acting on the timing (0:24 to 0:32)
-
-**Prompt**
-
-> She sets the phone down face up on the desk, picks up the pen, and signs the
-> contract in one unhurried stroke. Full daylight now fills the room, warm and
-> directional. She caps the pen and sits back. A brass desk object and a small stack
-> of paper sit in the foreground, slightly out of focus.
-
-**Camera:** Low angle close on the hand and pen, then a cut to a medium wide as she
-sits back. Handheld, minimal drift.
-
-**Audio:** Pen on paper, a chair settling, the room's daylight ambience. No music.
+> Look: 35mm film, shallow depth of field, single soft window light, warm earthy palette
+> matching the style reference, fine grain, muted contrast, calm unhurried pacing.
 
 ---
 
-### Clip 5 — Brand close (0:32 to 0:40)
+## 4. Trailer, 16:9 (five clips, about 40 s)
 
-**Prompt**
+Attach **CHAR** and **STYLE** to every clip. Draft at 360p, final at 1080p or 4K.
 
-> The empty desk in soft afternoon light. The clay cup, the signed page, and the
-> phone lying face down on the wood. A slow drift across the surface as the light
-> moves. The frame is still, composed like an editorial magazine spread, with clean
-> negative space in the upper third for a title card.
+### T1: The unresolved decision (8 s)
 
-**Camera:** Slow lateral dolly right, 50mm, static subject, 4 to 5 seconds of hold at
-the end on a clean composition.
+> Goal: an 8 second opening shot of a woman unable to sign a contract before sunrise.
+> Input role: the character reference is the woman; the style reference sets palette and
+> light only.
+> Scene: she sits at a worn wooden desk in a dim apartment before dawn. A contract and a
+> pen rest under her hand. First light is just reaching the window sill.
+> Motion: [0-4s] slow push in from medium wide to medium, eye level, 40mm, her off center
+> with space to her right; she hovers the pen above the signature line. [4-8s] she
+> hesitates, sets the pen down without signing, exhales and looks toward the window.
+> Thoughtful, not distressed.
+> Audio: quiet room tone, a distant early morning street, the small click of the pen on
+> wood.
+> Constraints: single continuous shot, no scene cuts. No dialogue. No music.
+> Look: (look line)
 
-**Audio:** Room tone fading to near silence.
+### T2: The ritual (8 s)
 
-> Leave the upper third empty. The wordmark and the closing line are typeset in the
-> edit, never generated.
+> Goal: an 8 second shot of the same woman starting her morning ritual with her phone.
+> Input role: character reference is the woman; style reference sets palette and light.
+> Scene: morning light fills the same room. A clay teapot, an unglazed cup and a phone lie
+> face down on a small table by the window.
+> Motion: [0-3s] static wide as she pours tea, steam rising through window light. [3-8s]
+> slow handheld drift into a two-thirds profile as she turns the phone face up and settles
+> into a chair to read, shoulders dropping. The screen is angled away from the lens, a soft
+> warm cream glow.
+> Audio: tea pouring into clay, ceramic set on wood, one distant bird.
+> Constraints: single continuous shot, no scene cuts. No dialogue. No music.
+> Look: (look line)
+
+### T3: The signal, macro (8 s)
+
+> Goal: an 8 second macro of the moment she reads her daily signal and recognises it.
+> Input role: character reference is the woman; style reference sets palette and light.
+> Scene: extreme close up of a phone held in two hands in warm window light. The screen is
+> a parchment cream field with a thin terracotta line and a small block of dark text,
+> softly out of focus. The window reflection curves across the glass.
+> Motion: [0-4s] macro 100mm, very shallow focus; her thumb scrolls once, slowly. [4-8s]
+> one rack focus up from the screen to her eyes as they settle and narrow slightly, then a
+> small nod.
+> Audio: one soft thumb swipe on glass, a quiet breath, room tone.
+> Constraints: single continuous shot, no scene cuts. No dialogue. No music. No interface
+> sounds.
+> Look: (look line)
+
+### T4: Acting on the timing (8 s)
+
+> Goal: an 8 second shot of her signing the contract with calm certainty.
+> Input role: character reference is the woman; style reference sets palette and light.
+> Scene: full warm daylight on the desk. The phone lies face up beside the contract. A
+> brass object and a small paper stack sit out of focus in the foreground.
+> Motion: [0-4s] low close angle on her hand as she picks up the pen and signs in one
+> unhurried stroke. [4-8s] cut to a medium wide as she caps the pen and sits back.
+> Audio: pen nib on paper, a chair settling, daylight room ambience.
+> Constraints: exactly one cut, at 4s. No dialogue. No music.
+> Look: (look line)
+
+### T5: Brand close (8 s)
+
+> Goal: an 8 second still-life end card plate with room for a title.
+> Input role: style reference sets palette and light. No person in frame.
+> Scene: the empty desk in soft afternoon light: the clay cup, the signed page, and the
+> phone lying face down on the wood. Clean empty wall in the upper third.
+> Motion: [0-4s] slow lateral dolly right, 50mm. [4-8s] settle and hold completely still on
+> a composed editorial arrangement.
+> Audio: room tone fading to near silence.
+> Constraints: single continuous shot. No text in frame. No dialogue. No music.
+> Look: (look line)
+
+### T6 (optional): The method (8 s, insert after T3 for a 48 s cut)
+
+> Goal: an 8 second overhead insert suggesting the Vedic method behind Kaal.
+> Input role: style reference sets palette and light.
+> Scene: overhead flat lay on aged, deeply textured paper: a brass drafting compass, a
+> hand-drawn geometric yantra in fine matte ink, a folded almanac page.
+> Motion: locked off overhead with a slow 5 percent push in. At 3s a hand enters and traces
+> one line of the geometry with a fingertip.
+> Audio: fingertip on rough paper, distant room tone.
+> Constraints: single continuous shot. No dialogue. No music.
+> Look: (look line)
 
 ---
 
-### Optional Clip 6 — The method (insert after Clip 3 if you want a 48 second cut)
+## 5. Voiceover and on-screen copy
 
-**Prompt**
+Record or generate the voice separately, not in Omni (Omni can't take audio references yet,
+and a voice drifts between separate generations). Direction: a calm, low, unhurried woman's
+voice, warm and certain, like a seasoned counsellor rather than a meditation app.
 
-> Overhead flat lay on aged paper: a brass drafting compass, a hand drawn geometric
-> yantra in fine dark ink, and a folded almanac page. A hand enters the frame and
-> traces one line of the geometry with a fingertip. The paper is deeply textured, the
-> ink is matte and hand made, the light is a single soft window source.
-
-**Camera:** Locked off overhead, slow 5 percent push in.
-
-**Audio:** Paper texture, a fingertip on rough stock, distant room tone.
-
----
-
-## 3. Voiceover and on-screen copy
-
-Generate the voice separately (Veo dialogue is inconsistent across clips). Direction:
-a calm, low, unhurried woman's voice, warm and certain, the register of a seasoned
-counselor rather than a meditation app. Sentence case, never breathy.
-
-| Timecode | Voiceover | On-screen text (typeset in edit) |
+| Time | Voiceover | On screen (typeset in edit) |
 |---|---|---|
 | 0:02 | some decisions are not about what. they are about when. | |
 | 0:10 | kaal reads your birth chart once, then tells you what today is carrying. | `Built on Vedic timing systems` |
-| 0:18 | a signal for the day. the phase you are inside. what to move on, and what to leave alone. | Real Today section composite |
-| 0:26 | ask it directly. career, money, relationships, travel, a move, a conversation. | Real Decision tabs composite |
-| 0:34 | | `Kaal` wordmark, then `know what's happening. know what to do.` |
+| 0:18 | a signal for the day. the phase you are inside. what to move on, and what to leave alone. | Today section cut-in |
+| 0:26 | ask it directly. career, money, relationships, travel, a move, a conversation. | Decision tabs cut-in |
+| 0:34 | | `Kaal`, then `know what's happening. know what to do.` |
 
-Copy rules inherited from `DESIGN.md`: body and guidance lines stay lowercase or
-sentence case, only labels and micro copy go uppercase, and no em dashes anywhere.
-
----
-
-## 4. The composite pass (this is where the product actually appears)
-
-Flow gives you the film. The product footage comes from the real app:
-
-1. Run the app locally and screen record on a real device or a device frame at
-   60fps: the birth form, the loading screen, the Today section, Current Phase, and
-   the Decision tabs with category switching.
-2. Track the recording onto the phone screen in Clips 2, 3 and 4. Match the parchment
-   cream of the UI to the film's white balance so it reads as the same room light.
-3. Add a subtle screen reflection and a touch of grain over the composite so it does
-   not sit on top of the plate.
-4. Typeset the title card and captions in Playfair Display for display lines and
-   Inter for body, per the type scale in `DESIGN.md`.
-5. Score it with a sparse acoustic bed: single sustained strings or a tanpura like
-   drone, low in the mix. No tabla build, no percussion swell, no cinematic riser.
-6. Respect the product's own restraint: terracotta appears on no more than about 15
-   percent of any frame.
+Copy rules from `DESIGN.md`: body lines lowercase or sentence case, only labels uppercase,
+no em dashes.
 
 ---
 
-## 5. Prompting notes for Flow specifically
+## 6. Showing the real product
 
-- **One idea per clip.** Veo degrades when a prompt carries two beats. Clip 1 is
-  hesitation, Clip 4 is commitment. Do not merge them.
-- **Describe light, not mood words.** "Single soft window source at low angle" gets
-  you further than "serene" or "sacred".
-- **Use Frames to Video for continuity.** Wardrobe and room drift between
-  independent generations, so chain the clips through their end frames.
-- **Generate four variants and pick.** The keeper is usually the one where the hands
-  behave. Hands on a pen and a phone are the highest risk elements in this film.
-- **Extend rather than re-prompt** when a clip is right but ends early.
-- **Keep screens oblique.** Any prompt that asks Veo for readable interface copy will
-  produce convincing nonsense, which is worse than an out of focus screen.
+**Default: cut to full-screen app footage. Don't track it onto the phone.** Tracking a
+recording onto a generated phone takes After Effects-level work and was the bottleneck of
+the first plan. A clean cut to the real interface reads as more honest anyway.
 
----
+1. Record the app at 1080×1920 (portrait) and 1920×1080 (a desktop or device frame): the
+   birth form, loading screen, Today section, Current Phase, Decision tabs switching
+   category. Playwright can script this so it's repeatable (section 9).
+2. Grade the recording slightly warm and add a touch of grain so it sits next to the film.
+3. Cut in on a motion beat: the thumb swipe in T3 or V3, the tab switch.
 
-## 6. Copy paste block for Clip 3
-
-For convenience, the highest value single clip, fully assembled:
-
-> Extreme close up of a phone held in two hands in warm morning window light. The
-> screen is a warm parchment cream field with a thin terracotta rule and a single
-> small block of dark text, deliberately out of focus and unreadable, drifting in and
-> out of the focal plane. A thumb scrolls once, slowly and deliberately. The window
-> reflection curves across the glass. Rack focus from the screen to the woman's eyes
-> as they settle and narrow slightly with recognition, then a small nod. Macro 100mm,
-> very shallow depth of field, single rack focus, no cuts. Audio: one soft thumb
-> swipe on glass, quiet breath, room tone, no music and no interface sounds. Shot on
-> 35mm film, anamorphic, soft directional dawn light from a single window, warm
-> earthy palette of parchment cream, charcoal brown, terracotta clay, brass and sage.
-> Editorial magazine photography, tactile paper and linen textures, muted contrast,
-> fine natural grain. Calm unhurried pacing, handheld micro movement only.
->
-> Negative prompt: text, on-screen text, captions, subtitles, watermarks, logos,
-> legible screen content, purple, neon, glowing gradients, starfield, crystals,
-> zodiac wheels, corporate office, blue palette, glossy plastic, fast cuts, distorted
-> hands, extra fingers.
+**Optional test: Kaal's screen inside the shot.** Attach **UI** to T3 or V3 and change the
+scene line to: `The phone screen shows the app screen from the UI reference, held flat to
+camera, slightly soft.` Omni's text handling means this can now work. If the screen text
+comes out garbled after two tries, go back to the cut-in and keep the screen soft.
 
 ---
 
-## 7. The vertical cut (9:16) for Instagram
+## 7. Instagram Reel, 9:16 (23 s, loops)
 
-Set **Aspect 9:16** in Flow and generate these fresh. Do not center crop the 16:9
-clips: the lateral dolly in Clip 5 has nowhere to travel in a tall frame, and cropping
-a 40mm medium gives you a tight, headroom starved portrait that loses the editorial
-composition entirely.
+### Retention rules this cut is built on
 
-### What actually changes
+- **The product is in frame one.** A logo or slow build at 0:00 loses the scroll.
+- **It loops.** The last frame matches the first, so a replay feels like one continuous
+  video and watch time counts it again. Omni can do this natively (part B below).
+- **Texture and sound hold attention, not fast cutting.** Frantic pacing contradicts a
+  product about calm timing (`PRODUCT.md` anti-references). Macro detail plus close
+  sounds (thumb on glass, tea on clay, pen nib on paper) do the work.
+- **Muted first.** Captions carry the message; audio is a bonus.
 
-- **Negative space moves from beside the subject to above and below her.** In 16:9 she
-  sits off center with room to her right. In 9:16 she sits in the lower two thirds with
-  window light and empty wall above.
-- **Horizontal camera moves become vertical ones.** Lateral dollies become boom downs
-  and tilts. A tall frame rewards rising steam, falling light, and a tilt that travels
-  from a surface up to a face.
-- **Desk work goes overhead.** Hands on paper read far better top down in vertical than
-  from a low side angle.
-- **The phone composite gets better, not worse.** A vertical phone in a vertical frame
-  can run nearly full height, which means the real Today section composite is larger
-  and more legible than it ever was in 16:9. Clip 3 is the payoff shot here.
+### Beat sheet
 
-### Safe zones (1080 x 1920)
-
-Instagram overlays its own furniture on your frame. Keep anything that matters inside
-the middle band:
-
-| Zone | Keep clear |
-|---|---|
-| Top 250px | Reels header and sound attribution |
-| Bottom 420px | Caption, username, audio ticker |
-| Right 180px | Like, comment, share, save buttons |
-
-So the working area is roughly **y 250 to y 1500, x 0 to x 900**. Faces, the phone
-screen composite, and any typeset line all live inside that. The brand card in Clip 5
-sits in the upper middle, not the top edge.
-
-### Watch it muted
-
-Most Reels views start with sound off, so the voiceover cannot carry the film. Burn the
-voiceover lines in as typeset captions in the middle band, styled per `DESIGN.md`:
-Playfair Display for the display lines, Inter for body, lowercase, no em dashes. Treat
-the audio as a bonus for the people who turn it on.
-
-### Order for Instagram
-
-The 16:9 cut builds slowly, which suits a landing page where the viewer already chose
-to be there. A Reel has about one second before the thumb moves, so the vertical cut
-leads with the payoff and explains afterward. **Section 8 supersedes this section on
-ordering and timing**: it carries the full retention beat sheet, the extra micro beats
-the Reel needs, and the loop. Generate the clips here, then assemble them per section 8.
-
----
-
-### V1 — The unresolved decision (vertical)
-
-> A woman in her early thirties sits at a worn wooden desk in a dim apartment before
-> sunrise, wearing a soft oatmeal sweater, framed in the lower two thirds of a tall
-> vertical frame with the window and empty wall above her. A contract and a pen rest
-> under her hand at the bottom of frame. She hovers the pen above the signature line,
-> hesitates, and sets it down without signing. She exhales and looks up toward the
-> window, where first light is just reaching the sill. Her face is thoughtful, not
-> distressed. Camera: vertical portrait composition, slow push in at chest height, 35mm,
-> generous headroom filled with soft window light. Audio: room tone, a distant early
-> morning street, the small click of a pen set down on wood, no music and no dialogue.
-
-### V2 — The ritual (vertical)
-
-> A woman pours tea into an unglazed clay cup beside a window, hands and cup centered in
-> a tall vertical frame with steam rising through the upper third. She sets the pot
-> down, picks up a phone, and turns it face up in her palm. The screen glows a warm
-> cream color, held at a raking angle so it reads as a soft bright rectangle rather than
-> readable content. Camera: vertical portrait composition, starts centered on the cup
-> and hands, then a slow tilt up from the cup to her face as she settles and reads.
-> Audio: tea pouring, ceramic on wood, a single distant bird, no music.
-
-### V3 — The signal, macro (vertical) — the hook shot
-
-> Extreme close up of a phone held upright in two hands in warm morning window light,
-> the phone running nearly the full height of a tall vertical frame. The screen is a
-> warm parchment cream field with a thin terracotta rule and a single small block of
-> dark text, deliberately out of focus and unreadable, drifting in and out of the focal
-> plane. A thumb scrolls once, slowly and deliberately. The window reflection curves
-> across the glass. Rack focus up from the screen to the woman's eyes at the top of
-> frame as they settle and narrow slightly with recognition, then a small nod. Camera:
-> vertical portrait composition, macro 85mm, very shallow depth of field, a single
-> vertical rack focus from the lower frame to the upper frame, no cuts. Audio: one soft
-> thumb swipe on glass, quiet breath, room tone, no music and no interface sounds.
-
-### V4 — Acting on the timing (vertical)
-
-> Overhead top down view of a worn wooden desk in full warm daylight, shot straight down
-> into a tall vertical frame. A phone lies face up at the bottom of frame. A hand enters
-> from the lower edge, picks up a pen, and signs a contract in one unhurried stroke. The
-> hand withdraws and the signed page sits alone. Camera: vertical portrait composition,
-> locked off overhead, slow five percent push in, minimal handheld drift. Audio: pen on
-> paper, a chair settling, the room's daylight ambience, no music.
-
-### V5 — Brand close (vertical)
-
-> An empty desk in soft afternoon light, shot from a high three quarter angle into a
-> tall vertical frame. A clay cup, a signed page, and a phone lying face down on the
-> wood are arranged in the lower half, with clean empty wood and wall filling the upper
-> half. Camera: vertical portrait composition, a slow boom down over the surface as the
-> light moves, settling into a still, composed editorial still life and holding for four
-> to five seconds. Audio: room tone fading to near silence.
-
-### V6 — The method (vertical, optional)
-
-> Overhead flat lay on aged paper in a tall vertical frame: a brass drafting compass, a
-> hand drawn geometric yantra in fine dark ink, and a folded almanac page, arranged in a
-> vertical stack down the center of frame. A hand enters from the lower edge and traces
-> one line of the geometry with a fingertip. The paper is deeply textured, the ink is
-> matte and hand made, the light is a single soft window source. Camera: vertical
-> portrait composition, locked off overhead, slow five percent push in. Audio: paper
-> texture, a fingertip on rough stock, distant room tone.
-
----
-
-Append the same style block from section 1 and the same negative prompt to every
-vertical clip. Add `vertical composition, portrait orientation` to the front of the
-style block, and add `letterboxing, pillarboxing, black bars, horizontal composition`
-to the negative prompt so Flow does not hand you a padded landscape frame.
-
----
-
-## 8. Product trailer structure and Reel retention
-
-This section turns the clips above into an edit that actually holds attention. It
-supersedes section 7 on ordering and timing.
-
-### The tension, and how this resolves it
-
-Standard Reels advice says cut every one to two seconds, open loud, and never hold a
-frame. Applied literally, that produces exactly the thing `PRODUCT.md` lists as an anti
-reference: frantic, corporate, and at odds with a product whose entire claim is calm,
-intentional timing. A hectic ad for a patience product does not convert, it confuses.
-
-The resolution is that premium brands do not hold attention with cutting speed. They
-hold it with **tactile density and sound**. Macro texture, a thumb on glass, tea hitting
-clay, a pen nib on rough paper: these are ASMR triggers, and they are the highest
-retention tool available that does not break the brand. So this edit keeps the calm
-pacing and buys attention with texture and audio instead of velocity.
-
-Two retention rules we do adopt without compromise, because they cost the brand nothing:
-
-1. **The product appears in the first second.** In the 16:9 cut the app shows up at
-   0:16, which is fatal for a trailer. Here it is frame one.
-2. **The film loops.** Last frame matches first frame, so a replay is seamless. Watch
-   time is measured as a ratio, and a clean loop inflates it more than any hook line.
-
-### Product trailer fundamentals applied
-
-| Principle | How this cut does it |
-|---|---|
-| Show the product doing the thing, early | Real Today section composited into the opening macro shot |
-| One value prop, not a feature list | "know when" is the only claim. Chart math, nakshatras and tara bala stay out |
-| Problem before payoff, but briefly | The unsigned contract lands at 0:03, after the hook, not before it |
-| A hero moment | The Decision tabs: ask a real question, get a real answer |
-| Earn the end card | Wordmark only at the end, never at the head |
-
-### Never put the logo first
-
-A brand card at 0:00 is the single most reliable way to lose a Reel audience. The viewer
-has not been given a reason to care yet, so the logo reads as an ad and the thumb moves.
-Kaal's wordmark appears at 0:19 and not before.
-
-### The beat sheet (23 seconds)
-
-| Time | Shot | On screen text | Retention function |
+| Time | Shot | Caption | Job |
 |---|---|---|---|
-| 0:00 to 0:02 | V3 macro, thumb swipe on the real Today screen | `some decisions aren't about what` | Hook. Motion and text in frame one |
-| 0:02 to 0:04 | V3 continues, rack up to her eyes | `they're about when` | Open loop. The claim lands, the proof has not |
-| 0:04 to 0:07 | V1 pen hovering over the unsigned contract | `so you sit on it for a week` | Problem. Recognition beat |
-| 0:07 to 0:10 | V2 tea pour, phone turned face up | `kaal reads your chart once` | Pattern interrupt. ASMR pour |
-| 0:10 to 0:13 | Real UI: Today section, signal and focus area | `then tells you what today is carrying` | Product proof |
-| 0:13 to 0:16 | Real UI: Decision tabs switching category | `ask it directly` | Hero moment. Interaction, not narration |
-| 0:16 to 0:19 | V4 overhead, the contract signed in one stroke | `then move` | Payoff. Loop closes on the 0:04 problem |
-| 0:19 to 0:23 | V5 brand close, phone face down | `Kaal` then `know what's happening. know what to do.` | End card and visual loop back to frame one |
+| 0:00-0:02 | Part A, hands lift phone, thumb swipe | `some decisions aren't about what` | Hook, motion in frame one |
+| 0:02-0:04 | Part A, rack to her eyes | `they're about when` | Claim lands, proof pending |
+| 0:04-0:07 | Part A, pen hovering over contract | `so you sit on it for a week` | Problem, recognition |
+| 0:07-0:10 | Part A, tea pour, phone turned up | `kaal reads your chart once` | Pattern interrupt, loud ASMR |
+| 0:10-0:13 | App cut-in: Today section | `then tells you what today is carrying` | Product proof |
+| 0:13-0:16 | App cut-in: Decision tabs switching | `ask it directly` | Hero moment |
+| 0:16-0:19 | Part B, overhead signature | `then move` | Payoff, closes the 0:04 problem |
+| 0:19-0:23 | Part B, still life, phone face down | `Kaal`, then `know what's happening. know what to do.` | End card, loops to 0:00 |
 
-### Where the retention dips, and what sits there
+### Generate it in two parts
 
-Reels lose people at predictable moments. Each one gets a new visual or sonic event:
+Generating each Reel section as one multi-shot generation keeps the woman, room and light
+identical, which works better than stitching separate clips. Attach **CHAR** and **STYLE**
+to both parts, 9:16.
 
-- **0:02** the first scroll decision. The rack focus to her eyes fires here, plus the
-  caption's second half. Never hold a static frame across this mark.
-- **0:07** the post hook slump. The tea pour is the loudest, most tactile sound in the
-  film and it lands exactly here.
-- **0:13** the mid film drift. The Decision tab switch is the only moment of visible
-  interface motion, so it carries this beat.
-- **0:19** the exit. The signed page and the end card arrive together, and the frame
-  match to 0:00 invites the replay.
+**Part A (10 s): hook through problem**
 
-### The loop
+> Goal: a 10 second vertical sequence of one quiet morning, four shots, same woman and
+> room throughout.
+> Input role: character reference is the woman; style reference sets palette and light
+> only, not a first frame.
+> Scene: a warm apartment at dawn, a worn wooden desk by a window, a phone, a contract, a
+> pen, a clay cup. She sits in the lower two thirds of the frame with window light above.
+> Motion:
+> [0-2s] extreme close up, two hands lift a phone upright into window light and a thumb
+> swipes once; the screen is a soft parchment cream glow, nearly full frame height.
+> [2-4s] rack focus up from the screen to her eyes; they settle and narrow slightly.
+> [4-7s] cut to a medium vertical shot: her pen hovers over an unsigned contract, she sets
+> it down and looks up at the window.
+> [7-10s] cut to a close shot of tea pouring into an unglazed clay cup, steam rising through
+> the upper frame, then her hand turns the phone face up.
+> Audio: close and present: thumb on glass at 0s, a breath at 2s, pen click at 6s, tea
+> pouring loudly at 7s, constant quiet room tone.
+> Constraints: exactly three cuts at 2s, 4s and 7s. No dialogue. No music. No text in frame.
+> Look: (look line), vertical portrait composition.
 
-End V5 on the phone lying face down on the wood in soft light. Open V3 on two hands
-lifting a phone into the same light, matched in white balance and position. Cut them
-together and the film reads as continuous on replay. Test it by watching three times in
-a row: if you cannot find the seam, it is right.
+Save **the first frame of your chosen Part A take** as the **LOOP** image.
+
+**Part B (7 s): payoff and loop**
+
+> Goal: a 7 second vertical ending that resolves the unsigned contract and returns to the
+> opening frame.
+> Input role: character reference is the woman's hand and sweater sleeve; style reference
+> sets palette and light; the LOOP image is the last frame.
+> Scene: the same desk in full warm daylight.
+> Motion:
+> [0-3s] overhead top-down shot, a hand enters from the bottom edge and signs the contract in
+> one unhurried stroke, then withdraws.
+> [3-7s] cut to a high three-quarter still life: clay cup, signed page, phone face down on the
+> wood, clean empty wall in the upper half; slow boom down, then two hands reach in and lift
+> the phone upright, ending exactly on the last frame image.
+> Audio: pen nib on paper loud and close at 1s, then room tone fading low.
+> Constraints: exactly one cut at 3s. No dialogue. No music. No text in frame.
+> Look: (look line), vertical portrait composition.
+
+In Flow, set LOOP as the **end frame** for Part B. If the cut at 3s breaks the end-frame
+match, split Part B into two generations and put the end frame only on the second.
+
+**Fallback:** if a multi-shot generation drifts (wrong cut timing, a changing face),
+generate each beat as its own single shot with the same prompt parts and cut them together
+in the edit.
+
+### Safe zones (1080×1920)
+
+| Zone | Keep clear of |
+|---|---|
+| Top 250 px | Reels header, sound attribution |
+| Bottom 420 px | Caption, username, audio ticker |
+| Right 180 px | Like, comment, share, save |
+
+Faces, the phone, and every caption stay in **x 0-900, y 250-1500**.
 
 ### Captions
 
-- Burned in, not auto generated. Instagram's auto captions will break the typography.
-- Two to four words per card, swapped on the beat, never a paragraph.
-- Positioned in the middle band (y 250 to y 1500), never the bottom where the real
-  caption and audio ticker sit.
-- Playfair Display for the display lines, Inter for the body lines, lowercase, no em
-  dashes, per `DESIGN.md`.
-- Hold each card for a minimum of 0.8 seconds, or it cannot be read.
+Burned in, typeset in the edit (Playfair Display for display lines, Inter for body,
+lowercase, no em dashes). Two to four words per card, changed on the beat, each on screen
+at least 0.8 s, in the middle band. Don't use Instagram's auto captions.
 
-### Sound design is the retention engine
+### Sound mix
 
-Build the mix in this order, and keep it quiet enough to feel expensive:
+1. Close sounds loud and forward: thumb on glass, tea, pen nib. They are the hooks.
+2. One continuous room tone under everything, so it feels like a single morning.
+3. Music last and lowest: one sustained string or a tanpura-like drone, no percussion, no
+   riser. If you notice the music, it's too loud.
 
-1. **Tactile layer, loud and close.** Thumb on glass at 0:00, tea into clay at 0:07, pen
-   nib on paper at 0:16. These are the hooks. Mix them forward, almost uncomfortably
-   present.
-2. **Room tone bed.** Continuous, the same room across every cut, so the film feels like
-   one morning rather than eight generations.
-3. **Music last and lowest.** A single sustained string or a tanpura like drone, no
-   percussion, no build, no riser. If the music is noticeable, it is too loud.
+### Hook lines to A/B test
 
-The tactile layer is doing the work that fast cutting does in a conventional Reel. Do
-not bury it under music.
+Same edit, swap only the 0:00 caption, one per week, keep the winner:
 
-### The first frame is a thumbnail
+- `some decisions aren't about what. they're about when.` (default)
+- `i stopped guessing when to make big decisions.`
+- `your chart already knows what today is carrying.`
+- `the contract sat unsigned for nine days.`
 
-Whatever frame the Reel opens on is what appears in the grid and in feed previews. Open
-on the phone already in hand with the warm cream screen visible and her hands in frame:
-legible at a glance, warm against a feed of white and blue, and it poses a question. Do
-not open on black, on a fade in, or on an empty room.
+### 7 second cut
 
-### Hook line alternatives
+For paid placement: Part A 0-3 s with the hook caption → Decision tabs cut-in (3-5 s) →
+`Kaal` over the Part B still life (5-7 s).
 
-Test these against the default. Same footage, swap the 0:00 caption only:
+---
 
-- `some decisions aren't about what. they're about when.` (default, claim led)
-- `i stopped guessing when to make big decisions.` (first person, highest reach)
-- `your chart already knows what today is carrying.` (curiosity led)
-- `the contract sat unsigned for nine days.` (story led, pairs with V1)
+## 8. Fixing takes in Flow
 
-Run one per week against the same edit and keep the winner. Hook swaps move retention
-far more than any other variable in this list.
+Omni edits a take in conversation, which is cheaper than regenerating.
 
-### Extra micro beats to generate
+- **Keep edit prompts short** and end with `Keep everything else the same.`
+  - `Make the phone screen softer and unreadable. Keep everything else the same.`
+  - `Remove the ring on her hand. Keep everything else the same.`
+  - `Make the light warmer and lower. Keep everything else the same.`
+  - `Remove the background music. Keep everything else the same.`
+- Edits keep context for about three turns. After that, start a fresh edit from the best
+  version.
+- **Extend** rather than re-prompt when a take is right but ends early: `The scene
+  continues. She sets the cup down.` Extensions carry motion, character and audio forward.
+- **Change one thing at a time** between drafts so you know what fixed it.
+- Save strong frames as images. They become first frames, end frames or references for
+  later shots.
 
-The beat sheet needs three inserts that are not in section 7. Generate these at 9:16
-with the same style and negative blocks:
+---
 
-**M1, the loop opener (2 seconds, precedes V3)**
+## 9. Automating it
 
-> Two hands lift a phone upright into warm morning window light in a tall vertical
-> frame, the screen a soft parchment cream rectangle, the motion settling as the phone
-> reaches eye level. Camera: vertical portrait composition, macro 85mm, locked off, the
-> phone rising into a static frame. Audio: fabric movement and a quiet breath.
+Flow has no API, and scripting its web page with a bot breaks easily and risks the account.
+Omni itself is available through the Gemini API with the same capabilities, so the automated
+pipeline calls the API directly and these prompts carry over almost unchanged.
 
-**M2, the recognition insert (1.5 seconds, sits at 0:02)**
+**API differences from Flow:**
+- References attach as tags in the prompt: `<IMAGE_REF_0>` (CHAR), `<IMAGE_REF_1>` (STYLE),
+  `<FIRST_FRAME>` / `<LAST_FRAME>` (use the LOOP image for both to get a native loop).
+- Draft with `resolution="360p"`, final with `"1080p"`; `duration` 3-10; `aspect_ratio`
+  `"9:16"`.
+- Edits and extensions chain with `previous_interaction_id` instead of the Flow chat.
+- Needs `GEMINI_API_KEY`, Python 3.10+, `google-genai >= 2.19.0`, and ffmpeg.
 
-> Extreme close up of a woman's eyes in warm morning light in a tall vertical frame,
-> catching the soft cream glow of a screen below. Her gaze settles, narrows very
-> slightly, and she gives a single small nod. Camera: vertical portrait composition,
-> macro 100mm, static, very shallow depth of field. Audio: one quiet breath, room tone.
+**Skills and repos worth using**
 
-**M3, the loop closer (2 seconds, ends V5)**
+| Repo | What it gives us | Verdict |
+|---|---|---|
+| [google-gemini/gemini-skills](https://github.com/google-gemini/gemini-skills) → `gemini-omni-flash-api` | Google's official Claude Code skill: generate, first/last frame, loops, extend, edit, batch jobs from a JSON file (`--batch jobs.json --concurrency 3`), ffmpeg prep | **Use this.** Official and actively maintained; the batch JSON format fits this prompt pack |
+| [kdowswell/veo-tools](https://github.com/kdowswell/veo-tools) | `/veo` for Veo 3.1 on Vertex AI, plus `/video-loop` (ffmpeg seamless loops) | Only for the Veo fallback or the loop script |
+| [xbill9/omni-skill-claude](https://github.com/xbill9/omni-skill-claude) | MCP server for stateful Omni edit sessions | Skip unless we need multi-turn edits driven by Claude |
+| [zysilm/video-producer-skill](https://github.com/zysilm/video-producer-skill) | Walks you through continuous shots using the Gemini web interface | Skip, manual |
 
-> A phone lies face down on worn wood in soft afternoon light in a tall vertical frame,
-> beside a clay cup. The light shifts almost imperceptibly across the surface. Camera:
-> vertical portrait composition, locked off, completely static, no movement in frame.
-> Audio: room tone fading to near silence.
+**Planned pipeline:** Playwright records the app screens → `gemini-omni-flash-api` batch
+generates B-roll and Reel parts from this doc → ffmpeg assembles cut-ins, typeset captions
+and the sound bed into finished Reels and hook variants.
 
-Match M3's light and framing to M1 so the loop is invisible.
+---
 
-### The seven second cut
+## Sources
 
-For paid placement and for feeds that punish anything long, there is a shorter edit made
-entirely from footage above:
-
-`M1 and V3 macro with the hook caption (0 to 3) → Decision tab switch, real UI (3 to 5)
-→ wordmark over V5 (5 to 7).`
-
-Hook, product, name. Completion rate on a seven second Reel runs far higher than on a
-twenty three second one, and completion is what the ranking actually rewards.
+- [Generate and edit videos with Gemini Omni Flash (Gemini API docs)](https://ai.google.dev/gemini-api/docs/omni)
+- [google-gemini/gemini-skills: gemini-omni-flash-api SKILL.md](https://github.com/google-gemini/gemini-skills)
+- [Google Flow brings new creative control features (Aug 2026)](https://blog.google/innovation-and-ai/models-and-research/google-labs/new-creative-controls-google-flow/)
+- [New agents, mobile apps and Gemini Omni for Google Flow (May 2026)](https://blog.google/innovation-and-ai/models-and-research/google-labs/flow-updates/)
+- [Create videos in Google Flow (Help Center)](https://support.google.com/flow/answer/16353334?hl=en)
+- [Edit videos and build scenes in Google Flow (Help Center)](https://support.google.com/flow/answer/16935718?hl=en)
+- [Mastering Gemini Omni: video prompting guide (Google AI)](https://x.com/GoogleAI/article/2059381218660270435)
