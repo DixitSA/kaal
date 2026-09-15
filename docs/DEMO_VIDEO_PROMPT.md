@@ -4,6 +4,9 @@ A shot-by-shot prompt pack for producing a 40 second Kaal demo film in Google Fl
 (Veo). Everything here is derived from `PRODUCT.md` and `DESIGN.md`, so the film
 matches the Editorial Sanctuary language the product already speaks.
 
+Section 2 is the 16:9 cut for the site hero and YouTube. Section 7 is the vertical
+9:16 cut for Instagram Reels, recomposed rather than cropped.
+
 ---
 
 ## 0. How to use this in Flow
@@ -60,7 +63,7 @@ Paste this at the end of every clip prompt:
 
 ---
 
-## 2. The five clips
+## 2. The five clips (16:9)
 
 Each clip gives you **Prompt**, **Camera**, and **Audio**. In Flow, put the prompt
 body in the main field and keep the camera and audio lines inside the same prompt
@@ -253,3 +256,132 @@ For convenience, the highest value single clip, fully assembled:
 > legible screen content, purple, neon, glowing gradients, starfield, crystals,
 > zodiac wheels, corporate office, blue palette, glossy plastic, fast cuts, distorted
 > hands, extra fingers.
+
+---
+
+## 7. The vertical cut (9:16) for Instagram
+
+Set **Aspect 9:16** in Flow and generate these fresh. Do not center crop the 16:9
+clips: the lateral dolly in Clip 5 has nowhere to travel in a tall frame, and cropping
+a 40mm medium gives you a tight, headroom starved portrait that loses the editorial
+composition entirely.
+
+### What actually changes
+
+- **Negative space moves from beside the subject to above and below her.** In 16:9 she
+  sits off center with room to her right. In 9:16 she sits in the lower two thirds with
+  window light and empty wall above.
+- **Horizontal camera moves become vertical ones.** Lateral dollies become boom downs
+  and tilts. A tall frame rewards rising steam, falling light, and a tilt that travels
+  from a surface up to a face.
+- **Desk work goes overhead.** Hands on paper read far better top down in vertical than
+  from a low side angle.
+- **The phone composite gets better, not worse.** A vertical phone in a vertical frame
+  can run nearly full height, which means the real Today section composite is larger
+  and more legible than it ever was in 16:9. Clip 3 is the payoff shot here.
+
+### Safe zones (1080 x 1920)
+
+Instagram overlays its own furniture on your frame. Keep anything that matters inside
+the middle band:
+
+| Zone | Keep clear |
+|---|---|
+| Top 250px | Reels header and sound attribution |
+| Bottom 420px | Caption, username, audio ticker |
+| Right 180px | Like, comment, share, save buttons |
+
+So the working area is roughly **y 250 to y 1500, x 0 to x 900**. Faces, the phone
+screen composite, and any typeset line all live inside that. The brand card in Clip 5
+sits in the upper middle, not the top edge.
+
+### Watch it muted
+
+Most Reels views start with sound off, so the voiceover cannot carry the film. Burn the
+voiceover lines in as typeset captions in the middle band, styled per `DESIGN.md`:
+Playfair Display for the display lines, Inter for body, lowercase, no em dashes. Treat
+the audio as a bonus for the people who turn it on.
+
+### Order for Instagram
+
+The 16:9 cut builds slowly, which suits a landing page where the viewer already chose
+to be there. A Reel has about one second before the thumb moves. For Instagram, lead
+with the payoff and explain afterward:
+
+**V3 (the signal, macro) → V1 (the unresolved decision) → V2 (the ritual) → V4 (acting
+on the timing) → V5 (brand close).**
+
+Opening on a macro phone screen and a face reading it is the strongest hook in the set.
+Keep the total under 30 seconds.
+
+---
+
+### V1 — The unresolved decision (vertical)
+
+> A woman in her early thirties sits at a worn wooden desk in a dim apartment before
+> sunrise, wearing a soft oatmeal sweater, framed in the lower two thirds of a tall
+> vertical frame with the window and empty wall above her. A contract and a pen rest
+> under her hand at the bottom of frame. She hovers the pen above the signature line,
+> hesitates, and sets it down without signing. She exhales and looks up toward the
+> window, where first light is just reaching the sill. Her face is thoughtful, not
+> distressed. Camera: vertical portrait composition, slow push in at chest height, 35mm,
+> generous headroom filled with soft window light. Audio: room tone, a distant early
+> morning street, the small click of a pen set down on wood, no music and no dialogue.
+
+### V2 — The ritual (vertical)
+
+> A woman pours tea into an unglazed clay cup beside a window, hands and cup centered in
+> a tall vertical frame with steam rising through the upper third. She sets the pot
+> down, picks up a phone, and turns it face up in her palm. The screen glows a warm
+> cream color, held at a raking angle so it reads as a soft bright rectangle rather than
+> readable content. Camera: vertical portrait composition, starts centered on the cup
+> and hands, then a slow tilt up from the cup to her face as she settles and reads.
+> Audio: tea pouring, ceramic on wood, a single distant bird, no music.
+
+### V3 — The signal, macro (vertical) — the hook shot
+
+> Extreme close up of a phone held upright in two hands in warm morning window light,
+> the phone running nearly the full height of a tall vertical frame. The screen is a
+> warm parchment cream field with a thin terracotta rule and a single small block of
+> dark text, deliberately out of focus and unreadable, drifting in and out of the focal
+> plane. A thumb scrolls once, slowly and deliberately. The window reflection curves
+> across the glass. Rack focus up from the screen to the woman's eyes at the top of
+> frame as they settle and narrow slightly with recognition, then a small nod. Camera:
+> vertical portrait composition, macro 85mm, very shallow depth of field, a single
+> vertical rack focus from the lower frame to the upper frame, no cuts. Audio: one soft
+> thumb swipe on glass, quiet breath, room tone, no music and no interface sounds.
+
+### V4 — Acting on the timing (vertical)
+
+> Overhead top down view of a worn wooden desk in full warm daylight, shot straight down
+> into a tall vertical frame. A phone lies face up at the bottom of frame. A hand enters
+> from the lower edge, picks up a pen, and signs a contract in one unhurried stroke. The
+> hand withdraws and the signed page sits alone. Camera: vertical portrait composition,
+> locked off overhead, slow five percent push in, minimal handheld drift. Audio: pen on
+> paper, a chair settling, the room's daylight ambience, no music.
+
+### V5 — Brand close (vertical)
+
+> An empty desk in soft afternoon light, shot from a high three quarter angle into a
+> tall vertical frame. A clay cup, a signed page, and a phone lying face down on the
+> wood are arranged in the lower half, with clean empty wood and wall filling the upper
+> half. Camera: vertical portrait composition, a slow boom down over the surface as the
+> light moves, settling into a still, composed editorial still life and holding for four
+> to five seconds. Audio: room tone fading to near silence.
+
+### V6 — The method (vertical, optional)
+
+> Overhead flat lay on aged paper in a tall vertical frame: a brass drafting compass, a
+> hand drawn geometric yantra in fine dark ink, and a folded almanac page, arranged in a
+> vertical stack down the center of frame. A hand enters from the lower edge and traces
+> one line of the geometry with a fingertip. The paper is deeply textured, the ink is
+> matte and hand made, the light is a single soft window source. Camera: vertical
+> portrait composition, locked off overhead, slow five percent push in. Audio: paper
+> texture, a fingertip on rough stock, distant room tone.
+
+---
+
+Append the same style block from section 1 and the same negative prompt to every
+vertical clip. Add `vertical composition, portrait orientation` to the front of the
+style block, and add `letterboxing, pillarboxing, black bars, horizontal composition`
+to the negative prompt so Flow does not hand you a padded landscape frame.
